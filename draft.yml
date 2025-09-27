@@ -7,6 +7,12 @@ models:
     email: string unique
     password: string
     email_verified_at: timestamp nullable
+    phone: string nullable
+    address: text nullable
+    city: string nullable
+    province: string nullable
+    postal_code: string:255
+    country_id: id
     relationships:
       hasMany: Location, Subscription
       belongsTo: Country
@@ -15,17 +21,36 @@ models:
   Location:
     name: string:100
     address: string:255
+    city: string:255
+    province: string:255
+    postal_code: string:255
     phone: string:30 nullable
     description: text nullable
     user_id: id
+    country_id: id
     image_url: string:255 nullable
     logo_url: string:255 nullable
     slug: string:255
     url: string:255
+    lang: string:255
+    languages: json nullable
+    currency: string:255
+    time_format: string:255
+    time_zone: string:255
+    social_medias: json nullable
     relationships:
       belongsTo: User, Country
       belongsToMany: Category
       hasMany: MenuCard
+
+  OpeningHour:
+    location_id: id
+    weekday: integer # 0=domingo, 1=lunes, ..., 6=sábado
+    opens_at: time nullable
+    closes_at: time nullable
+    is_closed: boolean default:false
+    relationships:
+      belongsTo: Location
 
   Country:
     name: string:100 unique
@@ -55,8 +80,9 @@ models:
     description: text nullable
     location_id: id
     image_url: string:255 nullable
+    template_id: id nullable
     relationships:
-      belongsTo: Location
+      belongsTo: Location, Template
       hasMany: Menu
       hasOne: QRCode
 
@@ -66,12 +92,13 @@ models:
     description: text nullable
     menu_card_id: id
     image_url: string:255 nullable
+    show_prices: boolean default:true
+    show_currency: boolean default:true
+    show_calories: boolean default:false
     relationships:
       belongsTo: MenuCard
       belongsToMany: Product
-      show_prices: boolean default:true
-      show_currency: boolean default:true
-      show_calories: boolean default:false
+
 
   Section:
     name: string:100
@@ -81,6 +108,15 @@ models:
     relationships:
       belongsTo: Menu
       belongsToMany: Product
+
+  Template:
+    name: string:100
+    description: text nullable
+    preview_image_url: string:255 nullable
+    config: json nullable
+    is_active: boolean default:true
+    relationships:
+      hasMany: MenuCard
 
   Allergen:
     name: string:100 unique
@@ -135,4 +171,337 @@ models:
     relationships:
       belongsTo: Subscription
 
-seeders: User, Location, Category, Plan
+  Translation:
+    translatable_id: id
+    translatable_type: string:100
+    locale: string:10
+    field: string:50
+    value: string:255
+    relationships:
+      morphTo: translatable
+
+controllers:
+  User:
+    index:
+      dispatch: ListUsers
+      render: user.index with:users
+    store:
+      validate: name, email, password, country_id
+      dispatch: CreateUser with:request
+      redirect: user.index
+    show:
+      dispatch: ShowUser with:id
+      render: user.show with:user
+    update:
+      validate: name, email, password, country_id
+      dispatch: UpdateUser with:request, id
+      redirect: user.show
+    destroy:
+      dispatch: DeleteUser with:id
+      redirect: user.index
+
+  Location:
+    index:
+      dispatch: ListLocations
+      render: location.index with:locations
+    store:
+      validate: name, address, city, province, postal_code, user_id, country_id
+      dispatch: CreateLocation with:request
+      redirect: location.index
+    show:
+      dispatch: ShowLocation with:id
+      render: location.show with:location
+    update:
+      validate: name, address, city, province, postal_code, user_id, country_id
+      dispatch: UpdateLocation with:request, id
+      redirect: location.show
+    destroy:
+      dispatch: DeleteLocation with:id
+      redirect: location.index
+
+  Category:
+    index:
+      dispatch: ListCategories
+      render: category.index with:categories
+    store:
+      validate: name
+      dispatch: CreateCategory with:request
+      redirect: category.index
+    show:
+      dispatch: ShowCategory with:id
+      render: category.show with:category
+    update:
+      validate: name
+      dispatch: UpdateCategory with:request, id
+      redirect: category.show
+    destroy:
+      dispatch: DeleteCategory with:id
+      redirect: category.index
+
+  MenuCard:
+    index:
+      dispatch: ListMenuCards
+      render: menucard.index with:menucards
+    store:
+      validate: name, location_id, template_id
+      dispatch: CreateMenuCard with:request
+      redirect: menucard.index
+    show:
+      dispatch: ShowMenuCard with:id
+      render: menucard.show with:menucard
+    update:
+      validate: name, location_id, template_id
+      dispatch: UpdateMenuCard with:request, id
+      redirect: menucard.show
+    destroy:
+      dispatch: DeleteMenuCard with:id
+      redirect: menucard.index
+
+  Menu:
+    index:
+      dispatch: ListMenus
+      render: menu.index with:menus
+    store:
+      validate: name, menu_card_id
+      dispatch: CreateMenu with:request
+      redirect: menu.index
+    show:
+      dispatch: ShowMenu with:id
+      render: menu.show with:menu
+    update:
+      validate: name, menu_card_id
+      dispatch: UpdateMenu with:request, id
+      redirect: menu.show
+    destroy:
+      dispatch: DeleteMenu with:id
+      redirect: menu.index
+
+  Section:
+    index:
+      dispatch: ListSections
+      render: section.index with:sections
+    store:
+      validate: name, menu_id
+      dispatch: CreateSection with:request
+      redirect: section.index
+    show:
+      dispatch: ShowSection with:id
+      render: section.show with:section
+    update:
+      validate: name, menu_id
+      dispatch: UpdateSection with:request, id
+      redirect: section.show
+    destroy:
+      dispatch: DeleteSection with:id
+      redirect: section.index
+
+  Product:
+    index:
+      dispatch: ListProducts
+      render: product.index with:products
+    store:
+      validate: name, price
+      dispatch: CreateProduct with:request
+      redirect: product.index
+    show:
+      dispatch: ShowProduct with:id
+      render: product.show with:product
+    update:
+      validate: name, price
+      dispatch: UpdateProduct with:request, id
+      redirect: product.show
+    destroy:
+      dispatch: DeleteProduct with:id
+      redirect: product.index
+
+  Ingredient:
+    index:
+      dispatch: ListIngredients
+      render: ingredient.index with:ingredients
+    store:
+      validate: name
+      dispatch: CreateIngredient with:request
+      redirect: ingredient.index
+    show:
+      dispatch: ShowIngredient with:id
+      render: ingredient.show with:ingredient
+    update:
+      validate: name
+      dispatch: UpdateIngredient with:request, id
+      redirect: ingredient.show
+    destroy:
+      dispatch: DeleteIngredient with:id
+      redirect: ingredient.index
+
+  Allergen:
+    index:
+      dispatch: ListAllergens
+      render: allergen.index with:allergens
+    store:
+      validate: name
+      dispatch: CreateAllergen with:request
+      redirect: allergen.index
+    show:
+      dispatch: ShowAllergen with:id
+      render: allergen.show with:allergen
+    update:
+      validate: name
+      dispatch: UpdateAllergen with:request, id
+      redirect: allergen.show
+    destroy:
+      dispatch: DeleteAllergen with:id
+      redirect: allergen.index
+
+  Plan:
+    index:
+      dispatch: ListPlans
+      render: plan.index with:plans
+    store:
+      validate: name, price, period
+      dispatch: CreatePlan with:request
+      redirect: plan.index
+    show:
+      dispatch: ShowPlan with:id
+      render: plan.show with:plan
+    update:
+      validate: name, price, period
+      dispatch: UpdatePlan with:request, id
+      redirect: plan.show
+    destroy:
+      dispatch: DeletePlan with:id
+      redirect: plan.index
+
+  Subscription:
+    index:
+      dispatch: ListSubscriptions
+      render: subscription.index with:subscriptions
+    store:
+      validate: user_id, plan_id, started_at, status
+      dispatch: CreateSubscription with:request
+      redirect: subscription.index
+    show:
+      dispatch: ShowSubscription with:id
+      render: subscription.show with:subscription
+    update:
+      validate: user_id, plan_id, started_at, status
+      dispatch: UpdateSubscription with:request, id
+      redirect: subscription.show
+    destroy:
+      dispatch: DeleteSubscription with:id
+      redirect: subscription.index
+
+  Payment:
+    index:
+      dispatch: ListPayments
+      render: payment.index with:payments
+    store:
+      validate: subscription_id, amount, paid_at, payment_method, status
+      dispatch: CreatePayment with:request
+      redirect: payment.index
+    show:
+      dispatch: ShowPayment with:id
+      render: payment.show with:payment
+    update:
+      validate: subscription_id, amount, paid_at, payment_method, status
+      dispatch: UpdatePayment with:request, id
+      redirect: payment.show
+    destroy:
+      dispatch: DeletePayment with:id
+      redirect: payment.index
+
+  Template:
+    index:
+      dispatch: ListTemplates
+      render: template.index with:templates
+    store:
+      validate: name
+      dispatch: CreateTemplate with:request
+      redirect: template.index
+    show:
+      dispatch: ShowTemplate with:id
+      render: template.show with:template
+    update:
+      validate: name
+      dispatch: UpdateTemplate with:request, id
+      redirect: template.show
+    destroy:
+      dispatch: DeleteTemplate with:id
+      redirect: template.index
+
+  Translation:
+    index:
+      dispatch: ListTranslations
+      render: translation.index with:translations
+    store:
+      validate: translatable_id, translatable_type, locale, field, value
+      dispatch: CreateTranslation with:request
+      redirect: translation.index
+    show:
+      dispatch: ShowTranslation with:id
+      render: translation.show with:translation
+    update:
+      validate: translatable_id, translatable_type, locale, field, value
+      dispatch: UpdateTranslation with:request, id
+      redirect: translation.show
+    destroy:
+      dispatch: DeleteTranslation with:id
+      redirect: translation.index
+
+  OpeningHour:
+    index:
+      dispatch: ListOpeningHours
+      render: openinghour.index with:openinghours
+    store:
+      validate: location_id, weekday
+      dispatch: CreateOpeningHour with:request
+      redirect: openinghour.index
+    show:
+      dispatch: ShowOpeningHour with:id
+      render: openinghour.show with:openinghour
+    update:
+      validate: location_id, weekday
+      dispatch: UpdateOpeningHour with:request, id
+      redirect: openinghour.show
+    destroy:
+      dispatch: DeleteOpeningHour with:id
+      redirect: openinghour.index
+
+  Country:
+    index:
+      dispatch: ListCountries
+      render: country.index with:countries
+    store:
+      validate: name, code
+      dispatch: CreateCountry with:request
+      redirect: country.index
+    show:
+      dispatch: ShowCountry with:id
+      render: country.show with:country
+    update:
+      validate: name, code
+      dispatch: UpdateCountry with:request, id
+      redirect: country.show
+    destroy:
+      dispatch: DeleteCountry with:id
+      redirect: country.index
+
+  QRCode:
+    index:
+      dispatch: ListQRCodes
+      render: qrcode.index with:qrcodes
+    store:
+      validate: menu_card_id, parameters
+      dispatch: CreateQRCode with:request
+      redirect: qrcode.index
+    show:
+      dispatch: ShowQRCode with:id
+      render: qrcode.show with:qrcode
+    update:
+      validate: menu_card_id, parameters
+      dispatch: UpdateQRCode with:request, id
+      redirect: qrcode.show
+    destroy:
+      dispatch: DeleteQRCode with:id
+      redirect: qrcode.index
+
+seeders: User, Category, Plan, Country, Ingredient, Allergen
