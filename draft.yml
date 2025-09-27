@@ -1,0 +1,138 @@
+# draft.yaml
+# Definición de modelos para una app de gestión de menús digitales.
+
+models:
+  User:
+    name: string
+    email: string unique
+    password: string
+    email_verified_at: timestamp nullable
+    relationships:
+      hasMany: Location, Subscription
+      belongsTo: Country
+
+  # Negocio o local gestionado por un usuario.
+  Location:
+    name: string:100
+    address: string:255
+    phone: string:30 nullable
+    description: text nullable
+    user_id: id
+    image_url: string:255 nullable
+    logo_url: string:255 nullable
+    slug: string:255
+    url: string:255
+    relationships:
+      belongsTo: User, Country
+      belongsToMany: Category
+      hasMany: MenuCard
+
+  Country:
+    name: string:100 unique
+    code: string:5 unique
+    relationships:
+      hasMany: User, Location
+
+  # Categoría de negocio (ej: cafetería, restaurante, bar, etc).
+  Category:
+    name: string:50 unique
+    relationships:
+      belongsToMany: Location
+
+  QRCode:
+    menu_card_id: id
+    parameters: json
+    image_url: string:255 nullable
+    url: string:255 nullable
+    created_at: timestamp
+    updated_at: timestamp
+    relationships:
+      belongsTo: MenuCard
+
+  # Carta de un negocio (puede haber varias por local).
+  MenuCard:
+    name: string:100
+    description: text nullable
+    location_id: id
+    image_url: string:255 nullable
+    relationships:
+      belongsTo: Location
+      hasMany: Menu
+      hasOne: QRCode
+
+  # Menú dentro de una carta (ej: desayuno, almuerzo, etc).
+  Menu:
+    name: string:100
+    description: text nullable
+    menu_card_id: id
+    image_url: string:255 nullable
+    relationships:
+      belongsTo: MenuCard
+      belongsToMany: Product
+      show_prices: boolean default:true
+      show_currency: boolean default:true
+      show_calories: boolean default:false
+
+  Section:
+    name: string:100
+    description: text nullable
+    menu_id: id
+    image_url: string:255 nullable
+    relationships:
+      belongsTo: Menu
+      belongsToMany: Product
+
+  Allergen:
+    name: string:100 unique
+    description: text nullable
+    image_url: string:255 nullable
+    relationships:
+      belongsToMany: Product
+
+  Ingredient:
+    name: string:100 unique
+    description: text nullable
+    relationships:
+      belongsToMany: Product
+  # Producto dentro de un menú.
+  Product:
+    name: string:100
+    description: text nullable
+    price: decimal:8,2
+    calories: decimal:8,2 nullable
+    image_url: string:255 nullable
+    relationships:
+      belongsToMany: Menu, Allergen, Section, Ingredient
+
+  # Plan de suscripción para negocios.
+  Plan:
+    name: string:50
+    price: decimal:8,2
+    period: string:20 # monthly, yearly, etc.
+    description: text nullable
+    is_active: boolean default:true
+    relationships:
+      hasMany: Subscription
+
+  # Suscripción de un usuario a un plan.
+  Subscription:
+    user_id: id
+    plan_id: id
+    started_at: timestamp
+    ends_at: timestamp nullable
+    status: string:20 # active, cancelled, etc.
+    relationships:
+      belongsTo: User, Plan
+      hasMany: Payment
+
+  # Pagos realizados por una suscripción.
+  Payment:
+    subscription_id: id
+    amount: decimal:8,2
+    paid_at: timestamp
+    payment_method: string:30
+    status: string:20 # paid, failed, pending, etc.
+    relationships:
+      belongsTo: Subscription
+
+seeders: User, Location, Category, Plan
