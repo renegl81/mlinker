@@ -16,7 +16,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
- * @see \App\Http\Controllers\MenuController
+ * @see \App\Http\Controllers\Admin\Menu\MenuController
  */
 final class MenuControllerTest extends TestCase
 {
@@ -30,7 +30,7 @@ final class MenuControllerTest extends TestCase
         $response = $this->get(route('menus.index'));
 
         $response->assertOk();
-        $response->assertViewIs('menu.index');
+        $response->assertViewIs('Menu.index');
         $response->assertViewHas('menus');
 
         Queue::assertPushed(ListMenus::class);
@@ -41,7 +41,7 @@ final class MenuControllerTest extends TestCase
     public function store_uses_form_request_validation(): void
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\MenuController::class,
+            \App\Http\Controllers\Admin\Menu\MenuController::class,
             'store',
             \App\Http\Requests\MenuStoreRequest::class
         );
@@ -60,7 +60,7 @@ final class MenuControllerTest extends TestCase
             'menu_card_id' => $menu_card->id,
         ]);
 
-        $response->assertRedirect(route('menu.index'));
+        $response->assertRedirect(route('Menu.index'));
 
         Queue::assertPushed(CreateMenu::class, function ($job) use ($request) {
             return $job->request->is($request);
@@ -78,8 +78,8 @@ final class MenuControllerTest extends TestCase
         $response = $this->get(route('menus.show', $menu));
 
         $response->assertOk();
-        $response->assertViewIs('menu.show');
-        $response->assertViewHas('menu');
+        $response->assertViewIs('Menu.show');
+        $response->assertViewHas('Menu');
 
         Queue::assertPushed(ShowMenu::class, function ($job) use ($id) {
             return $job->id->is($id);
@@ -91,7 +91,7 @@ final class MenuControllerTest extends TestCase
     public function update_uses_form_request_validation(): void
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\MenuController::class,
+            \App\Http\Controllers\Admin\Menu\MenuController::class,
             'update',
             \App\Http\Requests\MenuUpdateRequest::class
         );
@@ -111,7 +111,7 @@ final class MenuControllerTest extends TestCase
             'menu_card_id' => $menu_card->id,
         ]);
 
-        $response->assertRedirect(route('menu.show', ['menu' => $menu]));
+        $response->assertRedirect(route('Menu.show', ['Menu' => $menu]));
 
         Queue::assertPushed(UpdateMenu::class, function ($job) use ($request, $id) {
             return $job->request->is($request) && $job->id->is($id);
@@ -128,7 +128,7 @@ final class MenuControllerTest extends TestCase
 
         $response = $this->delete(route('menus.destroy', $menu));
 
-        $response->assertRedirect(route('menu.index'));
+        $response->assertRedirect(route('Menu.index'));
 
         Queue::assertPushed(DeleteMenu::class, function ($job) use ($id) {
             return $job->id->is($id);

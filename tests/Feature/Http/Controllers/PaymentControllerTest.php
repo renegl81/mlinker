@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
- * @see \App\Http\Controllers\PaymentController
+ * @see \App\Http\Controllers\Admin\PaymentController
  */
 final class PaymentControllerTest extends TestCase
 {
@@ -42,7 +42,7 @@ final class PaymentControllerTest extends TestCase
     public function store_uses_form_request_validation(): void
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\PaymentController::class,
+            \App\Http\Controllers\Admin\PaymentController::class,
             'store',
             \App\Http\Requests\PaymentStoreRequest::class
         );
@@ -98,7 +98,7 @@ final class PaymentControllerTest extends TestCase
     public function update_uses_form_request_validation(): void
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\PaymentController::class,
+            \App\Http\Controllers\Admin\PaymentController::class,
             'update',
             \App\Http\Requests\PaymentUpdateRequest::class
         );

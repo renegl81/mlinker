@@ -12,6 +12,30 @@ class CountrySeeder extends Seeder
      */
     public function run(): void
     {
-        Country::factory()->count(5)->create();
+        $countries = [
+            [
+                'name' => 'Spain',
+                'code' => 'ES',
+            ],
+            [
+                'name' => 'France',
+                'code' => 'FR',
+            ],
+            [
+                'name' => 'Germany',
+                'code' => 'DE',
+            ],
+            [
+                'name' => 'Italy',
+                'code' => 'IT',
+            ],
+            [
+                'name' => 'Portugal',
+                'code' => 'PT',
+            ]
+        ];
+        foreach ($countries as $country) {
+            Country::updateOrCreate($country);
+        }
     }
 }

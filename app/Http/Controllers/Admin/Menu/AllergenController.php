@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\Menu;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\AllergenStoreRequest;
 use App\Http\Requests\AllergenUpdateRequest;
 use App\Jobs\CreateAllergen;
@@ -13,12 +14,13 @@ use App\Models\Allergen;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class AllergenController extends Controller
 {
     public function index(Request $request)
     {
-        ListAllergens::dispatch();
+        $allergens = ListAllergens::dispatch();
 
         return Inertia::render('allergen.index', [
             'allergens' => $allergens,
@@ -32,9 +34,9 @@ class AllergenController extends Controller
         return redirect()->route('allergen.index');
     }
 
-    public function show(Request $request, Allergen $allergen)
+    public function show(Request $request, Allergen $allergen): Response
     {
-        ShowAllergen::dispatch($id);
+        ShowAllergen::dispatch($allergen);
 
         return Inertia::render('allergen.show', [
             'allergen' => $allergen,
@@ -43,14 +45,14 @@ class AllergenController extends Controller
 
     public function update(AllergenUpdateRequest $request, Allergen $allergen): RedirectResponse
     {
-        UpdateAllergen::dispatch($request, $id);
+        UpdateAllergen::dispatch($request, $allergen);
 
         return redirect()->route('allergen.show', ['allergen' => $allergen]);
     }
 
     public function destroy(Request $request, Allergen $allergen): RedirectResponse
     {
-        DeleteAllergen::dispatch($id);
+        DeleteAllergen::dispatch($allergen);
 
         return redirect()->route('allergen.index');
     }

@@ -16,7 +16,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
- * @see \App\Http\Controllers\OpeningHourController
+ * @see \App\Http\Controllers\Admin\OpeningHourController
  */
 final class OpeningHourControllerTest extends TestCase
 {
@@ -41,7 +41,7 @@ final class OpeningHourControllerTest extends TestCase
     public function store_uses_form_request_validation(): void
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\OpeningHourController::class,
+            \App\Http\Controllers\Admin\OpeningHourController::class,
             'store',
             \App\Http\Requests\OpeningHourStoreRequest::class
         );
@@ -91,7 +91,7 @@ final class OpeningHourControllerTest extends TestCase
     public function update_uses_form_request_validation(): void
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\OpeningHourController::class,
+            \App\Http\Controllers\Admin\OpeningHourController::class,
             'update',
             \App\Http\Requests\OpeningHourUpdateRequest::class
         );

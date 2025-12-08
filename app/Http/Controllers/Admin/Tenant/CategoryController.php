@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\Tenant;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use App\Jobs\CreateCategory;
@@ -18,7 +19,7 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        ListCategories::dispatch();
+        $categories = ListCategories::dispatch();
 
         return Inertia::render('category.index', [
             'categories' => $categories,
@@ -34,7 +35,7 @@ class CategoryController extends Controller
 
     public function show(Request $request, Category $category)
     {
-        ShowCategory::dispatch($id);
+        ShowCategory::dispatch($category);
 
         return Inertia::render('category.show', [
             'category' => $category,
@@ -43,14 +44,14 @@ class CategoryController extends Controller
 
     public function update(CategoryUpdateRequest $request, Category $category): RedirectResponse
     {
-        UpdateCategory::dispatch($request, $id);
+        UpdateCategory::dispatch($request, $category);
 
         return redirect()->route('category.show', ['category' => $category]);
     }
 
     public function destroy(Request $request, Category $category): RedirectResponse
     {
-        DeleteCategory::dispatch($id);
+        DeleteCategory::dispatch($category);
 
         return redirect()->route('category.index');
     }

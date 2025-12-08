@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use;
 use App\Jobs\CreateMenuCard;
 use App\Jobs\DeleteMenuCard;
 use App\Jobs\ListMenuCards;
 use App\Jobs\ShowMenuCard;
 use App\Jobs\UpdateMenuCard;
-use App\Models\;
 use App\Models\Location;
 use App\Models\MenuCard;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
- * @see \App\Http\Controllers\MenuCardController
+ * @see \App\Http\Controllers\Admin\Menu\MenuCardController
  */
 final class MenuCardControllerTest extends TestCase
 {
@@ -28,7 +28,7 @@ final class MenuCardControllerTest extends TestCase
     {
         Queue::fake();
 
-        $response = $this->get(route('menu-cards.index'));
+        $response = $this->get(route('Menu-cards.index'));
 
         $response->assertOk();
         $response->assertViewIs('menucard.index');
@@ -42,7 +42,7 @@ final class MenuCardControllerTest extends TestCase
     public function store_uses_form_request_validation(): void
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\MenuCardController::class,
+            \App\Http\Controllers\Admin\Menu\MenuCardController::class,
             'store',
             \App\Http\Requests\MenuCardStoreRequest::class
         );
@@ -57,7 +57,7 @@ final class MenuCardControllerTest extends TestCase
 
         Queue::fake();
 
-        $response = $this->post(route('menu-cards.store'), [
+        $response = $this->post(route('Menu-cards.store'), [
             'name' => $name,
             'location_id' => $location->id,
             'template_id' => $template->id,
@@ -78,7 +78,7 @@ final class MenuCardControllerTest extends TestCase
 
         Queue::fake();
 
-        $response = $this->get(route('menu-cards.show', $menuCard));
+        $response = $this->get(route('Menu-cards.show', $menuCard));
 
         $response->assertOk();
         $response->assertViewIs('menucard.show');
@@ -94,7 +94,7 @@ final class MenuCardControllerTest extends TestCase
     public function update_uses_form_request_validation(): void
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\MenuCardController::class,
+            \App\Http\Controllers\Admin\Menu\MenuCardController::class,
             'update',
             \App\Http\Requests\MenuCardUpdateRequest::class
         );
@@ -110,7 +110,7 @@ final class MenuCardControllerTest extends TestCase
 
         Queue::fake();
 
-        $response = $this->put(route('menu-cards.update', $menuCard), [
+        $response = $this->put(route('Menu-cards.update', $menuCard), [
             'name' => $name,
             'location_id' => $location->id,
             'template_id' => $template->id,
@@ -131,7 +131,7 @@ final class MenuCardControllerTest extends TestCase
 
         Queue::fake();
 
-        $response = $this->delete(route('menu-cards.destroy', $menuCard));
+        $response = $this->delete(route('Menu-cards.destroy', $menuCard));
 
         $response->assertRedirect(route('menucard.index'));
 

@@ -25,12 +25,12 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('phone')->nullable();
-            $table->text('address')->nullable();
-            $table->string('city')->nullable();
+            $table->string('phone')->nullable()->nullable();
+            $table->text('address')->nullable()->nullable();
+            $table->string('city')->nullable()->nullable();
             $table->string('province')->nullable();
-            $table->string('postal_code', 255);
-            $table->foreignId('country_id');
+            $table->string('postal_code', 255)->nullable();
+            $table->foreignId('country_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\Tenant;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\LocationStoreRequest;
 use App\Http\Requests\LocationUpdateRequest;
 use App\Jobs\CreateLocation;
@@ -36,7 +37,7 @@ class LocationController extends Controller
 
     public function show(Request $request, Location $location)
     {
-        ShowLocation::dispatch($id);
+        ShowLocation::dispatch($location);
 
         return Inertia::render('location.show', [
             'location' => $location,
@@ -45,14 +46,14 @@ class LocationController extends Controller
 
     public function update(LocationUpdateRequest $request, Location $location): RedirectResponse
     {
-        UpdateLocation::dispatch($request, $id);
+        UpdateLocation::dispatch($request, $location);
 
         return redirect()->route('location.show', ['location' => $location]);
     }
 
     public function destroy(Request $request, Location $location): RedirectResponse
     {
-        DeleteLocation::dispatch($id);
+        DeleteLocation::dispatch($location);
 
         return redirect()->route('location.index');
     }

@@ -16,7 +16,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
- * @see \App\Http\Controllers\TranslationController
+ * @see \App\Http\Controllers\Admin\TranslationController
  */
 final class TranslationControllerTest extends TestCase
 {
@@ -41,7 +41,7 @@ final class TranslationControllerTest extends TestCase
     public function store_uses_form_request_validation(): void
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\TranslationController::class,
+            \App\Http\Controllers\Admin\TranslationController::class,
             'store',
             \App\Http\Requests\TranslationStoreRequest::class
         );
@@ -97,7 +97,7 @@ final class TranslationControllerTest extends TestCase
     public function update_uses_form_request_validation(): void
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\TranslationController::class,
+            \App\Http\Controllers\Admin\TranslationController::class,
             'update',
             \App\Http\Requests\TranslationUpdateRequest::class
         );

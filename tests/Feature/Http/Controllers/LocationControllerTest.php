@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use;
 use App\Jobs\CreateLocation;
 use App\Jobs\DeleteLocation;
 use App\Jobs\ListLocations;
 use App\Jobs\ShowLocation;
 use App\Jobs\UpdateLocation;
-use App\Models\;
 use App\Models\Location;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -17,7 +17,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
- * @see \App\Http\Controllers\LocationController
+ * @see \App\Http\Controllers\Admin\Tenant\LocationController
  */
 final class LocationControllerTest extends TestCase
 {
@@ -42,7 +42,7 @@ final class LocationControllerTest extends TestCase
     public function store_uses_form_request_validation(): void
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\LocationController::class,
+            \App\Http\Controllers\Admin\Tenant\LocationController::class,
             'store',
             \App\Http\Requests\LocationStoreRequest::class
         );
@@ -102,7 +102,7 @@ final class LocationControllerTest extends TestCase
     public function update_uses_form_request_validation(): void
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\LocationController::class,
+            \App\Http\Controllers\Admin\Tenant\LocationController::class,
             'update',
             \App\Http\Requests\LocationUpdateRequest::class
         );

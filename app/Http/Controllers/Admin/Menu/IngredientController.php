@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\Menu;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\IngredientStoreRequest;
 use App\Http\Requests\IngredientUpdateRequest;
 use App\Jobs\CreateIngredient;

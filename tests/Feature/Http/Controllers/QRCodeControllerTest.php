@@ -16,7 +16,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
- * @see \App\Http\Controllers\QRCodeController
+ * @see \App\Http\Controllers\Admin\Menu\QRCodeController
  */
 final class QRCodeControllerTest extends TestCase
 {
@@ -41,7 +41,7 @@ final class QRCodeControllerTest extends TestCase
     public function store_uses_form_request_validation(): void
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\QRCodeController::class,
+            \App\Http\Controllers\Admin\Menu\QRCodeController::class,
             'store',
             \App\Http\Requests\QRCodeStoreRequest::class
         );
@@ -91,7 +91,7 @@ final class QRCodeControllerTest extends TestCase
     public function update_uses_form_request_validation(): void
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\QRCodeController::class,
+            \App\Http\Controllers\Admin\Menu\QRCodeController::class,
             'update',
             \App\Http\Requests\QRCodeUpdateRequest::class
         );

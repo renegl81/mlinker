@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\Tenant;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Jobs\CreateUser;
@@ -18,7 +19,7 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        ListUsers::dispatch();
+        $users = ListUsers::dispatch();
 
         return Inertia::render('user.index', [
             'users' => $users,
@@ -34,7 +35,7 @@ class UserController extends Controller
 
     public function show(Request $request, User $user)
     {
-        ShowUser::dispatch($id);
+        ShowUser::dispatch($user);
 
         return Inertia::render('user.show', [
             'user' => $user,
@@ -43,14 +44,14 @@ class UserController extends Controller
 
     public function update(UserUpdateRequest $request, User $user): RedirectResponse
     {
-        UpdateUser::dispatch($request, $id);
+        UpdateUser::dispatch($request, $user);
 
         return redirect()->route('user.show', ['user' => $user]);
     }
 
     public function destroy(Request $request, User $user): RedirectResponse
     {
-        DeleteUser::dispatch($id);
+        DeleteUser::dispatch($user);
 
         return redirect()->route('user.index');
     }

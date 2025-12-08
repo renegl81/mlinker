@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\Tenant;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\TemplateStoreRequest;
 use App\Http\Requests\TemplateUpdateRequest;
 use App\Jobs\CreateTemplate;
@@ -18,7 +19,7 @@ class TemplateController extends Controller
 {
     public function index(Request $request)
     {
-        ListTemplates::dispatch();
+        $templates = ListTemplates::dispatch();
 
         return Inertia::render('template.index', [
             'templates' => $templates,
@@ -34,7 +35,7 @@ class TemplateController extends Controller
 
     public function show(Request $request, Template $template)
     {
-        ShowTemplate::dispatch($id);
+        ShowTemplate::dispatch($template);
 
         return Inertia::render('template.show', [
             'template' => $template,
@@ -43,14 +44,14 @@ class TemplateController extends Controller
 
     public function update(TemplateUpdateRequest $request, Template $template): RedirectResponse
     {
-        UpdateTemplate::dispatch($request, $id);
+        UpdateTemplate::dispatch($request, $template);
 
         return redirect()->route('template.show', ['template' => $template]);
     }
 
     public function destroy(Request $request, Template $template): RedirectResponse
     {
-        DeleteTemplate::dispatch($id);
+        DeleteTemplate::dispatch($template);
 
         return redirect()->route('template.index');
     }

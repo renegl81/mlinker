@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\Tenant;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\PlanStoreRequest;
 use App\Http\Requests\PlanUpdateRequest;
 use App\Jobs\CreatePlan;

@@ -15,7 +15,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
- * @see \App\Http\Controllers\AllergenController
+ * @see \App\Http\Controllers\Admin\Menu\AllergenController
  */
 final class AllergenControllerTest extends TestCase
 {
@@ -40,7 +40,7 @@ final class AllergenControllerTest extends TestCase
     public function store_uses_form_request_validation(): void
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\AllergenController::class,
+            \App\Http\Controllers\Admin\Menu\AllergenController::class,
             'store',
             \App\Http\Requests\AllergenStoreRequest::class
         );
@@ -88,7 +88,7 @@ final class AllergenControllerTest extends TestCase
     public function update_uses_form_request_validation(): void
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\AllergenController::class,
+            \App\Http\Controllers\Admin\Menu\AllergenController::class,
             'update',
             \App\Http\Requests\AllergenUpdateRequest::class
         );

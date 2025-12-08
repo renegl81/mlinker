@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\Menu;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\MenuStoreRequest;
 use App\Http\Requests\MenuUpdateRequest;
 use App\Jobs\CreateMenu;
@@ -20,7 +21,7 @@ class MenuController extends Controller
     {
         ListMenus::dispatch();
 
-        return Inertia::render('menu.index', [
+        return Inertia::render('Menu.index', [
             'menus' => $menus,
         ]);
     }
@@ -29,15 +30,15 @@ class MenuController extends Controller
     {
         CreateMenu::dispatch($request);
 
-        return redirect()->route('menu.index');
+        return redirect()->route('Menu.index');
     }
 
     public function show(Request $request, Menu $menu)
     {
         ShowMenu::dispatch($id);
 
-        return Inertia::render('menu.show', [
-            'menu' => $menu,
+        return Inertia::render('Menu.show', [
+            'Menu' => $menu,
         ]);
     }
 
@@ -45,13 +46,13 @@ class MenuController extends Controller
     {
         UpdateMenu::dispatch($request, $id);
 
-        return redirect()->route('menu.show', ['menu' => $menu]);
+        return redirect()->route('Menu.show', ['Menu' => $menu]);
     }
 
     public function destroy(Request $request, Menu $menu): RedirectResponse
     {
         DeleteMenu::dispatch($id);
 
-        return redirect()->route('menu.index');
+        return redirect()->route('Menu.index');
     }
 }

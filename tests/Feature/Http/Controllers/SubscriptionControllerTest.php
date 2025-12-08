@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use;
 use App\Jobs\CreateSubscription;
 use App\Jobs\DeleteSubscription;
 use App\Jobs\ListSubscriptions;
 use App\Jobs\ShowSubscription;
 use App\Jobs\UpdateSubscription;
-use App\Models\;
 use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -18,7 +18,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
 /**
- * @see \App\Http\Controllers\SubscriptionController
+ * @see \App\Http\Controllers\Admin\SubscriptionController
  */
 final class SubscriptionControllerTest extends TestCase
 {
@@ -43,7 +43,7 @@ final class SubscriptionControllerTest extends TestCase
     public function store_uses_form_request_validation(): void
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\SubscriptionController::class,
+            \App\Http\Controllers\Admin\SubscriptionController::class,
             'store',
             \App\Http\Requests\SubscriptionStoreRequest::class
         );
@@ -97,7 +97,7 @@ final class SubscriptionControllerTest extends TestCase
     public function update_uses_form_request_validation(): void
     {
         $this->assertActionUsesFormRequest(
-            \App\Http\Controllers\SubscriptionController::class,
+            \App\Http\Controllers\Admin\SubscriptionController::class,
             'update',
             \App\Http\Requests\SubscriptionUpdateRequest::class
         );

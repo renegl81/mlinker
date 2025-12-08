@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin\Menu;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\MenuCardStoreRequest;
 use App\Http\Requests\MenuCardUpdateRequest;
 use App\Jobs\CreateMenuCard;
