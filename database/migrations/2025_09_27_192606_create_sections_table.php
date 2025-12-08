@@ -17,6 +17,8 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->foreignId('menu_id');
             $table->string('image_url', 255)->nullable();
+            $table->string('tenant_id')->index();
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             $table->timestamps();
         });
     }

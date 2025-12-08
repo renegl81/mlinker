@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Couchbase\Role;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -60,11 +59,6 @@ class User extends Model
         return $this->hasMany(Location::class);
     }
 
-    public function subscriptions(): HasMany
-    {
-        return $this->hasMany(Subscription::class);
-    }
-
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);
@@ -79,5 +73,26 @@ class User extends Model
     {
         $roles = is_array($roles) ? $roles : [$roles];
         return $this->roles()->whereIn('name', $roles)->exists();
+    }
+
+    /**
+     * Los restaurantes a los que pertenece este usuario.
+     */
+    public function tenants(): BelongsToMany
+    {
+        return $this->belongsToMany(Tenant::class, 'tenant_user')
+            ->withPivot('role') // Para acceder a $user->pivot->role
+            ->withTimestamps();
+    }
+
+    /**
+     * Helper para saber si es dueño de un tenant específico
+     */
+    public function owns(Tenant $tenant): bool
+    {
+        return $this->tenants()
+            ->where('tenant_id', $tenant->id)
+            ->wherePivot('role', 'owner')
+            ->exists();
     }
 }

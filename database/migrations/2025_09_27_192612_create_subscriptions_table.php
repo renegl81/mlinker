@@ -13,11 +13,16 @@ return new class extends Migration
     {
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->string('tenant_id')->index();
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             $table->foreignId('plan_id');
-            $table->timestamp('started_at');
+            $table->string('type');
+            $table->string('stripe_id')->unique();
+            $table->string('stripe_status');
+            $table->string('stripe_price')->nullable();
+            $table->integer('quantity')->nullable();
+            $table->timestamp('trial_ends_at')->nullable();
             $table->timestamp('ends_at')->nullable();
-            $table->string('status', 20);
             $table->timestamps();
         });
     }

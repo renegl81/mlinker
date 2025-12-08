@@ -20,6 +20,8 @@ return new class extends Migration
             $table->boolean('show_prices')->default(true);
             $table->boolean('show_currency')->default(true);
             $table->boolean('show_calories')->default(false);
+            $table->string('tenant_id')->index();
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             $table->timestamps();
         });
     }

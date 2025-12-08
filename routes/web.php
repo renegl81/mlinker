@@ -33,23 +33,27 @@ require __DIR__.'/auth.php';
 
 
 // routes/web.php
+foreach (config('tenancy.central_domains') as $domain) {
+    Route::domain($domain)->group(function () {
+        Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
+            Route::resource('users', UserController::class)->except('create', 'edit');
+            Route::resource('locations', LocationController::class)->except('create', 'edit');
+            Route::resource('categories', CategoryController::class)->except('create', 'edit');
+            Route::resource('menu-cards', MenuCardController::class)->except('create', 'edit');
+            Route::resource('menus', MenuController::class)->except('create', 'edit');
+            Route::resource('sections', SectionController::class)->except('create', 'edit');
+            Route::resource('products', ProductController::class)->except('create', 'edit');
+            Route::resource('ingredients', IngredientController::class)->except('create', 'edit');
+            Route::resource('allergens', AllergenController::class)->except('create', 'edit');
+            Route::resource('plans', PlanController::class)->except('create', 'edit');
+            Route::resource('subscriptions', SubscriptionController::class)->except('create', 'edit');
+            Route::resource('payments', PaymentController::class)->except('create', 'edit');
+            Route::resource('templates', TemplateController::class)->except('create', 'edit');
+            Route::resource('translations', TranslationController::class)->except('create', 'edit');
+            Route::resource('opening-hours', OpeningHourController::class)->except('create', 'edit');
+            Route::resource('countries', CountryController::class)->except('create', 'edit');
+            Route::resource('qrcodes', QRCodeController::class)->except('create', 'edit');
+        });
+    });
+}
 
-Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
-    Route::resource('users', UserController::class)->except('create', 'edit');
-    Route::resource('locations', LocationController::class)->except('create', 'edit');
-    Route::resource('categories', CategoryController::class)->except('create', 'edit');
-    Route::resource('menu-cards', MenuCardController::class)->except('create', 'edit');
-    Route::resource('menus', MenuController::class)->except('create', 'edit');
-    Route::resource('sections', SectionController::class)->except('create', 'edit');
-    Route::resource('products', ProductController::class)->except('create', 'edit');
-    Route::resource('ingredients', IngredientController::class)->except('create', 'edit');
-    Route::resource('allergens', AllergenController::class)->except('create', 'edit');
-    Route::resource('plans', PlanController::class)->except('create', 'edit');
-    Route::resource('subscriptions', SubscriptionController::class)->except('create', 'edit');
-    Route::resource('payments', PaymentController::class)->except('create', 'edit');
-    Route::resource('templates', TemplateController::class)->except('create', 'edit');
-    Route::resource('translations', TranslationController::class)->except('create', 'edit');
-    Route::resource('opening-hours', OpeningHourController::class)->except('create', 'edit');
-    Route::resource('countries', CountryController::class)->except('create', 'edit');
-    Route::resource('qrcodes', QRCodeController::class)->except('create', 'edit');
-});

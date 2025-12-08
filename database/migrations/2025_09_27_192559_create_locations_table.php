@@ -32,6 +32,8 @@ return new class extends Migration
             $table->string('time_format', 255);
             $table->string('time_zone', 255);
             $table->json('social_medias')->nullable();
+            $table->string('tenant_id')->index();
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('ingredient_product', function (Blueprint $table) {
-            $table->foreignId('ingredient_id');
-            $table->foreignId('product_id');
-            $table->string('tenant_id')->index();
-            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
+        Schema::table('subscription_items', function (Blueprint $table) {
+            $table->string('meter_event_name')->nullable()->after('quantity');
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('ingredient_product');
+        Schema::table('subscription_items', function (Blueprint $table) {
+            $table->dropColumn('meter_event_name');
+        });
     }
 };

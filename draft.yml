@@ -112,6 +112,7 @@ models:
   Template:
     name: string:100
     description: text nullable
+    parameters: json
     preview_image_url: string:255 nullable
     config: json nullable
     is_active: boolean default:true

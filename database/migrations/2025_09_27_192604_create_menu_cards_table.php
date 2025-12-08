@@ -18,6 +18,8 @@ return new class extends Migration
             $table->foreignId('location_id');
             $table->string('image_url', 255)->nullable();
             $table->foreignId('template_id')->nullable();
+            $table->string('tenant_id')->index();
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             $table->timestamps();
         });
     }

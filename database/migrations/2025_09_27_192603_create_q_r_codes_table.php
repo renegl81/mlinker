@@ -17,6 +17,8 @@ return new class extends Migration
             $table->json('parameters');
             $table->string('image_url', 255)->nullable();
             $table->string('url', 255)->nullable();
+            $table->string('tenant_id')->index();
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -11,22 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('allergens', function (Blueprint $table) {
+        Schema::create('tenant_user', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100)->unique();
-            $table->text('description')->nullable();
-            $table->string('image_url', 255)->nullable();
-            $table->string('tenant_id')->index();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('tenant_id');
             $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
+            $table->string('role')->default('owner');
+
             $table->timestamps();
+
+            // Un usuario no puede estar dos veces en el mismo restaurante
+            $table->unique(['user_id', 'tenant_id']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('allergens');
+        Schema::dropIfExists('tenant_user');
     }
 };
