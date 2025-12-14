@@ -3,8 +3,9 @@
 import { Head, Link } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/app/FrontLayout.vue';
 import { defineComponent } from 'vue';
+import { BreadcrumbItemType } from '@/types';
 
-const breadcrumbs = {
+const breadcrumbs = <BreadcrumbItemType[]>{
     'Home': 'Home',
 }
 </script>

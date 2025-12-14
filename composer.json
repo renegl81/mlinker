@@ -1,15 +1,15 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/vue-starter-kit",
+    "name": "menulinker/core",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "The menulinker core.",
     "keywords": [
         "laravel",
         "framework"
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
+        "php": "^8.4",
         "inertiajs/inertia-laravel": "^2.0",
         "laravel/cashier": "^16.1",
         "laravel/fortify": "^1.30",

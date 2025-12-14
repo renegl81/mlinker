@@ -1,14 +1,8 @@
 <?php
 
-
-
 return [
-   'nav' => [
-       'home' => 'Inicio',
-       'about' => 'Sobre nosotros',
-       'contact' => 'Contacto',
-       'login' => 'Entrar',
-       'register' => 'Registrarse',
-   ]
-
+    'actions' => require __DIR__ . '/actions.php',
+    'pagination' => require __DIR__ . '/pagination.php',
+    'nav' => require __DIR__ . '/nav.php',
+    'users' => require __DIR__ . '/users.php',
 ];

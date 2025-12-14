@@ -15,7 +15,7 @@ class ListLocations implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * Create a new job instance.
+     * Create.vue a new job instance.
      */
     public function __construct(private ?User $user = null)
     {

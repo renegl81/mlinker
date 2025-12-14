@@ -17,7 +17,7 @@ class UpdateSubscription implements ShouldQueue
     public $id;
 
     /**
-     * Create a new job instance.
+     * Create.vue a new job instance.
      */
     public function __construct($request, $id)
     {

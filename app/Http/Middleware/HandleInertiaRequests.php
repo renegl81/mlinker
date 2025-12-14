@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\File;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
 
@@ -51,7 +53,9 @@ class HandleInertiaRequests extends Middleware
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
-            'messages' => fn () => __('messages'),
+           'messages' => fn () => App::environment('production')
+                ? cache()->rememberForever('messages.' . app()->getLocale(), fn() => __('messages'))
+                : __('messages'),
         ];
     }
 }

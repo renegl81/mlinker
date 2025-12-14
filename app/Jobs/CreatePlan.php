@@ -15,7 +15,7 @@ class CreatePlan implements ShouldQueue
     public $request;
 
     /**
-     * Create a new job instance.
+     * Create.vue a new job instance.
      */
     public function __construct($request)
     {
