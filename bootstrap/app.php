@@ -6,8 +6,8 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request; // <--- 1. IMPORTANTE: Añadir esta línea
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route; // <--- 1. IMPORTANTE: Añadir esta línea
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -27,7 +27,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             HandleAppearance::class,
             HandleInertiaRequests::class,
-            AddLinkHeadersForPreloadedAssets::class
+            AddLinkHeadersForPreloadedAssets::class,
         ]);
 
         // 2. CONFIGURACIÓN DE REDIRECCIÓN (El arreglo clave)
@@ -37,6 +37,7 @@ return Application::configure(basePath: dirname(__DIR__))
             if ($request->expectsJson()) {
                 return null;
             }
+
             return route('central.login');
         });
     })

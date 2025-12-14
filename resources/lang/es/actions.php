@@ -9,5 +9,5 @@ return [
     'save' => 'Guardar',
     'cancel' => 'Cancelar',
     'clear' => 'Limpiar',
-    'search' => 'Buscar'
+    'search' => 'Buscar',
 ];

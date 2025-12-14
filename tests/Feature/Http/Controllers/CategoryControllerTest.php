@@ -35,7 +35,6 @@ final class CategoryControllerTest extends TestCase
         Queue::assertPushed(ListCategories::class);
     }
 
-
     #[Test]
     public function store_uses_form_request_validation(): void
     {
@@ -64,7 +63,6 @@ final class CategoryControllerTest extends TestCase
         });
     }
 
-
     #[Test]
     public function show_displays_view(): void
     {
@@ -82,7 +80,6 @@ final class CategoryControllerTest extends TestCase
             return $job->id->is($id);
         });
     }
-
 
     #[Test]
     public function update_uses_form_request_validation(): void
@@ -112,7 +109,6 @@ final class CategoryControllerTest extends TestCase
             return $job->request->is($request) && $job->id->is($id);
         });
     }
-
 
     #[Test]
     public function destroy_redirects(): void

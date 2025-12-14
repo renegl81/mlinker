@@ -36,7 +36,7 @@ class CategorySeeder extends Seeder
             'Asador',
             'Restaurante vegetariano',
             'Restaurante vegano',
-            'Casa de comidas'
+            'Casa de comidas',
         ];
         foreach ($names as $name) {
             Category::updateOrCreate(['name' => $name]);

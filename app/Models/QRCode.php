@@ -9,9 +9,10 @@ use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 class QRCode extends Model
 {
-    use HasFactory, BelongsToTenant;
+    use BelongsToTenant, HasFactory;
 
     protected $table = 'qr_codes';
+
     /**
      * The attributes that are mass assignable.
      *

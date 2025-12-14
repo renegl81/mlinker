@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -75,6 +74,7 @@ class User extends Authenticatable
     public function hasRole(array|string $roles): bool
     {
         $roles = is_array($roles) ? $roles : [$roles];
+
         return $this->roles()->whereIn('name', $roles)->exists();
     }
 

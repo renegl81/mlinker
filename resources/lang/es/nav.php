@@ -7,5 +7,5 @@ return [
     'login' => 'Entrar',
     'register' => 'Registrarse',
     'logout' => 'Salir',
-    'profile' => 'Perfil'
+    'profile' => 'Perfil',
 ];

@@ -51,3 +51,20 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- 6. Salir
 \q
+
+## 🎨 Formateo de Código con Laravel Pint
+
+**Laravel Pint** es un formateador de código PHP que viene preinstalado en Laravel 12. Utiliza PHP-CS-Fixer bajo el capó para mantener un estilo de código consistente.
+
+### Uso Básico
+
+```bash
+# Formatear todo el código del proyecto
+./vendor/bin/pint
+
+# Ver qué archivos cambiarían sin modificarlos (modo dry-run)
+./vendor/bin/pint --test
+
+# Formatear archivos/carpetas específicas
+./vendor/bin/pint app/Models
+./vendor/bin/pint app/Http/Controllers/Admin

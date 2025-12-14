@@ -2,10 +2,9 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\Menu;
 use App\Models\MenuCard;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class MenuFactory extends Factory
 {

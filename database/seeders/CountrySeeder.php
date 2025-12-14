@@ -32,7 +32,7 @@ class CountrySeeder extends Seeder
             [
                 'name' => 'Portugal',
                 'code' => 'PT',
-            ]
+            ],
         ];
         foreach ($countries as $country) {
             Country::updateOrCreate($country);

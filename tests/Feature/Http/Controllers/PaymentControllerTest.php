@@ -37,7 +37,6 @@ final class PaymentControllerTest extends TestCase
         Queue::assertPushed(ListPayments::class);
     }
 
-
     #[Test]
     public function store_uses_form_request_validation(): void
     {
@@ -74,7 +73,6 @@ final class PaymentControllerTest extends TestCase
         });
     }
 
-
     #[Test]
     public function show_displays_view(): void
     {
@@ -92,7 +90,6 @@ final class PaymentControllerTest extends TestCase
             return $job->id->is($id);
         });
     }
-
 
     #[Test]
     public function update_uses_form_request_validation(): void
@@ -130,7 +127,6 @@ final class PaymentControllerTest extends TestCase
             return $job->request->is($request) && $job->id->is($id);
         });
     }
-
 
     #[Test]
     public function destroy_redirects(): void

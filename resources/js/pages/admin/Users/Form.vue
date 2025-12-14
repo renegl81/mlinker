@@ -37,7 +37,10 @@
                     </div>
 
                     <div class="space-y-2">
-                        <Label for="password">{{ page.props.messages.users.fields.password }}</Label>
+                        <Label for="password">
+                            {{ page.props.messages.users.fields.password }}
+                            <span v-if="isEdit" class="text-muted-foreground text-xs">({{ page.props.messages.users.fields.optional }})</span>
+                        </Label>
                         <Input
                             id="password"
                             type="password"
@@ -52,7 +55,10 @@
                     </div>
 
                     <div class="space-y-2">
-                        <Label for="password_confirmation">{{ page.props.messages.users.fields.password_confirmation }}</Label>
+                        <Label for="password_confirmation">
+                            {{ page.props.messages.users.fields.password_confirmation }}
+                            <span v-if="isEdit" class="text-muted-foreground text-xs">({{ page.props.messages.users.fields.optional }})</span>
+                        </Label>
                         <Input
                             id="password_confirmation"
                             type="password"
@@ -80,6 +86,7 @@
         </form>
     </Card>
 </template>
+
 
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3'

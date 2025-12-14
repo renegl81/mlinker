@@ -15,24 +15,24 @@ class UserSeeder extends Seeder
     {
         $roles = [
             'Admin',
-            'Owner'
+            'Owner',
         ];
         foreach ($roles as $role) {
             Role::updateOrCreate(['name' => $role]);
         }
         $roleAdmin = Role::where('name', 'Admin')->first();
         $admins = [
-          [
-              'name' => 'Admin',
-              'last_name' => 'FlowSuite',
-              'email' => 'admin@flowsuite.com',
-              'password' => bcrypt('password'),
-          ]
+            [
+                'name' => 'Admin',
+                'last_name' => 'FlowSuite',
+                'email' => 'admin@flowsuite.com',
+                'password' => bcrypt('password'),
+            ],
         ];
-      foreach ($admins as $admin){
-          $user = User::updateOrCreate($admin);
-          $user->assignRole($roleAdmin);
-          $user->save();
-      }
+        foreach ($admins as $admin) {
+            $user = User::updateOrCreate($admin);
+            $user->assignRole($roleAdmin);
+            $user->save();
+        }
     }
 }

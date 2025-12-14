@@ -27,7 +27,7 @@ class ListLocations implements ShouldQueue
      */
     public function handle()
     {
-        if($this->user){
+        if ($this->user) {
             return $this->user->locations;
         }
 

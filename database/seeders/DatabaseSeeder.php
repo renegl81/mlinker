@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Country;
 use App\Models\Tenant;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -13,6 +12,7 @@ class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
+     *
      * @throws TenantCouldNotBeIdentifiedById
      */
     public function run(): void
@@ -34,7 +34,7 @@ class DatabaseSeeder extends Seeder
             // el 'tenant_id' => 'pizzeria-mario'
             tenancy()->initialize($mainTenant);
 
-            $this->command->info("🌱 Sembrando datos para el restaurante: " . $mainTenant->id);
+            $this->command->info('🌱 Sembrando datos para el restaurante: '.$mainTenant->id);
 
             // B. EJECUTAR SEEDERS DE CONTENIDO
             // Nota: Estos seeders NO necesitan saber del tenant explícitamente,

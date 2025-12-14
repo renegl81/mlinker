@@ -1,14 +1,15 @@
 <?php
+
 // File: database/seeders/TenantSeeder.php
+
 namespace Database\Seeders;
 
 use App\Models\Role;
 use App\Models\Tenant;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class TenantSeeder extends Seeder
 {
@@ -40,7 +41,7 @@ class TenantSeeder extends Seeder
             'pm_type' => 'card',
             'pm_last_four' => '4242',
             'trial_ends_at' => now()->addDays(14),
-            'data' => json_encode(new \stdClass()),
+            'data' => json_encode(new \stdClass),
             'stripe_connect_id' => 'acct_123456789',
             'updated_at' => now(),
             'created_at' => now(),

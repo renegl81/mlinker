@@ -7,7 +7,8 @@ use Inertia\Inertia;
 
 class DefaultController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         return Inertia::render('Home', []);
     }
 }

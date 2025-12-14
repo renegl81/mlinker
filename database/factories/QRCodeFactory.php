@@ -2,10 +2,9 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\MenuCard;
 use App\Models\QRCode;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class QRCodeFactory extends Factory
 {

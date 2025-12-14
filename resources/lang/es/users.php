@@ -15,14 +15,14 @@ return [
         'email' => 'Email',
         'password' => 'Contraseña',
         'password_confirmation' => 'Confirmar Contraseña',
-        'postal_code' => 'Código Postal'
+        'postal_code' => 'Código Postal',
     ],
     'placeholders' => [
         'name' => 'Nombre completo',
         'email' => 'correo@ejemplo.com',
         'password' => 'Contraseña',
         'password_edit' => 'Dejar vacío para no cambiar',
-        'password_confirmation' => 'Confirmar contraseña'
+        'password_confirmation' => 'Confirmar contraseña',
     ],
     'filters' => [
         'show' => 'Mostrar filtros',
@@ -38,8 +38,8 @@ return [
             'province' => 'Buscar por provincia',
             'city' => 'Buscar por ciudad',
             'postal_code' => 'Buscar por código postal',
-            'address' => 'Buscar por dirección'
-        ]
+            'address' => 'Buscar por dirección',
+        ],
     ],
     'actions' => [
         'create' => 'Crear Usuario',
@@ -48,12 +48,16 @@ return [
         'confirm_delete' => '¿Estás seguro de eliminar este usuario?',
         'save' => 'Guardar',
         'saving' => 'Guardando...',
-        'cancel' => 'Cancelar'
+        'cancel' => 'Cancelar',
     ],
     'form' => [
         'title_create' => 'Información del Usuario',
         'title_edit' => 'Editar Usuario',
         'description_create' => 'Completa los datos del usuario',
-        'description_edit' => 'Actualiza los datos del usuario'
-    ]
+        'description_edit' => 'Actualiza los datos del usuario',
+        'create_success' => 'Usuario creado correctamente',
+        'edit_success' => 'Usuario actualizado correctamente',
+        'delete_success' => 'Usuario eliminado correctamente',
+
+    ],
 ];
