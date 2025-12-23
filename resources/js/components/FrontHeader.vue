@@ -34,8 +34,8 @@ import { getInitials } from '@/composables/useInitials';
 import { toUrl, urlIsActive } from '@/lib/utils';
 import type { BreadcrumbItem, NavItem } from '@/types';
 import { InertiaLinkProps, Link, usePage } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-vue-next';
-import { computed } from 'vue';
+import { Menu, Search, LucideProps, LogInIcon, UserPlus } from 'lucide-vue-next';
+import { computed, FunctionalComponent } from 'vue';
 
 interface Props {
     breadcrumbs?: BreadcrumbItem[];
@@ -60,29 +60,24 @@ const activeItemStyles = computed(
             : '',
 );
 
-const mainNavItems: NavItem[] = [
+const mainNavItems: ({ title: any; href: string; icon: null })[] = [
+
+];
+
+const rightNavItems: ({ title: any; href: string; icon: FunctionalComponent<LucideProps, {}, any, {}> } | {
+    title: any;
+    href: string;
+    icon: null
+})[] = [
     {
         title: page.props.messages.nav.login,
         href: route('login'),
-        icon: null,
+        icon: LogInIcon,
     },
     {
         title: page.props.messages.nav.register,
         href: route('register'),
-        icon: null,
-    },
-];
-
-const rightNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
-        icon: BookOpen,
+        icon: UserPlus,
     },
 ];
 </script>

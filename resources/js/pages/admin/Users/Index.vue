@@ -11,6 +11,7 @@ import { Plus, Pencil, Trash2, ChevronLeft, ChevronRight } from 'lucide-vue-next
 import type { BreadcrumbItem } from '@/types'
 import { index as usersRoute, create, destroy as userRouteDestroy } from '@/routes/users'
 import UserFilters, { type UserFilters as UserFiltersType } from './Filters.vue'
+import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 const page = usePage()
 interface User {
@@ -110,20 +111,40 @@ function clearFilters() {
                                 <TableCell>{{ u.email }}</TableCell>
                                 <TableCell class="text-right">
                                     <div class="flex justify-end gap-2">
-                                        <Button variant="outline" size="sm" as-child>
-                                            <Link :href="`/admin/users/${u.id}/edit`">
-                                                <Pencil class="mr-2 h-3 w-3" />
-                                                {{ page.props.messages.actions.edit }}
-                                            </Link>
-                                        </Button>
-                                        <Button
-                                            variant="destructive"
-                                            size="sm"
-                                            @click="remove(u.id)"
-                                        >
-                                            <Trash2 class="mr-2 h-3 w-3" />
-                                            {{ page.props.messages.actions.remove }}
-                                        </Button>
+                                        <TooltipProvider>
+                                            <Tooltip>
+                                                <TooltipTrigger as-child>
+                                                    <Button variant="outline" size="sm" as-child>
+                                                        <Link
+                                                            :href="`/admin/users/${u.id}/edit`"
+                                                            :aria-label="page.props.messages?.users.actions.edit"
+                                                        >
+                                                            <Pencil class="h-3 w-3" />
+                                                        </Link>
+                                                    </Button>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    {{ page.props.messages?.users.actions.edit }}
+                                                </TooltipContent>
+                                            </Tooltip>
+
+                                            <Tooltip>
+                                                <TooltipTrigger as-child>
+                                                    <Button
+                                                        variant="destructive"
+                                                        size="sm"
+                                                        @click="remove(u.id)"
+                                                        :aria-label="page.props.messages?.users.actions.delete"
+                                                    >
+                                                        <Trash2 class="h-3 w-3" />
+                                                    </Button>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    {{ page.props.messages?.users.actions.delete }}
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </TooltipProvider>
+
                                     </div>
                                 </TableCell>
                             </TableRow>
