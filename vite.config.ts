@@ -33,13 +33,19 @@ export default defineConfig(({ mode }) => {
                 host: '0.0.0.0',
                 port: 5173,
                 strictPort: true,
-                cors: { origin: '*' },
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS',
-                    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+                hmr: {
+                    host: 'localhost',
+                    protocol: 'ws',
+                    clientPort: 5173,
                 },
+                watch: {
+                    usePolling: true, // Importante para Docker
+                },
+                cors: true, // Simplificado
             }
             : undefined,
+        ssr: {
+            noExternal: ['@inertiajs/server'],
+        },
     };
 });
