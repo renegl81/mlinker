@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
@@ -23,6 +24,8 @@ Route::middleware([
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
 ])->group(function () {
-    /*Route::get('/', [App\Http\Controllers\Admin\Tenant\DefaultController::class, 'index'])
-        ->name('tenant.home');*/
+    Route::get('/users', function () {
+        $tenant = tenant();
+        return $tenant->users;
+    })->name('tenant.users.index');
 });

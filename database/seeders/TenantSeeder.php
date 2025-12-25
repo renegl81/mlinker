@@ -75,12 +75,26 @@ class TenantSeeder extends Seeder
 
         if ($tenant instanceof Tenant) {
             $tenant->domains()->firstOrCreate(['domain' => $domainName]);
+            $tenant->users()->syncWithoutDetaching([
+                $user->id => ['role' => 'owner']
+            ]);
         } else {
             // Fallback directo a la tabla domains (evita triggers/bootstrappers)
             DB::table('domains')->updateOrInsert(
                 ['domain' => $domainName],
                 [
                     'tenant_id' => $tenantId,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
+            DB::table('tenant_user')->updateOrInsert(
+                [
+                    'user_id' => $user->id,
+                    'tenant_id' => $tenantId,
+                ],
+                [
+                    'role' => 'owner',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]
