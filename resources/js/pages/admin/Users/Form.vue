@@ -68,6 +68,33 @@
                             :class="{ 'border-destructive': form.errors.password_confirmation }"
                         />
                     </div>
+
+                    <div class="space-y-2">
+                        <Label for="role">{{ page.props.messages.users.fields.role }}</Label>
+                        <Select
+                            :model-value="form.role"
+                            @update:model-value="$emit('update:role', $event)"
+                        >
+                            <SelectTrigger
+                                id="role"
+                                :class="{ 'border-destructive': form.errors.role }"
+                            >
+                                <SelectValue :placeholder="page.props.messages.users.placeholders.role" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem
+                                    v-for="role in props.roles"
+                                    :key="role.id"
+                                    :value="role.id.toString()"
+                                >
+                                    {{ role.name }}
+                                </SelectItem>
+                            </SelectContent>
+                        </Select>
+                        <p v-if="form.errors.role" class="text-sm text-destructive">
+                            {{ form.errors.role }}
+                        </p>
+                    </div>
                 </div>
             </CardContent>
 
@@ -87,7 +114,6 @@
     </Card>
 </template>
 
-
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3'
 import { computed } from 'vue'
@@ -95,8 +121,10 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Save, X } from 'lucide-vue-next'
 import { index as usersRoute } from '@/routes/users'
+import { Role } from '@/types'
 
 interface Props {
     form: {
@@ -104,6 +132,7 @@ interface Props {
         email: string
         password: string
         password_confirmation: string
+        role: string
         errors: Record<string, string>
         processing: boolean
     }
@@ -112,6 +141,7 @@ interface Props {
     submitText?: string
     processingText?: string
     isEdit?: boolean
+    roles: Role[]
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -148,5 +178,6 @@ defineEmits<{
     'update:email': [value: string]
     'update:password': [value: string]
     'update:passwordConfirmation': [value: string]
+    'update:role': [value: string]
 }>()
 </script>

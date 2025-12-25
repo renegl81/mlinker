@@ -12,6 +12,7 @@
                 title="Información del Usuario"
                 description="Completa los datos del nuevo usuario."
                 submit-text="Crear Usuario"
+                :roles="props.roles"
                 @submit="submit"
                 @update:name="form.name = $event"
                 @update:email="form.email = $event"

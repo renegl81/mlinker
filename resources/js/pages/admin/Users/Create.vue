@@ -12,6 +12,7 @@
                 title="Información del Usuario"
                 description="Completa los datos del nuevo usuario."
                 submit-text="Crear Usuario"
+                :roles="props.roles"
                 @submit="submit"
                 @update:name="form.name = $event"
                 @update:email="form.email = $event"
@@ -27,7 +28,7 @@ import { Head, useForm } from '@inertiajs/vue3'
 import AppLayout from '@/layouts/AppLayout.vue'
 import HeadingSmall from '@/components/HeadingSmall.vue'
 import UserForm from './Form.vue'
-import type { BreadcrumbItem } from '@/types'
+import type { BreadcrumbItem, Role, User } from '@/types'
 import { index as usersRoute, store } from '@/routes/users'
 
 const breadcrumbItems: BreadcrumbItem[] = [
@@ -40,6 +41,11 @@ const breadcrumbItems: BreadcrumbItem[] = [
         href: '#',
     },
 ]
+interface Props {
+    roles: Role[]
+}
+
+const props = defineProps<Props>()
 
 const form = useForm({
     name: '',

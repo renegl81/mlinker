@@ -4,13 +4,12 @@ namespace App\Http\Controllers\Admin\Tenant;
 
 use App\Actions\User\CreateUser;
 use App\Actions\User\GetTenantUsers;
+use App\Actions\User\UpdateUser;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
-use App\Jobs\DeleteUser;
-use App\Jobs\ShowUser;
-use App\Jobs\UpdateUser;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -26,6 +25,12 @@ class UserController extends Controller
         ]);
     }
 
+    public function create()
+    {
+        return Inertia::render('admin/tenant/Users/Create', [
+            'roles' => Role::all(['id', 'name']),
+        ]);
+    }
     public function store(UserStoreRequest $request, CreateUser $createUser): RedirectResponse
     {
         $createUser->execute($request);
@@ -35,6 +40,7 @@ class UserController extends Controller
 
     public function show(User $user)
     {
+        $user->load('roles');
         return Inertia::render('tenant.users.show', [
             'user' => $user,
         ]);
@@ -42,21 +48,31 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
+        $user->load('roles');
         return Inertia::render('admin/tenant/Users/Edit', [
             'user' => $user,
+            'roles' => Role::all(['id', 'name']),
         ]);
     }
-    public function update(UserUpdateRequest $request, User $user): RedirectResponse
+    public function update(UserUpdateRequest $request, User $user, UpdateUser $updateUser): RedirectResponse
     {
-        UpdateUser::dispatch($request, $user);
+        try{
+            $user = $updateUser->execute($request, $user);
+        }catch (\Exception $e){
+            return redirect()->route('tenant.users.edit', ['user' => $user])
+                ->with('error', $e->getMessage());
+        }
 
-        return redirect()->route('tenant.users.show', ['user' => $user]);
+
+        return redirect()->route('tenant.users.edit', ['user' => $user])
+            ->with('success', 'User updated successfully.');
     }
 
     public function destroy(Request $request, User $user): RedirectResponse
     {
-        DeleteUser::dispatch($user);
+        $user->delete();
 
-        return redirect()->route('tenant.users.index');
+        return redirect()->route('tenant.users.index')
+            ->with('success', 'User deleted successfully.');
     }
 }
