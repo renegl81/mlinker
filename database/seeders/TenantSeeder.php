@@ -71,7 +71,7 @@ class TenantSeeder extends Seeder
         }
 
         // 4. Crear Dominio (Opcional). Si tenemos el modelo, usar la relación; si no, usar DB directo.
-        $domainName = 'pizzeria-mario.localhost';
+        $domainName = 'pizzeria-mario.'.config('app.domain');
 
         if ($tenant instanceof Tenant) {
             $tenant->domains()->firstOrCreate(['domain' => $domainName]);

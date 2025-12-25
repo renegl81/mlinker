@@ -29,8 +29,13 @@ class Tenant extends BaseTenant implements TenantWithDatabase
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'tenant_user')
-            ->withPivot('role')
+        return $this->belongsToMany(
+            User::class,
+            'tenant_user',
+            'tenant_id',
+            'user_id'
+        )
+            ->withPivot('role', 'permissions', 'is_active', 'invited_at', 'joined_at')
             ->withTimestamps();
     }
 }

@@ -15,7 +15,9 @@ class UpdateUserRequest extends FormRequest
     {
         $rules = [
             'name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email,'.$this->user->id],
+            'roles' => 'required|array'
         ];
 
         if ($this->filled('password')) {

@@ -15,11 +15,7 @@
                 :is-edit="true"
                 :roles="props.roles"
                 @submit="submit"
-                @update:name="form.name = $event"
-                @update:email="form.email = $event"
-                @update:roles="form.roles = $event"
-                @update:password="form.password = $event"
-                @update:password-confirmation="form.password_confirmation = $event"
+                @update:field="updateField"
             />
         </div>
     </AppLayout>
@@ -51,8 +47,13 @@ const breadcrumbItems: BreadcrumbItem[] = [
     },
 ]
 
+function updateField(field: string, value: any) {
+    form[field] = value
+}
+
 const form = useForm({
     name: props.user.name,
+    last_name: props.user.last_name,
     email: props.user.email,
     password: '',
     password_confirmation: '',

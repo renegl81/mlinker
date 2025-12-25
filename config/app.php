@@ -2,6 +2,7 @@
 
 return [
 
+    'domain' => env('APP_DOMAIN', 'flowsuite.com'),
     /*
     |--------------------------------------------------------------------------
     | Application Name

@@ -13,15 +13,17 @@ return new class extends Migration
     {
         Schema::create('tenant_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('tenant_id');
-            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
-            $table->string('role')->default('owner');
-
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('role')->default('waiter'); // owner, manager, waiter, chef, cashier
+            $table->json('permissions')->nullable(); // Permisos personalizados adicionales
+            $table->boolean('is_active')->default(true);
+            $table->timestamp('invited_at')->nullable();
+            $table->timestamp('joined_at')->nullable();
             $table->timestamps();
 
-            // Un usuario no puede estar dos veces en el mismo restaurante
-            $table->unique(['user_id', 'tenant_id']);
+            $table->unique(['tenant_id', 'user_id']);
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
         });
     }
 

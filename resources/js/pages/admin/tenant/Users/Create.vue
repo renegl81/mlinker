@@ -14,10 +14,7 @@
                 submit-text="Crear Usuario"
                 :roles="props.roles"
                 @submit="submit"
-                @update:name="form.name = $event"
-                @update:email="form.email = $event"
-                @update:password="form.password = $event"
-                @update:password-confirmation="form.password_confirmation = $event"
+                @update:field="updateField"
             />
         </div>
     </AppLayout>
@@ -28,8 +25,8 @@ import { Head, useForm } from '@inertiajs/vue3'
 import AppLayout from '@/layouts/AppLayout.vue'
 import HeadingSmall from '@/components/HeadingSmall.vue'
 import UserForm from './Form.vue'
-import type { BreadcrumbItem } from '@/types'
-import { index as usersRoute, store } from '@/routes/users'
+import type { BreadcrumbItem, Role, User } from '@/types'
+import { index as usersRoute, store } from '@/routes/tenant/users'
 
 const breadcrumbItems: BreadcrumbItem[] = [
     {
@@ -41,14 +38,31 @@ const breadcrumbItems: BreadcrumbItem[] = [
         href: '#',
     },
 ]
+interface Props {
+    roles: Role[]
+}
 
-const form = useForm({
+const props = defineProps<Props>()
+interface FormState {
+    name: string
+    last_name: string
+    email: string
+    password: string
+    password_confirmation: string
+    roles: Role[]
+}
+
+const form = useForm<FormState>({
     name: '',
+    last_name: '',
     email: '',
     password: '',
-    password_confirmation: ''
+    password_confirmation: '',
+    roles: []
 })
-
+function updateField(field: string, value: any) {
+    form[field] = value
+}
 function submit() {
     form.post(store().url)
 }

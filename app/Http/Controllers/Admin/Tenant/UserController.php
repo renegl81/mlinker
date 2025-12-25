@@ -6,6 +6,7 @@ use App\Actions\User\CreateUser;
 use App\Actions\User\GetTenantUsers;
 use App\Actions\User\UpdateUser;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Core\User\StoreUserRequest;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
@@ -31,10 +32,10 @@ class UserController extends Controller
             'roles' => Role::all(['id', 'name']),
         ]);
     }
-    public function store(UserStoreRequest $request, CreateUser $createUser): RedirectResponse
+    public function store(StoreUserRequest $request, CreateUser $createUser): RedirectResponse
     {
         $createUser->execute($request);
-        return redirect()->route('user.index')
+        return redirect()->route('tenant.users.index')
             ->with('success', 'User created successfully.');
     }
 

@@ -93,9 +93,44 @@ class User extends Authenticatable
      */
     public function tenants(): BelongsToMany
     {
-        return $this->belongsToMany(Tenant::class, 'tenant_user')
-            ->withPivot('role') // Para acceder a $user->pivot->role
+        return $this->belongsToMany(
+            Tenant::class,
+            'tenant_user',
+            'user_id',
+            'tenant_id'
+        )
+            ->withPivot('role', 'permissions', 'is_active', 'invited_at', 'joined_at')
             ->withTimestamps();
+    }
+
+    public function currentTenantRole()
+    {
+        if (!tenancy()->initialized) {
+            return null;
+        }
+
+        return $this->roleInTenant(tenant('id'));
+    }
+
+    public function belongsToCurrentTenant(): bool
+    {
+        if (!tenancy()->initialized) {
+            return false;
+        }
+
+        return $this->tenants()
+            ->where('tenant_id', tenant('id'))
+            ->wherePivot('is_active', true)
+            ->exists();
+    }
+
+    /**
+     * Obtener rol en un tenant específico
+     */
+    public function roleInTenant($tenantId)
+    {
+        $tenant = $this->tenants()->where('tenant_id', $tenantId)->first();
+        return $tenant?->pivot->role;
     }
 
     /**
