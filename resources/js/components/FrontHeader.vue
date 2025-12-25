@@ -64,7 +64,7 @@ const mainNavItems: ({ title: any; href: string; icon: null })[] = [
 
 ];
 
-const rightNavItems: ({ title: any; href: string; icon: FunctionalComponent<LucideProps, {}, any, {}> } | {
+const rightNavItems: ({ title: any; href: string; withAuth: boolean; icon: FunctionalComponent<LucideProps, {}, any, {}> } | {
     title: any;
     href: string;
     icon: null
@@ -73,13 +73,23 @@ const rightNavItems: ({ title: any; href: string; icon: FunctionalComponent<Luci
         title: page.props.messages.nav.login,
         href: route('login'),
         icon: LogInIcon,
+        withAuth: false
     },
     {
         title: page.props.messages.nav.register,
         href: route('register'),
         icon: UserPlus,
+        withAuth: false
     },
 ];
+
+const rightItems = computed(() => {
+    return []
+    if (page.props.auth?.user) {
+        return rightNavItems.filter((i) => 'withAuth' in i && (i as any).withAuth)
+    }
+    return rightNavItems
+})
 </script>
 
 <template>
@@ -128,7 +138,7 @@ const rightNavItems: ({ title: any; href: string; icon: FunctionalComponent<Luci
                                 </nav>
                                 <div class="flex flex-col space-y-4">
                                     <a
-                                        v-for="item in rightNavItems"
+                                        v-for="item in rightItems"
                                         :key="item.title"
                                         :href="toUrl(item.href)"
                                         target="_blank"
@@ -201,7 +211,7 @@ const rightNavItems: ({ title: any; href: string; icon: FunctionalComponent<Luci
 
                         <div class="hidden space-x-1 lg:flex">
                             <template
-                                v-for="item in rightNavItems"
+                                v-for="item in rightItems"
                                 :key="item.title"
                             >
                                 <TooltipProvider :delay-duration="0">

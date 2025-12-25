@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Admin\Core\DashboardController;
-use App\Http\Controllers\Admin\Core\HomeController;
 use App\Http\Controllers\Admin\Core\UserController;
 use App\Http\Controllers\Admin\Menu\AllergenController;
 use App\Http\Controllers\Admin\Menu\IngredientController;
@@ -14,6 +13,7 @@ use App\Http\Controllers\Admin\Tenant\CountryController;
 use App\Http\Controllers\Admin\Tenant\LocationController;
 use App\Http\Controllers\Admin\Tenant\PlanController;
 use App\Http\Controllers\Admin\Tenant\TemplateController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -22,7 +22,7 @@ require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
 
 // Definir las rutas UNA SOLA VEZ - Laravel manejará los dominios automáticamente
-Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('users', UserController::class);
     Route::resource('locations', LocationController::class)->except('create', 'edit');

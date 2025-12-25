@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin\Core;
 
+use App\Actions\User\GetAdminUsers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Core\User\StoreUserRequest;
 use App\Http\Requests\Admin\Core\User\UpdateUserRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -12,15 +14,10 @@ use Inertia\Inertia;
 
 class UserController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, getAdminUsers $getAdminUsers)
     {
-        $users = User::query()
-            ->when($request->search, fn ($q) => $q->where('name', 'like', '%'.$request->search.'%'))
-            ->paginate(10)
-            ->withQueryString();
-
         return Inertia::render('admin/Users/Index', [
-            'users' => $users,
+            'users' => UserResource::collection($getAdminUsers->execute($request)),
             'filters' => $request->only('search'),
         ]);
     }

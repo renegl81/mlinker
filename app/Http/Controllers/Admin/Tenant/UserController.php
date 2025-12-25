@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Admin\Tenant;
 
+use App\Actions\User\GetTenantUsers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Http\Resources\UserResource;
 use App\Jobs\CreateUser;
 use App\Jobs\DeleteUser;
 use App\Jobs\ListUsers;
 use App\Jobs\ShowUser;
+use App\Jobs\Tenant\TenantListUsers;
 use App\Jobs\UpdateUser;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -17,12 +20,11 @@ use Inertia\Inertia;
 
 class UserController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, GetTenantUsers $getTenantUsers)
     {
-        $users = ListUsers::dispatch();
-
-        return Inertia::render('user.index', [
-            'users' => $users,
+        return Inertia::render('admin/tenant/Users/Index', [
+            'users' => UserResource::collection($getTenantUsers->execute($request)),
+            'filters' => $request->only('search'),
         ]);
     }
 
