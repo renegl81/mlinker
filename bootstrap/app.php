@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Foundation\Application;
@@ -30,15 +31,16 @@ return Application::configure(basePath: dirname(__DIR__))
             AddLinkHeadersForPreloadedAssets::class,
         ]);
 
-        // 2. CONFIGURACIÓN DE REDIRECCIÓN (El arreglo clave)
-        // Como renombramos la ruta 'login' a 'central.login' para evitar conflictos,
-        // debemos decirles explícitamente a Laravel a dónde ir si no está logueado.
+        $middleware->alias([
+            'admin' =>EnsureUserIsAdmin::class,
+        ]);
+
         $middleware->redirectGuestsTo(function (Request $request) {
             if ($request->expectsJson()) {
                 return null;
             }
 
-            return route('central.login');
+            return route('login');
         });
     })
     ->withExceptions(function (Exceptions $exceptions) {

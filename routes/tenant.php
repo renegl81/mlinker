@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Admin\Tenant\UserController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
@@ -23,9 +24,8 @@ Route::middleware([
     'web',
     InitializeTenancyByDomain::class,
     PreventAccessFromCentralDomains::class,
-])->group(function () {
-    Route::get('/users', function () {
-        $tenant = tenant();
-        return $tenant->users;
-    })->name('tenant.users.index');
+    'auth',
+    'verified'
+])->as('tenant.')->group(function () {
+    Route::resource('users', UserController::class);
 });

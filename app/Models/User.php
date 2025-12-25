@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -42,6 +43,9 @@ class User extends Authenticatable
         'password',
     ];
 
+    protected $appends = [
+        'is_admin',
+    ];
     /**
      * Get the attributes that should be cast.
      *
@@ -56,6 +60,12 @@ class User extends Authenticatable
         ];
     }
 
+    protected function isAdmin(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->hasRole('Admin')
+        );
+    }
     public function locations(): HasMany
     {
         return $this->hasMany(Location::class);

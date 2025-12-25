@@ -18,7 +18,7 @@ const breadcrumbs = <BreadcrumbItemType[]>{
         <meta name="description" content="MenuLinker - Crea menús digitales con códigos QR para tu restaurante. Aumenta ventas y mejora la experiencia del cliente.">
         <meta name="keywords" content="menu digital, codigo qr, restaurante, hosteleria, menu online, qr menu">
         <meta name="author" content="MenuLinker">
-        <title>MenuLinker - Menús Digitales con Código QR para Restaurantes</title>
+        <title>FlowSuite - Menús Digitales con Código QR para Restaurantes</title>
     </Head>
 
     <AppLayout :breadcrumbs="breadcrumbs">

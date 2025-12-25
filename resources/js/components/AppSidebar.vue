@@ -11,13 +11,17 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard } from '@/routes';
+import { dashboard, documentation } from '@/routes';
 import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import { BookOpen, Folder, LayoutGrid } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 import {index as users} from '@/routes/users';
+import {index as tenantUsers} from '@/routes/tenant/users';
+import { route } from 'ziggy-js';
+import { UserGroupIcon } from '@heroicons/vue/16/solid';
 
+const page = usePage();
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
@@ -26,8 +30,8 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Usuarios',
-        href: users(), // reemplaza por users() si tienes un helper de rutas
-        icon: Folder,
+        href: page.props.auth?.user?.is_admin ? users() : tenantUsers(),
+        icon: UserGroupIcon,
     },
 ];
 
@@ -38,8 +42,8 @@ const footerNavItems: NavItem[] = [
         icon: Folder,
     },
     {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
+        title: 'Documentación',
+        href: documentation(),
         icon: BookOpen,
     },
 ];
