@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AccountActivationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
@@ -33,6 +34,13 @@ Route::middleware('guest')->group(function () {
 
     Route::post('reset-password', [NewPasswordController::class, 'store'])
         ->name('password.store');
+
+    Route::get('/activation-sent', [AccountActivationController::class, 'sent'])
+        ->name('auth.activation.sent');
+
+    Route::get('/activate/{user}', [AccountActivationController::class, 'activate'])
+        ->name('auth.activate')
+        ->middleware('signed');
 });
 
 Route::middleware('auth')->group(function () {
