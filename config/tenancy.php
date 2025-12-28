@@ -18,9 +18,11 @@ return [
      */
     'central_domains' => [
         'lvh.me:8086',
+        'lvh.me',
+        '127.0.0.1:8086',
         '127.0.0.1',
+        'localhost:8086',
         'localhost',
-        'localhost:8000',
     ],
 
     /**

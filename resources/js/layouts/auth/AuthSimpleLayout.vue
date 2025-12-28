@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
-import { home } from '@/routes';
+import { tenant_home as home } from '@/routes/tenant_public/index';
 import { Link } from '@inertiajs/vue3';
 
 defineProps<{

@@ -36,6 +36,8 @@ import type { BreadcrumbItem, NavItem } from '@/types';
 import { InertiaLinkProps, Link, usePage } from '@inertiajs/vue3';
 import { Menu, Search, LucideProps, LogInIcon, UserPlus } from 'lucide-vue-next';
 import { computed, FunctionalComponent } from 'vue';
+import NavUser from '@/components/NavUser.vue';
+import UserInfo from '@/components/UserInfo.vue';
 
 interface Props {
     breadcrumbs?: BreadcrumbItem[];
@@ -99,7 +101,7 @@ const rightNavItems: ({ title: any; href: string; icon: FunctionalComponent<Luci
                     </Sheet>
                 </div>
 
-                <Link :href="route('home')" class="flex items-center gap-x-2">
+                <Link :href="route('tenant_public.tenant_home')" class="flex items-center gap-x-2">
                     <AppLogo class="text-white fill-white" /> </Link>
 
                 <div class="hidden h-full lg:flex lg:flex-1">
@@ -133,14 +135,16 @@ const rightNavItems: ({ title: any; href: string; icon: FunctionalComponent<Luci
                                 Sign up
                             </Link>
                         </template>
-
-                        <template v-else v-for="item in rightNavItems" :key="item.title">
-                        </template>
                     </div>
 
                     <DropdownMenu v-if="auth?.user">
                         <DropdownMenuTrigger :as-child="true">
-                            <Button variant="ghost" size="icon" class="relative size-10 w-auto rounded-full p-1 border border-slate-700">
+                            <Button variant="ghost" class="relative size-10 w-auto rounded-full p-1 border border-slate-700">
+                                <Avatar class="h-8 w-8 overflow-hidden rounded-lg">
+                                    <AvatarFallback class="rounded-lg text-white">
+                                        {{ getInitials(auth?.user?.name) }}
+                                    </AvatarFallback>
+                                </Avatar>
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" class="w-56 bg-slate-900 border-slate-800 text-slate-200">
