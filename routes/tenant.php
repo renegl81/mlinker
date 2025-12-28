@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Admin\Core\DashboardController;
+use App\Http\Controllers\Admin\Tenant\MenuController;
+use App\Http\Controllers\Admin\Tenant\TemplateController;
 use App\Http\Controllers\Admin\Tenant\UserController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
@@ -27,5 +30,10 @@ Route::middleware([
     'auth',
     'verified'
 ])->as('tenant.')->group(function () {
-    Route::resource('users', UserController::class);
+    Route::prefix('panel')->group(function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+        Route::resource('menus', MenuController::class);
+        Route::resource('users', UserController::class);
+    });
+
 });

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
+use Throwable;
 
 class AccountActivationController extends Controller
 {
@@ -23,7 +24,7 @@ class AccountActivationController extends Controller
 
     /**
      * Activate the user account.
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function activate(Request $request, User $user): RedirectResponse
     {
@@ -50,8 +51,16 @@ class AccountActivationController extends Controller
         });
 
         Auth::login($user);
+        $tenant = $user->tenants()->first();
+        if ($tenant && ! empty($tenant->domain)) {
+            $domain = rtrim($tenant->domain, '/');
+            $port = config('services.app_port') ? ':'.config('services.app_port') : '';
+            $url = str_starts_with($domain, 'http') ? $domain.$port . '/panel' : 'https://' . $domain.$port . '/panel';
+            return redirect()->to($url)
+                ->with('success', __('auth.register.activation.success'));
+        }
 
-        return to_route('dashboard')
+        return redirect()->route('login')
             ->with('success', __('auth.register.activation.success'));
     }
 }

@@ -14,24 +14,33 @@ import {
 import { dashboard, documentation } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-vue-next';
+import { BookOpen, CookieIcon, Folder, LayoutGrid, MenuIcon } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 import {index as users} from '@/routes/users';
 import {index as tenantUsers} from '@/routes/tenant/users';
-import { route } from 'ziggy-js';
+import {dashboard as panel } from '@/routes/tenant/index';
+import {index as menus  } from '@/routes/tenant/menus/index';
 import { UserGroupIcon } from '@heroicons/vue/16/solid';
 
 const page = usePage();
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        href: dashboard(),
+        href: page.props.auth?.user?.is_admin ? dashboard() : panel(),
         icon: LayoutGrid,
+        role: 'owner, admin'
     },
     {
-        title: 'Usuarios',
+        title: page.props.messages.menus.plural,
+        href: menus(),
+        icon: CookieIcon,
+        role: 'owner'
+    },
+    {
+        title: page.props.messages.users.plural,
         href: page.props.auth?.user?.is_admin ? users() : tenantUsers(),
         icon: UserGroupIcon,
+        role: 'owner, admin'
     },
 ];
 

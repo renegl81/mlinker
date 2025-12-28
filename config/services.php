@@ -13,7 +13,7 @@ return [
     | a conventional file to locate the various service credentials.
     |
     */
-
+    'app_port' => env('APP_PORT'),
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],
