@@ -4,57 +4,60 @@ import { QrCodeIcon, DevicePhoneMobileIcon, ChartBarIcon, ShieldCheckIcon, BoltI
 const features = [
     {
         icon: QrCodeIcon,
-        title: 'Códigos QR Personalizados',
-        description: 'Genera códigos QR únicos con tu logo y colores corporativos.',
+        title: 'QR Personalizados',
+        description: 'Genera códigos únicos que se alinean con la identidad visual de tu marca.',
     },
     {
         icon: DevicePhoneMobileIcon,
-        title: 'Diseño Responsive',
-        description: 'Menús perfectamente optimizados para cualquier dispositivo móvil.',
+        title: 'Diseño Adaptativo',
+        description: 'Menús que fluyen perfectamente en cualquier dispositivo móvil.',
     },
     {
         icon: ChartBarIcon,
-        title: 'Analytics en Tiempo Real',
-        description: 'Conoce qué platos son más populares y optimiza tu oferta.',
+        title: 'Analytics Avanzado',
+        description: 'Métricas en tiempo real para optimizar tu oferta gastronómica.',
     },
     {
         icon: ShieldCheckIcon,
-        title: 'Gestión de Alérgenos',
-        description: 'Información clara sobre alérgenos para tus clientes.',
+        title: 'Control de Alérgenos',
+        description: 'Seguridad alimentaria con información clara para tus clientes.',
     },
     {
         icon: BoltIcon,
-        title: 'Actualización Instantánea',
-        description: 'Modifica precios y platos al instante sin reimprimir nada.',
+        title: 'Tiempo Real',
+        description: 'Sincronización instantánea de precios y disponibilidad.',
     },
     {
         icon: GlobeAltIcon,
-        title: 'Multi-idioma',
-        description: 'Menús en varios idiomas para clientes internacionales.',
+        title: 'Internacional',
+        description: 'Soporte multi-idioma automático para turistas.',
     },
 ];
 </script>
 
 <template>
-    <section class="py-20 bg-gray-50">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">
-                    Todo lo que necesitas para tu negocio
+    <section class="py-24 bg-slate-950 relative border-t border-slate-900">
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-20">
+                <h2 class="text-3xl md:text-5xl font-bold text-white mb-6">
+                    Todo lo que necesitas
                 </h2>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-                    Una solución completa para digitalizar tu restaurante y mejorar la experiencia de tus clientes
+                <p class="text-xl text-slate-400 max-w-2xl mx-auto">
+                    Potencia tu restaurante con herramientas diseñadas para el futuro.
                 </p>
             </div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <div v-for="feature in features" :key="feature.title"
-                     class="bg-white p-8 rounded-xl shadow-sm hover:shadow-xl transition duration-300 border border-gray-100">
-                    <div class="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
-                        <component :is="feature.icon" class="w-7 h-7 text-blue-600" />
+                     class="group relative bg-slate-900/50 p-8 rounded-2xl border border-slate-800 hover:border-purple-500/50 transition duration-300 overflow-hidden">
+
+                    <div class="absolute inset-0 bg-gradient-to-br from-purple-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+                    <div class="relative z-10 w-12 h-12 bg-slate-800 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <component :is="feature.icon" class="w-6 h-6 text-purple-400" />
                     </div>
-                    <h3 class="text-xl font-bold text-gray-900 mb-3">{{ feature.title }}</h3>
-                    <p class="text-gray-600">{{ feature.description }}</p>
+                    <h3 class="relative z-10 text-xl font-bold text-white mb-3 group-hover:text-purple-300 transition-colors">{{ feature.title }}</h3>
+                    <p class="relative z-10 text-slate-400 leading-relaxed">{{ feature.description }}</p>
                 </div>
             </div>
         </div>

@@ -15,14 +15,12 @@ const breadcrumbs = <BreadcrumbItemType[]>{
 
 <template>
     <Head>
-        <meta name="description" content="MenuLinker - Crea menús digitales con códigos QR para tu restaurante. Aumenta ventas y mejora la experiencia del cliente.">
-        <meta name="keywords" content="menu digital, codigo qr, restaurante, hosteleria, menu online, qr menu">
-        <meta name="author" content="MenuLinker">
-        <title>FlowSuite - Menús Digitales con Código QR para Restaurantes</title>
+        <meta name="description" content="MenuLinker - Crea menús digitales con códigos QR.">
+        <title>FlowSuite - Menús Digitales</title>
     </Head>
 
     <AppLayout :breadcrumbs="breadcrumbs">
-        <div class="min-h-screen bg-white">
+        <div class="min-h-screen bg-slate-950 text-slate-200 selection:bg-purple-500 selection:text-white">
             <HeroSection />
             <FeaturesSection />
             <PricingSection />

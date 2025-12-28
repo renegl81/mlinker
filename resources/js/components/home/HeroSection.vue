@@ -3,49 +3,60 @@ import { Link } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <section class="relative bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white py-20 overflow-hidden">
-        <div class="absolute inset-0 bg-[url('/images/pattern.svg')] opacity-10"></div>
+    <section class="relative bg-slate-950 py-24 lg:py-32 overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-purple-600/20 blur-[120px] rounded-full pointer-events-none"></div>
+        <div class="absolute bottom-0 right-0 w-[600px] h-[400px] bg-indigo-600/10 blur-[100px] rounded-full pointer-events-none"></div>
 
         <div class="container mx-auto px-4 relative z-10">
-            <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <div class="grid lg:grid-cols-2 gap-16 items-center">
                 <div class="text-center lg:text-left">
-                    <h1 class="text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                        Digitaliza tu <span class="text-yellow-300">Menú</span> en segundos
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-900/30 border border-purple-500/30 text-purple-300 text-sm font-medium mb-6">
+                        <span class="relative flex h-2 w-2">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
+                        </span>
+                        Nuevo: Analíticas v2.0
+                    </div>
+
+                    <h1 class="text-5xl lg:text-7xl font-bold mb-6 leading-tight tracking-tight text-white">
+                        Digitaliza tu <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400">
+                            Menú al Instante
+                        </span>
                     </h1>
-                    <p class="text-xl mb-8 text-blue-100">
-                        Genera códigos QR para tus menús digitales. Rápido, fácil y profesional.
-                        Aumenta tus ventas y mejora la experiencia de tus clientes.
+                    <p class="text-lg lg:text-xl mb-10 text-slate-400 max-w-xl mx-auto lg:mx-0">
+                        Genera códigos QR para tus menús digitales. La herramienta definitiva para restaurantes modernos que buscan velocidad y diseño.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                        <Link href="/register" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold py-4 px-8 rounded-lg transition transform hover:scale-105 shadow-lg">
+                        <Link href="/register" class="group relative px-8 py-4 bg-white text-slate-950 font-bold rounded-full hover:bg-slate-200 transition-all shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)]">
                             Comenzar gratis
                         </Link>
-                        <Link href="/demo" class="bg-white/10 hover:bg-white/20 backdrop-blur-sm border-2 border-white/50 text-white font-bold py-4 px-8 rounded-lg transition">
+
+                        <Link href="/demo" class="px-8 py-4 bg-slate-900/50 text-white font-medium rounded-full border border-slate-700 hover:border-slate-500 hover:bg-slate-800 transition backdrop-blur-sm">
                             Ver demo
                         </Link>
                     </div>
                 </div>
 
-                <div class="relative z-10 bg-white rounded-xl shadow-2xl p-8 transform hover:scale-105 transition duration-300">
-                    <svg viewBox="0 0 300 250" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Smartphone frame -->
-                        <rect x="50" y="20" width="250" height="460" rx="30" fill="#1F2937" stroke="#374151" stroke-width="3"/>
-                        <rect x="65" y="35" width="230" height="430" rx="20" fill="white"/>
+                <div class="relative z-10 mx-auto lg:mx-0 w-full max-w-md">
+                    <div class="relative bg-slate-900 border border-slate-800 rounded-3xl p-2 shadow-2xl rotate-3 hover:rotate-0 transition duration-500">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-3xl blur opacity-25"></div>
+                        <div class="relative bg-slate-950 rounded-2xl overflow-hidden border border-slate-800/50">
+                            <svg viewBox="0 0 300 400" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="300" height="400" fill="#020617"/>
+                                <rect x="20" y="20" width="260" height="40" rx="8" fill="#1e293b"/>
+                                <circle cx="40" cy="40" r="6" fill="#fb7185"/>
+                                <rect x="60" y="35" width="100" height="10" rx="2" fill="#334155"/>
 
-                        <!-- QR Code -->
-                        <rect x="130" y="100" width="140" height="140" fill="#3B82F6" opacity="0.1" rx="10"/>
-                        <path d="M150 120 h40 v40 h-40 z M210 120 h40 v40 h-40 z M150 180 h40 v40 h-40 z M210 180 h40 v40 h-40 z" fill="#3B82F6"/>
+                                <rect x="20" y="80" width="260" height="60" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+                                <rect x="20" y="150" width="260" height="60" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1"/>
+                                <rect x="20" y="220" width="260" height="60" rx="12" fill="#0f172a" stroke="#334155" stroke-width="1"/>
 
-                        <!-- Menu items -->
-                        <rect x="90" y="280" width="220" height="20" rx="5" fill="#E5E7EB"/>
-                        <rect x="90" y="315" width="180" height="20" rx="5" fill="#E5E7EB"/>
-                        <rect x="90" y="350" width="200" height="20" rx="5" fill="#E5E7EB"/>
-                        <rect x="90" y="385" width="160" height="20" rx="5" fill="#E5E7EB"/>
-
-                        <!-- Decorative elements -->
-                        <circle cx="200" cy="180" r="80" fill="#FBBF24" opacity="0.2"/>
-                        <circle cx="280" cy="120" r="30" fill="#3B82F6" opacity="0.3"/>
-                    </svg>
+                                <circle cx="250" cy="350" r="25" fill="#c026d3"/>
+                                <path d="M250 340 v20 M240 350 h20" stroke="white" stroke-width="3"/>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
 
             </div>

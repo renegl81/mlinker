@@ -25,31 +25,35 @@ const testimonials = [
 </script>
 
 <template>
-    <section class="py-20 bg-gradient-to-br from-gray-50 to-blue-50">
-        <div class="container mx-auto px-4">
+    <section class="py-24 bg-slate-950 border-t border-slate-900 relative overflow-hidden">
+
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-purple-900/10 blur-[120px] rounded-full pointer-events-none"></div>
+
+        <div class="container mx-auto px-4 relative z-10">
             <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">
+                <h2 class="text-3xl md:text-5xl font-bold text-white mb-4">
                     Lo que dicen nuestros clientes
                 </h2>
-                <p class="text-xl text-gray-600">
+                <p class="text-xl text-slate-400">
                     Miles de restaurantes confían en nosotros
                 </p>
             </div>
 
             <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                 <div v-for="testimonial in testimonials" :key="testimonial.name"
-                     class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition">
+                     class="group bg-slate-900/50 backdrop-blur-sm p-8 rounded-2xl border border-slate-800 hover:border-purple-500/30 transition duration-300">
+
                     <div class="flex mb-4">
-                        <span v-for="n in testimonial.rating" :key="n" class="text-yellow-400 text-xl">★</span>
+                        <span v-for="n in testimonial.rating" :key="n" class="text-yellow-400 text-lg">★</span>
                     </div>
 
-                    <p class="text-gray-700 mb-6 italic">"{{ testimonial.content }}"</p>
+                    <p class="text-slate-300 mb-6 italic leading-relaxed">"{{ testimonial.content }}"</p>
 
-                    <div class="flex items-center">
-                        <img :src="testimonial.image" :alt="testimonial.name" class="w-12 h-12 rounded-full mr-4" />
+                    <div class="flex items-center pt-4 border-t border-slate-800/50">
+                        <img :src="testimonial.image" :alt="testimonial.name" class="w-10 h-10 rounded-full mr-4 border border-slate-700" />
                         <div>
-                            <p class="font-bold text-gray-900">{{ testimonial.name }}</p>
-                            <p class="text-sm text-gray-600">{{ testimonial.role }}</p>
+                            <p class="font-bold text-white text-sm">{{ testimonial.name }}</p>
+                            <p class="text-xs text-slate-500">{{ testimonial.role }}</p>
                         </div>
                     </div>
                 </div>
