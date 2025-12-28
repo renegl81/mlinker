@@ -3,49 +3,88 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\RegisterRequest;
+use App\Models\Role;
+use App\Models\Tenant;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
+use App\Notifications\AccountActivationNotification;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
+use Throwable;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Show the registration page.
-     */
     public function create(): Response
     {
         return Inertia::render('auth/Register');
     }
 
     /**
-     * Handle an incoming registration request.
-     *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws Throwable
      */
-    public function store(Request $request): RedirectResponse
+    public function store(RegisterRequest $request): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        $validated = $request->validated();
+
+        $domainName = $validated['tenant_domain'].'.'.config('app.domain');
+        // Crear Tenant (sin base de datos)
+        DB::table('tenants')->insert([
+            'id' => $validated['tenant_domain'],
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
+        $tenant = (object) ['id' => $validated['tenant_domain']];
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        // Crear usuario y asociar al tenant
+        DB::transaction(function () use ($validated, $tenant, $domainName) {
+            $user = User::create([
+                'name' => $validated['name'],
+                'last_name' => $validated['last_name'],
+                'email' => $validated['email'],
+                'password' => Hash::make($validated['password']),
+                'role' => 'owner',
+                'is_active' => false,
+            ]);
+            $role = Role::where('name', 'Owner')->first();
+            if ($role) {
+                $user->assignRole($role);
+                $user->save();
+            }
 
-        event(new Registered($user));
+            // Fallback directo a la tabla domains (evita triggers/bootstrappers)
+            DB::table('domains')->insert(
+                [
+                    'tenant_id' => $tenant->id,
+                    'domain' => $domainName,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
+            DB::table('tenant_user')->updateOrInsert(
+                [
+                    'user_id' => $user->id,
+                    'tenant_id' => $tenant->id,
+                    'is_active' => false,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            );
 
-        Auth::login($user);
+            // Enviar notificación
+            try{
+                $user->notify(new AccountActivationNotification($user));
+            }catch (\Exception $exception){
+                Log::error($exception->getMessage());
+            }
 
-        return to_route('dashboard');
+        });
+
+        return to_route('auth.activation.sent')
+            ->with('success', __('auth.register.activation.sent'));
     }
+
 }

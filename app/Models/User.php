@@ -32,6 +32,7 @@ class User extends Authenticatable
         'province',
         'postal_code',
         'country_id',
+        'is_active',
     ];
 
     /**
@@ -46,6 +47,7 @@ class User extends Authenticatable
     protected $appends = [
         'is_admin',
     ];
+
     /**
      * Get the attributes that should be cast.
      *
@@ -56,16 +58,27 @@ class User extends Authenticatable
         return [
             'id' => 'integer',
             'email_verified_at' => 'timestamp',
+            'activated_at' => 'timestamp',
             'country_id' => 'integer',
+            'is_active' => 'boolean',
         ];
+    }
+
+    public function markAsActive(): void
+    {
+        $this->forceFill([
+            'is_active' => true,
+            'activated_at' => now(),
+        ])->save();
     }
 
     protected function isAdmin(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->hasRole('Admin')
+            get: fn () => $this->hasRole('Admin')
         );
     }
+
     public function locations(): HasMany
     {
         return $this->hasMany(Location::class);
@@ -105,7 +118,7 @@ class User extends Authenticatable
 
     public function currentTenantRole()
     {
-        if (!tenancy()->initialized) {
+        if (! tenancy()->initialized) {
             return null;
         }
 
@@ -114,7 +127,7 @@ class User extends Authenticatable
 
     public function belongsToCurrentTenant(): bool
     {
-        if (!tenancy()->initialized) {
+        if (! tenancy()->initialized) {
             return false;
         }
 
@@ -130,6 +143,7 @@ class User extends Authenticatable
     public function roleInTenant($tenantId)
     {
         $tenant = $this->tenants()->where('tenant_id', $tenantId)->first();
+
         return $tenant?->pivot->role;
     }
 
