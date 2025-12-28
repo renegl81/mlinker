@@ -1,21 +1,29 @@
 <script setup lang="ts">
-import AppContent from '@/components/AppContent.vue';
-import AppHeader from '@/components/AppHeader.vue';
-import AppShell from '@/components/AppShell.vue';
-import type { BreadcrumbItemType } from '@/types';
-import FrontHeader from '@/components/FrontHeader.vue';
+import { computed } from 'vue'
+import { usePage } from '@inertiajs/vue3'
+import AppContent from '@/components/AppContent.vue'
+import AppShell from '@/components/AppShell.vue'
+import FrontHeader from '@/components/FrontHeader.vue'
+import type { BreadcrumbItemType } from '@/types'
 
 interface Props {
-    breadcrumbs?: BreadcrumbItemType[];
+    breadcrumbs?: BreadcrumbItemType[]
 }
 
 withDefaults(defineProps<Props>(), {
     breadcrumbs: () => [],
-});
+})
+
+const page = usePage()
+
+const shouldUseDefaultTheme = computed(() => {
+    const url = page.url
+    return !url.startsWith('/admin') && !url.startsWith('/panel')
+})
 </script>
 
 <template>
-    <AppShell class="flex-col">
+    <AppShell :class="{ 'default': shouldUseDefaultTheme }" class="flex-col">
         <FrontHeader :breadcrumbs="breadcrumbs" />
         <AppContent>
             <slot />
