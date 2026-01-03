@@ -298,19 +298,6 @@
                             {{ form.errors.description }}
                         </p>
                     </div>
-
-                    <div v-if="isEdit" class="flex items-center space-x-2">
-                        <Switch
-                            id="is_active"
-                            :checked="form.is_active"
-                            @update:checked="
-                                $emit('update:field', 'is_active', $event)
-                            "
-                        />
-                        <Label for="is_active">{{
-                            messages.locations.fields.is_active
-                        }}</Label>
-                    </div>
                 </div>
             </CardContent>
 

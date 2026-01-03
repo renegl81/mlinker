@@ -22,6 +22,7 @@ class CreateLocation
             'province' => $data['province'],
             'currency' => $data['currency'] ?? 'EUR',
             'time_zone' => $data['time_zone'] ?? 'Europe/Madrid',
+            'time_format' => $data['time_format'] ?? 'H:i',
             'postal_code' => $data['postal_code'],
             'lang' => $data['lang'] ?? 'es',
             'languages' => $data['languages'] ?? ['es'],

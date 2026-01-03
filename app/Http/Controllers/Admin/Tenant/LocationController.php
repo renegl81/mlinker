@@ -11,6 +11,7 @@ use App\Http\Requests\LocationStoreRequest;
 use App\Http\Requests\LocationUpdateRequest;
 use App\Models\Country;
 use App\Models\Location;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -36,19 +37,20 @@ class LocationController extends Controller
 
     public function store(LocationStoreRequest $request, CreateLocation $createLocation): RedirectResponse
     {
-        dd($request)   ;
-        try{
+        try {
             $data = $request->validated();
             $createLocation->execute($data);
-        }catch (\Exception $e){
+
+            return redirect()->route('tenant.locations.index')
+                ->with('success', 'Local creado correctamente.');
+
+        } catch (Exception $e) {
             Log::error($e->getMessage());
             return redirect()->back()
-                ->with('error', $e->getMessage());
+                ->withInput()
+                ->with('error', 'Ocurrió un error: ' . $e->getMessage());
         }
-
-        return redirect()->route('tenant.locations.index');
     }
-
     public function edit(Location $location)
     {
         return Inertia::render('admin/tenant/Locations/Edit', [
@@ -69,7 +71,7 @@ class LocationController extends Controller
         try{
             $request->validated();
             $updateLocation->execute($location, $request);
-        }catch (\Exception $e){
+        }catch (Exception $e){
             return redirect()->route('tenant.locations.edit', ['location' => $location])
                 ->with('error', $e->getMessage());
         }

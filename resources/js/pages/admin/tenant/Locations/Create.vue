@@ -45,37 +45,37 @@ interface Props {
 }
 const props = defineProps<Props>();
 interface FormState {
-    name: string;
-    description: string;
-    address: string;
-    phone: string;
-    postal_code: string;
-    latitude: string;
-    longitude: string;
-    city: string;
-    province: string;
-    country_id: number;
-    currency: string;
-    time_zone: string;
-    lang: string;
-    languages: Object<string, string>;
+    name?: string | null;
+    description?: string | null;
+    address?: string | null;
+    phone?: string | null;
+    postal_code?: string | null;
+    latitude?: string | null;
+    longitude?: string | null;
+    city?: string | null;
+    province?: string | null;
+    country_id?: number | null;
+    currency?: string | null;
+    time_zone?: string | null;
+    lang?: string | null;
+    languages?: Array<string>;
 }
 
 const form = useForm<FormState>({
-    name: '',
-    description: '',
-    address: '',
-    phone: '',
-    postal_code: '',
-    latitude: '',
-    longitude: '',
-    city: '',
-    province: '',
-    country_id: 0,
-    currency: '',
-    time_zone: '',
-    lang: '',
-    languages: {} as any,
+    name: null,
+    description: null,
+    address: null,
+    phone: null,
+    postal_code: null,
+    latitude: null,
+    longitude: null,
+    city: null,
+    province: null,
+    country_id: null,
+    currency: null,
+    time_zone: null,
+    lang: null,
+    languages: null as any,
 });
 function updateField(field: string, value: any) {
     form[field] = value;

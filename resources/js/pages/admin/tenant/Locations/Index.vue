@@ -25,7 +25,7 @@ import type { BreadcrumbItem } from '@/types';
 import {
     index as locationsRoute,
     create,
-    destroy as locationRouteDestroy,
+    destroy as locationRouteDestroy, edit,
 } from '@/routes/tenant/locations';
 import UserFilters, {
     type UserFilters as UserFiltersType,
@@ -79,7 +79,7 @@ function go(url: string) {
 }
 
 function remove(id: number) {
-    if (confirm(page.props.messages?.locations.actions.confirm_delete)) {
+    if (confirm(messages?.locations.actions.confirm_delete)) {
         Inertia.delete(locationRouteDestroy(id).url);
     }
 }
@@ -103,13 +103,13 @@ function clearFilters() {
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <div class="flex items-center justify-between">
                 <HeadingSmall
-                    :title="page.props.messages.locations.plural"
-                    :description="page.props.messages.locations.caption"
+                    :title="messages.locations.plural"
+                    :description="messages.locations.caption"
                 />
                 <Button as-child>
                     <Link :href="create()">
                         <Plus class="mr-2 h-4 w-4" />
-                        {{ page.props.messages?.locations.actions.create }}
+                        {{ messages?.locations.actions.create }}
                     </Link>
                 </Button>
             </div>
@@ -126,13 +126,13 @@ function clearFilters() {
                         <TableHeader>
                             <TableRow>
                                 <TableHead>{{
-                                    page.props.messages.locations.fields.name
+                                    messages.locations.fields.name
                                 }}</TableHead>
                                 <TableHead>{{
-                                    page.props.messages.locations.fields.email
+                                    messages.locations.fields.email
                                 }}</TableHead>
                                 <TableHead class="text-right">{{
-                                    page.props.messages.actions.label
+                                    messages.actions.label
                                 }}</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -141,7 +141,6 @@ function clearFilters() {
                                 <TableCell class="font-medium">{{
                                     u.name
                                 }}</TableCell>
-                                <TableCell>{{ u.email }}</TableCell>
                                 <TableCell class="text-right">
                                     <div class="flex justify-end gap-2">
                                         <TooltipProvider>
@@ -153,10 +152,9 @@ function clearFilters() {
                                                         as-child
                                                     >
                                                         <Link
-                                                            :href="`/locations/${u.id}/edit`"
+                                                            :href="edit(u.id)"
                                                             :aria-label="
-                                                                page.props
-                                                                    .messages
+                                                                messages
                                                                     ?.locations
                                                                     .actions
                                                                     .edit
@@ -215,14 +213,14 @@ function clearFilters() {
                         @click="locations.prev_page_url && go(locations.prev_page_url)"
                     >
                         <ChevronLeft class="mr-2 h-4 w-4" />
-                        {{ page.props.messages.pagination.previous }}
+                        {{ messages.pagination.previous }}
                     </Button>
                     <Button
                         variant="outline"
                         :disabled="!locations.next_page_url"
                         @click="locations.next_page_url && go(locations.next_page_url)"
                     >
-                        {{ page.props.messages.pagination.next }}
+                        {{ messages.pagination.next }}
                         <ChevronRight class="ml-2 h-4 w-4" />
                     </Button>
                 </CardFooter>
