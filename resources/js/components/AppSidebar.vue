@@ -14,13 +14,20 @@ import {
 import { dashboard, documentation } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
-import { BookOpen, CookieIcon, Folder, LayoutGrid, MenuIcon } from 'lucide-vue-next';
+import {
+    BookOpen,
+    Building2Icon,
+    CookieIcon,
+    Folder,
+    LayoutGrid,
+} from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
-import {index as users} from '@/routes/users';
-import {index as tenantUsers} from '@/routes/tenant/users';
-import {dashboard as panel } from '@/routes/tenant/index';
-import {index as menus  } from '@/routes/tenant/menus/index';
+import { index as users } from '@/routes/users';
+import { index as tenantUsers } from '@/routes/tenant/users';
+import { dashboard as panel } from '@/routes/tenant/index';
+import { index as menus } from '@/routes/tenant/menus/index';
 import { UserGroupIcon } from '@heroicons/vue/16/solid';
+import { index as locations } from '@/routes/tenant/locations';
 
 const page = usePage();
 const mainNavItems: NavItem[] = [
@@ -28,19 +35,25 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         href: page.props.auth?.user?.is_admin ? dashboard() : panel(),
         icon: LayoutGrid,
-        role: 'owner, admin'
+        role: 'owner, admin',
+    },
+    {
+        title: page.props.messages.locations.plural,
+        href: locations(),
+        icon: Building2Icon,
+        role: 'owner',
     },
     {
         title: page.props.messages.menus.plural,
         href: menus(),
         icon: CookieIcon,
-        role: 'owner'
+        role: 'owner',
     },
     {
         title: page.props.messages.users.plural,
         href: page.props.auth?.user?.is_admin ? users() : tenantUsers(),
         icon: UserGroupIcon,
-        role: 'owner, admin'
+        role: 'owner, admin',
     },
 ];
 

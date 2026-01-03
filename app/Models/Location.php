@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasDynamicFilters;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +12,7 @@ use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 class Location extends Model
 {
-    use BelongsToTenant, HasFactory;
+    use BelongsToTenant, HasFactory, HasDynamicFilters;
 
     /**
      * The attributes that are mass assignable.
@@ -40,6 +41,17 @@ class Location extends Model
         'social_medias',
     ];
 
+    public static function getFilterableFields(): array
+    {
+        return [
+            'name' => 'like',
+            'address' => 'like',
+            'city' => 'like',
+            'province' => 'like',
+            'status' => '=',
+            'type' => 'in',
+        ];
+    }
     /**
      * Get the attributes that should be cast.
      *
