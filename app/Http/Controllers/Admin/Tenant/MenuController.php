@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Tenant;
 
-use App\Actions\Menu\CreateMenu;
-use App\Actions\Menu\DeleteMenu;
-use App\Actions\Menu\ListMenus;
-use App\Actions\Menu\UpdateMenu;
+use App\Actions\Menu\CreateLocation;
+use App\Actions\Menu\DeleteLocation;
+use App\Actions\Menu\ListLocations;
+use App\Actions\Menu\UpdateLocation;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Menu\MenuStoreRequest;
 use App\Http\Requests\Menu\MenuUpdateRequest;
@@ -19,7 +19,7 @@ class MenuController extends Controller
 {
     public function index(Request $request): Response
     {
-        $menus = app(ListMenus::class)($request);
+        $menus = app(ListLocations::class)($request);
 
         return Inertia::render('admin/tenant/Menus/Index', [
             'menus' => $menus,
@@ -34,7 +34,7 @@ class MenuController extends Controller
 
     public function store(MenuStoreRequest $request): RedirectResponse
     {
-        app(CreateMenu::class)($request->validated());
+        app(CreateLocation::class)($request->validated());
 
         return redirect()
             ->route('menus.index')
@@ -50,7 +50,7 @@ class MenuController extends Controller
 
     public function update(MenuUpdateRequest $request, Menu $menu): RedirectResponse
     {
-        app(UpdateMenu::class)($menu, $request->validated());
+        app(UpdateLocation::class)($menu, $request->validated());
 
         return redirect()
             ->route('menus.index')
@@ -59,7 +59,7 @@ class MenuController extends Controller
 
     public function destroy(Menu $menu): RedirectResponse
     {
-        app(DeleteMenu::class)($menu);
+        app(DeleteLocation::class)($menu);
 
         return redirect()
             ->route('menus.index')

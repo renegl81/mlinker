@@ -51,7 +51,8 @@ return [
         'cancel' => 'Cancelar',
     ],
     'form' => [
-        'title_create' => 'Información del Usuario',
+        'title_create' => 'Crear Usuario',
+        'title_show' => 'Información del Usuario',
         'title_edit' => 'Editar Usuario',
         'description_create' => 'Completa los datos del usuario',
         'description_edit' => 'Actualiza los datos del usuario',

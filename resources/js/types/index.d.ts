@@ -44,4 +44,33 @@ export interface Role {
     name: string
 }
 
+export interface Country {
+    id: number;
+    name: string;
+    code: string;
+}
+
+export interface Location {
+    id: number;
+    name: string;
+    address: string;
+    city?: string;
+    province: boolean;
+    postal_code: string | null;
+    phone: string;
+    description: string;
+    user: User;
+    slug: string;
+    country: Country;
+    image_url: string | null;
+    logo_url: string | null;
+    languages: Record<string, string>;
+    currency: string;
+    time_zone: string;
+    social_medias: Record<string, string>;
+    tenant_id: number;
+    created_at: string;
+    updated_at: string;
+    roles: Role[];
+}
 export type BreadcrumbItemType = BreadcrumbItem;

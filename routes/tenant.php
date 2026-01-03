@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Admin\Core\DashboardController;
+use App\Http\Controllers\Admin\Tenant\LocationController;
 use App\Http\Controllers\Admin\Tenant\MenuController;
 use App\Http\Controllers\Admin\Tenant\UserController;
 use App\Http\Controllers\Tenant\HomeController;
@@ -40,6 +41,7 @@ Route::middleware([
             Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
             Route::resource('menus', MenuController::class);
             Route::resource('users', UserController::class);
+            Route::resource('locations', LocationController::class);
         });
     });
 });

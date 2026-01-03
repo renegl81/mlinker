@@ -2,58 +2,88 @@
 
 namespace App\Http\Controllers\Admin\Tenant;
 
+use App\Actions\Location\CreateLocation;
+use App\Actions\Location\DeleteLocation;
+use App\Actions\Location\GetLocations;
+use App\Actions\Location\UpdateLocation;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LocationStoreRequest;
 use App\Http\Requests\LocationUpdateRequest;
-use App\Jobs\CreateLocation;
-use App\Jobs\DeleteLocation;
-use App\Jobs\ListLocations;
-use App\Jobs\ShowLocation;
-use App\Jobs\UpdateLocation;
+use App\Models\Country;
 use App\Models\Location;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class LocationController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, GetLocations $listLocations)
     {
-        $user = auth()->user();
-        $locations = ListLocations::dispatch($user);
+        $locations = $listLocations->execute($request);
 
-        return Inertia::render('location.index', [
+        return Inertia::render('admin/tenant/Locations/Index', [
             'locations' => $locations,
         ]);
     }
 
-    public function store(LocationStoreRequest $request): RedirectResponse
+    public function create()
     {
-        CreateLocation::dispatch($request);
+        return Inertia::render('admin/tenant/Locations/Create', [
+            'countries' => Country::all(['id', 'name']),
+        ]);
+    }
 
-        return redirect()->route('location.index');
+    public function store(LocationStoreRequest $request, CreateLocation $createLocation): RedirectResponse
+    {
+        dd($request)   ;
+        try{
+            $data = $request->validated();
+            $createLocation->execute($data);
+        }catch (\Exception $e){
+            Log::error($e->getMessage());
+            return redirect()->back()
+                ->with('error', $e->getMessage());
+        }
+
+        return redirect()->route('tenant.locations.index');
+    }
+
+    public function edit(Location $location)
+    {
+        return Inertia::render('admin/tenant/Locations/Edit', [
+            'location' => $location,
+            'countries' => Country::all(['id', 'name']),
+        ]);
     }
 
     public function show(Request $request, Location $location)
     {
-        ShowLocation::dispatch($location);
-
-        return Inertia::render('location.show', [
+        return Inertia::render('Admin/Tenant/Locations/Show', [
             'location' => $location,
         ]);
     }
 
-    public function update(LocationUpdateRequest $request, Location $location): RedirectResponse
+    public function update(LocationUpdateRequest $request, UpdateLocation $updateLocation, Location $location): RedirectResponse
     {
-        UpdateLocation::dispatch($request, $location);
+        try{
+            $request->validated();
+            $updateLocation->execute($location, $request);
+        }catch (\Exception $e){
+            return redirect()->route('tenant.locations.edit', ['location' => $location])
+                ->with('error', $e->getMessage());
+        }
 
-        return redirect()->route('location.show', ['location' => $location]);
+
+        return redirect()->route('tenant.locations.show', [
+            'location' => $location
+        ]);
     }
 
-    public function destroy(Request $request, Location $location): RedirectResponse
+    public function destroy(DeleteLocation $deleteLocation, Location $location): RedirectResponse
     {
-        DeleteLocation::dispatch($location);
+        $deleteLocation->execute($location);
 
-        return redirect()->route('location.index');
+        return redirect()->route('tenant.locations.index');
     }
 }

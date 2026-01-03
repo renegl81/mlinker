@@ -25,7 +25,7 @@ import { Head, useForm } from '@inertiajs/vue3'
 import AppLayout from '@/layouts/AppLayout.vue'
 import HeadingSmall from '@/components/HeadingSmall.vue'
 import UserForm from './Form.vue'
-import type { BreadcrumbItem, Role, User } from '@/types'
+import type { BreadcrumbItem, Role } from '@/types'
 import { index as usersRoute, store } from '@/routes/tenant/users'
 
 const breadcrumbItems: BreadcrumbItem[] = [
