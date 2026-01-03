@@ -1,37 +1,63 @@
 <script setup lang="ts">
-import { Head, Link, usePage } from '@inertiajs/vue3';
-import { Inertia } from '@inertiajs/inertia';
-import { computed } from 'vue';
-import AppLayout from '@/layouts/AppLayout.vue';
 import HeadingSmall from '@/components/HeadingSmall.vue';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import {
-    Pencil,
-    Trash2,
-    ArrowLeft,
-    MapPin,
-    Phone,
-    Globe,
-    Clock,
-    BadgeDollarSign,
-} from 'lucide-vue-next';
-import type { BreadcrumbItem, Location } from '@/types';
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
+import AppLayout from '@/layouts/AppLayout.vue';
 import {
-    index as locationsRoute,
-    edit as locationRouteEdit,
     destroy as locationRouteDestroy,
+    edit as locationRouteEdit,
+    index as locationsRoute,
 } from '@/routes/tenant/locations';
+import {
+    create as menuCreate,
+    show as menuShow,
+} from '@/routes/tenant/menus';
+import type { BreadcrumbItem, Country, Location } from '@/types';
+import { Inertia } from '@inertiajs/inertia';
+import { Head, Link, usePage } from '@inertiajs/vue3';
+import {
+    ArrowLeft,
+    BadgeDollarSign,
+    Clock,
+    ExternalLink,
+    Globe,
+    MapPin,
+    Pencil,
+    Phone,
+    Plus,
+    Trash2,
+    Utensils,
+} from 'lucide-vue-next';
+import { computed } from 'vue';
 
-const page = usePage();
-const messages = computed(() => page.props.messages as any);
+// Definición de interfaces locales
+interface Menu {
+    id: number;
+    name: string;
+    description?: string;
+    is_active: boolean;
+}
 
 interface Props {
-    location: Location;
+    location: Location & {
+        country?: Country;
+        menus?: Menu[];
+    };
 }
 
 const props = defineProps<Props>();
+const page = usePage();
+const messages = computed(() => page.props.messages as any);
 
 const breadcrumbItems: BreadcrumbItem[] = [
     {
@@ -56,7 +82,9 @@ function remove() {
 
     <AppLayout :breadcrumbs="breadcrumbItems">
         <div class="flex h-full flex-1 flex-col gap-6 rounded-xl p-4">
-            <div class="flex items-center justify-between">
+            <div
+                class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+            >
                 <div class="flex items-center gap-4">
                     <Button variant="outline" size="icon" as-child>
                         <Link :href="locationsRoute().url">
@@ -65,10 +93,10 @@ function remove() {
                     </Button>
                     <HeadingSmall
                         :title="location.name"
-                        :description="messages.locations.fields.description"
+                        :description="messages.locations.caption"
                     />
                 </div>
-                <div class="flex gap-2">
+                <div class="flex items-center gap-2">
                     <Button variant="outline" as-child>
                         <Link :href="locationRouteEdit(location.id)">
                             <Pencil class="mr-2 h-4 w-4" />
@@ -83,117 +111,245 @@ function remove() {
             </div>
 
             <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-                <Card class="lg:col-span-2">
-                    <CardHeader>
-                        <CardTitle>{{
-                            messages.locations.form.title_show ||
-                            'Detalles de la Ubicación'
-                        }}</CardTitle>
-                    </CardHeader>
-                    <CardContent class="space-y-6">
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <div class="flex flex-col gap-1">
-                                <span
-                                    class="text-sm font-medium text-muted-foreground"
-                                    >{{
-                                        messages.locations.fields.address
-                                    }}</span
-                                >
-                                <div class="flex items-center gap-2">
-                                    <MapPin class="h-4 w-4 text-primary" />
-                                    <span>{{ location.address }}</span>
-                                </div>
-                            </div>
-                            <div class="flex flex-col gap-1">
-                                <span
-                                    class="text-sm font-medium text-muted-foreground"
-                                    >{{ messages.locations.fields.phone }}</span
-                                >
-                                <div class="flex items-center gap-2">
-                                    <Phone class="h-4 w-4 text-primary" />
-                                    <span>{{ location.phone || 'N/A' }}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <Separator />
-
-                        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-                            <div class="flex flex-col gap-1">
-                                <span
-                                    class="text-sm font-medium text-muted-foreground"
-                                    >{{ messages.locations.fields.city }}</span
-                                >
-                                <span>{{ location.city }}</span>
-                            </div>
-                            <div class="flex flex-col gap-1">
-                                <span
-                                    class="text-sm font-medium text-muted-foreground"
-                                    >{{
-                                        messages.locations.fields.province
-                                    }}</span
-                                >
-                                <span>{{ location.province }}</span>
-                            </div>
-                            <div class="flex flex-col gap-1">
-                                <span
-                                    class="text-sm font-medium text-muted-foreground"
-                                    >{{
-                                        messages.locations.fields.postal_code
-                                    }}</span
-                                >
-                                <span>{{ location.postal_code }}</span>
-                            </div>
-                        </div>
-
-                        <Separator v-if="location.description" />
-
-                        <div
-                            v-if="location.description"
-                            class="flex flex-col gap-1"
-                        >
-                            <span
-                                class="text-sm font-medium text-muted-foreground"
-                                >{{
-                                    messages.locations.fields.description
-                                }}</span
-                            >
-                            <p class="text-sm leading-relaxed">
-                                {{ location.description }}
-                            </p>
-                        </div>
-                    </CardContent>
-                </Card>
-
-                <div class="flex flex-col gap-6">
+                <div class="space-y-6 lg:col-span-2">
                     <Card>
                         <CardHeader>
-                            <CardTitle>{{
+                            <CardTitle class="text-lg font-semibold">
+                                {{
+                                    messages.locations.form.title_show ||
+                                    'Información General'
+                                }}
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent class="space-y-6">
+                            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                                <div class="flex flex-col gap-1.5">
+                                    <span
+                                        class="text-xs font-bold tracking-wider text-muted-foreground uppercase"
+                                    >
+                                        {{ messages.locations.fields.address }}
+                                    </span>
+                                    <div class="flex items-start gap-2 text-sm">
+                                        <MapPin
+                                            class="mt-0.5 h-4 w-4 shrink-0 text-primary"
+                                        />
+                                        <span>{{ location.address }}</span>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col gap-1.5">
+                                    <span
+                                        class="text-xs font-bold tracking-wider text-muted-foreground uppercase"
+                                    >
+                                        {{ messages.locations.fields.phone }}
+                                    </span>
+                                    <div
+                                        class="flex items-center gap-2 text-sm"
+                                    >
+                                        <Phone
+                                            class="h-4 w-4 shrink-0 text-primary"
+                                        />
+                                        <span>{{
+                                            location.phone || '---'
+                                        }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <Separator />
+
+                            <div
+                                class="grid grid-cols-1 gap-4 text-sm md:grid-cols-3"
+                            >
+                                <div class="space-y-1">
+                                    <span
+                                        class="block font-medium text-muted-foreground"
+                                        >{{
+                                            messages.locations.fields.city
+                                        }}</span
+                                    >
+                                    <p>{{ location.city }}</p>
+                                </div>
+                                <div class="space-y-1">
+                                    <span
+                                        class="block font-medium text-muted-foreground"
+                                        >{{
+                                            messages.locations.fields.province
+                                        }}</span
+                                    >
+                                    <p>{{ location.province }}</p>
+                                </div>
+                                <div class="space-y-1">
+                                    <span
+                                        class="block font-medium text-muted-foreground"
+                                        >{{
+                                            messages.locations.fields
+                                                .postal_code
+                                        }}</span
+                                    >
+                                    <p>{{ location.postal_code }}</p>
+                                </div>
+                            </div>
+
+                            <div
+                                v-if="location.description"
+                                class="space-y-2 pt-2"
+                            >
+                                <span
+                                    class="text-xs font-bold tracking-wider text-muted-foreground uppercase"
+                                >
+                                    {{ messages.locations.fields.description }}
+                                </span>
+                                <p
+                                    class="text-sm leading-relaxed text-pretty text-muted-foreground"
+                                >
+                                    {{ location.description }}
+                                </p>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    <Card>
+                        <CardHeader
+                            class="flex flex-row items-center justify-between space-y-0"
+                        >
+                            <CardTitle class="flex items-center gap-2 text-lg">
+                                <Utensils class="h-5 w-5 text-primary" />
+                                {{ messages.menus?.plural || 'Menús' }}
+                            </CardTitle>
+                            <Button size="sm" as-child>
+                                <Link :href="menuCreate()">
+                                    <Plus class="mr-2 h-4 w-4" />
+                                    {{
+                                        messages.menus?.actions?.create ||
+                                        'Nuevo Menú'
+                                    }}
+                                </Link>
+                            </Button>
+                        </CardHeader>
+                        <CardContent>
+                            <div
+                                v-if="
+                                    location.menus && location.menus.length > 0
+                                "
+                            >
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow>
+                                            <TableHead>{{
+                                                messages.menus?.fields?.name ||
+                                                'Nombre'
+                                            }}</TableHead>
+                                            <TableHead>{{
+                                                messages.menus?.fields
+                                                    ?.status || 'Estado'
+                                            }}</TableHead>
+                                            <TableHead class="text-right">{{
+                                                messages.actions?.label
+                                            }}</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        <TableRow
+                                            v-for="menu in location.menus"
+                                            :key="menu.id"
+                                        >
+                                            <TableCell class="font-medium">
+                                                {{ menu.name }}
+                                                <p
+                                                    class="line-clamp-1 text-xs font-normal text-muted-foreground"
+                                                    v-if="menu.description"
+                                                >
+                                                    {{ menu.description }}
+                                                </p>
+                                            </TableCell>
+                                            <TableCell>
+                                                <Badge
+                                                    :variant="
+                                                        menu.is_active
+                                                            ? 'default'
+                                                            : 'secondary'
+                                                    "
+                                                >
+                                                    {{
+                                                        menu.is_active
+                                                            ? 'Activo'
+                                                            : 'Inactivo'
+                                                    }}
+                                                </Badge>
+                                            </TableCell>
+                                            <TableCell class="text-right">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    as-child
+                                                >
+                                                    <Link
+                                                        :href="
+                                                            menuShow(menu.id)
+                                                        "
+                                                    >
+                                                        <ExternalLink
+                                                            class="h-4 w-4"
+                                                        />
+                                                    </Link>
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
+                            </div>
+                            <div
+                                v-else
+                                class="flex flex-col items-center justify-center rounded-lg border-2 border-dashed py-10 text-center"
+                            >
+                                <Utensils
+                                    class="mb-3 h-10 w-10 text-muted-foreground/30"
+                                />
+                                <p
+                                    class="text-sm font-medium text-muted-foreground"
+                                >
+                                    {{
+                                        messages.menus?.empty ||
+                                        'No hay menús para esta ubicación.'
+                                    }}
+                                </p>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+
+                <div class="space-y-6">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle class="text-md font-semibold">{{
                                 messages.locations.fields.configuration ||
                                 'Configuración'
                             }}</CardTitle>
                         </CardHeader>
-                        <CardContent class="space-y-4">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-2">
-                                    <Globe
-                                        class="h-4 w-4 text-muted-foreground"
-                                    />
-                                    <span class="text-sm">{{
+                        <CardContent class="space-y-4 text-sm">
+                            <div
+                                class="flex items-center justify-between border-b border-muted py-1"
+                            >
+                                <div
+                                    class="flex items-center gap-2 text-muted-foreground"
+                                >
+                                    <Globe class="h-4 w-4" />
+                                    <span>{{
                                         messages.locations.fields.country
                                     }}</span>
                                 </div>
-                                <span class="font-medium">{{
-                                    location.country?.name ||
-                                    location.country_id
+                                <span class="text-right font-medium">{{
+                                    location.country?.name
                                 }}</span>
                             </div>
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-2">
-                                    <BadgeDollarSign
-                                        class="h-4 w-4 text-muted-foreground"
-                                    />
-                                    <span class="text-sm">{{
+                            <div
+                                class="flex items-center justify-between border-b border-muted py-1"
+                            >
+                                <div
+                                    class="flex items-center gap-2 text-muted-foreground"
+                                >
+                                    <BadgeDollarSign class="h-4 w-4" />
+                                    <span>{{
                                         messages.locations.fields.currency
                                     }}</span>
                                 </div>
@@ -201,18 +357,23 @@ function remove() {
                                     location.currency
                                 }}</span>
                             </div>
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center gap-2">
-                                    <Clock
-                                        class="h-4 w-4 text-muted-foreground"
-                                    />
-                                    <span class="text-sm">{{
+                            <div
+                                class="flex items-center justify-between border-b border-muted py-1"
+                            >
+                                <div
+                                    class="flex items-center gap-2 text-muted-foreground"
+                                >
+                                    <Clock class="h-4 w-4" />
+                                    <span>{{
                                         messages.locations.fields.time_zone
                                     }}</span>
                                 </div>
-                                <span class="text-xs font-medium">{{
-                                    location.time_zone
-                                }}</span>
+                                <span
+                                    class="max-w-[120px] truncate font-medium"
+                                    :title="location.time_zone"
+                                >
+                                    {{ location.time_zone }}
+                                </span>
                             </div>
                         </CardContent>
                     </Card>
@@ -220,18 +381,28 @@ function remove() {
                     <Card
                         :class="
                             location.is_active
-                                ? 'border-green-200 bg-green-50'
-                                : 'border-red-200 bg-red-50'
+                                ? 'border-green-200 bg-green-50/50'
+                                : 'border-red-200 bg-red-50/50'
                         "
                     >
-                        <CardContent class="py-4 text-center">
+                        <CardContent
+                            class="flex items-center justify-center gap-2 py-4"
+                        >
+                            <div
+                                :class="
+                                    location.is_active
+                                        ? 'bg-green-500'
+                                        : 'bg-red-500'
+                                "
+                                class="h-2 w-2 animate-pulse rounded-full"
+                            />
                             <span
                                 :class="
                                     location.is_active
                                         ? 'text-green-700'
                                         : 'text-red-700'
                                 "
-                                class="text-sm font-bold uppercase"
+                                class="text-xs font-bold tracking-widest uppercase"
                             >
                                 {{
                                     location.is_active

@@ -62,7 +62,7 @@ class LocationController extends Controller
     public function show(Request $request, Location $location)
     {
         return Inertia::render('admin/tenant/Locations/Show', [
-            'location' => $location,
+            'location' => $location->load('country'),
         ]);
     }
 
