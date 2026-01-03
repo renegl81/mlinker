@@ -1,19 +1,19 @@
 <template>
-    <Head title="Editar Usuario" />
+    <Head :title="messages.locations.form.update_title" />
     <AppLayout :breadcrumbs="breadcrumbItems">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <HeadingSmall
-                title="Editar Usuario"
-                description="Modifica la información del usuario"
+                :title="messages.locations.form.update_title"
+                description=""
             />
 
             <LocationForm
                 :form="form"
-                title="Información del Usuario"
-                description="Actualiza los datos del usuario. Deja la contraseña vacía si no deseas cambiarla."
-                submit-text="Guardar Cambios"
+                :title="messages.locations.form.update_title"
+                description=""
+                :submit-text="messages.actions.save"
                 :is-edit="true"
-                :roles="props.roles"
+                :countries="props.countries"
                 @submit="submit"
                 @update:field="updateField"
             />
@@ -35,8 +35,8 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-const page = usePage()
-const messages = page.props.messages
+const page = usePage();
+const messages = page.props.messages;
 const breadcrumbItems: BreadcrumbItem[] = [
     {
         title: messages.locations.plural,

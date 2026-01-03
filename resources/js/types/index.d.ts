@@ -55,6 +55,7 @@ export interface Location {
     name: string;
     address: string;
     city?: string;
+    country_id?: number;
     province: boolean;
     postal_code: string | null;
     phone: string;
@@ -72,5 +73,8 @@ export interface Location {
     created_at: string;
     updated_at: string;
     roles: Role[];
+    latitude: string;
+    longitude: string;
+    lang: string;
 }
 export type BreadcrumbItemType = BreadcrumbItem;

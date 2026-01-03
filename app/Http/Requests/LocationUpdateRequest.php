@@ -25,8 +25,20 @@ class LocationUpdateRequest extends FormRequest
             'city' => ['required', 'string', 'max:255'],
             'province' => ['required', 'string', 'max:255'],
             'postal_code' => ['required', 'string', 'max:255'],
-            'user_id' => ['required', 'integer', 'exists:Users,id'],
-            'country_id' => ['required', 'integer', 'exists:,id'],
+            'country_id' => 'required|exists:countries,id',
+            'phone' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:1000'],
+            'latitude' => ['nullable', 'numeric'],
+            'longitude' => ['nullable', 'numeric'],
+            'logo_url' => ['nullable', 'string', 'max:255'],
+            'image_url' => ['nullable', 'string', 'max:255'],
+            'languages' => ['nullable', 'array'],
+            'currency' => ['nullable', 'string', 'max:3'],
+            'time_zone' => ['nullable', 'string', 'max:30'],
+            'time_format' => ['nullable', 'string', 'max:30'],
+            'lang' => ['nullable', 'string', 'max:3'],
+            'social_medias' => ['nullable', 'array'],
+
         ];
     }
 }

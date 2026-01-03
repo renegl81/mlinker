@@ -61,7 +61,7 @@ class LocationController extends Controller
 
     public function show(Request $request, Location $location)
     {
-        return Inertia::render('Admin/Tenant/Locations/Show', [
+        return Inertia::render('admin/tenant/Locations/Show', [
             'location' => $location,
         ]);
     }
@@ -69,11 +69,12 @@ class LocationController extends Controller
     public function update(LocationUpdateRequest $request, UpdateLocation $updateLocation, Location $location): RedirectResponse
     {
         try{
-            $request->validated();
-            $updateLocation->execute($location, $request);
+            $data = $request->validated();
+            $updateLocation->execute($location, $data);
         }catch (Exception $e){
             return redirect()->route('tenant.locations.edit', ['location' => $location])
-                ->with('error', $e->getMessage());
+                ->withInput()
+                ->with('error', 'Ocurrió un error: ' . $e->getMessage());
         }
 
 

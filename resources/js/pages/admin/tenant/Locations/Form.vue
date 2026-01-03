@@ -8,18 +8,12 @@
             <CardContent>
                 <div class="my-5 grid grid-cols-1 gap-4 md:grid-cols-2">
                     <div class="space-y-2">
-                        <Label for="name">{{
-                            page.props.messages.locations.fields.name
-                        }}</Label>
+                        <Label for="name">{{messages.locations.fields.name }}</Label>
                         <Input
                             id="name"
                             :model-value="form.name"
-                            @update:model-value="
-                                $emit('update:field', 'name', $event)
-                            "
-                            :placeholder="
-                                page.props.messages.locations.placeholders.name
-                            "
+                            @update:model-value="$emit('update:field', 'name', $event)"
+                            :placeholder="messages.locations.placeholders.name"
                             :class="{ 'border-destructive': form.errors.name }"
                         />
                         <p
@@ -32,7 +26,7 @@
 
                     <div class="space-y-2">
                         <Label for="address">{{
-                            page.props.messages.locations.fields.address
+                            messages.locations.fields.address
                         }}</Label>
                         <Input
                             id="address"
@@ -41,7 +35,7 @@
                                 $emit('update:field', 'address', $event)
                             "
                             :placeholder="
-                                page.props.messages.locations.placeholders
+                                messages.locations.placeholders
                                     .address
                             "
                             :class="{
@@ -58,17 +52,13 @@
 
                     <div class="space-y-2">
                         <Label for="phone">{{
-                            page.props.messages.locations.fields.phone
+                            messages.locations.fields.phone
                         }}</Label>
                         <Input
                             id="phone"
                             :model-value="form.phone"
-                            @update:model-value="
-                                $emit('update:field', 'phone', $event)
-                            "
-                            :placeholder="
-                                page.props.messages.locations.placeholders.phone
-                            "
+                            @update:model-value="$emit('update:field', 'phone', $event)"
+                            :placeholder="messages.locations.placeholders.phone"
                             :class="{ 'border-destructive': form.errors.phone }"
                         />
                         <p
@@ -81,17 +71,13 @@
 
                     <div class="space-y-2">
                         <Label for="city">{{
-                            page.props.messages.locations.fields.city
+                            messages.locations.fields.city
                         }}</Label>
                         <Input
                             id="city"
                             :model-value="form.city"
-                            @update:model-value="
-                                $emit('update:field', 'city', $event)
-                            "
-                            :placeholder="
-                                page.props.messages.locations.placeholders.city
-                            "
+                            @update:model-value="$emit('update:field', 'city', $event)"
+                            :placeholder="messages.locations.placeholders.city"
                             :class="{ 'border-destructive': form.errors.city }"
                         />
                         <p
@@ -104,7 +90,7 @@
 
                     <div class="space-y-2">
                         <Label for="province">{{
-                            page.props.messages.locations.fields.province
+                            messages.locations.fields.province
                         }}</Label>
                         <Input
                             id="province"
@@ -113,7 +99,7 @@
                                 $emit('update:field', 'province', $event)
                             "
                             :placeholder="
-                                page.props.messages.locations.placeholders
+                                messages.locations.placeholders
                                     .province
                             "
                             :class="{
@@ -129,17 +115,11 @@
                     </div>
                     <div class="space-y-2">
                         <Label for="country_id">{{
-                            page.props.messages.locations.fields.country
+                            messages.locations.fields.country
                         }}</Label>
                         <SelectRoot
                             :model-value="form.country_id"
-                            @update:model-value="
-                                $emit(
-                                    'update:field',
-                                    'country_id',
-                                    $event
-                                )
-                            "
+                            @update:model-value="$emit('update:field', 'country_id', $event)"
                         >
                             <SelectTrigger
                                 id="country_id"
@@ -198,7 +178,7 @@
 
                     <div class="space-y-2">
                         <Label for="postal_code">{{
-                            page.props.messages.locations.fields.postal_code
+                            messages.locations.fields.postal_code
                         }}</Label>
                         <Input
                             id="postal_code"
@@ -207,7 +187,7 @@
                                 $emit('update:field', 'postal_code', $event)
                             "
                             :placeholder="
-                                page.props.messages.locations.placeholders
+                                messages.locations.placeholders
                                     .postal_code
                             "
                             :class="{
@@ -224,7 +204,7 @@
 
                     <div class="space-y-2">
                         <Label for="currency">{{
-                            page.props.messages.locations.fields.currency
+                            messages.locations.fields.currency
                         }}</Label>
                         <Input
                             id="currency"
@@ -233,7 +213,7 @@
                                 $emit('update:field', 'currency', $event)
                             "
                             :placeholder="
-                                page.props.messages.locations.placeholders
+                               messages.locations.placeholders
                                     .currency
                             "
                             :class="{
