@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import RegisteredUserController from '@/actions/App/Http/Controllers/Auth/RegisteredUserController';
 import InputError from '@/components/InputError.vue';
 import TextLink from '@/components/TextLink.vue';
 import { Button } from '@/components/ui/button';
@@ -29,16 +28,19 @@ const processing = ref(false);
 const errors = ref<Record<string, string>>({});
 
 // Generar dominio automáticamente
-watch(() => form.value.tenant_name, (newValue) => {
-    if (newValue) {
-        form.value.tenant_domain = newValue
-            .toLowerCase()
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/^-+|-+$/g, '');
-    }
-});
+watch(
+    () => form.value.tenant_name,
+    (newValue) => {
+        if (newValue) {
+            form.value.tenant_domain = newValue
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+        }
+    },
+);
 
 const submit = () => {
     processing.value = true;
@@ -60,10 +62,7 @@ const submit = () => {
 </script>
 
 <template>
-    <AuthBase
-        :title="t('title')"
-        :description="t('description')"
-    >
+    <AuthBase :title="t('title')" :description="t('description')">
         <Head title="Registro" />
 
         <form @submit.prevent="submit" class="flex flex-col gap-6">
@@ -161,7 +160,9 @@ const submit = () => {
                 </div>
 
                 <div class="grid gap-2">
-                    <Label for="password_confirmation">{{ t('password_confirmation') }}</Label>
+                    <Label for="password_confirmation">{{
+                        t('password_confirmation')
+                    }}</Label>
                     <Input
                         id="password_confirmation"
                         v-model="form.password_confirmation"
@@ -176,8 +177,9 @@ const submit = () => {
                 </div>
 
                 <Button
+                    variant="outline"
                     type="submit"
-                    class="mt-2 w-full"
+                    class="mt-2 w-full border-purple-500"
                     :tabindex="8"
                     :disabled="processing"
                     data-test="register-user-button"
@@ -196,7 +198,8 @@ const submit = () => {
                     :href="login()"
                     class="underline underline-offset-4"
                     :tabindex="9"
-                >{{ t('login_link') }}</TextLink>
+                    >{{ t('login_link') }}</TextLink
+                >
             </div>
         </form>
     </AuthBase>

@@ -15,8 +15,8 @@ return [
         'last_name_placeholder' => 'Tus apellidos',
         'email' => 'Correo electrónico',
         'email_placeholder' => 'email@ejemplo.com',
-        'tenant_name' => 'Nombre del workspace',
-        'tenant_name_placeholder' => 'Mi Empresa',
+        'tenant_name' => 'Nombre del negocio',
+        'tenant_name_placeholder' => 'Mi Cafetería',
         'tenant_domain' => 'Dominio único',
         'tenant_domain_placeholder' => 'mi-empresa',
         'tenant_domain_help' => 'Este será tu subdominio único',
@@ -59,6 +59,7 @@ return [
             'success' => '¡Tu cuenta ha sido activada exitosamente!',
             'invalid_link' => 'El enlace de activación es inválido o ha expirado.',
             'already_activated' => 'Tu cuenta ya está activada.',
+            'back_login' => 'Volver al inicio de sesión'
         ],
     ],
 

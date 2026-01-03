@@ -36,10 +36,10 @@ const t = (key: string) => messages.value.auth.register.activation[key] || key;
             <Button
                 as-child
                 variant="outline"
-                class="w-full"
+                class="w-full border-b-purple-500"
             >
                 <TextLink :href="login()">
-                    Volver al inicio de sesión
+                    {{ t('back_login') }}
                 </TextLink>
             </Button>
         </div>

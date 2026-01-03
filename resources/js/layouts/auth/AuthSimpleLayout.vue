@@ -1,17 +1,25 @@
 <script setup lang="ts">
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import { tenant_home as home } from '@/routes/tenant_public/index';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
 defineProps<{
     title?: string;
     description?: string;
 }>();
+
+const page = usePage()
+const shouldUseDefaultTheme = computed(() => {
+    const url = page.url;
+    return !url.startsWith('/admin') && !url.startsWith('/panel');
+});
 </script>
 
 <template>
     <div
         class="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10"
+        :class="{ default: shouldUseDefaultTheme }"
     >
         <div class="w-full max-w-sm">
             <div class="flex flex-col gap-8">
