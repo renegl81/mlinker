@@ -9,6 +9,7 @@ use App\Models\Tenant;
 use App\Models\User;
 use App\Notifications\AccountActivationNotification;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -74,7 +75,7 @@ class RegisteredUserController extends Controller
                     'updated_at' => now(),
                 ]
             );
-
+             //Artisan::call('tenants:storage-link');
             // Enviar notificación
             try{
                 $user->notify(new AccountActivationNotification($user));

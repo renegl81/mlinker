@@ -14,7 +14,12 @@ import { create } from '@/routes/tenant/locations/menus';
 import { show as menuShow } from '@/routes/tenant/menus';
 import type { Menu } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
-import { ExternalLink, Plus, Utensils } from 'lucide-vue-next';
+import {
+    ExternalLink,
+    Image as ImageIcon,
+    Plus,
+    Utensils,
+} from 'lucide-vue-next';
 import { computed } from 'vue';
 
 interface Props {
@@ -48,11 +53,12 @@ const messages = computed(() => page.props.messages as any);
                 <Table>
                     <TableHeader>
                         <TableRow>
+                            <TableHead class="w-16"></TableHead>
                             <TableHead>{{
-                                messages.menus?.fields?.name || 'Nombre'
+                                messages.menus?.fields?.name
                             }}</TableHead>
                             <TableHead>{{
-                                messages.menus?.fields?.status || 'Estado'
+                                messages.menus?.fields?.is_active
                             }}</TableHead>
                             <TableHead class="text-right">{{
                                 messages.actions?.label
@@ -61,6 +67,22 @@ const messages = computed(() => page.props.messages as any);
                     </TableHeader>
                     <TableBody>
                         <TableRow v-for="menu in menus" :key="menu.id">
+                            <TableCell>
+                                <div
+                                    class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-md border bg-muted"
+                                >
+                                    <img
+                                        v-if="menu.image_path"
+                                        :src="menu.image_path"
+                                        :alt="menu.name"
+                                        class="h-full w-full object-cover"
+                                    />
+                                    <ImageIcon
+                                        v-else
+                                        class="h-4 w-4 text-muted-foreground"
+                                    />
+                                </div>
+                            </TableCell>
                             <TableCell class="font-medium">
                                 {{ menu.name }}
                                 <p
@@ -81,7 +103,11 @@ const messages = computed(() => page.props.messages as any);
                             </TableCell>
                             <TableCell class="text-right">
                                 <Button variant="ghost" size="icon" as-child>
-                                    <Link :href="menuShow(locationId, menu.id)">
+                                    <Link
+                                        :href="
+                                            menuShow(locationId, menu.id).url
+                                        "
+                                    >
                                         <ExternalLink class="h-4 w-4" />
                                     </Link>
                                 </Button>

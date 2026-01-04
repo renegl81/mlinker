@@ -96,6 +96,10 @@ export interface Menu {
     name: string;
     description: string | null;
     image_url: string | null;
+    image_path: string | null;
+    template_id: number | null;
+    template: Template | null;
+    location: Location;
     location_id: number;
     menu_card_id: number;
     tenant_id: number;
