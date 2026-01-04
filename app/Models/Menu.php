@@ -23,6 +23,8 @@ class Menu extends Model
         'description',
         'menu_card_id',
         'location_id',
+        'template_id',
+        'is_active',
         'image_url',
         'show_prices',
         'show_currency',

@@ -36,7 +36,7 @@ interface Props {
         show_currency: boolean;
         show_prices: boolean;
         show_calories: boolean;
-        image_url: File | null;
+        image_url: string | null;
         template_id?: number;
         errors: Record<string, string>;
         processing: boolean;
@@ -79,7 +79,24 @@ const processingText = computed(() => {
     return props.processingText || messages.menus.actions.saving;
 });
 
-defineEmits<{
+const handleFileChange = async (event: Event) => {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (!file) {
+        emit('update:field', 'image_url', null);
+        return;
+    }
+
+    // Convertir archivo a base64
+    const reader = new FileReader();
+    reader.onload = () => {
+        emit('update:field', 'image_url', reader.result as string);
+    };
+    reader.readAsDataURL(file);
+};
+
+const emit = defineEmits<{
     submit: [];
     'update:field': [field: string, value: any];
 }>();
@@ -159,14 +176,7 @@ defineEmits<{
                             id="image_url"
                             type="file"
                             accept="image/jpeg,image/jpg,image/png,image/gif"
-                            @change="
-                                $emit(
-                                    'update:field',
-                                    'image_url',
-                                    ($event.target as HTMLInputElement)
-                                        .files?.[0] || null,
-                                )
-                            "
+                            @change="handleFileChange"
                             :class="{
                                 'border-destructive': form.errors.image_url,
                             }"
@@ -181,7 +191,7 @@ defineEmits<{
 
                     <div class="space-y-2">
                         <Label for="template_id">{{
-                            messages.menus.fields.template || 'Plantilla'
+                            messages.menus.fields.template
                         }}</Label>
                         <SelectRoot
                             :model-value="form.template_id"
@@ -202,10 +212,7 @@ defineEmits<{
                                 "
                             >
                                 <SelectValue
-                                    :placeholder="
-                                        messages.templates?.single ||
-                                        'Selecciona una plantilla'
-                                    "
+                                    :placeholder="messages.templates?.single"
                                 />
                                 <SelectIcon>
                                     <ChevronDown class="h-4 w-4 opacity-50" />

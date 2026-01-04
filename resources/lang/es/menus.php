@@ -9,6 +9,12 @@ return [
         'description' => 'Descripción',
         'is_active' => 'Activo',
         'status' => 'Estado',
+        'template' => 'Plantilla',
+        'location' => 'Ubicación',
+        'show_prices' => 'Mostrar Precios',
+        'show_currency' => 'Mostrar Moneda',
+        'show_calories' => 'Mostrar Calorías',
+        'image_url' => 'Imagen del Menú',
     ],
     'placeholders' => [
         'name' => 'Ingresa el nombre del menú',

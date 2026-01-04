@@ -7,6 +7,7 @@ return [
     'users' => require __DIR__.'/users.php',
     'locations' => require __DIR__.'/locations.php',
     'countries' => require __DIR__.'/countries.php',
+    'templates' => require __DIR__.'/templates.php',
     'menus' => require __DIR__.'/menus.php',
     'auth' => require __DIR__.'/auth.php',
 ];

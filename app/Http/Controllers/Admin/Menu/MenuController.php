@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Menu;
 
+use App\Actions\Menu\GetMenus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MenuStoreRequest;
 use App\Http\Requests\MenuUpdateRequest;
@@ -17,9 +18,9 @@ use Inertia\Inertia;
 
 class MenuController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, GetMenus $getMenus)
     {
-        ListMenus::dispatch();
+        $menus = $getMenus->execute($request);
 
         return Inertia::render('Menu.index', [
             'menus' => $menus,

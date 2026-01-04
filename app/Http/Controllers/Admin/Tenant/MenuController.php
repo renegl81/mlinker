@@ -12,8 +12,10 @@ use App\Http\Requests\Menu\MenuUpdateRequest;
 use App\Models\Location;
 use App\Models\Menu;
 use App\Models\Template;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -38,10 +40,18 @@ class MenuController extends Controller
 
     public function store(MenuStoreRequest $request, CreateMenu $createMenu): RedirectResponse
     {
-        $createMenu->execute($request->validated());
+        try{
+            $createMenu->execute($request->validated());
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Ocurrió un error: ' . $e->getMessage());
+        }
+
 
         return redirect()
-            ->route('menus.index')
+            ->route('tenant.locations.show', ['location' => $request->input('location_id')])
             ->with('success', __('messages.menus.created'));
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class MenuStoreRequest extends FormRequest
 {
@@ -21,7 +22,13 @@ class MenuStoreRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:100'],
-            'menu_id' => ['required', 'integer', 'exists:menus,id'],
+            'location_id' => ['required', 'integer',  Rule::exists('locations', 'id')],
+             'template_id' => ['required','integer', Rule::exists('templates', 'id')],
+            'description' => ['nullable', 'string'],
+            'image_url' => ['nullable', 'string'],
+            'show_prices' => ['boolean'],
+            'show_currency' => ['boolean'],
+            'show_calories' => ['boolean'],
         ];
     }
 }

@@ -3,8 +3,7 @@
 namespace App\Actions\Menu;
 
 use App\Models\Menu;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
+use App\Support\ImageHelper;
 
 class CreateMenu
 {
@@ -12,17 +11,17 @@ class CreateMenu
     {
         $menuData = [
             'name' => $data['name'],
-            'description' => $data['description'] ?? null,
-            'location_id' => $data['location_id'] ?? null,
-            'template_id' => $data['template_id'] ?? null,
+            'description' => $data['description'],
+            'location_id' => $data['location_id'],
+            'template_id' => $data['template_id'],
             'is_active' => $data['is_active'] ?? true,
             'show_currency' => $data['show_currency'] ?? false,
             'show_prices' => $data['show_prices'] ?? true,
             'show_calories' => $data['show_calories'] ?? false,
         ];
 
-        if (isset($data['image_url']) && $data['image_url'] instanceof UploadedFile) {
-            $menuData['image_url'] = $data['image_url']->store('menus', 'public');
+        if (isset($data['image_url']) && is_string($data['image_url']) && str_starts_with($data['image_url'], 'data:image')) {
+            $menuData['image_url'] = ImageHelper::storeBase64Image($data['image_url'], 'menus');
         }
 
         return Menu::create($menuData);
