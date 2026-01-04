@@ -17,6 +17,12 @@ class MenuStoreRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:1000'],
             'is_active' => ['boolean'],
+            'location_id' => ['integer', 'exists:locations,id'],
+            'template_id' => ['integer', 'exists:templates,id'],
+            'show_currency' => ['boolean'],
+            'show_prices' => ['boolean'],
+            'show_calories' => ['boolean'],
+            'image_url' => ['nullable', 'file', 'max:2048', 'mimes:jpg,jpeg,png,gif'],
         ];
     }
 

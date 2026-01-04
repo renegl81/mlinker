@@ -20,7 +20,7 @@ class UserController extends Controller
 {
     public function index(Request $request, GetTenantUsers $getTenantUsers)
     {
-        return Inertia::render('admin/tenant/Users/Index', [
+        return Inertia::render('admin/tenant/users/Index', [
             'users' => UserResource::collection($getTenantUsers->execute($request)),
             'filters' => $request->only('search'),
         ]);
@@ -28,7 +28,7 @@ class UserController extends Controller
 
     public function create()
     {
-        return Inertia::render('admin/tenant/Users/Create', [
+        return Inertia::render('admin/tenant/users/Create', [
             'roles' => Role::all(['id', 'name']),
         ]);
     }
@@ -50,7 +50,7 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $user->load('roles');
-        return Inertia::render('admin/tenant/Users/Edit', [
+        return Inertia::render('admin/tenant/users/Edit', [
             'user' => $user,
             'roles' => Role::all(['id', 'name']),
         ]);

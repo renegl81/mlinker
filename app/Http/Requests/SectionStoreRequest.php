@@ -21,7 +21,7 @@ class SectionStoreRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:100'],
-            'menu_id' => ['required', 'integer', 'exists:Menus,id'],
+            'menu_id' => ['required', 'integer', 'exists:menus,id'],
         ];
     }
 }

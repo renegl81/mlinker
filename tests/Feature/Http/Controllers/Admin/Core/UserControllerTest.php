@@ -32,7 +32,7 @@ class UserControllerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertInertia(fn ($page) =>
-        $page->component('admin/Users/Index')
+        $page->component('admin/users/Index')
             ->has('users.data', 6) // 5 + admin
         );
     }
@@ -61,7 +61,7 @@ class UserControllerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertInertia(fn ($page) =>
-        $page->component('admin/Users/Create')
+        $page->component('admin/users/Create')
         );
     }
 
@@ -135,7 +135,7 @@ class UserControllerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertInertia(fn ($page) =>
-        $page->component('admin/Users/Edit')
+        $page->component('admin/users/Edit')
             ->where('user.id', $user->id)
         );
     }

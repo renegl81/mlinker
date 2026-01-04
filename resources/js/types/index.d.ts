@@ -63,6 +63,7 @@ export interface Location {
     user: User;
     slug: string;
     country: Country;
+    menus: Menu[];
     image_url: string | null;
     logo_url: string | null;
     languages: Record<string, string>;
@@ -76,5 +77,31 @@ export interface Location {
     latitude: string;
     longitude: string;
     lang: string;
+}
+
+export interface Template{
+    id: number;
+    name: string;
+    description: string | null;
+    preview_image_url: string | null;
+    config: object;
+    component_name: string;
+    is_active: boolean;
+    tenant_id: number | null;
+    created_at: string;
+    updated_at: string;
+}
+export interface Menu {
+    id: number;
+    name: string;
+    description: string | null;
+    image_url: string | null;
+    location_id: number;
+    menu_card_id: number;
+    tenant_id: number;
+    show_currency: boolean;
+    show_calories: boolean;
+    created_at: string;
+    updated_at: string;
 }
 export type BreadcrumbItemType = BreadcrumbItem;

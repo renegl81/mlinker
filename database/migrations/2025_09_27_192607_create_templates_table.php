@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('templates', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
+            $table->string('component_name', 100);
             $table->text('description')->nullable();
             $table->string('preview_image_url', 255)->nullable();
             $table->json('config')->nullable();

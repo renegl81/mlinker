@@ -10,4 +10,5 @@ return [
     'cancel' => 'Cancelar',
     'clear' => 'Limpiar',
     'search' => 'Buscar',
+    'show_details' => 'Ver detalles',
 ];

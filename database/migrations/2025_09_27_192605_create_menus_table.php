@@ -15,11 +15,15 @@ return new class extends Migration
             $table->id();
             $table->string('name', 100);
             $table->text('description')->nullable();
-            $table->foreignId('menu_card_id');
+            $table->unsignedBigInteger('location_id')->after('id');
+            $table->foreign('location_id')->references('id')->on('locations')->onDelete('set null');
+            $table->unsignedBigInteger('template_id')->after('id');
+            $table->foreign('template_id')->references('id')->on('templates')->onDelete('set null');
             $table->string('image_url', 255)->nullable();
             $table->boolean('show_prices')->default(true);
             $table->boolean('show_currency')->default(true);
             $table->boolean('show_calories')->default(false);
+            $table->boolean('is_active')->default(true);
             $table->string('tenant_id')->index();
             $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             $table->timestamps();

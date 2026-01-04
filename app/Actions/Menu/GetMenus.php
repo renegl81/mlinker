@@ -6,9 +6,9 @@ use App\Models\Menu;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 
-class ListMenus
+class GetMenus
 {
-    public function __invoke(Request $request): LengthAwarePaginator
+    public function execute(Request $request): LengthAwarePaginator
     {
         $query = Menu::query();
 

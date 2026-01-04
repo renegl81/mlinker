@@ -41,8 +41,8 @@ class QRCode extends Model
         ];
     }
 
-    public function menuCard(): BelongsTo
+    public function menu(): BelongsTo
     {
-        return $this->belongsTo(MenuCard::class);
+        return $this->belongsTo(Menu::class);
     }
 }

@@ -21,7 +21,7 @@ class MenuStoreRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:100'],
-            'menu_card_id' => ['required', 'integer', 'exists:MenuCards,id'],
+            'menu_id' => ['required', 'integer', 'exists:menus,id'],
         ];
     }
 }

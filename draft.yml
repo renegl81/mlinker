@@ -260,7 +260,7 @@ controllers:
 
   Menu:
     index:
-      dispatch: ListMenus
+      dispatch: GetMenus
       render: Menu.index with:menus
     store:
       validate: name, menu_card_id

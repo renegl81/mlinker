@@ -4,7 +4,6 @@ use App\Http\Controllers\Admin\Core\DashboardController;
 use App\Http\Controllers\Admin\Core\UserController;
 use App\Http\Controllers\Admin\Menu\AllergenController;
 use App\Http\Controllers\Admin\Menu\IngredientController;
-use App\Http\Controllers\Admin\Menu\MenuCardController;
 use App\Http\Controllers\Admin\Menu\MenuController;
 use App\Http\Controllers\Admin\Menu\ProductController;
 use App\Http\Controllers\Admin\Menu\QRCodeController;
@@ -28,7 +27,6 @@ Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(functio
     Route::resource('users', UserController::class);
     Route::resource('locations', LocationController::class)->except('create', 'edit');
     Route::resource('categories', CategoryController::class)->except('create', 'edit');
-    Route::resource('menu-cards', MenuCardController::class)->except('create', 'edit');
     Route::resource('menus', MenuController::class)->except('create', 'edit');
     Route::resource('products', ProductController::class)->except('create', 'edit');
     Route::resource('ingredients', IngredientController::class)->except('create', 'edit');

@@ -360,7 +360,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const page = usePage();
-const messages = page.props.messages;
+const messages = page.props.messages as any;
 const title = computed(() => {
     if (props.title) return props.title;
     return props.isEdit

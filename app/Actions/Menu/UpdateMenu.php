@@ -6,7 +6,7 @@ use App\Models\Menu;
 
 class UpdateMenu
 {
-    public function __invoke(Menu $menu, array $data): Menu
+    public function execute(Menu $menu, array $data): Menu
     {
         $menu->update([
             'name' => $data['name'],

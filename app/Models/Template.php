@@ -37,8 +37,8 @@ class Template extends Model
         ];
     }
 
-    public function menuCards(): HasMany
+    public function menus(): HasMany
     {
-        return $this->hasMany(MenuCard::class);
+        return $this->hasMany(Menu::class);
     }
 }

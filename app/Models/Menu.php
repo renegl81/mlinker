@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 class Menu extends Model
@@ -21,6 +22,7 @@ class Menu extends Model
         'name',
         'description',
         'menu_card_id',
+        'location_id',
         'image_url',
         'show_prices',
         'show_currency',
@@ -36,16 +38,26 @@ class Menu extends Model
     {
         return [
             'id' => 'integer',
-            'menu_card_id' => 'integer',
+            'location_id' => 'integer',
             'show_prices' => 'boolean',
             'show_currency' => 'boolean',
             'show_calories' => 'boolean',
         ];
     }
 
-    public function menuCard(): BelongsTo
+    public function location(): BelongsTo
     {
-        return $this->belongsTo(MenuCard::class);
+        return $this->belongsTo(Location::class);
+    }
+
+    public function template(): BelongsTo
+    {
+        return $this->belongsTo(Template::class);
+    }
+
+    public function sections(): HasMany
+    {
+        return $this->hasMany(Section::class);
     }
 
     public function products(): BelongsToMany

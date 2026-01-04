@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             UserSeeder::class,
             TenantSeeder::class,
+            TemplateSeeder::class,
         ]);
 
         $mainTenant = Tenant::find('pizzeria-mario');

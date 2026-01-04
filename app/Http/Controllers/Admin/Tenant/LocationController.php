@@ -23,14 +23,14 @@ class LocationController extends Controller
     {
         $locations = $listLocations->execute($request);
 
-        return Inertia::render('admin/tenant/Locations/Index', [
+        return Inertia::render('admin/tenant/locations/Index', [
             'locations' => $locations,
         ]);
     }
 
     public function create()
     {
-        return Inertia::render('admin/tenant/Locations/Create', [
+        return Inertia::render('admin/tenant/locations/Create', [
             'countries' => Country::all(['id', 'name']),
         ]);
     }
@@ -53,16 +53,16 @@ class LocationController extends Controller
     }
     public function edit(Location $location)
     {
-        return Inertia::render('admin/tenant/Locations/Edit', [
+        return Inertia::render('admin/tenant/locations/Edit', [
             'location' => $location,
             'countries' => Country::all(['id', 'name']),
         ]);
     }
 
-    public function show(Request $request, Location $location)
+    public function show(Location $location)
     {
-        return Inertia::render('admin/tenant/Locations/Show', [
-            'location' => $location->load('country'),
+        return Inertia::render('admin/tenant/locations/Show', [
+            'location' => $location->load(['country', 'menus']),
         ]);
     }
 

@@ -80,13 +80,13 @@ class Location extends Model
         return $this->belongsTo(Country::class);
     }
 
+    public function menus(): HasMany
+    {
+        return $this->hasMany(Menu::class);
+    }
+
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class);
-    }
-
-    public function menuCards(): HasMany
-    {
-        return $this->hasMany(MenuCard::class);
     }
 }

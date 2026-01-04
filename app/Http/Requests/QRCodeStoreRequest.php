@@ -20,7 +20,7 @@ class QRCodeStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'menu_card_id' => ['required', 'integer', 'exists:MenuCards,id'],
+            'menu_id' => ['required', 'integer', 'exists:menus,id'],
             'parameters' => ['required', 'json'],
         ];
     }

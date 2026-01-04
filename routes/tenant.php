@@ -39,9 +39,13 @@ Route::middleware([
     Route::middleware(['auth', 'verified'])->group(function () {
         Route::prefix('panel')->group(function () {
             Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-            Route::resource('menus', MenuController::class);
+
             Route::resource('users', UserController::class);
             Route::resource('locations', LocationController::class);
+
+            // Solo rutas anidadas para menús
+            Route::resource('locations.menus', MenuController::class)->shallow();
         });
     });
+
 });

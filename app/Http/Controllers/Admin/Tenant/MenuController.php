@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Admin\Tenant;
 
-use App\Actions\Menu\CreateLocation;
-use App\Actions\Menu\DeleteLocation;
-use App\Actions\Menu\ListLocations;
-use App\Actions\Menu\UpdateLocation;
+use App\Actions\Menu\CreateMenu;
+use App\Actions\Menu\DeleteMenu;
+use App\Actions\Menu\GetMenus;
+use App\Actions\Menu\UpdateMenu;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Menu\MenuStoreRequest;
 use App\Http\Requests\Menu\MenuUpdateRequest;
+use App\Models\Location;
 use App\Models\Menu;
+use App\Models\Template;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -17,24 +19,26 @@ use Inertia\Response;
 
 class MenuController extends Controller
 {
-    public function index(Request $request): Response
+    public function index(Request $request, GetMenus $getMenus): Response
     {
-        $menus = app(ListLocations::class)($request);
-
-        return Inertia::render('admin/tenant/Menus/Index', [
+        $menus = $getMenus->execute($request);
+        return Inertia::render('admin/tenant/menus/Index', [
             'menus' => $menus,
             'filters' => $request->only(['name', 'is_active']),
         ]);
     }
 
-    public function create(): Response
+    public function create(Location $location): Response
     {
-        return Inertia::render('admin/tenant/Menus/Create');
+        return Inertia::render('admin/tenant/menus/Create', [
+            'location' => $location,
+            'templates' => Template::all(),
+        ]);
     }
 
-    public function store(MenuStoreRequest $request): RedirectResponse
+    public function store(MenuStoreRequest $request, CreateMenu $createMenu): RedirectResponse
     {
-        app(CreateLocation::class)($request->validated());
+        $createMenu->execute($request->validated());
 
         return redirect()
             ->route('menus.index')
@@ -43,26 +47,34 @@ class MenuController extends Controller
 
     public function edit(Menu $menu): Response
     {
-        return Inertia::render('admin/tenant/Menus/Edit', [
+        return Inertia::render('admin/tenant/menus/Edit', [
             'menu' => $menu,
         ]);
     }
 
-    public function update(MenuUpdateRequest $request, Menu $menu): RedirectResponse
+    public function update(MenuUpdateRequest $request, Menu $menu, UpdateMenu $updateMenu): RedirectResponse
     {
-        app(UpdateLocation::class)($menu, $request->validated());
+        $updateMenu->execute($menu, $request->validated());
 
         return redirect()
             ->route('menus.index')
             ->with('success', __('messages.menus.updated'));
     }
 
-    public function destroy(Menu $menu): RedirectResponse
+    public function destroy(Menu $menu, DeleteMenu $deleteMenu): RedirectResponse
     {
-        app(DeleteLocation::class)($menu);
+        $deleteMenu->execute($menu);
 
         return redirect()
             ->route('menus.index')
             ->with('success', __('messages.menus.deleted'));
+    }
+
+    public function show(Location $location, Menu $menu): Response
+    {
+        return Inertia::render('admin/tenant/menus/Show', [
+            'menu' => $menu,
+        ]);
+
     }
 }

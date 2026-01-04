@@ -20,7 +20,7 @@ class OpeningHourStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'location_id' => ['required', 'integer', 'exists:Locations,id'],
+            'location_id' => ['required', 'integer', 'exists:locations,id'],
             'weekday' => ['required', 'integer'],
         ];
     }

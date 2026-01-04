@@ -1,27 +1,15 @@
 <script setup lang="ts">
 import HeadingSmall from '@/components/HeadingSmall.vue';
-import { Badge } from '@/components/ui/badge';
+import MenuSection from './components/MenuSection.vue';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table';
 import AppLayout from '@/layouts/AppLayout.vue';
 import {
     destroy as locationRouteDestroy,
     edit as locationRouteEdit,
     index as locationsRoute,
 } from '@/routes/tenant/locations';
-import {
-    create as menuCreate,
-    show as menuShow,
-} from '@/routes/tenant/menus';
 import type { BreadcrumbItem, Country, Location } from '@/types';
 import { Inertia } from '@inertiajs/inertia';
 import { Head, Link, usePage } from '@inertiajs/vue3';
@@ -29,18 +17,14 @@ import {
     ArrowLeft,
     BadgeDollarSign,
     Clock,
-    ExternalLink,
     Globe,
     MapPin,
     Pencil,
     Phone,
-    Plus,
     Trash2,
-    Utensils,
 } from 'lucide-vue-next';
 import { computed } from 'vue';
 
-// Definición de interfaces locales
 interface Menu {
     id: number;
     name: string;
@@ -49,10 +33,7 @@ interface Menu {
 }
 
 interface Props {
-    location: Location & {
-        country?: Country;
-        menus?: Menu[];
-    };
+    location: Location;
 }
 
 const props = defineProps<Props>();
@@ -208,114 +189,10 @@ function remove() {
                         </CardContent>
                     </Card>
 
-                    <Card>
-                        <CardHeader
-                            class="flex flex-row items-center justify-between space-y-0"
-                        >
-                            <CardTitle class="flex items-center gap-2 text-lg">
-                                <Utensils class="h-5 w-5 text-primary" />
-                                {{ messages.menus?.plural || 'Menús' }}
-                            </CardTitle>
-                            <Button size="sm" as-child>
-                                <Link :href="menuCreate()">
-                                    <Plus class="mr-2 h-4 w-4" />
-                                    {{
-                                        messages.menus?.actions?.create ||
-                                        'Nuevo Menú'
-                                    }}
-                                </Link>
-                            </Button>
-                        </CardHeader>
-                        <CardContent>
-                            <div
-                                v-if="
-                                    location.menus && location.menus.length > 0
-                                "
-                            >
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow>
-                                            <TableHead>{{
-                                                messages.menus?.fields?.name ||
-                                                'Nombre'
-                                            }}</TableHead>
-                                            <TableHead>{{
-                                                messages.menus?.fields
-                                                    ?.status || 'Estado'
-                                            }}</TableHead>
-                                            <TableHead class="text-right">{{
-                                                messages.actions?.label
-                                            }}</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                        <TableRow
-                                            v-for="menu in location.menus"
-                                            :key="menu.id"
-                                        >
-                                            <TableCell class="font-medium">
-                                                {{ menu.name }}
-                                                <p
-                                                    class="line-clamp-1 text-xs font-normal text-muted-foreground"
-                                                    v-if="menu.description"
-                                                >
-                                                    {{ menu.description }}
-                                                </p>
-                                            </TableCell>
-                                            <TableCell>
-                                                <Badge
-                                                    :variant="
-                                                        menu.is_active
-                                                            ? 'default'
-                                                            : 'secondary'
-                                                    "
-                                                >
-                                                    {{
-                                                        menu.is_active
-                                                            ? 'Activo'
-                                                            : 'Inactivo'
-                                                    }}
-                                                </Badge>
-                                            </TableCell>
-                                            <TableCell class="text-right">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="icon"
-                                                    as-child
-                                                >
-                                                    <Link
-                                                        :href="
-                                                            menuShow(menu.id)
-                                                        "
-                                                    >
-                                                        <ExternalLink
-                                                            class="h-4 w-4"
-                                                        />
-                                                    </Link>
-                                                </Button>
-                                            </TableCell>
-                                        </TableRow>
-                                    </TableBody>
-                                </Table>
-                            </div>
-                            <div
-                                v-else
-                                class="flex flex-col items-center justify-center rounded-lg border-2 border-dashed py-10 text-center"
-                            >
-                                <Utensils
-                                    class="mb-3 h-10 w-10 text-muted-foreground/30"
-                                />
-                                <p
-                                    class="text-sm font-medium text-muted-foreground"
-                                >
-                                    {{
-                                        messages.menus?.empty ||
-                                        'No hay menús para esta ubicación.'
-                                    }}
-                                </p>
-                            </div>
-                        </CardContent>
-                    </Card>
+                    <MenuSection
+                        :location-id="location.id"
+                        :menus="location.menus"
+                    />
                 </div>
 
                 <div class="space-y-6">

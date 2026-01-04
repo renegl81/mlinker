@@ -16,7 +16,7 @@ class UserController extends Controller
 {
     public function index(Request $request, getAdminUsers $getAdminUsers)
     {
-        return Inertia::render('admin/Users/Index', [
+        return Inertia::render('admin/users/Index', [
             'users' => UserResource::collection($getAdminUsers->execute($request)),
             'filters' => $request->only('search'),
         ]);
@@ -24,7 +24,7 @@ class UserController extends Controller
 
     public function create()
     {
-        return Inertia::render('admin/Users/Create');
+        return Inertia::render('admin/users/Create');
     }
 
     public function store(StoreUserRequest $request)
@@ -38,7 +38,7 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        return Inertia::render('admin/Users/Edit', ['user' => $user]);
+        return Inertia::render('admin/users/Edit', ['user' => $user]);
     }
 
     public function update(UpdateUserRequest $request, User $user)

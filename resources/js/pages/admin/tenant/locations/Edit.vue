@@ -36,7 +36,7 @@ interface Props {
 
 const props = defineProps<Props>();
 const page = usePage();
-const messages = page.props.messages;
+const messages = page.props.messages as any;
 const breadcrumbItems: BreadcrumbItem[] = [
     {
         title: messages.locations.plural,

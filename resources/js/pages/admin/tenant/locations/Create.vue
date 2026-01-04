@@ -29,7 +29,7 @@ import type { BreadcrumbItem, Country } from '@/types';
 import { index as locationsRoute, store } from '@/routes/tenant/locations';
 
 const page = usePage();
-const messages = page.props.messages;
+const messages = page.props.messages as any;
 const breadcrumbItems: BreadcrumbItem[] = [
     {
         title: messages.locations.plural,
