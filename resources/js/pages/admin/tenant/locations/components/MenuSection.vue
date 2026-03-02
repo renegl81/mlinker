@@ -15,12 +15,14 @@ import { show as menuShow } from '@/routes/tenant/menus';
 import type { Menu } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
 import {
+    Edit,
     ExternalLink,
     Image as ImageIcon,
     Plus,
     Utensils,
 } from 'lucide-vue-next';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+import ProductsDialog from './ProductsDialog.vue';
 
 interface Props {
     locationId: number;
@@ -30,6 +32,19 @@ interface Props {
 const props = defineProps<Props>();
 const page = usePage();
 const messages = computed(() => page.props.messages as any);
+
+const selectedMenu = ref<Menu | null>(null);
+const isProductsDialogOpen = ref(false);
+
+const openProductsDialog = (menu: Menu) => {
+    selectedMenu.value = menu;
+    isProductsDialogOpen.value = true;
+};
+
+const closeProductsDialog = () => {
+    isProductsDialogOpen.value = false;
+    selectedMenu.value = null;
+};
 </script>
 
 <template>
@@ -102,15 +117,31 @@ const messages = computed(() => page.props.messages as any);
                                 </Badge>
                             </TableCell>
                             <TableCell class="text-right">
-                                <Button variant="ghost" size="icon" as-child>
-                                    <Link
-                                        :href="
-                                            menuShow(locationId, menu.id).url
-                                        "
+                                <div
+                                    class="flex items-center justify-end gap-2"
+                                >
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        @click="openProductsDialog(menu)"
                                     >
-                                        <ExternalLink class="h-4 w-4" />
-                                    </Link>
-                                </Button>
+                                        <Edit class="h-4 w-4" />
+                                    </Button>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        as-child
+                                    >
+                                        <Link
+                                            :href="
+                                                menuShow(locationId, menu.id)
+                                                    .url
+                                            "
+                                        >
+                                            <ExternalLink class="h-4 w-4" />
+                                        </Link>
+                                    </Button>
+                                </div>
                             </TableCell>
                         </TableRow>
                     </TableBody>
@@ -129,5 +160,13 @@ const messages = computed(() => page.props.messages as any);
                 </p>
             </div>
         </CardContent>
+
+        <ProductsDialog
+            v-if="selectedMenu"
+            :open="isProductsDialogOpen"
+            :menu="selectedMenu"
+            :location-id="locationId"
+            @close="closeProductsDialog"
+        />
     </Card>
 </template>

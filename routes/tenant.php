@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Http\Controllers\Admin\Core\DashboardController;
 use App\Http\Controllers\Admin\Tenant\LocationController;
 use App\Http\Controllers\Admin\Tenant\MenuController;
+use App\Http\Controllers\Admin\Tenant\ProductController;
 use App\Http\Controllers\Admin\Tenant\UserController;
 use App\Http\Controllers\Tenant\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -27,7 +28,14 @@ Route::middleware([
     Route::get('/', HomeController::class)->name('tenant_home');
     Route::get('/menu/{menu}', \App\Http\Controllers\Tenant\MenuController::class)->name('tenant_menu_show');
 
-    // Aquí más rutas públicas del tenant en el futuro
+    Route::prefix('menus/{menu}')->group(function () {
+        Route::post('/products', [ProductController::class, 'store'])
+            ->name('tenant.menus.products.store');
+        Route::put('/products/{product}', [ProductController::class, 'update'])
+            ->name('tenant.menus.products.update');
+        Route::delete('/products/{product}', [ProductController::class, 'destroy'])
+            ->name('tenant.menus.products.destroy');
+    });
 });
 
 // Rutas protegidas del tenant (requieren tenant obligatorio)

@@ -100,12 +100,27 @@ export interface Menu {
     template_id: number | null;
     template: Template | null;
     location: Location;
+    products?: Product[];
     location_id: number;
     menu_card_id: number;
     tenant_id: number;
     show_currency: boolean;
     show_calories: boolean;
+    is_active: boolean;
     created_at: string;
     updated_at: string;
 }
+
+export interface Product {
+    id: number;
+    name: string;
+    description: string | null;
+    price: number;
+    calories: number | null;
+    image_url: string | null;
+    tenant_id: string;
+    created_at: string;
+    updated_at: string;
+}
+
 export type BreadcrumbItemType = BreadcrumbItem;
