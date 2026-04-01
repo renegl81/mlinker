@@ -1,10 +1,11 @@
 <?php
 
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\RateLimiter;
 use Laravel\Fortify\Features;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 test('login screen can be rendered', function () {
     $response = $this->get(route('login'));
@@ -69,7 +70,7 @@ test('users can logout', function () {
     $response = $this->actingAs($user)->post(route('logout'));
 
     $this->assertGuest();
-    $response->assertRedirect(route('home'));
+    $response->assertRedirect(route('tenant_public.tenant_home', absolute: false));
 });
 
 test('users are rate limited', function () {
@@ -86,5 +87,7 @@ test('users are rate limited', function () {
 
     $errors = session('errors');
 
-    $this->assertStringContainsString('Too many login attempts', $errors->first('email'));
+    $availableIn = RateLimiter::availableIn(implode('|', [$user->email, '127.0.0.1']));
+
+    $this->assertStringContainsString((string) $availableIn, $errors->first('email'));
 });

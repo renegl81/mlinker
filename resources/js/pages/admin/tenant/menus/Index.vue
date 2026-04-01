@@ -9,11 +9,13 @@ import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Plus, Pencil, Trash2, ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import type { BreadcrumbItem } from '@/types'
-import { index as menusRoute, create, destroy as menuRouteDestroy } from '@/routes/tenant/menus'
+import { index as locationMenusRoute, create } from '@/routes/tenant/locations/menus'
+import { destroy as menuRouteDestroy, edit as menuRouteEdit } from '@/routes/tenant/menus'
 import MenuFilters, { type MenuFilters as MenuFiltersType } from './Filters.vue'
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
 const page = usePage()
+const messages = page.props.messages as any
 
 interface Menu {
     id: number
@@ -29,27 +31,30 @@ interface PaginatedMenus {
 }
 
 interface Props {
+    location: {
+        id: number
+    }
     menus: PaginatedMenus
     filters?: MenuFiltersType
 }
 
+const props = defineProps<Props>()
+
 const breadcrumbItems: BreadcrumbItem[] = [
     {
         title: 'Menús',
-        href: menusRoute().url,
+        href: locationMenusRoute(props.location.id).url,
     },
 ]
-
-const props = defineProps<Props>()
 
 const filters = ref<MenuFiltersType>(props.filters || {})
 
 function applyFilters(appliedFilters: MenuFiltersType) {
     const cleanFilters = Object.fromEntries(
-        Object.entries(appliedFilters).filter(([_, value]) => value && value.length > 0)
+        Object.entries(appliedFilters).filter(([, value]) => value && value.length > 0)
     )
 
-    Inertia.get(menusRoute().url, cleanFilters, {
+    Inertia.get(locationMenusRoute(props.location.id).url, cleanFilters, {
         preserveState: true,
         replace: true
     })
@@ -60,14 +65,14 @@ function go(url: string) {
 }
 
 function remove(id: number) {
-    if (confirm(page.props.messages?.menus.actions.confirm_delete)) {
+    if (confirm(messages?.menus.actions.confirm_delete)) {
         Inertia.delete(menuRouteDestroy(id).url)
     }
 }
 
 function clearFilters() {
     filters.value = {}
-    Inertia.get(menusRoute().url, {}, {
+    Inertia.get(locationMenusRoute(props.location.id).url, {}, {
         preserveState: true,
         replace: true
     })
@@ -80,13 +85,13 @@ function clearFilters() {
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <div class="flex items-center justify-between">
                 <HeadingSmall
-                    :title="page.props.messages.menus.plural"
-                    :description="page.props.messages.menus.caption"
+                    :title="messages.menus.plural"
+                    :description="messages.menus.caption"
                 />
                 <Button as-child>
-                    <Link :href="create()">
+                    <Link :href="create(props.location.id).url">
                         <Plus class="mr-2 h-4 w-4" />
-                        {{ page.props.messages?.menus.actions.create }}
+                        {{ messages?.menus.actions.create }}
                     </Link>
                 </Button>
             </div>
@@ -102,10 +107,10 @@ function clearFilters() {
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>{{ page.props.messages.menus.fields.name }}</TableHead>
-                                <TableHead>{{ page.props.messages.menus.fields.description }}</TableHead>
-                                <TableHead>{{ page.props.messages.menus.fields.status }}</TableHead>
-                                <TableHead class="text-right">{{ page.props.messages.actions.label }}</TableHead>
+                                <TableHead>{{ messages.menus.fields.name }}</TableHead>
+                                <TableHead>{{ messages.menus.fields.description }}</TableHead>
+                                <TableHead>{{ messages.menus.fields.status }}</TableHead>
+                                <TableHead class="text-right">{{ messages.actions.label }}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -116,7 +121,7 @@ function clearFilters() {
                                     <span
                                         :class="menu.is_active ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'"
                                     >
-                                        {{ menu.is_active ? page.props.messages.menus.status.active : page.props.messages.menus.status.inactive }}
+                                        {{ menu.is_active ? messages.menus.status.active : messages.menus.status.inactive }}
                                     </span>
                                 </TableCell>
                                 <TableCell class="text-right">
@@ -126,15 +131,15 @@ function clearFilters() {
                                                 <TooltipTrigger as-child>
                                                     <Button variant="outline" size="sm" as-child>
                                                         <Link
-                                                            :href="`/menus/${menu.id}/edit`"
-                                                            :aria-label="page.props.messages?.menus.actions.edit"
+                                                            :href="menuRouteEdit(menu.id).url"
+                                                            :aria-label="messages?.menus.actions.edit"
                                                         >
                                                             <Pencil class="h-3 w-3" />
                                                         </Link>
                                                     </Button>
                                                 </TooltipTrigger>
                                                 <TooltipContent>
-                                                    {{ page.props.messages?.menus.actions.edit }}
+                                                    {{ messages?.menus.actions.edit }}
                                                 </TooltipContent>
                                             </Tooltip>
 
@@ -144,13 +149,13 @@ function clearFilters() {
                                                         variant="destructive"
                                                         size="sm"
                                                         @click="remove(menu.id)"
-                                                        :aria-label="page.props.messages?.menus.actions.delete"
+                                                        :aria-label="messages?.menus.actions.delete"
                                                     >
                                                         <Trash2 class="h-3 w-3" />
                                                     </Button>
                                                 </TooltipTrigger>
                                                 <TooltipContent>
-                                                    {{ page.props.messages?.menus.actions.delete }}
+                                                    {{ messages?.menus.actions.delete }}
                                                 </TooltipContent>
                                             </Tooltip>
                                         </TooltipProvider>
@@ -167,14 +172,14 @@ function clearFilters() {
                         @click="menus.prev_page_url && go(menus.prev_page_url)"
                     >
                         <ChevronLeft class="mr-2 h-4 w-4" />
-                        {{ page.props.messages.pagination.previous }}
+                        {{ messages.pagination.previous }}
                     </Button>
                     <Button
                         variant="outline"
                         :disabled="!menus.next_page_url"
                         @click="menus.next_page_url && go(menus.next_page_url)"
                     >
-                        {{ page.props.messages.pagination.next }}
+                        {{ messages.pagination.next }}
                         <ChevronRight class="ml-2 h-4 w-4" />
                     </Button>
                 </CardFooter>

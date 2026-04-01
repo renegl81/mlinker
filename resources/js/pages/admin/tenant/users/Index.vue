@@ -63,7 +63,7 @@ const filters = ref<UserFiltersType>(props.filters || {});
 function applyFilters(appliedFilters: UserFiltersType) {
     const cleanFilters = Object.fromEntries(
         Object.entries(appliedFilters).filter(
-            ([_, value]) => value && value.length > 0,
+            ([, value]) => value && value.length > 0,
         ),
     );
 

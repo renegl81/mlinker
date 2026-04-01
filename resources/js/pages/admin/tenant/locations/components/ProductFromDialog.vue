@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import {
-    store,
-    update,
-} from '@/routes/menus/products';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -63,14 +59,22 @@ watch(
 );
 
 const handleSubmit = () => {
-    const routeAction = isEditing.value
-        ? update(props.menu.id, props.product!.id)
-        : store(props.menu.id);
+    const onSuccess = () => {
+        emit('close');
+        form.reset();
+    };
 
-    form.post(routeAction.url, {
+    if (isEditing.value && props.product) {
+        form.put(`/menus/${props.menu.id}/products/${props.product.id}`, {
+            onSuccess,
+        });
+
+        return;
+    }
+
+    form.post(`/menus/${props.menu.id}/products`, {
         onSuccess: () => {
-            emit('close');
-            form.reset();
+            onSuccess();
         },
     });
 };

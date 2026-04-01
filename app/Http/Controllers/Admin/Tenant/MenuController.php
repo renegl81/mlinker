@@ -21,10 +21,11 @@ use Inertia\Response;
 
 class MenuController extends Controller
 {
-    public function index(Request $request, GetMenus $getMenus): Response
+    public function index(Request $request, Location $location, GetMenus $getMenus): Response
     {
         $menus = $getMenus->execute($request);
         return Inertia::render('admin/tenant/menus/Index', [
+            'location' => $location,
             'menus' => $menus,
             'filters' => $request->only(['name', 'is_active']),
         ]);
@@ -80,10 +81,10 @@ class MenuController extends Controller
             ->with('success', __('messages.menus.deleted'));
     }
 
-    public function show(Location $location, Menu $menu): Response
+    public function show(Menu $menu): Response
     {
         return Inertia::render('admin/tenant/menus/Show', [
-            'menu' => $menu,
+            'menu' => $menu->load(['location', 'template', 'sections']),
         ]);
 
     }

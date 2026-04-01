@@ -2,12 +2,13 @@
 
 namespace Tests\Feature\Http\Controllers\Admin\Core;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
 
-#Test
+// Test
 class UserControllerTest extends TestCase
 {
     use RefreshDatabase;
@@ -18,8 +19,10 @@ class UserControllerTest extends TestCase
     {
         parent::setUp();
 
-        // Crear un usuario administrador para autenticación
-        $this->admin = User::factory()->create();
+        Role::query()->firstOrCreate(['name' => 'Admin']);
+        Role::query()->firstOrCreate(['name' => 'Owner']);
+
+        $this->admin = User::factory()->admin()->create();
     }
 
     #[Test]
@@ -31,8 +34,7 @@ class UserControllerTest extends TestCase
             ->get(route('users.index'));
 
         $response->assertStatus(200);
-        $response->assertInertia(fn ($page) =>
-        $page->component('admin/users/Index')
+        $response->assertInertia(fn ($page) => $page->component('admin/users/Index')
             ->has('users.data', 6) // 5 + admin
         );
     }
@@ -47,8 +49,7 @@ class UserControllerTest extends TestCase
             ->get(route('users.index', ['search' => 'John']));
 
         $response->assertStatus(200);
-        $response->assertInertia(fn ($page) =>
-        $page->has('users.data', 1)
+        $response->assertInertia(fn ($page) => $page->has('users.data', 1)
             ->where('users.data.0.name', 'John Doe')
         );
     }
@@ -60,8 +61,7 @@ class UserControllerTest extends TestCase
             ->get(route('users.create'));
 
         $response->assertStatus(200);
-        $response->assertInertia(fn ($page) =>
-        $page->component('admin/users/Create')
+        $response->assertInertia(fn ($page) => $page->component('admin/users/Create')
         );
     }
 
@@ -70,9 +70,11 @@ class UserControllerTest extends TestCase
     {
         $userData = [
             'name' => 'Test User',
+            'last_name' => 'Tester',
             'email' => 'test@example.com',
             'password' => 'password123',
             'password_confirmation' => 'password123',
+            'roles' => ['Admin'],
         ];
 
         $response = $this->actingAs($this->admin)
@@ -82,6 +84,7 @@ class UserControllerTest extends TestCase
 
         $this->assertDatabaseHas('users', [
             'name' => 'Test User',
+            'last_name' => 'Tester',
             'email' => 'test@example.com',
         ]);
     }
@@ -92,7 +95,7 @@ class UserControllerTest extends TestCase
         $response = $this->actingAs($this->admin)
             ->post(route('users.store'), []);
 
-        $response->assertSessionHasErrors(['name', 'email', 'password']);
+        $response->assertSessionHasErrors(['name', 'last_name', 'email', 'password', 'roles']);
     }
 
     #[Test]
@@ -103,9 +106,11 @@ class UserControllerTest extends TestCase
         $response = $this->actingAs($this->admin)
             ->post(route('users.store'), [
                 'name' => 'Test User',
+                'last_name' => 'Tester',
                 'email' => 'existing@example.com',
                 'password' => 'password123',
                 'password_confirmation' => 'password123',
+                'roles' => ['Admin'],
             ]);
 
         $response->assertSessionHasErrors(['email']);
@@ -117,9 +122,11 @@ class UserControllerTest extends TestCase
         $response = $this->actingAs($this->admin)
             ->post(route('users.store'), [
                 'name' => 'Test User',
+                'last_name' => 'Tester',
                 'email' => 'test@example.com',
                 'password' => 'password123',
                 'password_confirmation' => 'different',
+                'roles' => ['Admin'],
             ]);
 
         $response->assertSessionHasErrors(['password']);
@@ -134,8 +141,7 @@ class UserControllerTest extends TestCase
             ->get(route('users.edit', $user));
 
         $response->assertStatus(200);
-        $response->assertInertia(fn ($page) =>
-        $page->component('admin/users/Edit')
+        $response->assertInertia(fn ($page) => $page->component('admin/users/Edit')
             ->where('user.id', $user->id)
         );
     }
@@ -148,7 +154,9 @@ class UserControllerTest extends TestCase
         $response = $this->actingAs($this->admin)
             ->put(route('users.update', $user), [
                 'name' => 'New Name',
+                'last_name' => $user->last_name,
                 'email' => $user->email,
+                'roles' => ['Admin'],
             ]);
 
         $response->assertRedirect(route('users.index'));
@@ -167,9 +175,11 @@ class UserControllerTest extends TestCase
         $response = $this->actingAs($this->admin)
             ->put(route('users.update', $user), [
                 'name' => $user->name,
+                'last_name' => $user->last_name,
                 'email' => $user->email,
                 'password' => 'newpassword123',
                 'password_confirmation' => 'newpassword123',
+                'roles' => ['Admin'],
             ]);
 
         $response->assertRedirect(route('users.index'));
@@ -184,15 +194,17 @@ class UserControllerTest extends TestCase
         $user1 = User::factory()->create([
             'email' => 'user1@example.com',
             'last_name' => 'User 1',
-            'password' => 'password'
+            'password' => bcrypt('password'),
         ]);
+
+        $otherUser = User::factory()->create(['email' => 'user2@example.com']);
 
         $response = $this->actingAs($this->admin)
             ->put(route('users.update', $user1), [
                 'name' => $user1->name,
                 'last_name' => $user1->last_name,
-                'email' => $user1->email,
-                'password' => 'password',
+                'email' => $otherUser->email,
+                'roles' => ['Admin'],
             ]);
 
         $response->assertSessionHasErrors(['email']);

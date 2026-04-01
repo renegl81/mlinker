@@ -2,9 +2,10 @@
 
 use App\Models\User;
 use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 
-uses(\Illuminate\Foundation\Testing\RefreshDatabase::class);
+uses(RefreshDatabase::class);
 
 test('sends verification notification', function () {
     Notification::fake();
@@ -12,8 +13,9 @@ test('sends verification notification', function () {
     $user = User::factory()->unverified()->create();
 
     $this->actingAs($user)
+        ->from(route('verification.notice'))
         ->post(route('verification.send'))
-        ->assertRedirect(route('home'));
+        ->assertRedirect(route('verification.notice', absolute: false));
 
     Notification::assertSentTo($user, VerifyEmail::class);
 });

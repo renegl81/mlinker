@@ -134,7 +134,7 @@ const closeProductsDialog = () => {
                                     >
                                         <Link
                                             :href="
-                                                menuShow(locationId, menu.id)
+                                                menuShow(menu.id)
                                                     .url
                                             "
                                         >

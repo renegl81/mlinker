@@ -9,12 +9,24 @@ use Illuminate\Http\Request;
 
 class GetAdminUsers
 {
-    public function execute(Request $request, $paginate =  true): Collection | LengthAwarePaginator
+    public function execute(Request $request, $paginate = true): Collection|LengthAwarePaginator
     {
-        if($paginate) {
-            return User::paginate(10)
+        $query = User::query();
+
+        if ($search = $request->string('search')->trim()->value()) {
+            $query->where(function ($builder) use ($search) {
+                $builder
+                    ->where('name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        if ($paginate) {
+            return $query->paginate(10)
                 ->withQueryString();
         }
-        return User::all();
+
+        return $query->get();
     }
 }

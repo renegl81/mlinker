@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import AppLogo from '@/components/AppLogo.vue';
-import AppLogoIcon from '@/components/AppLogoIcon.vue';
-import Breadcrumbs from '@/components/Breadcrumbs.vue';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { route } from 'ziggy-js';
 import {
@@ -19,69 +17,20 @@ import {
 import {
     Sheet,
     SheetContent,
-    SheetHeader,
-    SheetTitle,
     SheetTrigger,
 } from '@/components/ui/sheet';
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from '@/components/ui/tooltip';
 import UserMenuContent from '@/components/UserMenuContent.vue';
 import { getInitials } from '@/composables/useInitials';
-import { toUrl, urlIsActive } from '@/lib/utils';
-import type { BreadcrumbItem, NavItem } from '@/types';
-import { InertiaLinkProps, Link, usePage } from '@inertiajs/vue3';
-import { Menu, Search, LucideProps, LogInIcon, UserPlus } from 'lucide-vue-next';
-import { computed, FunctionalComponent } from 'vue';
-import NavUser from '@/components/NavUser.vue';
-import UserInfo from '@/components/UserInfo.vue';
-
-interface Props {
-    breadcrumbs?: BreadcrumbItem[];
-}
-
-const props = withDefaults(defineProps<Props>(), {
-    breadcrumbs: () => [],
-});
+import { urlIsActive } from '@/lib/utils';
+import type { NavItem } from '@/types';
+import { Link, usePage } from '@inertiajs/vue3';
+import { Menu } from 'lucide-vue-next';
+import { computed } from 'vue';
 
 const page = usePage();
 const auth = computed(() => page.props.auth);
 
-const isCurrentRoute = computed(
-    () => (url: NonNullable<InertiaLinkProps['href']>) =>
-        urlIsActive(url, page.url),
-);
-
-const activeItemStyles = computed(
-    () => (url: NonNullable<InertiaLinkProps['href']>) =>
-        isCurrentRoute.value(toUrl(url))
-            ? 'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100'
-            : '',
-);
-
-const mainNavItems: ({ title: any; href: string; icon: null })[] = [
-
-];
-
-const rightNavItems: ({ title: any; href: string; icon: FunctionalComponent<LucideProps, {}, any, {}> } | {
-    title: any;
-    href: string;
-    icon: null
-})[] = !page.props.auth?.user  ? [
-    {
-        title: page.props.messages.nav.login,
-        href: route('login'),
-        icon: LogInIcon,
-    },
-    {
-        title: page.props.messages.nav.register,
-        href: route('register'),
-        icon: UserPlus,
-    },
-] : [];
+const mainNavItems: NavItem[] = [];
 
 </script>
 
@@ -112,7 +61,7 @@ const rightNavItems: ({ title: any; href: string; icon: FunctionalComponent<Luci
                                     :class="[
                                         navigationMenuTriggerStyle(),
                                         // Estilos para links activos y normales en modo oscuro
-                                        urlIsActive(item.href) ? 'text-white bg-slate-800' : 'text-slate-400 hover:text-white hover:bg-slate-800/50',
+                                        urlIsActive(item.href, page.url) ? 'text-white bg-slate-800' : 'text-slate-400 hover:text-white hover:bg-slate-800/50',
                                         'h-9 cursor-pointer px-3 bg-transparent'
                                     ]"
                                     :href="item.href"

@@ -47,7 +47,7 @@ class AuthenticatedSessionController extends Controller
 
         $defaultRoute = route('dashboard', absolute: false);
 
-        if (!empty($user->tenants)) {
+        if ($user->tenants()->exists()) {
             $defaultRoute = route('tenant.dashboard', absolute: false);
         } elseif ((method_exists($user, 'hasRole') && $user->hasRole('Admin')) || (isset($user->role) && $user->role === 'Admin')) {
             $defaultRoute = route('dashboard', absolute: false);

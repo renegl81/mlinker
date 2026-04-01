@@ -1,16 +1,19 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
-import AppLayout from '@/layouts/app/FrontLayout.vue';
-import { BreadcrumbItemType } from '@/types';
-import HeroSection from '@/components/home/HeroSection.vue';
+import CtaSection from '@/components/home/CtaSection.vue';
 import FeaturesSection from '@/components/home/FeaturesSection.vue';
+import HeroSection from '@/components/home/HeroSection.vue';
 import PricingSection from '@/components/home/PricingSection.vue';
 import TestimonialsSection from '@/components/home/TestimonialsSection.vue';
-import CtaSection from '@/components/home/CtaSection.vue';
+import AppLayout from '@/layouts/app/FrontLayout.vue';
+import type { BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/vue3';
 
-const breadcrumbs = <BreadcrumbItemType[]>{
-    'Home': 'Home',
-}
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Home',
+        href: '/',
+    },
+];
 </script>
 
 <template>

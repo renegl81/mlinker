@@ -23,10 +23,9 @@ import ProductFromDialog from '@/pages/admin/tenant/locations/components/Product
 interface Props {
     open: boolean;
     menu: Menu;
-    locationId: number;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 const emit = defineEmits<{
     close: [];
 }>();

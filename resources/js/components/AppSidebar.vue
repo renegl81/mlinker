@@ -17,7 +17,6 @@ import { Link, usePage } from '@inertiajs/vue3';
 import {
     BookOpen,
     Building2Icon,
-    CookieIcon,
     Folder,
     LayoutGrid,
 } from 'lucide-vue-next';
@@ -29,6 +28,7 @@ import { UserGroupIcon } from '@heroicons/vue/16/solid';
 import { index as locations } from '@/routes/tenant/locations';
 
 const page = usePage();
+const messages = page.props.messages as any;
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
@@ -37,13 +37,13 @@ const mainNavItems: NavItem[] = [
         role: 'owner, admin',
     },
     {
-        title: page.props.messages.locations.plural,
+        title: messages.locations.plural,
         href: locations(),
         icon: Building2Icon,
         role: 'owner',
     },
     {
-        title: page.props.messages.users.plural,
+        title: messages.users.plural,
         href: page.props.auth?.user?.is_admin ? users() : tenantUsers(),
         icon: UserGroupIcon,
         role: 'owner, admin',

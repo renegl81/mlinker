@@ -26,10 +26,12 @@ import AppLayout from '@/layouts/AppLayout.vue'
 import HeadingSmall from '@/components/HeadingSmall.vue'
 import MenuForm from './Form.vue'
 import type { BreadcrumbItem } from '@/types'
-import { index as menusRoute, update } from '@/routes/tenant/menus'
+import { update } from '@/routes/tenant/menus'
+import { index as locationMenusRoute } from '@/routes/tenant/locations/menus'
 
 interface Menu {
     id: number
+    location_id: number
     name: string
     description: string | null
     is_active: boolean
@@ -44,7 +46,7 @@ const props = defineProps<Props>()
 const breadcrumbItems: BreadcrumbItem[] = [
     {
         title: 'Menús',
-        href: menusRoute().url,
+        href: locationMenusRoute(props.menu.location_id).url,
     },
     {
         title: 'Editar',

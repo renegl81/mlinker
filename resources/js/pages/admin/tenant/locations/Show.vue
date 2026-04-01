@@ -10,7 +10,7 @@ import {
     edit as locationRouteEdit,
     index as locationsRoute,
 } from '@/routes/tenant/locations';
-import type { BreadcrumbItem, Country, Location } from '@/types';
+import type { BreadcrumbItem, Location } from '@/types';
 import { Inertia } from '@inertiajs/inertia';
 import { Head, Link, usePage } from '@inertiajs/vue3';
 import {
@@ -25,12 +25,6 @@ import {
 } from 'lucide-vue-next';
 import { computed } from 'vue';
 
-interface Menu {
-    id: number;
-    name: string;
-    description?: string;
-    is_active: boolean;
-}
 
 interface Props {
     location: Location;
