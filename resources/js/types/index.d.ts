@@ -102,7 +102,6 @@ export interface Menu {
     location: Location;
     products?: Product[];
     location_id: number;
-    menu_card_id: number;
     tenant_id: number;
     show_currency: boolean;
     show_calories: boolean;

@@ -180,7 +180,7 @@ const formatPrice = (price: number): string => {
                                         />
                                     </svg>
                                     Alérgenos:
-                                    {{ product.allergens.join(', ') }}
+                                    {{ product.allergens.map((a: any) => a.name).join(', ') }}
                                 </span>
                             </div>
                         </div>

@@ -19,7 +19,7 @@ class QRCode extends Model
      * @var array
      */
     protected $fillable = [
-        'menu_card_id',
+        'menu_id',
         'parameters',
         'image_url',
         'url',
@@ -34,7 +34,7 @@ class QRCode extends Model
     {
         return [
             'id' => 'integer',
-            'menu_card_id' => 'integer',
+            'menu_id' => 'integer',
             'parameters' => 'array',
             'created_at' => 'timestamp',
             'updated_at' => 'timestamp',

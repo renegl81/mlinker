@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 class Menu extends Model
@@ -22,7 +23,6 @@ class Menu extends Model
     protected $fillable = [
         'name',
         'description',
-        'menu_card_id',
         'location_id',
         'template_id',
         'is_active',
@@ -64,7 +64,7 @@ class Menu extends Model
     {
         return Attribute::make(
             get: function () {
-                if (!$this->image_url) {
+                if (! $this->image_url) {
                     return null;
                 }
 
@@ -76,7 +76,7 @@ class Menu extends Model
                 // Obtener el ID del tenant actual
                 $tenantId = tenant('id');
 
-           return rtrim(config('app.url'), '/') . route('tenant_image', ['tenant' => 'tenant'.$tenantId, 'path' => $this->image_url], false);
+                return rtrim(config('app.url'), '/').route('tenant_image', ['tenant' => 'tenant'.$tenantId, 'path' => $this->image_url], false);
             }
         );
     }
@@ -99,5 +99,10 @@ class Menu extends Model
     public function products(): BelongsToMany
     {
         return $this->belongsToMany(Product::class);
+    }
+
+    public function qrCode(): HasOne
+    {
+        return $this->hasOne(QRCode::class);
     }
 }

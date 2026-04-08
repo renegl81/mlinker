@@ -2,57 +2,57 @@
 
 namespace App\Http\Controllers\Admin\Menu;
 
+use App\Actions\QrCode\GenerateQrCode;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\QRCodeStoreRequest;
-use App\Http\Requests\QRCodeUpdateRequest;
-use App\Jobs\CreateQRCode;
-use App\Jobs\DeleteQRCode;
-use App\Jobs\ListQRCodes;
-use App\Jobs\ShowQRCode;
-use App\Jobs\UpdateQRCode;
-use App\Models\QRCode;
+use App\Models\Menu;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class QRCodeController extends Controller
 {
-    public function index(Request $request)
-    {
-        $qrcodes = ListQRCodes::dispatch();
+    public function __construct(private readonly GenerateQrCode $generateQrCode) {}
 
-        return Inertia::render('qrcode.index', [
-            'qrcodes' => $qrcodes,
+    /**
+     * Generate (or regenerate) the QR code for a menu.
+     */
+    public function generate(QRCodeStoreRequest $request, Menu $menu): RedirectResponse
+    {
+        $this->generateQrCode->execute($menu, $request->validated('parameters', []));
+
+        return back()->with('success', 'QR generado correctamente.');
+    }
+
+    /**
+     * Download the existing QR code image as PNG.
+     */
+    public function download(Menu $menu): StreamedResponse
+    {
+        $qr = $menu->qrCode()->firstOrFail();
+
+        abort_unless($qr->image_url && Storage::disk('public')->exists($qr->image_url), 404);
+
+        $filename = "menu-{$menu->id}-qr.png";
+
+        return Storage::disk('public')->download($qr->image_url, $filename, [
+            'Content-Type' => 'image/png',
         ]);
     }
 
-    public function store(QRCodeStoreRequest $request): RedirectResponse
+    /**
+     * Delete the QR code for a menu.
+     */
+    public function destroy(Menu $menu): RedirectResponse
     {
-        CreateQRCode::dispatch($request);
+        $qr = $menu->qrCode;
+        if ($qr) {
+            if ($qr->image_url) {
+                Storage::disk('public')->delete($qr->image_url);
+            }
+            $qr->delete();
+        }
 
-        return redirect()->route('qrcode.index');
-    }
-
-    public function show(Request $request, QRCode $qRCode)
-    {
-        ShowQRCode::dispatch($id);
-
-        return Inertia::render('qrcode.show', [
-            'qrcode' => $qrcode,
-        ]);
-    }
-
-    public function update(QRCodeUpdateRequest $request, QRCode $qRCode): RedirectResponse
-    {
-        UpdateQRCode::dispatch($request, $id);
-
-        return redirect()->route('qrcode.show', ['qrcode' => $qrcode]);
-    }
-
-    public function destroy(Request $request, QRCode $qRCode): RedirectResponse
-    {
-        DeleteQRCode::dispatch($id);
-
-        return redirect()->route('qrcode.index');
+        return back()->with('success', 'QR eliminado.');
     }
 }

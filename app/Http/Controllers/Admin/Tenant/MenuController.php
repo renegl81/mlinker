@@ -84,7 +84,10 @@ class MenuController extends Controller
     public function show(Menu $menu): Response
     {
         return Inertia::render('admin/tenant/menus/Show', [
-            'menu' => $menu->load(['location', 'template', 'sections']),
+            'menu' => $menu->load(['location', 'template', 'sections', 'qrCode']),
+            'qrCodeImageUrl' => $menu->qrCode?->image_url
+                ? \Illuminate\Support\Facades\Storage::disk('public')->url($menu->qrCode->image_url)
+                : null,
         ]);
 
     }

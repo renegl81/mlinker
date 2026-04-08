@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Admin\Core\DashboardController;
+use App\Http\Controllers\Admin\Menu\QRCodeController;
 use App\Http\Controllers\Admin\Tenant\LocationController;
 use App\Http\Controllers\Admin\Tenant\MenuController;
 use App\Http\Controllers\Admin\Tenant\ProductController;
@@ -55,6 +56,11 @@ Route::middleware([
 
             // Solo rutas anidadas para menús
             Route::resource('locations.menus', MenuController::class)->shallow();
+
+            // QR del menú
+            Route::post('menus/{menu}/qr-code', [QRCodeController::class, 'generate'])->name('menus.qr-code.generate');
+            Route::get('menus/{menu}/qr-code/download', [QRCodeController::class, 'download'])->name('menus.qr-code.download');
+            Route::delete('menus/{menu}/qr-code', [QRCodeController::class, 'destroy'])->name('menus.qr-code.destroy');
         });
     });
 

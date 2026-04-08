@@ -6,28 +6,22 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('qr_codes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('menu_card_id');
-            $table->json('parameters');
+            $table->foreignId('menu_id')->constrained()->cascadeOnDelete();
+            $table->json('parameters')->nullable();
             $table->string('image_url', 255)->nullable();
-            $table->string('url', 255)->nullable();
+            $table->string('url', 500)->nullable();
             $table->string('tenant_id')->index();
             $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('q_r_codes');
+        Schema::dropIfExists('qr_codes');
     }
 };

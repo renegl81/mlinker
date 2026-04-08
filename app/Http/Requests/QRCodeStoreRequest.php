@@ -6,22 +6,20 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class QRCodeStoreRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     */
     public function rules(): array
     {
         return [
-            'menu_id' => ['required', 'integer', 'exists:menus,id'],
-            'parameters' => ['required', 'json'],
+            'parameters' => ['sometimes', 'array'],
+            'parameters.size' => ['sometimes', 'integer', 'between:100,1200'],
+            'parameters.margin' => ['sometimes', 'integer', 'between:0,80'],
+            'parameters.foreground' => ['sometimes', 'string', 'regex:/^#?[0-9A-Fa-f]{3}([0-9A-Fa-f]{3})?$/'],
+            'parameters.background' => ['sometimes', 'string', 'regex:/^#?[0-9A-Fa-f]{3}([0-9A-Fa-f]{3})?$/'],
+            'parameters.label' => ['sometimes', 'nullable', 'string', 'max:60'],
         ];
     }
 }

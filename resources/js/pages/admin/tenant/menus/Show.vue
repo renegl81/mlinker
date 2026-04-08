@@ -18,11 +18,15 @@ import { Head, Link, usePage } from '@inertiajs/vue3';
 import {
     ArrowLeft,
     BookOpen,
+    Download,
     Image as ImageIcon,
     Pencil,
+    QrCode as QrCodeIcon,
+    RefreshCw,
     Trash2,
 } from 'lucide-vue-next';
 import { computed } from 'vue';
+import { router } from '@inertiajs/vue3';
 
 interface Section {
     id: number;
@@ -36,9 +40,27 @@ interface MenuWithSections extends Menu {
 
 interface Props {
     menu: MenuWithSections;
+    qrCodeImageUrl: string | null;
 }
 
 const props = defineProps<Props>();
+
+function generateQr() {
+    router.post(`/panel/menus/${props.menu.id}/qr-code`, {}, {
+        preserveScroll: true,
+    });
+}
+
+function downloadQr() {
+    window.location.href = `/panel/menus/${props.menu.id}/qr-code/download`;
+}
+
+function deleteQr() {
+    if (!confirm('¿Eliminar el código QR de este menú?')) return;
+    router.delete(`/panel/menus/${props.menu.id}/qr-code`, {
+        preserveScroll: true,
+    });
+}
 const page = usePage();
 const messages = computed(() => page.props.messages as any);
 
@@ -227,6 +249,62 @@ function remove() {
                                 <Badge :variant="menu.show_calories ? 'default' : 'secondary'">
                                     {{ menu.show_calories ? messages.menus.status.active : messages.menus.status.inactive }}
                                 </Badge>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    <!-- Código QR -->
+                    <Card>
+                        <CardHeader>
+                            <CardTitle class="flex items-center gap-2 text-md font-semibold">
+                                <QrCodeIcon class="h-4 w-4 text-primary" />
+                                Código QR
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent class="space-y-3">
+                            <div
+                                v-if="qrCodeImageUrl"
+                                class="flex items-center justify-center rounded-lg border bg-white p-3"
+                            >
+                                <img
+                                    :src="qrCodeImageUrl"
+                                    alt="Código QR del menú"
+                                    class="h-40 w-40 object-contain"
+                                />
+                            </div>
+                            <div
+                                v-else
+                                class="flex h-40 flex-col items-center justify-center rounded-lg border-2 border-dashed text-muted-foreground"
+                            >
+                                <QrCodeIcon class="h-8 w-8 opacity-40" />
+                                <span class="mt-2 text-xs">Sin QR generado</span>
+                            </div>
+
+                            <div class="flex flex-col gap-2">
+                                <Button @click="generateQr" class="w-full" size="sm">
+                                    <RefreshCw class="mr-2 h-4 w-4" />
+                                    {{ qrCodeImageUrl ? 'Regenerar' : 'Generar QR' }}
+                                </Button>
+                                <Button
+                                    v-if="qrCodeImageUrl"
+                                    variant="outline"
+                                    size="sm"
+                                    class="w-full"
+                                    @click="downloadQr"
+                                >
+                                    <Download class="mr-2 h-4 w-4" />
+                                    Descargar PNG
+                                </Button>
+                                <Button
+                                    v-if="qrCodeImageUrl"
+                                    variant="ghost"
+                                    size="sm"
+                                    class="w-full text-destructive"
+                                    @click="deleteQr"
+                                >
+                                    <Trash2 class="mr-2 h-4 w-4" />
+                                    Eliminar QR
+                                </Button>
                             </div>
                         </CardContent>
                     </Card>
