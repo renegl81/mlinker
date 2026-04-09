@@ -1,0 +1,93 @@
+{
+    "common": {
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "edit": "Edit",
+        "create": "Create",
+        "back": "Back",
+        "loading": "Loading...",
+        "search": "Search",
+        "actions": "Actions",
+        "confirm": "Are you sure?",
+        "yes": "Yes",
+        "no": "No",
+        "active": "Active",
+        "inactive": "Inactive",
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "name": "Name",
+        "description": "Description",
+        "status": "Status",
+        "close": "Close",
+        "view": "View",
+        "add": "Add",
+        "remove": "Remove",
+        "update": "Update",
+        "upload": "Upload",
+        "download": "Download",
+        "generate": "Generate",
+        "regenerate": "Regenerate",
+        "noResults": "No results",
+        "optional": "Optional"
+    },
+    "nav": {
+        "dashboard": "Dashboard",
+        "locations": "Locations",
+        "menus": "Menus",
+        "products": "Products",
+        "billing": "Billing",
+        "settings": "Settings",
+        "users": "Users",
+        "documentation": "Documentation",
+        "profile": "Profile",
+        "logout": "Log out"
+    },
+    "plans": {
+        "free": "Free",
+        "pro": "Pro",
+        "business": "Business",
+        "enterprise": "Enterprise",
+        "upgrade": "Upgrade plan",
+        "current_plan": "Current plan",
+        "trial_ending": "Your trial is ending soon",
+        "feature_not_available": "This feature is not available on your current plan."
+    },
+    "onboarding": {
+        "title": "Set up your business",
+        "step_location": "Create your location",
+        "step_menu": "Create your menu",
+        "step_products": "Add products",
+        "step_complete": "Done!",
+        "complete_button": "Complete setup"
+    },
+    "billing": {
+        "plan_current": "Current plan",
+        "trial_ending": "Your trial period is ending soon",
+        "cancel": "Cancel subscription",
+        "resume": "Resume subscription",
+        "manage": "Manage subscription",
+        "upgrade": "Upgrade plan",
+        "downgrade": "Downgrade plan",
+        "per_month": "/ month",
+        "active": "Active",
+        "cancelled": "Cancelled",
+        "trialing": "In trial period"
+    },
+    "languages": {
+        "es": "Español",
+        "en": "English",
+        "select": "Language"
+    },
+    "translations": {
+        "title": "Menu translations",
+        "description": "Manage translations for your menu sections and products.",
+        "upgrade_required": "Multi-language translations require a Business plan or higher.",
+        "sections": "Sections",
+        "products": "Products",
+        "original": "Original (ES)",
+        "translation": "Translation (EN)",
+        "save_all": "Save all translations",
+        "saved": "Translations saved successfully."
+    }
+}

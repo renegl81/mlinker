@@ -117,37 +117,37 @@
 
 ---
 
-### 🔜 FASE 6 — Flujo Stripe / Suscripciones
+### ✅ FASE 6 — Flujo Stripe / Suscripciones (HECHO)
 
-> **Motivación de negocio:** sin pagos no hay negocio. Esta fase conecta el modelo freemium con Stripe. Los tenants Free pueden hacer upgrade a Pro con trial de 14 días.
+> **Motivación de negocio:** sin pagos no hay negocio. Esta fase conecta el modelo freemium con Stripe.
 
-| # | Tarea | Detalle técnico | Estado |
-|---|---|---|---|
-| 6.1 | Configurar productos y precios en Stripe | Documentar en un archivo `docs/stripe-setup.md` los pasos para crear productos y precios en el dashboard de Stripe (modo test). Mapear cada `Plan.slug` a un `stripe_price_id`. Los planes se sincronizan vía el seeder (campo `stripe_price_id` añadido en FASE 2). | ❌ |
-| 6.2 | Página `tenant/billing/Plans.vue` | Página accesible desde el panel (sidebar: "Facturación > Planes"). Muestra los planes disponibles con el actual destacado. CTA "Empezar prueba gratis de 14 días" para Pro (si está en Free). CTA "Mejorar" para Business. Renderiza features comparativas. Los datos vienen del backend (`plans` + `currentPlan`). | ❌ |
-| 6.3 | Action `Subscription/StartCheckout` | Usa Cashier: `$tenant->newSubscription('default', $plan->stripe_price_id)->trialDays($plan->trial_days)->checkout(...)`. Devuelve la URL de Stripe Checkout. El controller redirige al usuario allí. Tras el pago, Stripe redirige a `tenant/billing/success`. | ❌ |
-| 6.4 | Action `Subscription/ChangeSubscription` | Upgrade/downgrade: `$tenant->subscription('default')->swap($newPriceId)`. Cancelar: `$tenant->subscription('default')->cancel()` (cancela al final del periodo). Reanudar: `$tenant->subscription('default')->resume()`. | ❌ |
-| 6.5 | Webhook handler | Extender `CashierWebhookController` o crear `StripeWebhookController`. Manejar: `customer.subscription.updated` (actualizar `plan_id` local), `customer.subscription.deleted` (degradar a plan Free), `invoice.payment_failed` (marcar estado, enviar email). Registrar ruta `POST /stripe/webhook` en `web.php` (sin CSRF). | ❌ |
-| 6.6 | Página `tenant/billing/Manage.vue` | Muestra: plan actual, próxima fecha de cobro, estado del trial, historial de facturas (Cashier `$tenant->invoices()`). Botones: "Cambiar plan", "Cancelar suscripción", "Descargar factura" (PDF via Cashier). | ❌ |
-| 6.7 | Degradar a Free cuando expira la suscripción | Cuando el webhook recibe `customer.subscription.deleted`, actualizar el registro local en `subscriptions` para apuntar al plan Free. Los límites se aplican automáticamente porque `CheckLimit` ya lee el plan actual. Los recursos existentes que excedan los límites del Free **no se borran** — simplemente se bloquea la creación de nuevos. | ❌ |
-| 6.8 | Mailables de billing | `SubscriptionStarted` (bienvenida al plan), `TrialEnding` (3 días antes de que acabe el trial), `PaymentFailed` (con enlace a actualizar método de pago), `SubscriptionCancelled` (confirmación + recordatorio de que pierde features). Usar Mail components de Laravel. | ❌ |
-| 6.9 | Tests de billing | Test de creación de checkout session (mock de Stripe). Test de webhook que actualiza plan. Test que al cancelar, el tenant baja a Free. Test que los límites del Free se aplican tras degradación. | ❌ |
+| # | Tarea | Estado |
+|---|---|---|
+| 6.1 | `docs/stripe-setup.md` — guía de configuración Stripe (productos, precios, env vars, seeder) | ✅ |
+| 6.2 | `BillingController` (plans/checkout/success/manage/cancel/resume) + `Plans.vue` con grid comparativo | ✅ |
+| 6.3 | Action `StartCheckout` — Cashier checkout session con trial, metadata y success/cancel URLs | ✅ |
+| 6.4 | Action `ChangeSubscription` — swap, cancel, resume (busca subscription en BD directamente) | ✅ |
+| 6.5 | `StripeWebhookController` extiende Cashier — sincroniza plan_id en updated, degrada a Free en deleted | ✅ |
+| 6.6 | `Manage.vue` (estado suscripción, cancel/resume) + `Success.vue` (post-checkout) | ✅ |
+| 6.7 | Degradación a Free en webhook `subscription.deleted` — actualiza plan_id, CheckLimit aplica automáticamente | ✅ |
+| 6.8 | 4 mailables: SubscriptionStarted, TrialEnding, PaymentFailed, SubscriptionCancelled (clases + vistas) | ✅ |
+| 6.9 | `BillingTest.php` — 12 tests: pages, checkout validation, actions, webhook handlers (sin Stripe real) | ✅ |
 
 ---
 
-### 🔜 FASE 7 — Dashboard con métricas (feature premium)
+### ✅ FASE 7 — Dashboard con métricas (feature premium) (HECHO)
 
-> **Motivación de negocio:** "¿Quieres saber cuántas personas ven tu carta? Pasa a Pro." Las analytics son el trigger de conversión #1 en SaaS freemium. Se muestra un preview bloqueado en Free.
+> **Motivación de negocio:** "¿Quieres saber cuántas personas ven tu carta? Pasa a Pro."
 
-| # | Tarea | Detalle técnico | Estado |
-|---|---|---|---|
-| 7.1 | Migración `create_menu_views_table` | Tabla `menu_views`: `id`, `menu_id` (FK), `tenant_id` (FK), `viewed_at` (timestamp), `ip` (string 45, nullable — para no contar duplicados), `user_agent` (string 500, nullable), `referer` (string 500, nullable — para saber si viene de QR, WhatsApp, Google, etc). Índice compuesto en `(menu_id, viewed_at)`. | ❌ |
-| 7.2 | Tracking de visitas en `Tenant/MenuController` | En `__invoke()`, tras cargar el menú, disparar `TrackMenuView::dispatch($menu, $request)` (job async via queue). El job inserta en `menu_views`. Deduplicar por IP: si la misma IP vio el mismo menú en los últimos 30 min, no insertar. | ❌ |
-| 7.3 | Job `TrackMenuView` | `app/Jobs/TrackMenuView.php`. Recibe `Menu $menu`, `string $ip`, `string $userAgent`, `?string $referer`. Implementa `ShouldQueue`. Comprueba deduplicación y hace el insert. | ❌ |
-| 7.4 | Action `Analytics/GetTenantOverview` | Devuelve un array con: `total_views` (últimos 30 días), `views_by_day` (array de `{date, count}` para gráfico), `top_menus` (top 5 menús más vistos con nombre y count), `views_by_source` (agrupado por referer: QR, WhatsApp, Google, directo, otro), `current_plan` (nombre + días restantes del trial si aplica). Período configurable (7d, 30d, 90d). | ❌ |
-| 7.5 | Página `admin/tenant/Dashboard.vue` — versión completa (Pro) | Cards: "Visitas este mes", "Menú más popular", "Fuente principal" (QR vs link). Gráfico de líneas con visitas por día (`chart.js` + `vue-chartjs`). Tabla de top menús. Para tenants Pro con `has_analytics=true`. | ❌ |
-| 7.6 | Página `admin/tenant/Dashboard.vue` — versión bloqueada (Free) | Misma página pero con datos dummy/blur y un overlay: "Desbloquea Analytics con el plan Pro — Ver planes". Mostrar solo el número total de visitas (dato real) como teaser. El resto bloqueado con un CTA. Esto genera FOMO y motiva el upgrade. | ❌ |
-| 7.7 | Tests: analytics | Test que una visita al menú público crea un registro en `menu_views`. Test de deduplicación por IP/30min. Test que `GetTenantOverview` devuelve datos correctos. Test que un tenant Free no accede a los datos completos de analytics. | ❌ |
+| # | Tarea | Estado |
+|---|---|---|
+| 7.1 | Migración `create_menu_views_table` + modelo `MenuView` con `BelongsToTenant` | ✅ |
+| 7.2 | Tracking en `Tenant/MenuController` — dispatch `TrackMenuView` solo cuando hay tenant activo | ✅ |
+| 7.3 | Job `TrackMenuView` — deduplicación 30min por IP+menú, `withoutGlobalScopes()` para insert | ✅ |
+| 7.4 | Action `GetTenantOverview` — total_views, views_by_day, top_menus, views_by_source, current_period | ✅ |
+| 7.5 | Dashboard Pro: cards métricas + gráfico barras CSS/Tailwind + tabla top menús (sin chart.js) | ✅ |
+| 7.6 | Dashboard Free: total visitas real (teaser) + overlay blur + CTA "Ver planes" | ✅ |
+| 7.7 | `AnalyticsTest.php` — 7 tests: tracking, deduplicación, IPs distintas, overview, dashboard Pro/Free | ✅ |
 
 ---
 

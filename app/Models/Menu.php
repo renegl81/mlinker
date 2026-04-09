@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\HasImage;
+use App\Models\Traits\HasTranslations;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,7 @@ use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 class Menu extends Model
 {
-    use BelongsToTenant, HasFactory, HasImage;
+    use BelongsToTenant, HasFactory, HasImage, HasTranslations;
 
     /**
      * The attributes that are mass assignable.
@@ -55,6 +56,7 @@ class Menu extends Model
             'show_prices' => 'boolean',
             'show_currency' => 'boolean',
             'show_calories' => 'boolean',
+            'translations' => 'array',
         ];
     }
 

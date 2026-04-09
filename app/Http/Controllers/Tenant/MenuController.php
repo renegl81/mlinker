@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Tenant;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\TrackMenuView;
 use App\Models\Menu;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -68,6 +69,16 @@ class MenuController extends Controller
 
         $tenantSlug = tenant()?->id ?? '';
         $template = $menu->template?->component_name ?? 'Basic';
+
+        if ($tenantSlug) {
+            TrackMenuView::dispatch(
+                $menu->id,
+                $tenantSlug,
+                request()->ip(),
+                request()->userAgent(),
+                request()->header('referer'),
+            );
+        }
 
         return Inertia::render('tenant/templates/'.$template, [
             'menu' => $menu,

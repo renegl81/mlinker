@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Admin\Core\DashboardController;
 use App\Http\Controllers\Admin\Menu\QRCodeController;
+use App\Http\Controllers\Admin\Tenant\BillingController;
 use App\Http\Controllers\Admin\Tenant\ImageUploadController;
 use App\Http\Controllers\Admin\Tenant\LocationController;
 use App\Http\Controllers\Admin\Tenant\MenuController;
@@ -81,6 +82,16 @@ Route::middleware([
                 Route::post('menus/{menu}/qr-code', [QRCodeController::class, 'generate'])->name('menus.qr-code.generate');
                 Route::get('menus/{menu}/qr-code/download', [QRCodeController::class, 'download'])->name('menus.qr-code.download');
                 Route::delete('menus/{menu}/qr-code', [QRCodeController::class, 'destroy'])->name('menus.qr-code.destroy');
+
+                // Billing
+                Route::prefix('billing')->as('billing.')->group(function () {
+                    Route::get('plans', [BillingController::class, 'plans'])->name('plans');
+                    Route::post('checkout', [BillingController::class, 'checkout'])->name('checkout');
+                    Route::get('success', [BillingController::class, 'success'])->name('success');
+                    Route::get('manage', [BillingController::class, 'manage'])->name('manage');
+                    Route::post('cancel', [BillingController::class, 'cancel'])->name('cancel');
+                    Route::post('resume', [BillingController::class, 'resume'])->name('resume');
+                });
             });
         });
     });

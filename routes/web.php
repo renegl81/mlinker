@@ -14,8 +14,11 @@ use App\Http\Controllers\Admin\Tenant\PlanController;
 use App\Http\Controllers\Admin\Tenant\TemplateController;
 use App\Http\Controllers\DocumentationController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\TenantImageController;
 use Illuminate\Support\Facades\Route;
+
+Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook'])->name('stripe.webhook');
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/doc', [DocumentationController::class, 'index'])->name('documentation');

@@ -1,0 +1,93 @@
+{
+    "common": {
+        "save": "Guardar",
+        "cancel": "Cancelar",
+        "delete": "Eliminar",
+        "edit": "Editar",
+        "create": "Crear",
+        "back": "Volver",
+        "loading": "Cargando...",
+        "search": "Buscar",
+        "actions": "Acciones",
+        "confirm": "¿Estás seguro?",
+        "yes": "Sí",
+        "no": "No",
+        "active": "Activo",
+        "inactive": "Inactivo",
+        "enabled": "Habilitado",
+        "disabled": "Deshabilitado",
+        "name": "Nombre",
+        "description": "Descripción",
+        "status": "Estado",
+        "close": "Cerrar",
+        "view": "Ver",
+        "add": "Añadir",
+        "remove": "Quitar",
+        "update": "Actualizar",
+        "upload": "Subir",
+        "download": "Descargar",
+        "generate": "Generar",
+        "regenerate": "Regenerar",
+        "noResults": "Sin resultados",
+        "optional": "Opcional"
+    },
+    "nav": {
+        "dashboard": "Dashboard",
+        "locations": "Locales",
+        "menus": "Menús",
+        "products": "Productos",
+        "billing": "Facturación",
+        "settings": "Configuración",
+        "users": "Usuarios",
+        "documentation": "Documentación",
+        "profile": "Perfil",
+        "logout": "Cerrar sesión"
+    },
+    "plans": {
+        "free": "Gratuito",
+        "pro": "Pro",
+        "business": "Business",
+        "enterprise": "Enterprise",
+        "upgrade": "Mejorar plan",
+        "current_plan": "Plan actual",
+        "trial_ending": "Tu prueba termina pronto",
+        "feature_not_available": "Esta función no está disponible en tu plan actual."
+    },
+    "onboarding": {
+        "title": "Configura tu negocio",
+        "step_location": "Crear tu local",
+        "step_menu": "Crear tu menú",
+        "step_products": "Añadir productos",
+        "step_complete": "¡Listo!",
+        "complete_button": "Completar configuración"
+    },
+    "billing": {
+        "plan_current": "Plan actual",
+        "trial_ending": "Tu período de prueba termina pronto",
+        "cancel": "Cancelar suscripción",
+        "resume": "Reactivar suscripción",
+        "manage": "Gestionar suscripción",
+        "upgrade": "Actualizar plan",
+        "downgrade": "Reducir plan",
+        "per_month": "/ mes",
+        "active": "Activo",
+        "cancelled": "Cancelado",
+        "trialing": "En período de prueba"
+    },
+    "languages": {
+        "es": "Español",
+        "en": "English",
+        "select": "Idioma"
+    },
+    "translations": {
+        "title": "Traducciones del menú",
+        "description": "Gestiona las traducciones de las secciones y productos de tu menú.",
+        "upgrade_required": "Las traducciones multiidioma requieren un plan Business o superior.",
+        "sections": "Secciones",
+        "products": "Productos",
+        "original": "Original (ES)",
+        "translation": "Traducción (EN)",
+        "save_all": "Guardar todas las traducciones",
+        "saved": "Traducciones guardadas correctamente."
+    }
+}

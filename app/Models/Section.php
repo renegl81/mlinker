@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\HasImage;
+use App\Models\Traits\HasTranslations;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,7 +12,7 @@ use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 class Section extends Model
 {
-    use BelongsToTenant, HasFactory, HasImage;
+    use BelongsToTenant, HasFactory, HasImage, HasTranslations;
 
     /**
      * The attributes that are mass assignable.
@@ -35,6 +36,7 @@ class Section extends Model
         return [
             'id' => 'integer',
             'menu_id' => 'integer',
+            'translations' => 'array',
         ];
     }
 

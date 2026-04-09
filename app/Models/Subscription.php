@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Cashier\Subscription as CashierSubscription;
 
-class Subscription extends Model
+class Subscription extends CashierSubscription
 {
     use HasFactory;
 
@@ -62,8 +62,24 @@ class Subscription extends Model
         return $this->hasMany(Payment::class);
     }
 
+    /**
+     * Determine if the subscription is active (including free plan).
+     */
     public function isActive(): bool
     {
-        return $this->status === 'active' || $this->onTrial();
+        // Free plan subscriptions are always active
+        if ($this->stripe_status === 'free') {
+            return true;
+        }
+
+        return $this->active() || $this->onTrial();
+    }
+
+    /**
+     * Determine if this is a free plan subscription.
+     */
+    public function isFree(): bool
+    {
+        return $this->stripe_status === 'free';
     }
 }

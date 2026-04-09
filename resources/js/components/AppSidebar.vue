@@ -21,6 +21,7 @@ import {
     LayoutGrid,
 } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
+import LanguageSelector from '@/components/ui/LanguageSelector.vue';
 import { index as users } from '@/routes/users';
 import { index as tenantUsers } from '@/routes/tenant/users';
 import { dashboard as panel } from '@/routes/tenant/index';
@@ -84,6 +85,9 @@ const footerNavItems: NavItem[] = [
 
         <SidebarFooter>
             <NavFooter :items="footerNavItems" />
+            <div class="px-2 py-1">
+                <LanguageSelector />
+            </div>
             <NavUser />
         </SidebarFooter>
     </Sidebar>
