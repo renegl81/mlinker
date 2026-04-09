@@ -24,6 +24,7 @@ class AccountActivationController extends Controller
 
     /**
      * Activate the user account.
+     *
      * @throws Throwable
      */
     public function activate(Request $request, User $user): RedirectResponse
@@ -55,7 +56,8 @@ class AccountActivationController extends Controller
         if ($tenant && ! empty($tenant->domain)) {
             $domain = rtrim($tenant->domain, '/');
             $port = config('services.app_port') ? ':'.config('services.app_port') : '';
-            $url = str_starts_with($domain, 'http') ? $domain.$port . '/panel' : 'https://' . $domain.$port . '/panel';
+            $url = str_starts_with($domain, 'http') ? $domain.$port.'/panel' : 'https://'.$domain.$port.'/panel';
+
             return redirect()->to($url)
                 ->with('success', __('auth.register.activation.success'));
         }

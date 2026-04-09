@@ -4,9 +4,6 @@ namespace App\Actions\User;
 
 use App\Http\Requests\Admin\Core\User\StoreUserRequest;
 use App\Models\User;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Request;
 
 class CreateUser
 {
@@ -19,7 +16,7 @@ class CreateUser
             'password' => bcrypt($request->input('password')),
         ]);
 
-       if ($request->has('roles')) {
+        if ($request->has('roles')) {
             $user->roles()->sync($request->input('roles', []));
         }
 

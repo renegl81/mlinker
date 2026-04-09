@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Template;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class TemplateSeeder extends Seeder
@@ -57,5 +56,4 @@ class TemplateSeeder extends Seeder
         }
 
     }
-
 }

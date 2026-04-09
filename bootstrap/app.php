@@ -32,7 +32,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->alias([
-            'admin' =>EnsureUserIsAdmin::class,
+            'admin' => EnsureUserIsAdmin::class,
         ]);
 
         $middleware->redirectGuestsTo(function (Request $request) {

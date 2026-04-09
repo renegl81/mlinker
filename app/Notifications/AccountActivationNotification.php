@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\URL;
 
 class AccountActivationNotification extends Notification
 {
-
     public function __construct(public User $user) {}
 
     public function via(object $notifiable): array

@@ -8,7 +8,6 @@ use App\Http\Requests\MenuStoreRequest;
 use App\Http\Requests\MenuUpdateRequest;
 use App\Jobs\CreateMenu;
 use App\Jobs\DeleteMenu;
-use App\Jobs\ListMenus;
 use App\Jobs\ShowMenu;
 use App\Jobs\UpdateMenu;
 use App\Models\Menu;

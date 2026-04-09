@@ -2,11 +2,10 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
-use App\Models\;
+use App\Models\Plan;
 use App\Models\Subscription;
-use App\Models\User;
+use App\Models\Tenant;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class SubscriptionFactory extends Factory
 {
@@ -23,11 +22,11 @@ class SubscriptionFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
-            'plan_id' => ::factory(),
-            'started_at' => fake()->dateTime(),
-            'ends_at' => fake()->dateTime(),
-            'status' => fake()->regexify('[A-Za-z0-9]{20}'),
+            'tenant_id' => Tenant::factory(),
+            'plan_id' => Plan::factory(),
+            'type' => 'default',
+            'stripe_status' => 'free',
+            'quantity' => 1,
         ];
     }
 }

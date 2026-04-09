@@ -2,11 +2,10 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
-use App\Models\;
+use App\Models\Country;
 use App\Models\Location;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class LocationFactory extends Factory
 {
@@ -31,7 +30,7 @@ class LocationFactory extends Factory
             'phone' => fake()->phoneNumber(),
             'description' => fake()->text(),
             'user_id' => User::factory(),
-            'country_id' => ::factory(),
+            'country_id' => Country::factory(),
             'image_url' => fake()->regexify('[A-Za-z0-9]{255}'),
             'logo_url' => fake()->regexify('[A-Za-z0-9]{255}'),
             'slug' => fake()->slug(),

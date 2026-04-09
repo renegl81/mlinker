@@ -59,7 +59,7 @@ return [
             'success' => '¡Tu cuenta ha sido activada exitosamente!',
             'invalid_link' => 'El enlace de activación es inválido o ha expirado.',
             'already_activated' => 'Tu cuenta ya está activada.',
-            'back_login' => 'Volver al inicio de sesión'
+            'back_login' => 'Volver al inicio de sesión',
         ],
     ],
 

@@ -32,23 +32,24 @@ class GenerateQrCode
 
         $url = $this->buildPublicMenuUrl($menu);
 
-        $builder = Builder::create()
-            ->writer(new PngWriter)
-            ->writerOptions([])
-            ->data($url)
-            ->encoding(new Encoding('UTF-8'))
-            ->errorCorrectionLevel(ErrorCorrectionLevel::High)
-            ->size((int) $parameters['size'])
-            ->margin((int) $parameters['margin'])
-            ->roundBlockSizeMode(RoundBlockSizeMode::Margin)
-            ->foregroundColor($this->hexToColor($parameters['foreground']))
-            ->backgroundColor($this->hexToColor($parameters['background']));
+        $builder = new Builder(
+            writer: new PngWriter,
+            data: $url,
+            encoding: new Encoding('UTF-8'),
+            errorCorrectionLevel: ErrorCorrectionLevel::High,
+            size: (int) $parameters['size'],
+            margin: (int) $parameters['margin'],
+            roundBlockSizeMode: RoundBlockSizeMode::Margin,
+            foregroundColor: $this->hexToColor($parameters['foreground']),
+            backgroundColor: $this->hexToColor($parameters['background']),
+        );
 
+        $buildArgs = [];
         if (! empty($parameters['label'])) {
-            $builder->labelText((string) $parameters['label']);
+            $buildArgs['labelText'] = (string) $parameters['label'];
         }
 
-        $result = $builder->build();
+        $result = $builder->build(...$buildArgs);
 
         $tenantId = tenant('id');
         $directory = "tenant{$tenantId}/qr-codes";
@@ -80,10 +81,10 @@ class GenerateQrCode
         if ($domain) {
             $scheme = parse_url(config('app.url'), PHP_URL_SCHEME) ?: 'http';
 
-            return "{$scheme}://{$domain}/menu/{$menu->id}";
+            return "{$scheme}://{$domain}/m/{$menu->id}";
         }
 
-        return route('tenant_public.tenant_menu_show', ['menu' => $menu->id]);
+        return route('tenant_public.tenant_menu_short', ['menu' => $menu->id]);
     }
 
     protected function hexToColor(string $hex): Color

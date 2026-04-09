@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin\Tenant;
 
+use App\Actions\Plan\CheckLimit;
+use App\Exceptions\PlanLimitExceededException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
@@ -14,6 +16,12 @@ class ProductController extends Controller
 {
     public function store(StoreProductRequest $request, Menu $menu): RedirectResponse
     {
+        try {
+            (new CheckLimit)->execute('products', throw: true);
+        } catch (PlanLimitExceededException $e) {
+            return back()->with('error', $e->getMessage());
+        }
+
         $validated = $request->validated();
 
         if ($request->hasFile('image')) {

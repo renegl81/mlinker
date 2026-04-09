@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\File;
 class CreateTenantStorageLinks extends Command
 {
     protected $signature = 'tenants:storage-link';
+
     protected $description = 'Create storage symlinks for all tenants';
 
     public function handle(): void
@@ -25,7 +26,7 @@ class CreateTenantStorageLinks extends Command
             $link = public_path("storage/tenant{$tenant->id}");
 
             // Crear directorio de storage si no existe
-            if (!File::exists($target)) {
+            if (! File::exists($target)) {
                 File::makeDirectory($target, 0755, true);
                 $this->info("  → Directorio creado: {$target}");
             }
@@ -34,9 +35,9 @@ class CreateTenantStorageLinks extends Command
             if (File::exists($link)) {
                 if (is_link($link)) {
                     File::delete($link);
-                    $this->warn("  → Enlace simbólico existente eliminado");
+                    $this->warn('  → Enlace simbólico existente eliminado');
                 } else {
-                    //$this->error("  → Existe un directorio real en {$link}. No se puede crear el enlace.");
+                    // $this->error("  → Existe un directorio real en {$link}. No se puede crear el enlace.");
                     continue;
                 }
             }

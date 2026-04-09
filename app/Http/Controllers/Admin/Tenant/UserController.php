@@ -7,7 +7,6 @@ use App\Actions\User\GetTenantUsers;
 use App\Actions\User\UpdateUser;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Core\User\StoreUserRequest;
-use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Resources\UserResource;
 use App\Models\Role;
@@ -32,9 +31,11 @@ class UserController extends Controller
             'roles' => Role::all(['id', 'name']),
         ]);
     }
+
     public function store(StoreUserRequest $request, CreateUser $createUser): RedirectResponse
     {
         $createUser->execute($request);
+
         return redirect()->route('tenant.users.index')
             ->with('success', 'User created successfully.');
     }
@@ -42,6 +43,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         $user->load('roles');
+
         return Inertia::render('tenant.users.show', [
             'user' => $user,
         ]);
@@ -50,20 +52,21 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $user->load('roles');
+
         return Inertia::render('admin/tenant/users/Edit', [
             'user' => $user,
             'roles' => Role::all(['id', 'name']),
         ]);
     }
+
     public function update(UserUpdateRequest $request, User $user, UpdateUser $updateUser): RedirectResponse
     {
-        try{
+        try {
             $user = $updateUser->execute($request, $user);
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             return redirect()->route('tenant.users.edit', ['user' => $user])
                 ->with('error', $e->getMessage());
         }
-
 
         return redirect()->route('tenant.users.edit', ['user' => $user])
             ->with('success', 'User updated successfully.');

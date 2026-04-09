@@ -14,7 +14,7 @@ use Inertia\Inertia;
 
 class UserController extends Controller
 {
-    public function index(Request $request, getAdminUsers $getAdminUsers)
+    public function index(Request $request, GetAdminUsers $getAdminUsers)
     {
         return Inertia::render('admin/users/Index', [
             'users' => UserResource::collection($getAdminUsers->execute($request)),

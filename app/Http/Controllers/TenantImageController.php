@@ -16,7 +16,7 @@ class TenantImageController extends Controller
         $path = urldecode($path);
         $filePath = storage_path("{$tenant}/app/public/{$path}");
 
-        if (!File::exists($filePath)) {
+        if (! File::exists($filePath)) {
             abort(404);
         }
 

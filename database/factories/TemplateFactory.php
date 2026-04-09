@@ -21,10 +21,11 @@ class TemplateFactory extends Factory
     {
         return [
             'name' => fake()->name(),
+            'component_name' => 'Basic',
             'description' => fake()->text(),
-            'preview_image_url' => fake()->regexify('[A-Za-z0-9]{255}'),
+            'preview_image_url' => null,
             'config' => '{}',
-            'is_active' => fake()->boolean(),
+            'is_active' => true,
         ];
     }
 }

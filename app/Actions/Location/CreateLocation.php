@@ -2,7 +2,6 @@
 
 namespace App\Actions\Location;
 
-use App\Http\Requests\LocationStoreRequest;
 use App\Models\Location;
 use Illuminate\Support\Str;
 
@@ -12,6 +11,7 @@ class CreateLocation
     {
         $tenant = tenant();
         $slug = Str::slug($data['name']);
+
         return Location::create([
             'name' => $data['name'],
             'description' => $data['description'],
@@ -32,7 +32,7 @@ class CreateLocation
             'user_id' => auth()->id(),
             'tenant_id' => $tenant->id,
             'slug' => $slug,
-            'url' =>  $tenant->url . '/' . $slug,
+            'url' => $tenant->url.'/'.$slug,
         ]);
     }
 }

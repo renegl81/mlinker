@@ -8,13 +8,14 @@ use Illuminate\Http\Request;
 
 class GetTenantUsers
 {
-    public function execute(Request $request, $paginate =  true): Collection | LengthAwarePaginator
+    public function execute(Request $request, $paginate = true): Collection|LengthAwarePaginator
     {
-        if($paginate) {
+        if ($paginate) {
             return tenant()->users()
                 ->paginate(10)
                 ->withQueryString();
         }
+
         return tenant()->users;
     }
 }

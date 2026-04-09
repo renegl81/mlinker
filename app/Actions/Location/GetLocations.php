@@ -9,9 +9,9 @@ use Illuminate\Support\Collection;
 
 class GetLocations
 {
-    public function execute(Request $request, $paginate =  true): Collection | LengthAwarePaginator
+    public function execute(Request $request, $paginate = true): Collection|LengthAwarePaginator
     {
-        if($paginate) {
+        if ($paginate) {
             return Location::query()
                 ->applyFilters($request)
                 ->latest()

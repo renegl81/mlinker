@@ -24,7 +24,7 @@ class UserUpdateRequest extends FormRequest
             'name' => ['required', 'string'],
             'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($this->route('user'))],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
-           // 'country_id' => ['required', 'integer', 'exists:Countries,id'],
+            // 'country_id' => ['required', 'integer', 'exists:Countries,id'],
         ];
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Models\Plan;
 use App\Models\Role;
 use App\Models\Tenant;
 use App\Models\User;
@@ -75,11 +76,25 @@ class RegisteredUserController extends Controller
                     'updated_at' => now(),
                 ]
             );
-             //Artisan::call('tenants:storage-link');
+
+            $freePlan = Plan::free();
+            if ($freePlan) {
+                DB::table('subscriptions')->insert([
+                    'tenant_id' => $tenant->id,
+                    'plan_id' => $freePlan->id,
+                    'type' => 'default',
+                    'stripe_status' => 'free',
+                    'quantity' => 1,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+
+            // Artisan::call('tenants:storage-link');
             // Enviar notificación
-            try{
+            try {
                 $user->notify(new AccountActivationNotification($user));
-            }catch (\Exception $exception){
+            } catch (\Exception $exception) {
                 Log::error('Error enviando notificación de activación', [
                     'user_id' => $user->id,
                     'email' => $user->email,
@@ -93,5 +108,4 @@ class RegisteredUserController extends Controller
         return to_route('auth.activation.sent')
             ->with('success', __('auth.register.activation.sent'));
     }
-
 }

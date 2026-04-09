@@ -17,6 +17,7 @@ class Template extends Model
      */
     protected $fillable = [
         'name',
+        'component_name',
         'description',
         'preview_image_url',
         'config',

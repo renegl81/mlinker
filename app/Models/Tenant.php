@@ -12,6 +12,20 @@ class Tenant extends BaseTenant
 {
     use Billable, HasDomains;
 
+    public static function getCustomColumns(): array
+    {
+        return [
+            'id',
+            'onboarding_completed_at',
+            'onboarding_step',
+        ];
+    }
+
+    protected $casts = [
+        'onboarding_completed_at' => 'datetime',
+        'onboarding_step' => 'integer',
+    ];
+
     public function subscription(): HasOne
     {
         return $this->hasOne(Subscription::class)->latest();

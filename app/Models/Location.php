@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Traits\HasDynamicFilters;
+use App\Models\Traits\HasImage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,7 +13,7 @@ use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 class Location extends Model
 {
-    use BelongsToTenant, HasFactory, HasDynamicFilters;
+    use BelongsToTenant, HasDynamicFilters, HasFactory, HasImage;
 
     /**
      * The attributes that are mass assignable.
@@ -54,6 +55,7 @@ class Location extends Model
             'type' => 'in',
         ];
     }
+
     /**
      * Get the attributes that should be cast.
      *

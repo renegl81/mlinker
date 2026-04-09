@@ -6,6 +6,8 @@ use App\Actions\Location\CreateLocation;
 use App\Actions\Location\DeleteLocation;
 use App\Actions\Location\GetLocations;
 use App\Actions\Location\UpdateLocation;
+use App\Actions\Plan\CheckLimit;
+use App\Exceptions\PlanLimitExceededException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LocationStoreRequest;
 use App\Http\Requests\LocationUpdateRequest;
@@ -38,19 +40,26 @@ class LocationController extends Controller
     public function store(LocationStoreRequest $request, CreateLocation $createLocation): RedirectResponse
     {
         try {
+            (new CheckLimit)->execute('locations', throw: true);
             $data = $request->validated();
             $createLocation->execute($data);
 
             return redirect()->route('tenant.locations.index')
                 ->with('success', 'Local creado correctamente.');
 
-        } catch (Exception $e) {
-            Log::error($e->getMessage());
+        } catch (PlanLimitExceededException $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Ocurrió un error: ' . $e->getMessage());
+                ->with('error', $e->getMessage());
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Ocurrió un error: '.$e->getMessage());
         }
     }
+
     public function edit(Location $location)
     {
         return Inertia::render('admin/tenant/locations/Edit', [
@@ -68,18 +77,17 @@ class LocationController extends Controller
 
     public function update(LocationUpdateRequest $request, UpdateLocation $updateLocation, Location $location): RedirectResponse
     {
-        try{
+        try {
             $data = $request->validated();
             $updateLocation->execute($location, $data);
-        }catch (Exception $e){
+        } catch (Exception $e) {
             return redirect()->route('tenant.locations.edit', ['location' => $location])
                 ->withInput()
-                ->with('error', 'Ocurrió un error: ' . $e->getMessage());
+                ->with('error', 'Ocurrió un error: '.$e->getMessage());
         }
 
-
         return redirect()->route('tenant.locations.show', [
-            'location' => $location
+            'location' => $location,
         ]);
     }
 

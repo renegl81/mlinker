@@ -23,7 +23,7 @@ class MenuStoreRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:100'],
             'location_id' => ['required', 'integer',  Rule::exists('locations', 'id')],
-             'template_id' => ['required','integer', Rule::exists('templates', 'id')],
+            'template_id' => ['required', 'integer', Rule::exists('templates', 'id')],
             'description' => ['nullable', 'string'],
             'image_url' => ['nullable', 'string'],
             'show_prices' => ['boolean'],

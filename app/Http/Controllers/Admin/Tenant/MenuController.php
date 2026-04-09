@@ -6,6 +6,8 @@ use App\Actions\Menu\CreateMenu;
 use App\Actions\Menu\DeleteMenu;
 use App\Actions\Menu\GetMenus;
 use App\Actions\Menu\UpdateMenu;
+use App\Actions\Plan\CheckLimit;
+use App\Exceptions\PlanLimitExceededException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Menu\MenuStoreRequest;
 use App\Http\Requests\Menu\MenuUpdateRequest;
@@ -16,6 +18,7 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -24,6 +27,7 @@ class MenuController extends Controller
     public function index(Request $request, Location $location, GetMenus $getMenus): Response
     {
         $menus = $getMenus->execute($request);
+
         return Inertia::render('admin/tenant/menus/Index', [
             'location' => $location,
             'menus' => $menus,
@@ -41,15 +45,20 @@ class MenuController extends Controller
 
     public function store(MenuStoreRequest $request, CreateMenu $createMenu): RedirectResponse
     {
-        try{
+        try {
+            (new CheckLimit)->execute('menus', throw: true);
             $createMenu->execute($request->validated());
-        } catch (Exception $e) {
-            Log::error($e->getMessage());
+        } catch (PlanLimitExceededException $e) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Ocurrió un error: ' . $e->getMessage());
-        }
+                ->with('error', $e->getMessage());
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
 
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Ocurrió un error: '.$e->getMessage());
+        }
 
         return redirect()
             ->route('tenant.locations.show', ['location' => $request->input('location_id')])
@@ -86,7 +95,7 @@ class MenuController extends Controller
         return Inertia::render('admin/tenant/menus/Show', [
             'menu' => $menu->load(['location', 'template', 'sections', 'qrCode']),
             'qrCodeImageUrl' => $menu->qrCode?->image_url
-                ? \Illuminate\Support\Facades\Storage::disk('public')->url($menu->qrCode->image_url)
+                ? Storage::disk('public')->url($menu->qrCode->image_url)
                 : null,
         ]);
 

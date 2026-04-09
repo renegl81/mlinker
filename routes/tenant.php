@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 use App\Http\Controllers\Admin\Core\DashboardController;
 use App\Http\Controllers\Admin\Menu\QRCodeController;
+use App\Http\Controllers\Admin\Tenant\ImageUploadController;
 use App\Http\Controllers\Admin\Tenant\LocationController;
 use App\Http\Controllers\Admin\Tenant\MenuController;
+use App\Http\Controllers\Admin\Tenant\OnboardingController;
 use App\Http\Controllers\Admin\Tenant\ProductController;
 use App\Http\Controllers\Admin\Tenant\UserController;
 use App\Http\Controllers\Tenant\HomeController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\EnsurePlanLimits;
 use App\Http\Middleware\InitializeTenancyByDomainOptional;
+use App\Http\Middleware\RedirectToOnboarding;
+use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
@@ -27,7 +31,8 @@ Route::middleware([
     InitializeTenancyByDomainOptional::class,
 ])->as('tenant_public.')->group(function () {
     Route::get('/', HomeController::class)->name('tenant_home');
-    Route::get('/menu/{menu}', \App\Http\Controllers\Tenant\MenuController::class)->name('tenant_menu_show');
+    Route::get('/menu/{menu}', App\Http\Controllers\Tenant\MenuController::class)->name('tenant_menu_show');
+    Route::get('/m/{menu}', App\Http\Controllers\Tenant\MenuController::class)->name('tenant_menu_short');
 
     Route::prefix('menus/{menu}')->group(function () {
         Route::post('/products', [ProductController::class, 'store'])
@@ -48,19 +53,35 @@ Route::middleware([
 
     // Rutas protegidas con autenticación
     Route::middleware(['auth', 'verified'])->group(function () {
-        Route::prefix('panel')->group(function () {
-            Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-            Route::resource('users', UserController::class);
-            Route::resource('locations', LocationController::class);
+        // Rutas de onboarding (FUERA del RedirectToOnboarding para evitar bucles)
+        Route::prefix('panel/onboarding')->as('onboarding.')->group(function () {
+            Route::get('/', [OnboardingController::class, 'show'])->name('show');
+            Route::post('/location', [OnboardingController::class, 'storeLocation'])->name('location');
+            Route::post('/menu', [OnboardingController::class, 'storeMenu'])->name('menu');
+            Route::post('/products', [OnboardingController::class, 'storeProducts'])->name('products');
+            Route::post('/complete', [OnboardingController::class, 'complete'])->name('complete');
+        });
 
-            // Solo rutas anidadas para menús
-            Route::resource('locations.menus', MenuController::class)->shallow();
+        // Resto del panel con plan limits y redirect al onboarding si no completado
+        Route::middleware([EnsurePlanLimits::class, RedirectToOnboarding::class])->group(function () {
+            Route::prefix('panel')->group(function () {
+                Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-            // QR del menú
-            Route::post('menus/{menu}/qr-code', [QRCodeController::class, 'generate'])->name('menus.qr-code.generate');
-            Route::get('menus/{menu}/qr-code/download', [QRCodeController::class, 'download'])->name('menus.qr-code.download');
-            Route::delete('menus/{menu}/qr-code', [QRCodeController::class, 'destroy'])->name('menus.qr-code.destroy');
+                Route::resource('users', UserController::class);
+                Route::resource('locations', LocationController::class);
+
+                // Solo rutas anidadas para menús
+                Route::resource('locations.menus', MenuController::class)->shallow();
+
+                // Subida de imágenes
+                Route::post('uploads/image', [ImageUploadController::class, 'store'])->name('uploads.image');
+
+                // QR del menú
+                Route::post('menus/{menu}/qr-code', [QRCodeController::class, 'generate'])->name('menus.qr-code.generate');
+                Route::get('menus/{menu}/qr-code/download', [QRCodeController::class, 'download'])->name('menus.qr-code.download');
+                Route::delete('menus/{menu}/qr-code', [QRCodeController::class, 'destroy'])->name('menus.qr-code.destroy');
+            });
         });
     });
 

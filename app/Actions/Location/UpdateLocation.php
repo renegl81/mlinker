@@ -2,14 +2,13 @@
 
 namespace App\Actions\Location;
 
-use App\Http\Requests\LocationUpdateRequest;
 use App\Models\Location;
 
 class UpdateLocation
 {
     public function execute(Location $location, array $data): Location
     {
-       $location->update([
+        $location->update([
             'name' => $data['name'] ?? $location->name,
             'description' => $data['description'] ?? $location->description,
             'address' => $data['address'] ?? $location->address,

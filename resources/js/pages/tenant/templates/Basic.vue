@@ -1,9 +1,29 @@
 <script setup lang="ts">
+import { Head } from '@inertiajs/vue3';
+import ShareMenu from '@/components/public/ShareMenu.vue';
 import { Menu } from '@/types';
 import { computed } from 'vue';
 
+interface MetaProps {
+    title: string;
+    description: string;
+    image: string | null;
+    url: string;
+}
+
+interface JsonLd {
+    '@context': string;
+    '@type': string;
+    [key: string]: unknown;
+}
+
 interface Props {
     menu: Menu;
+    showBranding: boolean;
+    tenantSlug: string;
+    meta: MetaProps;
+    jsonLd: JsonLd;
+    shareUrl: string;
 }
 
 const props = defineProps<Props>();
@@ -25,9 +45,23 @@ const formatPrice = (price: number): string => {
         ? `${props.menu.location?.currency || '$'} ${formatted}`
         : formatted;
 };
+
+const jsonLdString = computed(() => JSON.stringify(props.jsonLd));
 </script>
 
 <template>
+    <Head>
+        <title>{{ meta.title }}</title>
+        <meta name="description" :content="meta.description" />
+        <meta property="og:title" :content="meta.title" />
+        <meta property="og:description" :content="meta.description" />
+        <meta v-if="meta.image" property="og:image" :content="meta.image" />
+        <meta property="og:url" :content="meta.url" />
+        <meta property="og:type" content="restaurant.menu" />
+        <!-- eslint-disable-next-line vue/no-v-text-v-html-on-component -->
+        <component :is="'script'" type="application/ld+json" v-html="jsonLdString" />
+    </Head>
+
     <div class="min-h-screen bg-background">
         <!-- Header del Menú -->
         <header class="border-b bg-card">
@@ -206,7 +240,29 @@ const formatPrice = (price: number): string => {
                 <p>{{ menu.location?.name }}</p>
                 <p v-if="menu.location?.address">{{ menu.location.address }}</p>
                 <p v-if="menu.location?.phone">{{ menu.location.phone }}</p>
+
+                <!-- Branding MenuLinker (solo plan Free) -->
+                <div
+                    v-if="showBranding"
+                    class="mt-3 border-t border-muted pt-3"
+                >
+                    <a
+                        :href="`https://menulinker.com?ref=${tenantSlug}`"
+                        target="_blank"
+                        rel="noopener"
+                        class="text-xs text-muted-foreground/60 transition-colors hover:text-muted-foreground"
+                    >
+                        Menú digital por MenuLinker — Crea el tuyo gratis
+                    </a>
+                </div>
             </div>
         </footer>
+
+        <!-- FAB Compartir -->
+        <ShareMenu
+            :url="shareUrl"
+            :menu-name="menu.name"
+            :location-name="menu.location?.name ?? ''"
+        />
     </div>
 </template>
