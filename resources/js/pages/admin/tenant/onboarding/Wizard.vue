@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { router, useForm } from '@inertiajs/vue3';
-import { computed, ref } from 'vue';
+import { Check, Loader2, Plus, Sparkles, X } from 'lucide-vue-next';
+import { computed, ref, watch } from 'vue';
 
 interface Location {
     id: number;
@@ -51,7 +49,22 @@ const menuForm = useForm({
     location_id: props.location?.id ?? 0,
 });
 
+// Keep location_id in sync with props after step 0 completes and props update.
+watch(
+    () => props.location?.id,
+    (id) => {
+        if (id) {
+            menuForm.location_id = id;
+        }
+    },
+    { immediate: true },
+);
+
 function submitMenu() {
+    // Safety: ensure we always send the latest location id from props.
+    if (props.location?.id) {
+        menuForm.location_id = props.location.id;
+    }
     menuForm.post(route('tenant.onboarding.menu'));
 }
 
@@ -77,6 +90,7 @@ function removeProduct(index: number) {
 }
 
 const productsError = ref('');
+const productsProcessing = ref(false);
 
 function submitProducts() {
     productsError.value = '';
@@ -86,19 +100,30 @@ function submitProducts() {
         return;
     }
 
+    productsProcessing.value = true;
     router.post(
         route('tenant.onboarding.products'),
         {
             menu_id: props.menu?.id,
             products: productRows.value,
         },
-        { preserveScroll: true },
+        {
+            preserveScroll: true,
+            onFinish: () => (productsProcessing.value = false),
+        },
     );
 }
 
 // ─── Step 3: Complete ────────────────────────────────────────────────────────
+const completeProcessing = ref(false);
+
 function submitComplete() {
-    router.post(route('tenant.onboarding.complete'), { menu_id: props.menu?.id });
+    completeProcessing.value = true;
+    router.post(
+        route('tenant.onboarding.complete'),
+        { menu_id: props.menu?.id },
+        { onFinish: () => (completeProcessing.value = false) },
+    );
 }
 
 // ─── Progress ────────────────────────────────────────────────────────────────
@@ -110,181 +135,324 @@ const steps = [
 ];
 
 const progressPercent = computed(() => Math.round((props.step / (steps.length - 1)) * 100));
+
+// ─── Shared input classes (explicit colors, no theme tokens) ────────────────
+const inputClass =
+    'flex h-11 w-full rounded-lg border border-slate-700 bg-slate-900/60 px-4 py-2 text-sm text-white placeholder:text-slate-500 transition-colors focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/30';
+const labelClass = 'text-sm font-medium text-slate-300';
+const errorClass = 'text-xs text-red-400';
 </script>
 
 <template>
-    <div class="flex min-h-svh flex-col items-center justify-start bg-background px-4 py-10">
-        <!-- Logo -->
-        <div class="mb-8 flex items-center gap-2">
-            <img src="/logo.png" alt="MenuLinker" class="h-8" />
-            <span class="text-lg font-semibold">MenuLinker</span>
-        </div>
-
-        <!-- Progress indicator -->
-        <div class="mb-8 w-full max-w-lg">
-            <div class="mb-2 flex justify-between">
-                <span
-                    v-for="(s, i) in steps"
-                    :key="i"
-                    class="text-xs font-medium"
-                    :class="i <= step ? 'text-primary' : 'text-muted-foreground'"
-                >
-                    {{ s.label }}
-                </span>
-            </div>
-            <div class="h-2 w-full overflow-hidden rounded-full bg-muted">
-                <div
-                    class="h-2 rounded-full bg-primary transition-all duration-300"
-                    :style="{ width: progressPercent + '%' }"
-                />
-            </div>
-        </div>
-
-        <!-- Card -->
-        <div class="w-full max-w-lg rounded-xl border bg-card p-8 shadow-sm">
-
-            <!-- ── Paso 0: Tu negocio ── -->
-            <template v-if="step === 0">
-                <h1 class="mb-1 text-2xl font-semibold">Tu negocio</h1>
-                <p class="mb-6 text-sm text-muted-foreground">Cuéntanos un poco sobre tu local. Esto solo tomará un minuto.</p>
-
-                <form @submit.prevent="submitLocation" class="space-y-4">
-                    <div class="space-y-1">
-                        <Label for="loc-name">Nombre del local <span class="text-destructive">*</span></Label>
-                        <Input id="loc-name" v-model="locationForm.name" placeholder="Ej. Cafetería El Sol" :class="{ 'border-destructive': locationForm.errors.name }" />
-                        <p v-if="locationForm.errors.name" class="text-xs text-destructive">{{ locationForm.errors.name }}</p>
-                    </div>
-                    <div class="space-y-1">
-                        <Label for="loc-address">Dirección</Label>
-                        <Input id="loc-address" v-model="locationForm.address" placeholder="Calle Mayor, 10" />
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="space-y-1">
-                            <Label for="loc-city">Ciudad</Label>
-                            <Input id="loc-city" v-model="locationForm.city" placeholder="Madrid" />
-                        </div>
-                        <div class="space-y-1">
-                            <Label for="loc-phone">Teléfono</Label>
-                            <Input id="loc-phone" v-model="locationForm.phone" placeholder="+34 600 000 000" />
-                        </div>
-                    </div>
-                    <Button type="submit" class="w-full" :disabled="locationForm.processing">
-                        Continuar →
-                    </Button>
-                </form>
-            </template>
-
-            <!-- ── Paso 1: Tu menú ── -->
-            <template v-else-if="step === 1">
-                <h1 class="mb-1 text-2xl font-semibold">Tu menú</h1>
-                <p class="mb-6 text-sm text-muted-foreground">Dale un nombre a tu menú digital.</p>
-
-                <form @submit.prevent="submitMenu" class="space-y-4">
-                    <input type="hidden" name="location_id" :value="location?.id" />
-                    <div class="space-y-1">
-                        <Label for="menu-name">Nombre del menú <span class="text-destructive">*</span></Label>
-                        <Input id="menu-name" v-model="menuForm.name" placeholder="Ej. Carta de Verano" :class="{ 'border-destructive': menuForm.errors.name }" />
-                        <p v-if="menuForm.errors.name" class="text-xs text-destructive">{{ menuForm.errors.name }}</p>
-                    </div>
-                    <div class="space-y-1">
-                        <Label for="menu-desc">Descripción</Label>
-                        <Input id="menu-desc" v-model="menuForm.description" placeholder="Una breve descripción (opcional)" />
-                    </div>
-                    <Button type="submit" class="w-full" :disabled="menuForm.processing">
-                        Continuar →
-                    </Button>
-                </form>
-            </template>
-
-            <!-- ── Paso 2: Tus platos ── -->
-            <template v-else-if="step === 2">
-                <h1 class="mb-1 text-2xl font-semibold">Tus platos</h1>
-                <p class="mb-6 text-sm text-muted-foreground">Añade al menos un producto a tu menú. Podrás añadir más desde el panel.</p>
-
-                <div class="mb-4 space-y-3">
-                    <div
-                        v-for="(row, index) in productRows"
-                        :key="index"
-                        class="grid grid-cols-[1fr_6rem_7rem_auto] gap-2 items-end"
-                    >
-                        <div class="space-y-1">
-                            <Label v-if="index === 0">Nombre</Label>
-                            <Input v-model="row.name" placeholder="Ej. Ensalada César" />
-                        </div>
-                        <div class="space-y-1">
-                            <Label v-if="index === 0">Precio (€)</Label>
-                            <Input v-model="row.price" type="number" step="0.01" min="0" placeholder="0.00" />
-                        </div>
-                        <div class="space-y-1">
-                            <Label v-if="index === 0">Sección</Label>
-                            <select
-                                v-model="row.section_name"
-                                class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                            >
-                                <option v-for="opt in sectionOptions" :key="opt" :value="opt">{{ opt }}</option>
-                                <option value="__custom__">Otra...</option>
-                            </select>
-                        </div>
-                        <button
-                            type="button"
-                            class="mb-0.5 text-muted-foreground hover:text-destructive transition-colors"
-                            :class="{ 'mt-5': index === 0 }"
-                            @click="removeProduct(index)"
-                            :disabled="productRows.length === 1"
-                            title="Eliminar"
-                        >
-                            ✕
-                        </button>
-                    </div>
-
-                    <!-- Input libre para sección "Otra" -->
-                    <template v-for="(row, index) in productRows" :key="'custom-' + index">
-                        <div v-if="row.section_name === '__custom__'" class="pl-0">
-                            <Label>Nombre de la sección personalizada</Label>
-                            <Input v-model="row.section_name" placeholder="Ej. Tapas" @input="(e: Event) => { row.section_name = (e.target as HTMLInputElement).value }" />
-                        </div>
-                    </template>
+    <div class="min-h-svh bg-slate-950 text-slate-200 selection:bg-purple-500 selection:text-white">
+        <div class="flex min-h-svh flex-col items-center justify-start px-4 py-10">
+            <!-- Logo -->
+            <div class="mb-10 flex items-center gap-2">
+                <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 shadow-lg shadow-purple-500/20">
+                    <Sparkles class="h-5 w-5 text-white" />
                 </div>
+                <span class="text-lg font-bold text-white">MenuLinker</span>
+            </div>
 
-                <p v-if="productsError" class="mb-2 text-xs text-destructive">{{ productsError }}</p>
+            <!-- Progress indicator -->
+            <div class="mb-8 w-full max-w-xl">
+                <div class="mb-3 flex justify-between">
+                    <div
+                        v-for="(s, i) in steps"
+                        :key="i"
+                        class="flex flex-1 flex-col items-center gap-2"
+                    >
+                        <div
+                            class="flex h-8 w-8 items-center justify-center rounded-full border-2 text-xs font-bold transition-all"
+                            :class="
+                                i < step
+                                    ? 'border-purple-500 bg-purple-500 text-white'
+                                    : i === step
+                                      ? 'border-purple-500 bg-purple-500/20 text-purple-300'
+                                      : 'border-slate-700 bg-slate-900 text-slate-500'
+                            "
+                        >
+                            <Check v-if="i < step" class="h-4 w-4" />
+                            <span v-else>{{ i + 1 }}</span>
+                        </div>
+                        <span
+                            class="text-[11px] font-medium"
+                            :class="i <= step ? 'text-purple-300' : 'text-slate-500'"
+                        >
+                            {{ s.label }}
+                        </span>
+                    </div>
+                </div>
+                <div class="relative mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
+                    <div
+                        class="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-500"
+                        :style="{ width: progressPercent + '%' }"
+                    />
+                </div>
+            </div>
 
-                <button
-                    type="button"
-                    class="mb-6 text-sm text-primary underline-offset-2 hover:underline"
-                    @click="addProduct"
-                >
-                    + Añadir otro plato
-                </button>
+            <!-- Card -->
+            <div class="w-full max-w-xl rounded-2xl border border-slate-800 bg-slate-900/60 p-8 shadow-2xl backdrop-blur-sm">
+                <!-- ── Paso 0: Tu negocio ── -->
+                <template v-if="step === 0">
+                    <h1 class="mb-2 text-2xl font-bold text-white">Tu negocio</h1>
+                    <p class="mb-6 text-sm text-slate-400">
+                        Cuéntanos un poco sobre tu local. Esto solo tomará un minuto.
+                    </p>
 
-                <Button class="w-full" @click="submitProducts">
-                    Continuar →
-                </Button>
-            </template>
+                    <form class="space-y-5" @submit.prevent="submitLocation">
+                        <div class="space-y-2">
+                            <label for="loc-name" :class="labelClass">
+                                Nombre del local <span class="text-red-400">*</span>
+                            </label>
+                            <input
+                                id="loc-name"
+                                v-model="locationForm.name"
+                                type="text"
+                                placeholder="Ej. Cafetería El Sol"
+                                :class="[inputClass, locationForm.errors.name && 'border-red-500']"
+                            />
+                            <p v-if="locationForm.errors.name" :class="errorClass">{{ locationForm.errors.name }}</p>
+                        </div>
 
-            <!-- ── Paso 3: ¡Listo! ── -->
-            <template v-else-if="step === 3">
-                <div class="mb-4 flex items-center justify-center text-5xl">🎉</div>
-                <h1 class="mb-1 text-center text-2xl font-semibold">¡Tu menú está casi listo!</h1>
-                <p class="mb-6 text-center text-sm text-muted-foreground">
-                    Haz clic en "Finalizar" para generar el código QR de tu menú y acceder al panel de administración.
-                </p>
+                        <div class="space-y-2">
+                            <label for="loc-address" :class="labelClass">Dirección</label>
+                            <input
+                                id="loc-address"
+                                v-model="locationForm.address"
+                                type="text"
+                                placeholder="Calle Mayor, 10"
+                                :class="inputClass"
+                            />
+                        </div>
 
-                <div class="mb-6 space-y-3">
-                    <div class="rounded-lg border bg-muted/40 p-4 text-sm">
-                        <p class="font-medium">Resumen:</p>
-                        <ul class="mt-1 list-inside list-disc text-muted-foreground">
-                            <li v-if="location">Local: <span class="text-foreground">{{ location.name }}</span></li>
-                            <li v-if="menu">Menú: <span class="text-foreground">{{ menu.name }}</span></li>
-                            <li v-if="products?.length">{{ products.length }} producto(s) añadido(s)</li>
+                        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                            <div class="space-y-2">
+                                <label for="loc-city" :class="labelClass">Ciudad</label>
+                                <input
+                                    id="loc-city"
+                                    v-model="locationForm.city"
+                                    type="text"
+                                    placeholder="Madrid"
+                                    :class="inputClass"
+                                />
+                            </div>
+                            <div class="space-y-2">
+                                <label for="loc-phone" :class="labelClass">Teléfono</label>
+                                <input
+                                    id="loc-phone"
+                                    v-model="locationForm.phone"
+                                    type="text"
+                                    placeholder="+34 600 000 000"
+                                    :class="inputClass"
+                                />
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            :disabled="locationForm.processing"
+                            class="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-6 font-semibold text-white shadow-lg shadow-purple-500/20 transition-all hover:from-purple-500 hover:to-pink-500 disabled:cursor-not-allowed disabled:opacity-60"
+                        >
+                            <Loader2 v-if="locationForm.processing" class="h-4 w-4 animate-spin" />
+                            <span>Continuar</span>
+                            <span v-if="!locationForm.processing">→</span>
+                        </button>
+                    </form>
+                </template>
+
+                <!-- ── Paso 1: Tu menú ── -->
+                <template v-else-if="step === 1">
+                    <h1 class="mb-2 text-2xl font-bold text-white">Tu menú</h1>
+                    <p class="mb-6 text-sm text-slate-400">Dale un nombre a tu menú digital.</p>
+
+                    <form class="space-y-5" @submit.prevent="submitMenu">
+                        <div
+                            v-if="menuForm.errors.location_id"
+                            class="rounded-lg border border-red-500/50 bg-red-500/10 p-3 text-sm text-red-300"
+                        >
+                            {{ menuForm.errors.location_id }}
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="menu-name" :class="labelClass">
+                                Nombre del menú <span class="text-red-400">*</span>
+                            </label>
+                            <input
+                                id="menu-name"
+                                v-model="menuForm.name"
+                                type="text"
+                                placeholder="Ej. Carta de Verano"
+                                :class="[inputClass, menuForm.errors.name && 'border-red-500']"
+                            />
+                            <p v-if="menuForm.errors.name" :class="errorClass">{{ menuForm.errors.name }}</p>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="menu-desc" :class="labelClass">Descripción</label>
+                            <input
+                                id="menu-desc"
+                                v-model="menuForm.description"
+                                type="text"
+                                placeholder="Una breve descripción (opcional)"
+                                :class="inputClass"
+                            />
+                        </div>
+
+                        <button
+                            type="submit"
+                            :disabled="menuForm.processing"
+                            class="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-6 font-semibold text-white shadow-lg shadow-purple-500/20 transition-all hover:from-purple-500 hover:to-pink-500 disabled:cursor-not-allowed disabled:opacity-60"
+                        >
+                            <Loader2 v-if="menuForm.processing" class="h-4 w-4 animate-spin" />
+                            <span>Continuar</span>
+                            <span v-if="!menuForm.processing">→</span>
+                        </button>
+                    </form>
+                </template>
+
+                <!-- ── Paso 2: Tus platos ── -->
+                <template v-else-if="step === 2">
+                    <h1 class="mb-2 text-2xl font-bold text-white">Tus platos</h1>
+                    <p class="mb-6 text-sm text-slate-400">
+                        Añade al menos un producto a tu menú. Podrás añadir más desde el panel.
+                    </p>
+
+                    <div class="mb-4 space-y-4">
+                        <div
+                            v-for="(row, index) in productRows"
+                            :key="index"
+                            class="rounded-lg border border-slate-800 bg-slate-950/50 p-4"
+                        >
+                            <div class="mb-3 flex items-center justify-between">
+                                <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                                    Plato #{{ index + 1 }}
+                                </span>
+                                <button
+                                    v-if="productRows.length > 1"
+                                    type="button"
+                                    class="text-slate-500 transition-colors hover:text-red-400"
+                                    title="Eliminar"
+                                    @click="removeProduct(index)"
+                                >
+                                    <X class="h-4 w-4" />
+                                </button>
+                            </div>
+
+                            <div class="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_7rem]">
+                                <div class="space-y-2">
+                                    <label :class="labelClass">Nombre</label>
+                                    <input
+                                        v-model="row.name"
+                                        type="text"
+                                        placeholder="Ej. Ensalada César"
+                                        :class="inputClass"
+                                    />
+                                </div>
+                                <div class="space-y-2">
+                                    <label :class="labelClass">Precio (€)</label>
+                                    <input
+                                        v-model="row.price"
+                                        type="number"
+                                        step="0.01"
+                                        min="0"
+                                        placeholder="0.00"
+                                        :class="inputClass"
+                                    />
+                                </div>
+                            </div>
+
+                            <div class="mt-3 space-y-2">
+                                <label :class="labelClass">Sección</label>
+                                <select v-model="row.section_name" :class="inputClass">
+                                    <option v-for="opt in sectionOptions" :key="opt" :value="opt" class="bg-slate-900">
+                                        {{ opt }}
+                                    </option>
+                                    <option value="__custom__" class="bg-slate-900">Otra…</option>
+                                </select>
+                                <input
+                                    v-if="row.section_name === '__custom__'"
+                                    type="text"
+                                    placeholder="Ej. Tapas"
+                                    :class="[inputClass, 'mt-2']"
+                                    @input="(e: Event) => (row.section_name = (e.target as HTMLInputElement).value)"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-purple-400 transition-colors hover:text-purple-300"
+                        @click="addProduct"
+                    >
+                        <Plus class="h-4 w-4" />
+                        Añadir otro plato
+                    </button>
+
+                    <p v-if="productsError" :class="[errorClass, 'mb-3']">{{ productsError }}</p>
+
+                    <button
+                        type="button"
+                        :disabled="productsProcessing"
+                        class="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-6 font-semibold text-white shadow-lg shadow-purple-500/20 transition-all hover:from-purple-500 hover:to-pink-500 disabled:cursor-not-allowed disabled:opacity-60"
+                        @click="submitProducts"
+                    >
+                        <Loader2 v-if="productsProcessing" class="h-4 w-4 animate-spin" />
+                        <span>Continuar</span>
+                        <span v-if="!productsProcessing">→</span>
+                    </button>
+                </template>
+
+                <!-- ── Paso 3: ¡Listo! ── -->
+                <template v-else-if="step === 3">
+                    <div class="mb-4 flex items-center justify-center">
+                        <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-pink-500 text-4xl shadow-lg shadow-purple-500/30">
+                            🎉
+                        </div>
+                    </div>
+                    <h1 class="mb-2 text-center text-2xl font-bold text-white">¡Tu menú está casi listo!</h1>
+                    <p class="mb-6 text-center text-sm text-slate-400">
+                        Haz clic en "Finalizar" para generar el código QR de tu menú y acceder al panel de administración.
+                    </p>
+
+                    <div class="mb-6 rounded-lg border border-slate-800 bg-slate-950/50 p-5">
+                        <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">Resumen</p>
+                        <ul class="space-y-2 text-sm">
+                            <li v-if="location" class="flex items-start gap-2">
+                                <Check class="mt-0.5 h-4 w-4 shrink-0 text-purple-400" />
+                                <span class="text-slate-400">Local: <span class="font-medium text-white">{{ location.name }}</span></span>
+                            </li>
+                            <li v-if="menu" class="flex items-start gap-2">
+                                <Check class="mt-0.5 h-4 w-4 shrink-0 text-purple-400" />
+                                <span class="text-slate-400">Menú: <span class="font-medium text-white">{{ menu.name }}</span></span>
+                            </li>
+                            <li v-if="products?.length" class="flex items-start gap-2">
+                                <Check class="mt-0.5 h-4 w-4 shrink-0 text-purple-400" />
+                                <span class="text-slate-400">
+                                    <span class="font-medium text-white">{{ products.length }}</span> producto{{ products.length === 1 ? '' : 's' }} añadido{{ products.length === 1 ? '' : 's' }}
+                                </span>
+                            </li>
                         </ul>
                     </div>
-                </div>
 
-                <Button class="w-full" @click="submitComplete">
-                    Finalizar y generar QR
-                </Button>
-            </template>
+                    <button
+                        type="button"
+                        :disabled="completeProcessing"
+                        class="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-6 font-semibold text-white shadow-lg shadow-purple-500/20 transition-all hover:from-purple-500 hover:to-pink-500 disabled:cursor-not-allowed disabled:opacity-60"
+                        @click="submitComplete"
+                    >
+                        <Loader2 v-if="completeProcessing" class="h-4 w-4 animate-spin" />
+                        <Sparkles v-else class="h-4 w-4" />
+                        <span>Finalizar y generar QR</span>
+                    </button>
+                </template>
+            </div>
 
+            <!-- Footer -->
+            <p class="mt-8 text-xs text-slate-600">
+                Paso {{ step + 1 }} de {{ steps.length }}
+            </p>
         </div>
     </div>
 </template>

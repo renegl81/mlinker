@@ -53,12 +53,15 @@ class AccountActivationController extends Controller
 
         Auth::login($user);
         $tenant = $user->tenants()->first();
-        if ($tenant && ! empty($tenant->domain)) {
-            $domain = rtrim($tenant->domain, '/');
-            $port = config('services.app_port') ? ':'.config('services.app_port') : '';
-            $url = str_starts_with($domain, 'http') ? $domain.$port.'/panel' : 'https://'.$domain.$port.'/panel';
+        $tenantDomain = $tenant?->domains()->first()?->domain;
 
-            return redirect()->to($url)
+        if ($tenantDomain) {
+            $appUrl = config('app.url');
+            $scheme = parse_url($appUrl, PHP_URL_SCHEME) ?: 'http';
+            $port = parse_url($appUrl, PHP_URL_PORT);
+            $portSuffix = $port ? ':'.$port : '';
+
+            return redirect()->to("{$scheme}://{$tenantDomain}{$portSuffix}/panel")
                 ->with('success', __('auth.register.activation.success'));
         }
 

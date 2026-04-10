@@ -30,9 +30,13 @@ class UserSeeder extends Seeder
             ],
         ];
         foreach ($admins as $admin) {
-            $user = User::updateOrCreate($admin);
-            $user->assignRole($roleAdmin);
-            $user->save();
+            $user = User::updateOrCreate(
+                ['email' => $admin['email']],
+                $admin,
+            );
+            if (! $user->hasRole('Admin')) {
+                $user->assignRole($roleAdmin);
+            }
         }
     }
 }

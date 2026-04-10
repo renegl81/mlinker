@@ -52,8 +52,10 @@ class TemplateSeeder extends Seeder
         ];
 
         foreach ($templates as $template) {
-            Template::create($template);
+            Template::updateOrCreate(
+                ['component_name' => $template['component_name']],
+                $template,
+            );
         }
-
     }
 }

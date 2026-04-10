@@ -7,10 +7,10 @@ import HeadingSmall from '@/components/HeadingSmall.vue'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Plus, Pencil, Trash2, ChevronLeft, ChevronRight } from 'lucide-vue-next'
+import { Plus, Pencil, Trash2, ChevronLeft, ChevronRight, Eye } from 'lucide-vue-next'
 import type { BreadcrumbItem } from '@/types'
 import { index as locationMenusRoute, create } from '@/routes/tenant/locations/menus'
-import { destroy as menuRouteDestroy, edit as menuRouteEdit } from '@/routes/tenant/menus'
+import { destroy as menuRouteDestroy, edit as menuRouteEdit, show as menuRouteShow } from '@/routes/tenant/menus'
 import MenuFilters, { type MenuFilters as MenuFiltersType } from './Filters.vue'
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
@@ -64,10 +64,24 @@ function go(url: string) {
     Inertia.visit(url)
 }
 
+function goToShow(id: number) {
+    Inertia.visit(menuRouteShow(id).url)
+}
+
 function remove(id: number) {
     if (confirm(messages?.menus.actions.confirm_delete)) {
         Inertia.delete(menuRouteDestroy(id).url)
     }
+}
+
+/**
+ * Navigate to the menu detail unless the click originated from an action
+ * button/link (edit/delete/view), which have their own handlers.
+ */
+function handleRowClick(menuId: number, event: MouseEvent) {
+    const target = event.target as HTMLElement
+    if (target.closest('[data-row-action]')) return
+    goToShow(menuId)
 }
 
 function clearFilters() {
@@ -114,7 +128,12 @@ function clearFilters() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            <TableRow v-for="menu in menus.data" :key="menu.id">
+                            <TableRow
+                                v-for="menu in menus.data"
+                                :key="menu.id"
+                                class="cursor-pointer transition-colors hover:bg-muted/50"
+                                @click="handleRowClick(menu.id, $event)"
+                            >
                                 <TableCell class="font-medium">{{ menu.name }}</TableCell>
                                 <TableCell>{{ menu.description || '-' }}</TableCell>
                                 <TableCell>
@@ -125,8 +144,24 @@ function clearFilters() {
                                     </span>
                                 </TableCell>
                                 <TableCell class="text-right">
-                                    <div class="flex justify-end gap-2">
+                                    <div class="flex justify-end gap-2" data-row-action>
                                         <TooltipProvider>
+                                            <Tooltip>
+                                                <TooltipTrigger as-child>
+                                                    <Button variant="outline" size="sm" as-child>
+                                                        <Link
+                                                            :href="menuRouteShow(menu.id).url"
+                                                            :aria-label="messages?.menus.actions.view || 'Ver'"
+                                                        >
+                                                            <Eye class="h-3 w-3" />
+                                                        </Link>
+                                                    </Button>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    {{ messages?.menus.actions.view || 'Ver' }}
+                                                </TooltipContent>
+                                            </Tooltip>
+
                                             <Tooltip>
                                                 <TooltipTrigger as-child>
                                                     <Button variant="outline" size="sm" as-child>

@@ -20,13 +20,28 @@ class UpdateMenu
             'show_calories' => $data['show_calories'] ?? false,
         ];
 
-        if (isset($data['image_url']) && is_string($data['image_url']) && str_starts_with($data['image_url'], 'data:image')) {
-            // Eliminar imagen anterior si existe
-            if ($menu->image_url) {
-                Storage::disk('public')->delete($menu->image_url);
-            }
+        // Image handling:
+        // - array_key_exists: distinguish "not sent" from "sent as null"
+        // - base64 → store new image, delete old one
+        // - null → user removed the image
+        // - absolute URL (starts with http) → pre-resolved URL from image_path
+        //   accessor, means the user did not change the image → do not touch
+        if (array_key_exists('image_url', $data)) {
+            $incoming = $data['image_url'];
 
-            $menuData['image_url'] = ImageHelper::storeBase64Image($data['image_url'], 'menus');
+            if (is_string($incoming) && str_starts_with($incoming, 'data:image')) {
+                if ($menu->image_url) {
+                    Storage::disk('public')->delete($menu->image_url);
+                }
+                $menuData['image_url'] = ImageHelper::storeBase64Image($incoming, 'menus');
+            } elseif ($incoming === null) {
+                if ($menu->image_url) {
+                    Storage::disk('public')->delete($menu->image_url);
+                }
+                $menuData['image_url'] = null;
+            }
+            // If it's an http(s) URL or anything else, we intentionally do not
+            // touch the existing image_url column.
         }
 
         $menu->update($menuData);

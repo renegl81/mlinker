@@ -29,14 +29,30 @@ import {
 import { computed } from 'vue';
 import { router } from '@inertiajs/vue3';
 
+interface Product {
+    id: number;
+    name: string;
+    description: string | null;
+    price: string | number | null;
+    image_url: string | null;
+}
+
 interface Section {
     id: number;
     name: string;
     description: string | null;
+    products?: Product[];
 }
 
 interface MenuWithSections extends Menu {
     sections: Section[];
+}
+
+function formatPrice(price: string | number | null | undefined): string {
+    if (price === null || price === undefined || price === '') return '';
+    const n = typeof price === 'string' ? parseFloat(price) : price;
+    if (Number.isNaN(n)) return '';
+    return n.toFixed(2) + ' €';
 }
 
 interface Props {
@@ -196,24 +212,62 @@ function remove() {
                         <CardHeader class="flex flex-row items-center justify-between space-y-0">
                             <CardTitle class="flex items-center gap-2 text-lg">
                                 <BookOpen class="h-5 w-5 text-primary" />
-                                Secciones
+                                Secciones y productos
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div v-if="menu.sections && menu.sections.length > 0" class="space-y-2">
+                            <div v-if="menu.sections && menu.sections.length > 0" class="space-y-6">
                                 <div
                                     v-for="section in menu.sections"
                                     :key="section.id"
-                                    class="flex items-start gap-3 rounded-md border p-3"
+                                    class="space-y-3"
                                 >
-                                    <div class="flex-1">
-                                        <p class="text-sm font-medium">{{ section.name }}</p>
-                                        <p
-                                            v-if="section.description"
-                                            class="mt-0.5 text-xs text-muted-foreground"
+                                    <!-- Cabecera de sección -->
+                                    <div class="flex items-baseline justify-between border-b pb-2">
+                                        <div>
+                                            <h3 class="text-base font-semibold">{{ section.name }}</h3>
+                                            <p
+                                                v-if="section.description"
+                                                class="mt-0.5 text-xs text-muted-foreground"
+                                            >
+                                                {{ section.description }}
+                                            </p>
+                                        </div>
+                                        <span class="text-xs text-muted-foreground">
+                                            {{ section.products?.length ?? 0 }} producto{{ (section.products?.length ?? 0) === 1 ? '' : 's' }}
+                                        </span>
+                                    </div>
+
+                                    <!-- Productos de la sección -->
+                                    <div
+                                        v-if="section.products && section.products.length > 0"
+                                        class="space-y-2"
+                                    >
+                                        <div
+                                            v-for="product in section.products"
+                                            :key="product.id"
+                                            class="flex items-start justify-between gap-4 rounded-md border bg-muted/20 p-3"
                                         >
-                                            {{ section.description }}
-                                        </p>
+                                            <div class="flex-1 min-w-0">
+                                                <p class="text-sm font-medium">{{ product.name }}</p>
+                                                <p
+                                                    v-if="product.description"
+                                                    class="mt-0.5 line-clamp-2 text-xs text-muted-foreground"
+                                                >
+                                                    {{ product.description }}
+                                                </p>
+                                            </div>
+                                            <span class="shrink-0 text-sm font-semibold text-primary">
+                                                {{ formatPrice(product.price) }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        v-else
+                                        class="rounded-md border border-dashed bg-muted/10 p-3 text-center text-xs text-muted-foreground"
+                                    >
+                                        Esta sección aún no tiene productos.
                                     </div>
                                 </div>
                             </div>

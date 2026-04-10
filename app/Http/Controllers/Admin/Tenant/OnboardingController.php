@@ -93,15 +93,13 @@ class OnboardingController extends Controller
             'location_id' => ['required', 'integer', 'exists:locations,id'],
         ]);
 
-        $template = Template::where('component_name', 'Basic')->first()
-            ?? Template::where('is_active', true)->first()
-            ?? Template::first();
+        $template = $this->resolveDefaultTemplate();
 
         Menu::create([
             'name' => $data['name'],
             'description' => $data['description'] ?? null,
             'location_id' => (int) $data['location_id'],
-            'template_id' => $template?->id,
+            'template_id' => $template->id,
             'is_active' => true,
             'show_prices' => true,
             'show_currency' => false,
@@ -113,6 +111,34 @@ class OnboardingController extends Controller
         $tenant->save();
 
         return redirect()->route('tenant.onboarding.show');
+    }
+
+    /**
+     * Resolve a default template for new menus, creating a Basic one on demand
+     * if the templates table is empty (e.g. the TemplateSeeder was not run).
+     */
+    protected function resolveDefaultTemplate(): Template
+    {
+        $template = Template::where('component_name', 'Basic')->first()
+            ?? Template::where('is_active', true)->first()
+            ?? Template::first();
+
+        if ($template) {
+            return $template;
+        }
+
+        return Template::create([
+            'name' => 'Basic',
+            'component_name' => 'Basic',
+            'description' => 'Diseño clásico con enfoque en la simplicidad y elegancia.',
+            'preview_image_url' => null,
+            'config' => [
+                'color_scheme' => 'light',
+                'font_style' => 'serif',
+                'layout' => 'single-column',
+            ],
+            'is_active' => true,
+        ]);
     }
 
     public function storeProducts(Request $request): RedirectResponse

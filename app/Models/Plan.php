@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Cache;
 
 class Plan extends Model
 {
@@ -89,11 +88,27 @@ class Plan extends Model
     }
 
     /**
-     * Return the free plan, cached for 60 minutes.
+     * Per-request memoized free plan instance.
+     *
+     * Not using Cache::remember() because Stancl's CacheTenancyBootstrapper
+     * forces tags() on every cache call, which the `file` store does not support.
+     */
+    protected static ?self $freePlan = null;
+
+    /**
+     * Return the free plan, memoized per request.
      * Returns null if the free plan has not been seeded yet.
      */
     public static function free(): ?self
     {
-        return Cache::remember('plan:free', 3600, fn () => static::where('slug', 'free')->first());
+        return static::$freePlan ??= static::where('slug', 'free')->first();
+    }
+
+    /**
+     * Clear the memoized free plan reference (used by tests).
+     */
+    public static function resetFreePlanCache(): void
+    {
+        static::$freePlan = null;
     }
 }

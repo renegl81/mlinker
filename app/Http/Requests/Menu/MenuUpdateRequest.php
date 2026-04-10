@@ -17,6 +17,11 @@ class MenuUpdateRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:1000'],
             'is_active' => ['boolean'],
+            'template_id' => ['nullable', 'integer', 'exists:templates,id'],
+            'show_prices' => ['boolean'],
+            'show_currency' => ['boolean'],
+            'show_calories' => ['boolean'],
+            'image_url' => ['nullable', 'string'],
         ];
     }
 

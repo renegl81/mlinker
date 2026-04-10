@@ -45,15 +45,21 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        $defaultRoute = route('dashboard', absolute: false);
+        // If the user belongs to a tenant, redirect to the tenant's panel via its domain.
+        // Tenant routes (`/panel/*`) only exist when accessed through the tenant subdomain.
+        $tenant = $user->tenants()->first();
+        $tenantDomain = $tenant?->domains()->first()?->domain;
 
-        if ($user->tenants()->exists()) {
-            $defaultRoute = route('tenant.dashboard', absolute: false);
-        } elseif ((method_exists($user, 'hasRole') && $user->hasRole('Admin')) || (isset($user->role) && $user->role === 'Admin')) {
-            $defaultRoute = route('dashboard', absolute: false);
+        if ($tenantDomain) {
+            $appUrl = config('app.url');
+            $scheme = parse_url($appUrl, PHP_URL_SCHEME) ?: 'http';
+            $port = parse_url($appUrl, PHP_URL_PORT);
+            $portSuffix = $port ? ':'.$port : '';
+
+            return redirect()->to("{$scheme}://{$tenantDomain}{$portSuffix}/panel");
         }
 
-        return redirect()->intended($defaultRoute);
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 
     /**

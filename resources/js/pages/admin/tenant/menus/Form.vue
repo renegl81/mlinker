@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils';
 import { index as menusRoute } from '@/routes/tenant/locations/menus';
 import { Location, Template } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
-import { Check, ChevronDown, Save, X } from 'lucide-vue-next';
+import { Check, ChevronDown, Image as ImageIcon, Save, Trash2, X } from 'lucide-vue-next';
 import {
     SelectContent,
     SelectIcon,
@@ -54,8 +54,40 @@ const props = withDefaults(defineProps<Props>(), {
     isEdit: false,
 });
 
+const emit = defineEmits<{
+    submit: [];
+    'update:field': [field: string, value: any];
+}>();
+
 const page = usePage();
 const messages = page.props.messages as any;
+
+/**
+ * Resolve the preview URL from the current form.image_url value.
+ * - Null/empty → no preview
+ * - base64 data URI → use as-is (freshly uploaded by the user)
+ * - http(s) absolute URL → use as-is (already resolved by backend)
+ * - anything else (relative storage path) → skip, backend should pre-resolve
+ *
+ * For already-saved images, the parent page (Edit.vue) should pass the
+ * already-resolved URL from the Menu::$image_path accessor instead of the
+ * raw relative path.
+ */
+const imagePreview = computed<string | null>(() => {
+    const value = props.form.image_url;
+    if (!value || typeof value !== 'string') return null;
+    if (value.startsWith('data:') || value.startsWith('http')) {
+        return value;
+    }
+    return null;
+});
+
+function removeImage() {
+    emit('update:field', 'image_url', null);
+    // Also clear the native file input value so the user can re-select the same file.
+    const input = document.getElementById('image_url') as HTMLInputElement | null;
+    if (input) input.value = '';
+}
 
 const title = computed(() => {
     if (props.title) return props.title;
@@ -95,11 +127,6 @@ const handleFileChange = async (event: Event) => {
     };
     reader.readAsDataURL(file);
 };
-
-const emit = defineEmits<{
-    submit: [];
-    'update:field': [field: string, value: any];
-}>();
 </script>
 
 <template>
@@ -172,15 +199,46 @@ const emit = defineEmits<{
                         <Label for="image_url">{{
                             messages.menus.fields.image || 'Imagen'
                         }}</Label>
+
+                        <!-- Preview area -->
+                        <div
+                            v-if="imagePreview"
+                            class="group relative overflow-hidden rounded-lg border bg-muted/30"
+                        >
+                            <img
+                                :src="imagePreview"
+                                :alt="form.name || 'Preview'"
+                                class="h-48 w-full object-cover"
+                            />
+                            <button
+                                type="button"
+                                class="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-background/90 text-foreground shadow-md transition-colors hover:bg-destructive hover:text-destructive-foreground"
+                                @click="removeImage"
+                                aria-label="Eliminar imagen"
+                            >
+                                <Trash2 class="h-4 w-4" />
+                            </button>
+                        </div>
+                        <div
+                            v-else
+                            class="flex h-32 flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed bg-muted/10 text-muted-foreground"
+                        >
+                            <ImageIcon class="h-8 w-8 opacity-40" />
+                            <span class="text-xs">Sin imagen seleccionada</span>
+                        </div>
+
                         <Input
                             id="image_url"
                             type="file"
-                            accept="image/jpeg,image/jpg,image/png,image/gif"
+                            accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
                             @change="handleFileChange"
                             :class="{
                                 'border-destructive': form.errors.image_url,
                             }"
                         />
+                        <p class="text-xs text-muted-foreground">
+                            JPG, PNG, GIF o WebP. Máx. 2 MB.
+                        </p>
                         <p
                             v-if="form.errors.image_url"
                             class="text-sm text-destructive"

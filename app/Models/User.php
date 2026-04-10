@@ -71,6 +71,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
         $this->forceFill([
             'is_active' => true,
             'activated_at' => now(),
+            'email_verified_at' => $this->email_verified_at ?? now(),
         ])->save();
     }
 

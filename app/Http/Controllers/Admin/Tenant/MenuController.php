@@ -18,7 +18,6 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -67,8 +66,12 @@ class MenuController extends Controller
 
     public function edit(Menu $menu): Response
     {
+        $menu->load('location');
+
         return Inertia::render('admin/tenant/menus/Edit', [
             'menu' => $menu,
+            'location' => $menu->location,
+            'templates' => Template::where('is_active', true)->get(),
         ]);
     }
 
@@ -77,27 +80,62 @@ class MenuController extends Controller
         $updateMenu->execute($menu, $request->validated());
 
         return redirect()
-            ->route('menus.index')
+            ->route('tenant.menus.show', ['menu' => $menu->id])
             ->with('success', __('messages.menus.updated'));
     }
 
     public function destroy(Menu $menu, DeleteMenu $deleteMenu): RedirectResponse
     {
+        $locationId = $menu->location_id;
         $deleteMenu->execute($menu);
 
         return redirect()
-            ->route('menus.index')
+            ->route('tenant.locations.menus.index', ['location' => $locationId])
             ->with('success', __('messages.menus.deleted'));
     }
 
     public function show(Menu $menu): Response
     {
-        return Inertia::render('admin/tenant/menus/Show', [
-            'menu' => $menu->load(['location', 'template', 'sections', 'qrCode']),
-            'qrCodeImageUrl' => $menu->qrCode?->image_url
-                ? Storage::disk('public')->url($menu->qrCode->image_url)
-                : null,
+        $menu->load([
+            'location',
+            'template',
+            'sections' => fn ($q) => $q->orderBy('id'),
+            'sections.products' => fn ($q) => $q->orderBy('products.id'),
+            'qrCode',
         ]);
 
+        return Inertia::render('admin/tenant/menus/Show', [
+            'menu' => $menu,
+            'qrCodeImageUrl' => $this->resolveQrImageUrl($menu),
+        ]);
+    }
+
+    /**
+     * Build a public URL for the QR image stored on the tenant's disk.
+     *
+     * Stancl's FilesystemTenancyBootstrapper re-roots the public disk under
+     * storage/tenant{id}/app/public/, so Storage::url() does not resolve
+     * correctly through the public/storage symlink. We serve the file via
+     * the tenant_image route (TenantImageController) instead.
+     */
+    protected function resolveQrImageUrl(Menu $menu): ?string
+    {
+        $imagePath = $menu->qrCode?->image_url;
+
+        if (! $imagePath) {
+            return null;
+        }
+
+        $tenantId = tenant('id');
+
+        if (! $tenantId) {
+            return null;
+        }
+
+        return rtrim(config('app.url'), '/').route(
+            'tenant_image',
+            ['tenant' => 'tenant'.$tenantId, 'path' => $imagePath],
+            false,
+        );
     }
 }

@@ -17,7 +17,6 @@ import { Link, usePage } from '@inertiajs/vue3';
 import {
     BookOpen,
     Building2Icon,
-    Folder,
     LayoutGrid,
 } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
@@ -52,11 +51,6 @@ const mainNavItems: NavItem[] = [
 ];
 
 const footerNavItems: NavItem[] = [
-    {
-        title: 'Github Repo',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: Folder,
-    },
     {
         title: 'Documentación',
         href: documentation(),
