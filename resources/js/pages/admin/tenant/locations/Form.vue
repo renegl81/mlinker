@@ -303,6 +303,37 @@
                             {{ form.errors.description }}
                         </p>
                     </div>
+                    <!-- Brand colors -->
+                    <div class="space-y-2 md:col-span-2">
+                        <Label>Colores de marca</Label>
+                        <p class="text-xs text-muted-foreground mb-2">Se usarán en la página pública de tu negocio para personalizar la apariencia.</p>
+                        <div class="flex flex-wrap gap-4">
+                            <div class="flex items-center gap-2">
+                                <input
+                                    type="color"
+                                    :value="form.primary_color || '#0d9488'"
+                                    class="h-10 w-14 cursor-pointer rounded-lg border border-input p-0.5"
+                                    @input="$emit('update:field', 'primary_color', ($event.target as HTMLInputElement).value)"
+                                />
+                                <div>
+                                    <span class="text-sm font-medium">Primario</span>
+                                    <span class="block text-xs text-muted-foreground">{{ form.primary_color || '#0d9488' }}</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <input
+                                    type="color"
+                                    :value="form.secondary_color || '#f59e0b'"
+                                    class="h-10 w-14 cursor-pointer rounded-lg border border-input p-0.5"
+                                    @input="$emit('update:field', 'secondary_color', ($event.target as HTMLInputElement).value)"
+                                />
+                                <div>
+                                    <span class="text-sm font-medium">Secundario</span>
+                                    <span class="block text-xs text-muted-foreground">{{ form.secondary_color || '#f59e0b' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </CardContent>
 

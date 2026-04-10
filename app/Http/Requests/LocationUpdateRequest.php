@@ -38,7 +38,8 @@ class LocationUpdateRequest extends FormRequest
             'time_format' => ['nullable', 'string', 'max:30'],
             'lang' => ['nullable', 'string', 'max:3'],
             'social_medias' => ['nullable', 'array'],
-
+            'primary_color' => ['nullable', 'string', 'max:7', 'regex:/^#[0-9A-Fa-f]{6}$/'],
+            'secondary_color' => ['nullable', 'string', 'max:7', 'regex:/^#[0-9A-Fa-f]{6}$/'],
         ];
     }
 }

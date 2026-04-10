@@ -78,6 +78,8 @@ const form = useForm<FormState>({
     lang: null,
     languages: null as any,
     image_url: null,
+    primary_color: null,
+    secondary_color: null,
 });
 function updateField(field: string, value: any) {
     form[field] = value;

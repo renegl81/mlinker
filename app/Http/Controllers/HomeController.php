@@ -35,6 +35,8 @@ class HomeController extends Controller
             ['loc' => $baseUrl.'/', 'priority' => '1.0', 'changefreq' => 'weekly'],
             ['loc' => $baseUrl.'/login', 'priority' => '0.6', 'changefreq' => 'monthly'],
             ['loc' => $baseUrl.'/register', 'priority' => '0.8', 'changefreq' => 'monthly'],
+            ['loc' => $baseUrl.'/faq', 'priority' => '0.7', 'changefreq' => 'monthly'],
+            ['loc' => $baseUrl.'/contact', 'priority' => '0.6', 'changefreq' => 'monthly'],
             ['loc' => $baseUrl.'/doc', 'priority' => '0.5', 'changefreq' => 'monthly'],
         ];
 

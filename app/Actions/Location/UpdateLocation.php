@@ -27,6 +27,8 @@ class UpdateLocation
             'social_medias' => $data['social_medias'] ?? $location->social_medias ?? [],
             'latitude' => $data['latitude'] ?? $location->latitude,
             'longitude' => $data['longitude'] ?? $location->longitude,
+            'primary_color' => $data['primary_color'] ?? $location->primary_color,
+            'secondary_color' => $data['secondary_color'] ?? $location->secondary_color,
         ];
 
         if (array_key_exists('image_url', $data)) {
