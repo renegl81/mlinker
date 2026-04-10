@@ -2,60 +2,105 @@
 const testimonials = [
     {
         name: 'María González',
-        role: 'Propietaria de La Taberna del Puerto',
-        image: 'https://ui-avatars.com/api/?name=Maria+Gonzalez&background=random',
-        content: 'MenuLinker ha revolucionado nuestro servicio. Los clientes adoran poder ver el menú en su móvil y nosotros ahorramos en impresión.',
+        role: 'Propietaria',
+        business: 'La Taberna del Puerto · Málaga',
+        initials: 'MG',
+        color: 'bg-rose-100 text-rose-600',
+        content: 'Antes imprimíamos la carta cada semana por los cambios de precios. Ahora lo actualizamos desde el móvil en 30 segundos. El ahorro es brutal.',
         rating: 5,
     },
     {
         name: 'Carlos Ruiz',
-        role: 'Gerente de Restaurante El Mirador',
-        image: 'https://ui-avatars.com/api/?name=Carlos+Ruiz&background=random',
-        content: 'La facilidad para actualizar precios y platos del día es increíble. Lo recomiendo 100%.',
+        role: 'Gerente',
+        business: 'Restaurante El Mirador · Barcelona',
+        initials: 'CR',
+        color: 'bg-blue-100 text-blue-600',
+        content: 'Los clientes extranjeros nos agradecen mucho poder ver la carta en inglés o francés automáticamente. La función multi-idioma es un diferencial claro.',
         rating: 5,
     },
     {
         name: 'Ana Martínez',
-        role: 'Chef y propietaria de Sabores',
-        image: 'https://ui-avatars.com/api/?name=Ana+Martinez&background=random',
-        content: 'Los analytics nos ayudan a saber qué platos funcionan mejor. Una herramienta imprescindible.',
+        role: 'Chef y propietaria',
+        business: 'Sabores de Castilla · Madrid',
+        initials: 'AM',
+        color: 'bg-teal-100 text-teal-600',
+        content: 'Los analytics me sorprendieron. Descubrí que mis croquetas son lo que más mira la gente pero no lo que más vendo. Con esos datos cambié la presentación y mejoró.',
         rating: 5,
     },
 ];
 </script>
 
 <template>
-    <section class="py-24 bg-slate-950 border-t border-slate-900 relative overflow-hidden">
-
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] bg-purple-900/10 blur-[120px] rounded-full pointer-events-none"></div>
-
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-5xl font-bold text-white mb-4">
+    <section class="py-24 bg-white relative overflow-hidden">
+        <div class="container mx-auto px-4 max-w-7xl">
+            <!-- Header -->
+            <div class="text-center mb-14">
+                <span class="inline-block px-3 py-1 rounded-full bg-teal-50 text-teal-600 text-xs font-bold uppercase tracking-wider mb-4">Testimonios</span>
+                <h2 class="text-3xl md:text-5xl font-bold text-slate-900 mb-4">
                     Lo que dicen nuestros clientes
                 </h2>
-                <p class="text-xl text-slate-400">
-                    Miles de restaurantes confían en nosotros
+                <p class="text-lg text-slate-500">
+                    Restaurantes reales. Resultados reales.
                 </p>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <div v-for="testimonial in testimonials" :key="testimonial.name"
-                     class="group bg-slate-900/50 backdrop-blur-sm p-8 rounded-2xl border border-slate-800 hover:border-purple-500/30 transition duration-300">
-
-                    <div class="flex mb-4">
-                        <span v-for="n in testimonial.rating" :key="n" class="text-yellow-400 text-lg">★</span>
+            <!-- Cards: scroll horizontal en mobile, grid en desktop -->
+            <div class="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4 md:grid md:grid-cols-3 md:overflow-visible md:pb-0 scrollbar-hide">
+                <article
+                    v-for="t in testimonials"
+                    :key="t.name"
+                    class="flex-none w-80 md:w-auto snap-start bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md hover:border-slate-200 transition-all duration-300 p-7 flex flex-col"
+                >
+                    <!-- Stars -->
+                    <div class="flex gap-0.5 mb-5">
+                        <svg
+                            v-for="n in t.rating"
+                            :key="n"
+                            class="w-4 h-4 text-amber-400 fill-current"
+                            viewBox="0 0 20 20"
+                        >
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
                     </div>
 
-                    <p class="text-slate-300 mb-6 italic leading-relaxed">"{{ testimonial.content }}"</p>
+                    <!-- Quote -->
+                    <blockquote class="text-slate-600 leading-relaxed mb-6 flex-1 italic">
+                        "{{ t.content }}"
+                    </blockquote>
 
-                    <div class="flex items-center pt-4 border-t border-slate-800/50">
-                        <img :src="testimonial.image" :alt="testimonial.name" class="w-10 h-10 rounded-full mr-4 border border-slate-700" />
+                    <!-- Author -->
+                    <div class="flex items-center gap-3 pt-5 border-t border-slate-50">
+                        <div :class="['w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0', t.color]">
+                            {{ t.initials }}
+                        </div>
                         <div>
-                            <p class="font-bold text-white text-sm">{{ testimonial.name }}</p>
-                            <p class="text-xs text-slate-500">{{ testimonial.role }}</p>
+                            <p class="font-semibold text-slate-900 text-sm">{{ t.name }}</p>
+                            <p class="text-xs text-slate-400 mt-0.5">{{ t.role }} · {{ t.business }}</p>
                         </div>
                     </div>
+                </article>
+            </div>
+
+            <!-- Social proof stat -->
+            <div class="mt-14 flex flex-wrap justify-center gap-10 text-center">
+                <div>
+                    <p class="text-3xl font-bold text-slate-900">+500</p>
+                    <p class="text-slate-500 text-sm mt-1">Restaurantes activos</p>
+                </div>
+                <div class="w-px h-12 bg-slate-100 self-center hidden sm:block"></div>
+                <div>
+                    <p class="text-3xl font-bold text-slate-900">4,9/5</p>
+                    <p class="text-slate-500 text-sm mt-1">Valoración media</p>
+                </div>
+                <div class="w-px h-12 bg-slate-100 self-center hidden sm:block"></div>
+                <div>
+                    <p class="text-3xl font-bold text-slate-900">7</p>
+                    <p class="text-slate-500 text-sm mt-1">Idiomas disponibles</p>
+                </div>
+                <div class="w-px h-12 bg-slate-100 self-center hidden sm:block"></div>
+                <div>
+                    <p class="text-3xl font-bold text-slate-900">5 min</p>
+                    <p class="text-slate-500 text-sm mt-1">Para crear tu primera carta</p>
                 </div>
             </div>
         </div>

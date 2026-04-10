@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\Core\DashboardController;
 use App\Http\Controllers\Admin\Menu\QRCodeController;
 use App\Http\Controllers\Admin\Tenant\BillingController;
 use App\Http\Controllers\Admin\Tenant\CatalogIngredientController;
+use App\Http\Controllers\Admin\Tenant\DocsController;
 use App\Http\Controllers\Admin\Tenant\CatalogProductController;
 use App\Http\Controllers\Admin\Tenant\ImageUploadController;
 use App\Http\Controllers\Admin\Tenant\LocationController;
@@ -118,6 +119,10 @@ Route::middleware([
                     Route::get('website', [WebsiteSettingsController::class, 'show'])->name('website.show');
                     Route::put('website', [WebsiteSettingsController::class, 'update'])->name('website.update');
                 });
+
+                // Docs
+                Route::get('docs', [DocsController::class, 'index'])->name('docs.index');
+                Route::get('docs/{slug}', [DocsController::class, 'show'])->name('docs.show');
 
                 // Billing
                 Route::prefix('billing')->as('billing.')->group(function () {

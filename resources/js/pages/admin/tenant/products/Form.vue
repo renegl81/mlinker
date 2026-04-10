@@ -26,6 +26,9 @@ import {
 } from 'reka-ui';
 import { Check, ChevronDown } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 export interface Allergen {
     id: number;
@@ -155,12 +158,12 @@ function handleIngredientKeydown(event: KeyboardEvent) {
 }
 
 // Tags
-const AVAILABLE_TAGS = [
-    { key: 'vegetarian', label: 'Vegetariano', emoji: '🌱' },
-    { key: 'vegan', label: 'Vegano', emoji: '🌿' },
-    { key: 'spicy', label: 'Picante', emoji: '🌶️' },
-    { key: 'gluten_free', label: 'Sin gluten', emoji: '🚫🌾' },
-];
+const AVAILABLE_TAGS = computed(() => [
+    { key: 'vegetarian', label: t('public_menu.tags.vegetarian'), emoji: '🌱' },
+    { key: 'vegan', label: t('public_menu.tags.vegan'), emoji: '🌿' },
+    { key: 'spicy', label: t('public_menu.tags.spicy'), emoji: '🌶️' },
+    { key: 'gluten_free', label: t('public_menu.tags.gluten_free'), emoji: '🚫🌾' },
+]);
 
 function toggleTag(key: string) {
     const current = [...props.form.tags];
@@ -219,18 +222,18 @@ function selectSuggestion(name: string) {
             <div class="space-y-6">
                 <Card>
                     <CardHeader>
-                        <CardTitle>{{ isEdit ? 'Editar plato' : 'Nuevo plato' }}</CardTitle>
-                        <CardDescription>Información básica del producto</CardDescription>
+                        <CardTitle>{{ isEdit ? t('panel.product_form.edit_title') : t('panel.product_form.create_title') }}</CardTitle>
+                        <CardDescription>{{ t('panel.product_form.basic_info') }}</CardDescription>
                     </CardHeader>
                     <CardContent class="space-y-4">
                         <!-- Name -->
                         <div class="space-y-2">
-                            <Label for="product_name">Nombre *</Label>
+                            <Label for="product_name">{{ t('panel.product_form.field_name') }}</Label>
                             <Input
                                 id="product_name"
                                 :model-value="form.name"
                                 @update:model-value="$emit('update:field', 'name', $event)"
-                                placeholder="Ej. Ensalada César"
+                                :placeholder="t('panel.product_form.name_placeholder')"
                                 :class="{ 'border-destructive': form.errors.name }"
                             />
                             <p v-if="form.errors.name" class="text-sm text-destructive">{{ form.errors.name }}</p>
@@ -238,12 +241,12 @@ function selectSuggestion(name: string) {
 
                         <!-- Description -->
                         <div class="space-y-2">
-                            <Label for="product_description">Descripción</Label>
+                            <Label for="product_description">{{ t('panel.product_form.field_description') }}</Label>
                             <textarea
                                 id="product_description"
                                 :value="form.description"
                                 @input="$emit('update:field', 'description', ($event.target as HTMLTextAreaElement).value)"
-                                placeholder="Descripción del plato..."
+                                :placeholder="t('panel.product_form.description_placeholder')"
                                 rows="3"
                                 :class="[
                                     'flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
@@ -256,7 +259,7 @@ function selectSuggestion(name: string) {
                         <!-- Price + Calories -->
                         <div class="grid grid-cols-2 gap-4">
                             <div class="space-y-2">
-                                <Label for="product_price">Precio (€) *</Label>
+                                <Label for="product_price">{{ t('panel.product_form.field_price') }}</Label>
                                 <Input
                                     id="product_price"
                                     type="number"
@@ -270,7 +273,7 @@ function selectSuggestion(name: string) {
                                 <p v-if="form.errors.price" class="text-sm text-destructive">{{ form.errors.price }}</p>
                             </div>
                             <div class="space-y-2">
-                                <Label for="product_calories">Calorías (kcal)</Label>
+                                <Label for="product_calories">{{ t('panel.product_form.field_calories') }}</Label>
                                 <Input
                                     id="product_calories"
                                     type="number"
@@ -287,7 +290,7 @@ function selectSuggestion(name: string) {
 
                         <!-- Section -->
                         <div class="space-y-2">
-                            <Label>Sección *</Label>
+                            <Label>{{ t('panel.product_form.field_section') }}</Label>
                             <SelectRoot
                                 :model-value="form.section_id"
                                 @update:model-value="$emit('update:field', 'section_id', $event)"
@@ -298,7 +301,7 @@ function selectSuggestion(name: string) {
                                         { 'border-destructive': form.errors.section_id },
                                     )"
                                 >
-                                    <SelectValue placeholder="Selecciona una sección" />
+                                    <SelectValue :placeholder="t('panel.product_form.select_section')" />
                                     <SelectIcon>
                                         <ChevronDown class="h-4 w-4 opacity-50" />
                                     </SelectIcon>
@@ -332,7 +335,7 @@ function selectSuggestion(name: string) {
                 <!-- Image -->
                 <Card>
                     <CardHeader>
-                        <CardTitle>Imagen</CardTitle>
+                        <CardTitle>{{ t('panel.product_form.image_title') }}</CardTitle>
                     </CardHeader>
                     <CardContent class="space-y-3">
                         <div

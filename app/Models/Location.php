@@ -64,6 +64,8 @@ class Location extends Model
         'social_medias',
         'latitude',
         'longitude',
+        'primary_color',
+        'secondary_color',
     ];
 
     public static function getFilterableFields(): array

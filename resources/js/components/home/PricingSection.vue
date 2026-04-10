@@ -26,7 +26,7 @@ interface Props {
     plans: Plan[];
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 function features(plan: Plan): string[] {
     const f: string[] = [];
@@ -40,16 +40,16 @@ function features(plan: Plan): string[] {
     if (plan.max_products === 0 && plan.slug !== 'free') f.push('Productos ilimitados');
     else if (plan.max_products > 0) f.push(`${plan.max_products} productos`);
 
-    if (plan.has_custom_qr) f.push('QR personalizado');
+    if (plan.has_custom_qr) f.push('QR personalizado con tu marca');
     else f.push('QR básico');
 
-    if (plan.has_analytics) f.push('Analytics');
-    if (plan.has_multilang) f.push('Multi-idioma automático');
+    if (plan.has_analytics) f.push('Analytics y estadísticas');
+    if (plan.has_multilang) f.push('Multi-idioma automático (7 idiomas)');
     if (plan.has_catalog) f.push('Catálogo centralizado');
     if (plan.has_team) f.push('Gestión de equipo');
     if (plan.has_custom_domain) f.push('Dominio personalizado');
     if (plan.has_api_access) f.push('Acceso API completo');
-    if (plan.show_branding) f.push('Branding MenuLinker');
+    if (plan.show_branding) f.push('Branding MenuLinker visible');
     if (plan.trial_days > 0) f.push(`${plan.trial_days} días de prueba gratuita`);
 
     return f;
@@ -61,80 +61,115 @@ function isHighlighted(plan: Plan): boolean {
 
 function ctaText(plan: Plan): string {
     if (plan.slug === 'free') return 'Empezar gratis';
-    if (plan.slug === 'enterprise') return 'Contactar';
-    if (plan.trial_days > 0) return 'Empezar prueba gratuita';
+    if (plan.slug === 'enterprise') return 'Hablar con ventas';
+    if (plan.trial_days > 0) return 'Empezar prueba gratis';
     return 'Suscribirse';
 }
 
 function ctaHref(plan: Plan): string {
-    if (plan.slug === 'enterprise') return 'mailto:hello@menulinker.com';
+    if (plan.slug === 'enterprise') return '/contact';
     if (plan.slug === 'free') return '/register';
     return `/register?plan=${plan.slug}`;
 }
 </script>
 
 <template>
-    <section id="pricing" class="py-24 bg-slate-950 border-t border-slate-900">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold text-white mb-4">Planes Simples</h2>
-                <p class="text-xl text-slate-400">Escala tu negocio sin fricción</p>
+    <section id="pricing" class="py-24 bg-slate-50">
+        <div class="container mx-auto px-4 max-w-7xl">
+            <!-- Header -->
+            <div class="text-center mb-14">
+                <span class="inline-block px-3 py-1 rounded-full bg-teal-50 text-teal-600 text-xs font-bold uppercase tracking-wider mb-4">Precios</span>
+                <h2 class="text-3xl md:text-5xl font-bold text-slate-900 mb-4">Planes simples y transparentes</h2>
+                <p class="text-lg text-slate-500">Sin contratos anuales obligatorios. Cancela cuando quieras.</p>
             </div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto items-start">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5 max-w-7xl mx-auto items-start">
                 <div
                     v-for="plan in plans"
                     :key="plan.slug"
                     :class="[
-                        'relative rounded-3xl p-8 border transition-all duration-300',
+                        'relative rounded-2xl p-7 border transition-all duration-300 flex flex-col',
                         isHighlighted(plan)
-                            ? 'bg-slate-900/80 border-teal-500 shadow-[0_0_30px_rgba(20,184,166,0.15)] z-10 lg:-translate-y-4'
-                            : 'bg-slate-950 border-slate-800 hover:border-slate-700',
+                            ? 'bg-slate-900 border-teal-500 shadow-xl shadow-teal-500/10 lg:-translate-y-3 ring-1 ring-teal-500/30'
+                            : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-md',
                     ]"
                 >
+                    <!-- Popular badge -->
                     <div
                         v-if="isHighlighted(plan)"
-                        class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-teal-600 to-cyan-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg whitespace-nowrap"
+                        class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-teal-500 text-white text-[11px] font-bold px-4 py-1 rounded-full whitespace-nowrap uppercase tracking-wide"
                     >
-                        MÁS POPULAR
+                        Más popular
                     </div>
 
-                    <h3 class="text-xl font-bold text-white mb-2">{{ plan.name }}</h3>
-                    <p class="text-slate-400 text-sm mb-6">{{ plan.description }}</p>
+                    <!-- Plan name + desc -->
+                    <div class="mb-6">
+                        <h3 :class="['text-lg font-bold mb-1.5', isHighlighted(plan) ? 'text-white' : 'text-slate-900']">
+                            {{ plan.name }}
+                        </h3>
+                        <p :class="['text-sm leading-relaxed', isHighlighted(plan) ? 'text-slate-400' : 'text-slate-500']">
+                            {{ plan.description }}
+                        </p>
+                    </div>
 
-                    <div class="mb-8 flex items-baseline">
+                    <!-- Price -->
+                    <div class="mb-7 flex items-end gap-1">
                         <template v-if="plan.price !== null && Number(plan.price) > 0">
-                            <span class="text-4xl font-bold text-white">€{{ plan.price }}</span>
-                            <span class="text-slate-500 ml-2">/{{ plan.period }}</span>
+                            <span :class="['text-4xl font-bold leading-none', isHighlighted(plan) ? 'text-white' : 'text-slate-900']">
+                                €{{ plan.price }}
+                            </span>
+                            <span :class="['text-sm mb-1', isHighlighted(plan) ? 'text-slate-400' : 'text-slate-400']">
+                                /{{ plan.period }}
+                            </span>
                         </template>
                         <template v-else-if="plan.slug === 'enterprise'">
-                            <span class="text-2xl font-bold text-white">A medida</span>
+                            <span :class="['text-2xl font-bold', isHighlighted(plan) ? 'text-white' : 'text-slate-900']">
+                                A medida
+                            </span>
                         </template>
                         <template v-else>
-                            <span class="text-4xl font-bold text-white">Gratis</span>
+                            <span :class="['text-4xl font-bold leading-none', isHighlighted(plan) ? 'text-white' : 'text-slate-900']">
+                                Gratis
+                            </span>
                         </template>
                     </div>
 
-                    <ul class="space-y-4 mb-8">
-                        <li v-for="feature in features(plan)" :key="feature" class="flex items-start">
-                            <CheckIcon class="w-5 h-5 text-teal-400 mr-3 mt-0.5 shrink-0" />
-                            <span class="text-slate-300 text-sm">{{ feature }}</span>
+                    <!-- Features list -->
+                    <ul class="space-y-3 mb-8 flex-1">
+                        <li v-for="feature in features(plan)" :key="feature" class="flex items-start gap-2.5">
+                            <CheckIcon
+                                :class="['w-4 h-4 mt-0.5 flex-shrink-0', isHighlighted(plan) ? 'text-teal-400' : 'text-teal-500']"
+                            />
+                            <span :class="['text-sm', isHighlighted(plan) ? 'text-slate-300' : 'text-slate-600']">
+                                {{ feature }}
+                            </span>
                         </li>
                     </ul>
 
+                    <!-- CTA -->
                     <Link
                         :href="ctaHref(plan)"
                         :class="[
-                            'block w-full text-center py-3 px-6 rounded-xl font-bold transition-all',
+                            'block w-full text-center py-3 px-6 rounded-xl font-bold text-sm transition-all',
                             isHighlighted(plan)
-                                ? 'bg-white text-slate-950 hover:bg-slate-200'
-                                : 'bg-slate-800 text-white hover:bg-slate-700',
+                                ? 'bg-teal-500 text-white hover:bg-teal-400'
+                                : plan.slug === 'enterprise'
+                                    ? 'border border-slate-200 text-slate-700 hover:border-teal-300 hover:text-teal-600'
+                                    : 'bg-slate-900 text-white hover:bg-slate-800',
                         ]"
                     >
                         {{ ctaText(plan) }}
                     </Link>
                 </div>
             </div>
+
+            <!-- Bottom note -->
+            <p class="text-center text-slate-400 text-sm mt-10">
+                Todos los planes incluyen hosting, actualizaciones y soporte por email.
+                <Link href="/faq" class="text-teal-600 hover:text-teal-700 underline underline-offset-2 ml-1">
+                    Ver preguntas frecuentes
+                </Link>
+            </p>
         </div>
     </section>
 </template>

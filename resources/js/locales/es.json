@@ -174,6 +174,252 @@
     "languages": {
         "es": "Español",
         "en": "English",
+        "ca": "Català / Valencià",
+        "gl": "Galego",
+        "eu": "Euskara",
         "select": "Idioma"
+    },
+    "panel": {
+        "product_form": {
+            "edit_title": "Editar plato",
+            "create_title": "Nuevo plato",
+            "basic_info": "Información básica del producto",
+            "field_name": "Nombre *",
+            "field_description": "Descripción",
+            "field_price": "Precio (€) *",
+            "field_calories": "Calorías (kcal)",
+            "field_section": "Sección *",
+            "select_section": "Selecciona una sección",
+            "image_title": "Imagen",
+            "image_none": "Sin imagen seleccionada",
+            "image_formats": "JPG, PNG, GIF o WebP. Máx. 2 MB.",
+            "remove_image": "Eliminar imagen",
+            "saving": "Guardando...",
+            "save_changes": "Guardar cambios",
+            "create_dish": "Crear plato",
+            "description_placeholder": "Descripción del plato...",
+            "name_placeholder": "Ej. Ensalada César"
+        },
+        "menu_show": {
+            "sections_title": "Secciones y platos",
+            "add_section": "Añadir sección",
+            "new_section": "Nueva sección",
+            "section_name": "Nombre *",
+            "section_desc": "Descripción",
+            "section_desc_placeholder": "Opcional...",
+            "section_placeholder": "Ej. Entrantes",
+            "add_dish": "Añadir plato",
+            "add_first_section": "Añadir primera sección",
+            "no_sections": "No hay secciones en este menú.",
+            "section_no_dishes": "Esta sección aún no tiene platos.",
+            "move_up": "Subir sección",
+            "move_down": "Bajar sección",
+            "edit_section": "Editar sección",
+            "delete_section": "Eliminar sección",
+            "delete_section_confirm": "¿Eliminar esta sección? Los platos no se borrarán.",
+            "edit_dish": "Editar plato",
+            "delete_dish": "Eliminar plato",
+            "delete_dish_confirm": "¿Eliminar este plato? Esta acción no se puede deshacer.",
+            "delete_qr_confirm": "¿Eliminar el código QR de este menú?",
+            "qr_title": "Código QR",
+            "qr_none": "Sin QR generado",
+            "qr_generate": "Generar QR",
+            "qr_regenerate": "Regenerar",
+            "qr_download": "Descargar PNG",
+            "qr_delete": "Eliminar QR",
+            "no_image": "Sin imagen",
+            "section_name_placeholder": "Nombre de la sección",
+            "section_desc_edit_placeholder": "Descripción (opcional)"
+        },
+        "product_edit": {
+            "head_title": "Editar: {name}",
+            "description": "Modifica la información del plato",
+            "delete_confirm": "¿Eliminar este plato? Esta acción no se puede deshacer."
+        },
+        "billing": {
+            "manage_subscription": "Ver mi suscripción",
+            "cancel_subscription": "Cancelar suscripción",
+            "view_plans": "Ver planes",
+            "plan_unavailable": "Este plan no está disponible online. Contacta con nosotros."
+        },
+        "users": {
+            "view_plans": "Ver planes",
+            "all_roles": "Todos los roles",
+            "search_placeholder": "Buscar por nombre o email...",
+            "confirm_password": "Confirmar contraseña"
+        },
+        "filters": {
+            "search_name": "Buscar por nombre",
+            "search_surname": "Buscar por apellido",
+            "search_email": "Buscar por email",
+            "search_phone": "Buscar por teléfono",
+            "search_country": "Buscar por país",
+            "search_province": "Buscar por provincia",
+            "search_city": "Buscar por ciudad",
+            "search_postal": "Buscar por código postal",
+            "search_address": "Buscar por dirección",
+            "select_status": "Seleccionar estado",
+            "all_statuses": "Todos",
+            "search_button": "Buscar"
+        }
+    },
+    "docs": {
+        "title": "Documentación",
+        "subtitle": "Todo lo que necesitas para sacar el máximo partido a MenuLinker",
+        "back": "Volver a la documentación",
+        "topics": {
+            "getting-started": {
+                "title": "Primeros pasos",
+                "description": "Aprende a configurar tu cuenta y publicar tu primera carta en minutos."
+            },
+            "locations": {
+                "title": "Gestión de locales",
+                "description": "Crea y gestiona los establecimientos de tu negocio."
+            },
+            "menus": {
+                "title": "Menús y cartas",
+                "description": "Organiza tus cartas en secciones y elige la plantilla perfecta."
+            },
+            "products": {
+                "title": "Productos e ingredientes",
+                "description": "Añade platos con alérgenos, ingredientes, precios y etiquetas."
+            },
+            "translations": {
+                "title": "Traducciones e idiomas",
+                "description": "Ofrece tu carta en varios idiomas de forma automática."
+            },
+            "qr-codes": {
+                "title": "Códigos QR",
+                "description": "Genera y personaliza los QR para tus mesas y espacios."
+            },
+            "team": {
+                "title": "Gestión de equipo",
+                "description": "Invita a colaboradores y controla sus permisos por local."
+            },
+            "billing": {
+                "title": "Facturación y planes",
+                "description": "Entiende los planes disponibles y gestiona tu suscripción."
+            },
+            "website": {
+                "title": "Tu página web",
+                "description": "Activa y personaliza tu página web pública de negocio."
+            }
+        },
+        "getting_started": {
+            "intro_title": "Bienvenido a MenuLinker",
+            "intro_body": "MenuLinker es una plataforma SaaS para hostelería que te permite crear menús digitales accesibles mediante códigos QR. Tus clientes escanean el QR en la mesa y acceden al menú actualizado al instante, sin descargar ninguna app.",
+            "step1_title": "Paso 1: Crea tu primer local",
+            "step1_body": "Ve a la sección «Locales» y pulsa «Nuevo local». Introduce el nombre del establecimiento, su dirección completa y un número de teléfono de contacto. El local es la unidad base: cada local puede tener uno o varios menús.",
+            "step2_title": "Paso 2: Crea tu primer menú",
+            "step2_body": "Dentro del local, pulsa «Nuevo menú». Dale un nombre (por ejemplo, «Carta de verano») y elige una de las plantillas de diseño disponibles. La plantilla define la apariencia visual que verán tus clientes.",
+            "step3_title": "Paso 3: Añade tus platos",
+            "step3_body": "Accede al menú y crea secciones (Entrantes, Principales, Postres…). Dentro de cada sección añade los platos con su nombre, descripción, precio y opcionalmente una imagen. Puedes asignar alérgenos e ingredientes a cada plato.",
+            "step4_title": "Paso 4: Genera el QR y compártelo",
+            "step4_body": "Desde la página del menú, pulsa «Generar QR». Descarga el QR en alta resolución e imprímelo para colocarlo en tus mesas. Cada vez que actualices el menú, el QR seguirá apuntando a la versión más reciente automáticamente.",
+            "tip": "Consejo: Puedes empezar completamente gratis con el plan básico. No necesitas tarjeta de crédito para probar la plataforma."
+        },
+        "locations": {
+            "what_title": "¿Qué es un local en MenuLinker?",
+            "what_body": "Un local representa un establecimiento físico de tu negocio: un restaurante, un bar, una cafetería o cualquier punto de venta. Cada local tiene su propia configuración, menús, horarios e identidad visual.",
+            "create_title": "Cómo crear un local",
+            "create_body": "Ve a «Locales» en el menú de navegación y pulsa el botón «Nuevo local». Rellena el formulario con el nombre, dirección, ciudad y país. Una vez creado, podrás completar el resto de información desde la página de edición.",
+            "fields_title": "Campos importantes del local",
+            "fields_body": "Además del nombre y la dirección, puedes configurar: el teléfono de contacto para que los clientes puedan llamar directamente, los horarios de apertura para cada día de la semana, una foto principal que se muestra en tu página web pública, y los colores de marca para personalizar la apariencia de tus menús.",
+            "multi_title": "Gestión de múltiples locales",
+            "multi_body": "Si tienes más de un establecimiento, puedes gestionarlos todos desde el mismo panel. Los planes Business y superiores permiten un número ilimitado de locales. Cada local mantiene sus propios menús y configuración de forma independiente.",
+            "tip": "Consejo: La foto del local se muestra en tu página web pública. Usa una imagen de calidad (mínimo 800×600 píxeles) para causar una buena primera impresión."
+        },
+        "menus": {
+            "what_title": "¿Qué es un menú?",
+            "what_body": "Un menú (o carta) es el catálogo de platos que verán tus clientes al escanear el QR. Cada menú pertenece a un local y tiene una plantilla de diseño, un nombre y un conjunto de secciones con sus platos.",
+            "create_title": "Crear un menú y elegir plantilla",
+            "create_body": "Desde la página del local, pulsa «Nuevo menú». Elige un nombre descriptivo (por ejemplo, «Carta de almuerzo» o «Menú de vinos») y selecciona una de las 8 plantillas de diseño disponibles. La plantilla puede cambiarse en cualquier momento sin perder el contenido.",
+            "sections_title": "Secciones: cómo organizar tu carta",
+            "sections_body": "Las secciones son las categorías de tu carta: Entrantes, Principales, Postres, Bebidas, etc. Crea tantas secciones como necesites y añade los platos dentro de cada una. Las secciones se muestran en el orden que definas.",
+            "reorder_title": "Reordenar secciones",
+            "reorder_body": "Arrastra las secciones para cambiar su orden. El cliente verá las secciones en el orden que establezcas. Esto te permite destacar las secciones más importantes, como los especiales del día, en primer lugar.",
+            "activate_title": "Activar y desactivar un menú",
+            "activate_body": "Puedes tener varios menús por local y activar o desactivar cada uno según necesites. Solo los menús activos son accesibles a través del QR. Esto te permite preparar menús de temporada antes de publicarlos.",
+            "templates_title": "Las 8 plantillas disponibles",
+            "templates_body": "MenuLinker ofrece 8 plantillas de diseño para adaptarse a distintos tipos de negocio: desde diseños elegantes para restaurantes de alta cocina hasta estilos informales para bares y cafeterías. Cada plantilla está optimizada para móvil y incluye soporte para imágenes, alérgenos y múltiples idiomas.",
+            "tip": "Consejo: Puedes tener varios menús activos simultáneamente por local. Por ejemplo, una carta de día, una carta de noche y una carta de vinos, cada una con su propio QR."
+        },
+        "products": {
+            "add_title": "Cómo añadir un plato",
+            "add_body": "Dentro de un menú, selecciona la sección donde quieres añadir el plato y pulsa «Añadir plato». Introduce el nombre y, si lo deseas, una descripción. Guarda el plato y podrás completar el resto de información desde la pantalla de edición.",
+            "fields_title": "Campos del plato",
+            "fields_body": "Cada plato puede tener: nombre, descripción detallada, precio (con soporte para moneda local), calorías (kcal), y una imagen. La imagen se muestra en el menú digital y mejora notablemente la experiencia del cliente.",
+            "allergens_title": "Alérgenos: cómo asignarlos",
+            "allergens_body": "MenuLinker incluye los 14 alérgenos de declaración obligatoria según la normativa europea. En la edición de cada plato, marca los alérgenos presentes. Esta información se muestra de forma visible en el menú para que los clientes puedan tomar decisiones informadas.",
+            "ingredients_title": "Ingredientes",
+            "ingredients_body": "Puedes añadir la lista de ingredientes de cada plato. Los ingredientes se guardan en un catálogo compartido entre todos tus menús, lo que evita duplicados y facilita la gestión. Cuando escribas el nombre de un ingrediente, la plataforma te sugerirá coincidencias de tu catálogo.",
+            "tags_title": "Etiquetas (tags)",
+            "tags_body": "Añade etiquetas a tus platos para destacar características importantes: vegetariano, vegano, sin gluten, picante, sin lactosa. Estas etiquetas se muestran con iconos en el menú digital, ayudando a los clientes a identificar rápidamente los platos que se adaptan a sus preferencias.",
+            "catalog_title": "El catálogo centralizado",
+            "catalog_body": "Con los planes Business y superiores, dispones de un catálogo centralizado de productos e ingredientes. Desde el catálogo puedes gestionar todos tus platos de forma global, asignarlos a múltiples menús a la vez y mantener la coherencia entre locales.",
+            "merge_title": "Fusionar ingredientes duplicados",
+            "merge_body": "Si tienes ingredientes duplicados (por ejemplo, «Tomate» y «tomate»), puedes fusionarlos desde el catálogo de ingredientes. La fusión actualiza automáticamente todos los platos que usaban los ingredientes duplicados.",
+            "tip": "Consejo: Los ingredientes que introduces se sugieren automáticamente al añadir nuevos platos. Mantén los nombres consistentes para aprovechar al máximo el catálogo compartido."
+        },
+        "translations": {
+            "how_title": "Cómo funciona el multi-idioma",
+            "how_body": "MenuLinker permite ofrecer tu carta en varios idiomas. Cada menú tiene un idioma principal (el idioma en que introduces el contenido) y puede tener idiomas adicionales. Los clientes verán un selector de idioma en el menú digital.",
+            "auto_title": "Traducción automática",
+            "auto_body": "MenuLinker puede generar traducciones automáticas de tu carta utilizando inteligencia artificial. La traducción automática cubre el nombre y la descripción de cada plato, así como los nombres de las secciones. El proceso tarda unos segundos por idioma.",
+            "add_title": "Añadir un nuevo idioma",
+            "add_body": "Desde la sección «Traducciones» del menú, pulsa «Añadir idioma» y selecciona el idioma que quieres incorporar. Puedes optar por la traducción automática o introducir las traducciones manualmente. Ambas opciones pueden combinarse.",
+            "remove_title": "Eliminar un idioma",
+            "remove_body": "Para eliminar un idioma de tu menú, accede a «Traducciones», localiza el idioma y usa la opción de eliminar. Esta acción borra todas las traducciones de ese idioma para ese menú. El idioma principal no puede eliminarse.",
+            "selector_title": "El selector de idioma en el menú público",
+            "selector_body": "Cuando tu menú tiene más de un idioma, aparece automáticamente un selector en la parte superior del menú digital. Los clientes pueden cambiar de idioma con un toque. El idioma seleccionado se mantiene durante toda la sesión.",
+            "tip": "Consejo: Las traducciones automáticas son un buen punto de partida, pero siempre conviene revisarlas. Los términos culinarios específicos o los nombres propios de platos pueden requerir ajuste manual."
+        },
+        "qr_codes": {
+            "generate_title": "Cómo generar un QR para tu menú",
+            "generate_body": "Desde la página del menú, pulsa el botón «Generar QR». MenuLinker creará automáticamente un código QR único vinculado a ese menú. Una vez generado, el QR permanece activo indefinidamente.",
+            "customize_title": "Personalización del QR",
+            "customize_body": "Puedes personalizar los colores del QR para que coincidan con la identidad visual de tu negocio. También es posible incluir el logo de tu establecimiento en el centro del QR. Los QR personalizados tienen mejor tasa de escaneo cuando contrastan bien con el fondo.",
+            "download_title": "Descargar en alta resolución",
+            "download_body": "Descarga el QR en formato PNG de alta resolución (mínimo 1000×1000 píxeles). Esta resolución es suficiente para impresión profesional en tamaños de hasta A5. Para formatos mayores, se recomienda escalar manteniendo el margen blanco alrededor.",
+            "placement_title": "Dónde colocar el QR",
+            "placement_body": "Las posiciones más efectivas son: en las mesas (en un soporte o laminado), en la puerta de entrada o escaparate, en tu página web oficial, y en tus perfiles de redes sociales. Cuantos más puntos de acceso, mayor adopción por parte de los clientes.",
+            "tip": "Consejo: El QR siempre apunta a la última versión publicada de tu carta. No necesitas imprimir un nuevo QR cada vez que actualices el menú; los cambios se reflejan automáticamente."
+        },
+        "team": {
+            "roles_title": "Roles: Owner y Editor",
+            "roles_body": "MenuLinker tiene dos roles de usuario en el panel de tenant. El Owner (propietario) tiene acceso completo a todas las funciones, incluyendo facturación, ajustes y gestión de usuarios. El Editor tiene acceso limitado al contenido de los menús.",
+            "editor_title": "¿Qué puede hacer un Editor?",
+            "editor_body": "Un Editor puede crear y modificar menús, secciones y platos. No puede acceder a la configuración de facturación, no puede gestionar otros usuarios y no puede cambiar la configuración global del tenant. Es el rol adecuado para el personal de cocina o los encargados de sala.",
+            "scope_title": "Scope por local",
+            "scope_body": "Es posible restringir el acceso de un Editor a uno o varios locales específicos. Así, si tienes varios establecimientos, puedes asignar un equipo distinto a cada uno sin que tengan acceso a los menús de los otros locales.",
+            "manage_title": "Crear y gestionar usuarios",
+            "manage_body": "Desde la sección «Equipo» del panel, pulsa «Invitar usuario». Introduce el email de la persona y selecciona su rol. Recibirá un email de invitación para crear su cuenta. Desde esa misma sección puedes editar roles o revocar el acceso en cualquier momento.",
+            "plan_title": "Requisito de plan",
+            "plan_body": "La gestión de equipo está disponible a partir del plan Pro. Con el plan básico solo puede haber un usuario (el Owner). Actualiza tu plan desde la sección de facturación para añadir colaboradores."
+        },
+        "billing": {
+            "plans_title": "Los planes disponibles",
+            "plans_body": "MenuLinker ofrece varios planes adaptados a distintas necesidades: el plan básico gratuito para empezar, el plan Pro para negocios que necesitan múltiples usuarios y funciones avanzadas, y el plan Business para cadenas o grupos con múltiples locales y catálogo centralizado. Los detalles actualizados y precios están disponibles en la sección de planes.",
+            "change_title": "Cómo cambiar de plan",
+            "change_body": "Ve a «Facturación» en el panel y pulsa «Ver planes». Selecciona el plan al que quieres cambiar y confirma. Si subes de plan, el cambio es inmediato y se prorratean los días restantes del ciclo actual. Si bajas de plan, el cambio se aplica al inicio del siguiente ciclo de facturación.",
+            "trial_title": "Período de prueba gratuito",
+            "trial_body": "Todos los planes de pago incluyen un período de prueba gratuito de 14 días. Durante ese período tienes acceso completo a todas las funciones del plan elegido. No se realiza ningún cargo hasta que finaliza el período de prueba y no es necesario introducir tarjeta para empezar.",
+            "cancel_title": "Cancelar o pausar la suscripción",
+            "cancel_body": "Puedes cancelar tu suscripción en cualquier momento desde la sección de facturación. Al cancelar, mantienes el acceso a las funciones de pago hasta el final del período facturado. No hay penalizaciones ni permanencias.",
+            "stripe_title": "Facturación y pagos con Stripe",
+            "stripe_body": "Los pagos se procesan de forma segura a través de Stripe, uno de los procesadores de pago más utilizados del mundo. Recibirás facturas automáticas por email cada vez que se renueve tu suscripción. Puedes consultar el historial de pagos desde el portal de facturación."
+        },
+        "website": {
+            "what_title": "Tu propia página web de negocio",
+            "what_body": "MenuLinker incluye una página web pública para tu negocio accesible desde un subdominio o desde tu propio dominio personalizado. Esta página muestra automáticamente la información de tu establecimiento, tu carta y tus datos de contacto.",
+            "activate_title": "Cómo activarla",
+            "activate_body": "Durante el proceso de onboarding se te ofrece la opción de activar tu página web. Si la saltaste, puedes activarla en cualquier momento desde «Ajustes → Web pública». Simplemente activa el interruptor y tu página estará visible de inmediato.",
+            "template_title": "Elegir tipo de negocio y plantilla",
+            "template_body": "Selecciona el tipo de negocio que mejor describa tu establecimiento (restaurante, bar, cafetería, etc.) y elige una plantilla visual. La plantilla define la estructura y el estilo de tu página pública.",
+            "content_title": "Qué se muestra en tu web",
+            "content_body": "Tu página web pública muestra automáticamente: los horarios de apertura de tu local, tu carta o carta activa con opción de ver el menú digital, los datos de contacto (teléfono, dirección) y un mapa de localización.",
+            "branding_title": "Colores de marca personalizados",
+            "branding_body": "Desde los ajustes del local puedes configurar los colores primario y secundario de tu marca. Estos colores se aplican a tu página web pública y a los elementos de tu menú digital, dando una imagen coherente y profesional."
+        }
     }
 }

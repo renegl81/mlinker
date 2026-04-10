@@ -15,7 +15,7 @@ class HomeController extends Controller
     {
         // Sin tenant inicializado → home central de MenuLinker
         if (! tenancy()->initialized) {
-            return Inertia::render('Home');
+            return app(\App\Http\Controllers\HomeController::class)->index();
         }
 
         $tenant = tenant();

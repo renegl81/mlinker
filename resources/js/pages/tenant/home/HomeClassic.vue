@@ -55,6 +55,15 @@ const hoursGrouped = computed(() => loc.value?.opening_hours ? groupOpeningHours
 const hasHours = computed(() => loc.value?.opening_hours && loc.value.opening_hours.length > 0);
 const hasMenus = computed(() => loc.value?.menus && loc.value.menus.length > 0);
 const hasSocial = computed(() => !!loc.value?.social_medias && Object.keys(loc.value.social_medias as object).length > 0);
+
+const brandStyles = computed(() => {
+    const primary = (loc.value as any)?.primary_color;
+    const secondary = (loc.value as any)?.secondary_color;
+    const vars: Record<string, string> = {};
+    if (primary) vars['--brand-primary'] = primary;
+    if (secondary) vars['--brand-secondary'] = secondary;
+    return vars;
+});
 </script>
 
 <template>
@@ -65,7 +74,7 @@ const hasSocial = computed(() => !!loc.value?.social_medias && Object.keys(loc.v
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
     </Head>
 
-    <div class="hc">
+    <div class="hc" :style="brandStyles">
         <!-- ═══ HERO ═══ -->
         <header class="hc-hero">
             <div v-if="hero" class="hc-hero-img" :style="{ backgroundImage: `url(${hero})` }" />
@@ -224,8 +233,8 @@ const hasSocial = computed(() => !!loc.value?.social_medias && Object.keys(loc.v
     --ink-soft: oklch(0.42 0.015 40);
     --ink-faint: oklch(0.62 0.012 40);
     --rule: oklch(0.88 0.012 75);
-    --accent: oklch(0.42 0.08 30);
-    --accent-light: oklch(0.42 0.08 30 / 0.08);
+    --accent: var(--brand-primary, oklch(0.42 0.08 30));
+    --accent-light: color-mix(in oklch, var(--brand-primary, oklch(0.42 0.08 30)) 10%, transparent);
     --serif: 'Playfair Display', Georgia, serif;
     --sans: 'Lato', ui-sans-serif, system-ui, sans-serif;
     --radius: 14px;
@@ -245,8 +254,8 @@ const hasSocial = computed(() => !!loc.value?.social_medias && Object.keys(loc.v
         --ink-soft: oklch(0.72 0.01 75);
         --ink-faint: oklch(0.55 0.01 75);
         --rule: oklch(0.28 0.01 40);
-        --accent: oklch(0.78 0.1 35);
-        --accent-light: oklch(0.78 0.1 35 / 0.12);
+        --accent: var(--brand-primary, oklch(0.78 0.1 35));
+        --accent-light: color-mix(in oklch, var(--brand-primary, oklch(0.78 0.1 35)) 14%, transparent);
     }
 }
 .hc-container { max-width: 1040px; margin: 0 auto; padding: 0 clamp(1.25rem, 5vw, 2.5rem); }

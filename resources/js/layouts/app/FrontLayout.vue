@@ -1,10 +1,7 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { usePage } from '@inertiajs/vue3'
-import AppContent from '@/components/AppContent.vue'
-import AppShell from '@/components/AppShell.vue'
-import FrontHeader from '@/components/FrontHeader.vue'
-import type { BreadcrumbItemType } from '@/types'
+import FooterSection from '@/components/home/FooterSection.vue';
+import FrontHeader from '@/components/FrontHeader.vue';
+import type { BreadcrumbItemType } from '@/types';
 
 interface Props {
     breadcrumbs?: BreadcrumbItemType[]
@@ -12,21 +9,21 @@ interface Props {
 
 withDefaults(defineProps<Props>(), {
     breadcrumbs: () => [],
-})
-
-const page = usePage()
-
-const shouldUseDefaultTheme = computed(() => {
-    const url = page.url
-    return !url.startsWith('/admin') && !url.startsWith('/panel')
-})
+});
 </script>
 
 <template>
-    <AppShell :class="{ 'default': shouldUseDefaultTheme }" class="flex-col">
+    <div class="front-page flex min-h-screen flex-col bg-white text-slate-900 antialiased">
         <FrontHeader :breadcrumbs="breadcrumbs" />
-        <AppContent>
+        <main class="flex-1">
             <slot />
-        </AppContent>
-    </AppShell>
+        </main>
+        <FooterSection />
+    </div>
 </template>
+
+<style>
+.front-page {
+    font-family: 'Plus Jakarta Sans', 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+</style>

@@ -68,6 +68,8 @@ const form = useForm({
     lang: props.location.lang ?? null,
     languages: props.location.languages ?? [],
     image_url: props.location.image_path ?? props.location.image_url ?? null,
+    primary_color: props.location.primary_color ?? null,
+    secondary_color: props.location.secondary_color ?? null,
 });
 
 function submit() {

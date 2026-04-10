@@ -136,12 +136,10 @@ const jsonLdFaq = computed(() => JSON.stringify({
     </Head>
 
     <FrontLayout>
-        <div class="min-h-screen bg-slate-950 text-slate-200 selection:bg-teal-500 selection:text-white">
-            <HeroSection />
-            <FeaturesSection />
-            <PricingSection :plans="plans" />
-            <TestimonialsSection />
-            <CtaSection />
-        </div>
+        <HeroSection />
+        <FeaturesSection />
+        <PricingSection :plans="plans" />
+        <TestimonialsSection />
+        <CtaSection />
     </FrontLayout>
 </template>

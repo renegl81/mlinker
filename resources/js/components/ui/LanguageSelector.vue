@@ -10,12 +10,18 @@ import { useI18n } from 'vue-i18n';
 
 const { locale, t } = useI18n();
 
-const locales = [
+const SUPPORTED_LOCALES = ['es', 'en', 'ca', 'gl', 'eu'] as const;
+type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
+
+const locales: { code: SupportedLocale; label: string; flag: string }[] = [
     { code: 'es', label: 'Español', flag: '🇪🇸' },
     { code: 'en', label: 'English', flag: '🇬🇧' },
-] as const;
+    { code: 'ca', label: 'Català / Valencià', flag: '🏳️' },
+    { code: 'gl', label: 'Galego', flag: '🏳️' },
+    { code: 'eu', label: 'Euskara', flag: '🏳️' },
+];
 
-function changeLocale(code: 'es' | 'en') {
+function changeLocale(code: SupportedLocale) {
     locale.value = code;
     if (typeof localStorage !== 'undefined') {
         localStorage.setItem('locale', code);
@@ -34,7 +40,7 @@ const currentLocale = () => locales.find((l) => l.code === locale.value) ?? loca
             <Globe class="h-4 w-4" />
             <span class="text-xs font-medium uppercase">{{ locale }}</span>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" class="min-w-[140px]">
+        <DropdownMenuContent align="end" class="min-w-[160px]">
             <DropdownMenuItem
                 v-for="loc in locales"
                 :key="loc.code"

@@ -6,16 +6,22 @@ import type { DefineComponent } from 'vue';
 import { createApp, h } from 'vue';
 import { createI18n } from 'vue-i18n';
 import { initializeTheme } from './composables/useAppearance';
+import ca from './locales/ca.json';
 import en from './locales/en.json';
 import es from './locales/es.json';
+import eu from './locales/eu.json';
+import gl from './locales/gl.json';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
-function getStoredLocale(): string {
+const SUPPORTED_LOCALES = ['es', 'en', 'ca', 'gl', 'eu'] as const;
+type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
+
+function getStoredLocale(): SupportedLocale {
     if (typeof localStorage !== 'undefined') {
         const stored = localStorage.getItem('locale');
-        if (stored === 'en' || stored === 'es') {
-            return stored;
+        if (stored && (SUPPORTED_LOCALES as readonly string[]).includes(stored)) {
+            return stored as SupportedLocale;
         }
     }
     return 'es';
@@ -26,7 +32,7 @@ function createI18nInstance() {
         legacy: false,
         locale: getStoredLocale(),
         fallbackLocale: 'es',
-        messages: { es, en },
+        messages: { es, en, ca, gl, eu },
     });
 }
 

@@ -37,6 +37,8 @@ class LocationStoreRequest extends FormRequest
             'description' => 'nullable|string|max:1000',
             'latitude' => 'nullable|numeric',
             'longitude' => 'nullable|numeric',
+            'primary_color' => 'nullable|string|max:7|regex:/^#[0-9A-Fa-f]{6}$/',
+            'secondary_color' => 'nullable|string|max:7|regex:/^#[0-9A-Fa-f]{6}$/',
         ];
     }
 }
