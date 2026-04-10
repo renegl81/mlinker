@@ -1,20 +1,55 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Admin\Tenant;
 
 use App\Actions\Plan\CheckLimit;
+use App\Actions\Product\CreateProduct;
+use App\Actions\Product\DeleteProduct;
+use App\Actions\Product\DuplicateProduct;
+use App\Actions\Product\UpdateProduct;
 use App\Exceptions\PlanLimitExceededException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
+use App\Models\Allergen;
+use App\Models\Ingredient;
 use App\Models\Menu;
 use App\Models\Product;
+use App\Models\Section;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class ProductController extends Controller
 {
-    public function store(StoreProductRequest $request, Menu $menu): RedirectResponse
+    public function create(Request $request, Menu $menu): Response
+    {
+        $menu->load('sections');
+
+        // If no sections exist, create a default one
+        if ($menu->sections->isEmpty()) {
+            $section = Section::create([
+                'name' => 'General',
+                'menu_id' => $menu->id,
+                'tenant_id' => tenant('id'),
+                'sort_order' => 1,
+            ]);
+            $menu->sections = collect([$section]);
+        }
+
+        return Inertia::render('admin/tenant/products/Create', [
+            'menu' => $menu,
+            'sections' => $menu->sections,
+            'allergens' => Allergen::orderBy('name')->get(),
+            'ingredients' => Ingredient::orderBy('name')->get(),
+            'defaultSectionId' => $request->query('section_id'),
+        ]);
+    }
+
+    public function store(StoreProductRequest $request, Menu $menu, CreateProduct $createProduct): RedirectResponse
     {
         try {
             (new CheckLimit)->execute('products', throw: true);
@@ -22,68 +57,68 @@ class ProductController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        $validated = $request->validated();
+        $createProduct->execute($menu, $request->validated());
 
-        if ($request->hasFile('image')) {
-            $validated['image_url'] = $request->file('image')->store(
-                'products',
-                'public'
-            );
-        }
-
-        $validated['tenant_id'] = tenant()->id;
-
-        $product = Product::create($validated);
-
-        $menu->products()->attach($product->id, [
-            'sort_order' => $menu->products()->max('sort_order') + 1,
-        ]);
-
-        return back()->with('success', 'Producto creado exitosamente.');
+        return redirect()
+            ->route('tenant.menus.show', ['menu' => $menu->id])
+            ->with('success', 'Producto creado correctamente.');
     }
 
-    public function update(
-        UpdateProductRequest $request,
-        Menu $menu,
-        Product $product
-    ): RedirectResponse {
-        $this->authorize('update', $product);
-
-        $validated = $request->validated();
-
-        if ($request->hasFile('image')) {
-            if ($product->image_url) {
-                Storage::disk('public')->delete($product->image_url);
-            }
-
-            $validated['image_url'] = $request->file('image')->store(
-                'products',
-                'public'
-            );
-        }
-
-        $product->update($validated);
-
-        return back()->with('success', 'Producto actualizado exitosamente.');
-    }
-
-    public function destroy(Menu $menu, Product $product): RedirectResponse
+    public function edit(Product $product): Response
     {
-        $this->authorize('delete', $product);
+        $product->load(['sections.menu', 'allergens', 'ingredients']);
 
-        $menu->products()->detach($product->id);
+        $menu = $product->sections->first()?->menu;
 
-        if ($product->menus()->count() === 0) {
-            if ($product->image_url) {
-                Storage::disk('public')->delete($product->image_url);
-            }
+        return Inertia::render('admin/tenant/products/Edit', [
+            'product' => $product,
+            'menu' => $menu,
+            'sections' => $menu ? Section::where('menu_id', $menu->id)->orderBy('sort_order')->get() : collect(),
+            'allergens' => Allergen::orderBy('name')->get(),
+            'ingredients' => Ingredient::orderBy('name')->get(),
+        ]);
+    }
 
-            $product->delete();
+    public function update(UpdateProductRequest $request, Product $product, UpdateProduct $updateProduct): RedirectResponse
+    {
+        $updateProduct->execute($product, $request->validated());
+
+        $menu = $product->sections()->first()?->menu
+            ?? $product->menus()->first();
+
+        return redirect()
+            ->route('tenant.menus.show', ['menu' => $menu?->id])
+            ->with('success', 'Producto actualizado correctamente.');
+    }
+
+    public function destroy(Product $product, DeleteProduct $deleteProduct): RedirectResponse
+    {
+        $menu = $product->sections()->first()?->menu
+            ?? $product->menus()->first();
+
+        $deleteProduct->execute($product);
+
+        return redirect()
+            ->route('tenant.menus.show', ['menu' => $menu?->id])
+            ->with('success', 'Producto eliminado correctamente.');
+    }
+
+    public function duplicate(Product $product, DuplicateProduct $duplicateProduct): RedirectResponse
+    {
+        try {
+            (new CheckLimit)->execute('products', throw: true);
+        } catch (PlanLimitExceededException $e) {
+            return back()->with('error', $e->getMessage());
         }
 
-        return back()->with(
-            'success',
-            'Producto eliminado del menú exitosamente.'
-        );
+        $product->load(['sections.menu']);
+        $menu = $product->sections->first()?->menu
+            ?? $product->menus()->first();
+
+        $duplicateProduct->execute($product);
+
+        return redirect()
+            ->route('tenant.menus.show', ['menu' => $menu?->id])
+            ->with('success', 'Producto duplicado correctamente.');
     }
 }

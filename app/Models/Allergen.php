@@ -18,6 +18,7 @@ class Allergen extends Model
      */
     protected $fillable = [
         'name',
+        'code',
         'description',
         'image_url',
     ];

@@ -11,6 +11,7 @@ use App\Models\Menu;
 use App\Models\Product;
 use App\Models\Section;
 use App\Models\Template;
+use Database\Seeders\UeAllergenSeeder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -78,6 +79,13 @@ class OnboardingController extends Controller
             'languages' => ['es'],
             'social_medias' => [],
         ]);
+
+        // Seed the 14 EU allergens for this tenant (idempotent)
+        try {
+            UeAllergenSeeder::seedForTenant($tenant->id);
+        } catch (\Throwable $e) {
+            Log::error('UeAllergenSeeder failed', ['tenant' => $tenant->id, 'error' => $e->getMessage()]);
+        }
 
         $tenant->onboarding_step = 1;
         $tenant->save();

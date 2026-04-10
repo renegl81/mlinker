@@ -99,8 +99,9 @@ class MenuController extends Controller
         $menu->load([
             'location',
             'template',
-            'sections' => fn ($q) => $q->orderBy('id'),
+            'sections' => fn ($q) => $q->orderBy('sort_order'),
             'sections.products' => fn ($q) => $q->orderBy('products.id'),
+            'sections.products.allergens',
             'qrCode',
         ]);
 

@@ -23,6 +23,7 @@ class Product extends Model
         'description',
         'price',
         'calories',
+        'tags',
         'image_url',
     ];
 
@@ -37,6 +38,7 @@ class Product extends Model
             'id' => 'integer',
             'price' => 'decimal:2',
             'calories' => 'decimal:2',
+            'tags' => 'array',
             'translations' => 'array',
         ];
     }

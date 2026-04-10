@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests\Product;
 
 use Illuminate\Foundation\Http\FormRequest;
@@ -17,8 +19,15 @@ class StoreProductRequest extends FormRequest
             'name' => ['required', 'string', 'max:100'],
             'description' => ['nullable', 'string'],
             'price' => ['required', 'numeric', 'min:0', 'max:999999.99'],
-            'calories' => ['nullable', 'numeric', 'min:0', 'max:999999.99'],
-            'image' => ['nullable', 'image', 'max:2048'],
+            'calories' => ['nullable', 'numeric', 'min:0'],
+            'image_url' => ['nullable', 'string'],
+            'section_id' => ['required', 'integer', 'exists:sections,id'],
+            'allergen_ids' => ['nullable', 'array'],
+            'allergen_ids.*' => ['integer', 'exists:allergens,id'],
+            'ingredient_names' => ['nullable', 'array'],
+            'ingredient_names.*' => ['string', 'max:100'],
+            'tags' => ['nullable', 'array'],
+            'tags.*' => ['string', 'in:vegetarian,vegan,spicy,gluten_free'],
         ];
     }
 
@@ -33,8 +42,10 @@ class StoreProductRequest extends FormRequest
             'price.max' => 'El precio no puede superar 999999.99.',
             'calories.numeric' => 'Las calorías deben ser un número válido.',
             'calories.min' => 'Las calorías deben ser mayor o igual a 0.',
-            'image.image' => 'El archivo debe ser una imagen.',
-            'image.max' => 'La imagen no puede superar los 2MB.',
+            'section_id.required' => 'Debes seleccionar una sección.',
+            'section_id.exists' => 'La sección seleccionada no es válida.',
+            'allergen_ids.array' => 'Los alérgenos deben ser un array.',
+            'allergen_ids.*.exists' => 'Uno de los alérgenos seleccionados no es válido.',
         ];
     }
 }

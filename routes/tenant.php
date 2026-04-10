@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\Tenant\LocationController;
 use App\Http\Controllers\Admin\Tenant\MenuController;
 use App\Http\Controllers\Admin\Tenant\OnboardingController;
 use App\Http\Controllers\Admin\Tenant\ProductController;
+use App\Http\Controllers\Admin\Tenant\SectionController;
 use App\Http\Controllers\Admin\Tenant\TranslationController;
 use App\Http\Controllers\Admin\Tenant\UserController;
 use App\Http\Controllers\Tenant\HomeController;
@@ -35,15 +36,6 @@ Route::middleware([
     Route::get('/', HomeController::class)->name('tenant_home');
     Route::get('/menu/{menu}', App\Http\Controllers\Tenant\MenuController::class)->name('tenant_menu_show');
     Route::get('/m/{menu}', App\Http\Controllers\Tenant\MenuController::class)->name('tenant_menu_short');
-
-    Route::prefix('menus/{menu}')->group(function () {
-        Route::post('/products', [ProductController::class, 'store'])
-            ->name('tenant.menus.products.store');
-        Route::put('/products/{product}', [ProductController::class, 'update'])
-            ->name('tenant.menus.products.update');
-        Route::delete('/products/{product}', [ProductController::class, 'destroy'])
-            ->name('tenant.menus.products.destroy');
-    });
 });
 
 // Rutas protegidas del tenant (requieren tenant obligatorio)
@@ -78,6 +70,20 @@ Route::middleware([
 
                 // Subida de imágenes
                 Route::post('uploads/image', [ImageUploadController::class, 'store'])->name('uploads.image');
+
+                // Productos
+                Route::get('menus/{menu}/products/create', [ProductController::class, 'create'])->name('menus.products.create');
+                Route::post('menus/{menu}/products', [ProductController::class, 'store'])->name('menus.products.store');
+                Route::get('products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
+                Route::put('products/{product}', [ProductController::class, 'update'])->name('products.update');
+                Route::delete('products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+                Route::post('products/{product}/duplicate', [ProductController::class, 'duplicate'])->name('products.duplicate');
+
+                // Secciones
+                Route::post('menus/{menu}/sections', [SectionController::class, 'store'])->name('menus.sections.store');
+                Route::put('sections/{section}', [SectionController::class, 'update'])->name('sections.update');
+                Route::delete('sections/{section}', [SectionController::class, 'destroy'])->name('sections.destroy');
+                Route::post('menus/{menu}/sections/reorder', [SectionController::class, 'reorder'])->name('menus.sections.reorder');
 
                 // QR del menú
                 Route::post('menus/{menu}/qr-code', [QRCodeController::class, 'generate'])->name('menus.qr-code.generate');

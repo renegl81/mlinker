@@ -23,6 +23,7 @@ class Section extends Model
         'name',
         'description',
         'menu_id',
+        'sort_order',
         'image_url',
     ];
 
@@ -36,6 +37,7 @@ class Section extends Model
         return [
             'id' => 'integer',
             'menu_id' => 'integer',
+            'sort_order' => 'integer',
             'translations' => 'array',
         ];
     }

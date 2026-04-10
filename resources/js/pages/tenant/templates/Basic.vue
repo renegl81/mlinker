@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
 import ShareMenu from '@/components/public/ShareMenu.vue';
+import AllergenIcon from '@/components/ui/AllergenIcon.vue';
 import { Menu } from '@/types';
 import { computed } from 'vue';
 
@@ -158,64 +159,37 @@ const jsonLdString = computed(() => JSON.stringify(props.jsonLd));
                                 </p>
                             </div>
 
+                            <!-- Tags (vegetarian, vegan, etc.) -->
+                            <div v-if="product.tags && product.tags.length > 0" class="mt-1 flex gap-1 flex-wrap">
+                                <span v-if="product.tags.includes('vegetarian')" title="Vegetariano" class="text-sm">🌱</span>
+                                <span v-if="product.tags.includes('vegan')" title="Vegano" class="text-sm">🌿</span>
+                                <span v-if="product.tags.includes('spicy')" title="Picante" class="text-sm">🌶️</span>
+                                <span v-if="product.tags.includes('gluten_free')" title="Sin gluten" class="text-sm">🚫🌾</span>
+                            </div>
+
                             <!-- Información Adicional -->
-                            <div
-                                class="mt-2 flex flex-wrap gap-3 text-xs text-muted-foreground"
-                            >
+                            <div class="mt-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
                                 <span
-                                    v-if="
-                                        menu.show_calories && product.calories
-                                    "
+                                    v-if="menu.show_calories && product.calories"
                                     class="flex items-center gap-1"
                                 >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        class="h-3 w-3"
-                                    >
-                                        <path d="M12 2L2 7l10 5 10-5-10-5z" />
-                                        <path d="M2 17l10 5 10-5" />
-                                        <path d="M2 12l10 5 10-5" />
-                                    </svg>
                                     {{ product.calories }} kcal
                                 </span>
 
-                                <span
-                                    v-if="
-                                        product.allergens &&
-                                        product.allergens.length > 0
-                                    "
-                                    class="flex items-center gap-1"
+                                <!-- Allergens with icons -->
+                                <div
+                                    v-if="product.allergens && product.allergens.length > 0"
+                                    class="flex items-center gap-0.5 flex-wrap"
                                 >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        class="h-3 w-3"
-                                    >
-                                        <path
-                                            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
-                                        />
-                                        <line x1="12" y1="9" x2="12" y2="13" />
-                                        <line
-                                            x1="12"
-                                            y1="17"
-                                            x2="12.01"
-                                            y2="17"
-                                        />
-                                    </svg>
-                                    Alérgenos:
-                                    {{ product.allergens.map((a: any) => a.name).join(', ') }}
-                                </span>
+                                    <AllergenIcon
+                                        v-for="allergen in product.allergens"
+                                        :key="allergen.id"
+                                        :code="allergen.code"
+                                        size="sm"
+                                        :title="allergen.name"
+                                        class="cursor-default"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
