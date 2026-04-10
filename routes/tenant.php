@@ -5,6 +5,8 @@ declare(strict_types=1);
 use App\Http\Controllers\Admin\Core\DashboardController;
 use App\Http\Controllers\Admin\Menu\QRCodeController;
 use App\Http\Controllers\Admin\Tenant\BillingController;
+use App\Http\Controllers\Admin\Tenant\CatalogIngredientController;
+use App\Http\Controllers\Admin\Tenant\CatalogProductController;
 use App\Http\Controllers\Admin\Tenant\ImageUploadController;
 use App\Http\Controllers\Admin\Tenant\LocationController;
 use App\Http\Controllers\Admin\Tenant\MenuController;
@@ -94,6 +96,20 @@ Route::middleware([
                 Route::put('menus/{menu}/translations', [TranslationController::class, 'update'])->name('menus.translations.update');
                 Route::post('menus/{menu}/translations/add-language', [TranslationController::class, 'addLanguage'])->name('menus.translations.add-language');
                 Route::delete('menus/{menu}/translations/language', [TranslationController::class, 'removeLanguage'])->name('menus.translations.remove-language');
+
+                // Catálogo (Business plan o superior)
+                Route::prefix('catalog')->as('catalog.')->group(function () {
+                    Route::get('products', [CatalogProductController::class, 'index'])->name('products.index');
+                    Route::post('products/bulk-delete', [CatalogProductController::class, 'bulkDelete'])->name('products.bulk-delete');
+                    Route::post('products/bulk-duplicate', [CatalogProductController::class, 'bulkDuplicate'])->name('products.bulk-duplicate');
+                    Route::post('products/bulk-attach-menu', [CatalogProductController::class, 'bulkAttachMenu'])->name('products.bulk-attach-menu');
+
+                    Route::get('ingredients', [CatalogIngredientController::class, 'index'])->name('ingredients.index');
+                    Route::put('ingredients/{ingredient}', [CatalogIngredientController::class, 'update'])->name('ingredients.update');
+                    Route::put('ingredients/{ingredient}/translations', [CatalogIngredientController::class, 'updateTranslations'])->name('ingredients.translations');
+                    Route::delete('ingredients/{ingredient}', [CatalogIngredientController::class, 'destroy'])->name('ingredients.destroy');
+                    Route::post('ingredients/merge', [CatalogIngredientController::class, 'merge'])->name('ingredients.merge');
+                });
 
                 // Billing
                 Route::prefix('billing')->as('billing.')->group(function () {

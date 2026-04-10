@@ -59,6 +59,35 @@ class HandleInertiaRequests extends Middleware
             'messages' => fn () => App::environment('production')
                  ? cache()->rememberForever('messages.'.app()->getLocale(), fn () => __('messages'))
                  : __('messages'),
+            'tenant' => fn () => $this->tenantFeatures(),
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    private function tenantFeatures(): ?array
+    {
+        if (! function_exists('tenant') || ! tenant()) {
+            return null;
+        }
+
+        $subscription = \App\Models\Subscription::where('tenant_id', tenant()->id)
+            ->latest()
+            ->with('plan')
+            ->first();
+
+        $plan = $subscription?->plan ?? \App\Models\Plan::free();
+
+        return [
+            'id' => tenant()->id,
+            'plan_features' => [
+                'multilang' => (bool) ($plan?->has_multilang ?? false),
+                'catalog' => (bool) ($plan?->has_catalog ?? false),
+                'analytics' => (bool) ($plan?->has_analytics ?? false),
+                'custom_qr' => (bool) ($plan?->has_custom_qr ?? false),
+                'api_access' => (bool) ($plan?->has_api_access ?? false),
+            ],
         ];
     }
 }

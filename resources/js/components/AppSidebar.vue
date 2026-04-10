@@ -18,7 +18,13 @@ import {
     BookOpen,
     Building2Icon,
     LayoutGrid,
+    Library,
+    Leaf,
+    Utensils,
 } from 'lucide-vue-next';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 import AppLogo from './AppLogo.vue';
 import LanguageSelector from '@/components/ui/LanguageSelector.vue';
 import { index as users } from '@/routes/users';
@@ -29,6 +35,9 @@ import { index as locations } from '@/routes/tenant/locations';
 
 const page = usePage();
 const messages = page.props.messages as any;
+const tenantProps = page.props.tenant as { plan_features?: { catalog?: boolean } } | null;
+const hasCatalog = !!tenantProps?.plan_features?.catalog;
+
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
@@ -42,6 +51,22 @@ const mainNavItems: NavItem[] = [
         icon: Building2Icon,
         role: 'owner',
     },
+    ...(hasCatalog
+        ? [
+              {
+                  title: t('catalog.products.title'),
+                  href: '/panel/catalog/products',
+                  icon: Utensils,
+                  role: 'owner',
+              },
+              {
+                  title: t('catalog.ingredients.title'),
+                  href: '/panel/catalog/ingredients',
+                  icon: Leaf,
+                  role: 'owner',
+              },
+          ]
+        : []),
     {
         title: messages.users.plural,
         href: page.props.auth?.user?.is_admin ? users() : tenantUsers(),

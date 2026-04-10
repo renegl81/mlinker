@@ -1,4 +1,44 @@
 {
+    "catalog": {
+        "title": "Catálogo",
+        "products": {
+            "title": "Productos",
+            "subtitle": "Gestiona todos los platos de tu restaurante",
+            "search_placeholder": "Buscar por nombre...",
+            "filter_menu": "Menú",
+            "filter_section": "Sección",
+            "filter_tag": "Tag",
+            "filter_allergen": "Alérgeno",
+            "column_name": "Nombre",
+            "column_price": "Precio",
+            "column_menus": "Menús",
+            "column_tags": "Tags",
+            "column_actions": "Acciones",
+            "bulk_selected": "{count} seleccionado | {count} seleccionados",
+            "bulk_duplicate": "Duplicar",
+            "bulk_delete": "Eliminar",
+            "bulk_attach": "Añadir a menú",
+            "confirm_delete": "¿Eliminar los platos seleccionados? Esta acción no se puede deshacer.",
+            "empty": "Aún no tienes platos. Crea uno desde cualquier menú."
+        },
+        "ingredients": {
+            "title": "Ingredientes",
+            "subtitle": "Gestiona el catálogo de ingredientes y sus traducciones",
+            "search_placeholder": "Buscar ingrediente...",
+            "column_name": "Nombre",
+            "column_usage": "En productos",
+            "column_translations": "Traducciones",
+            "used_in_products": "Usado en {count} producto | Usado en {count} productos",
+            "edit_translations": "Editar traducciones",
+            "merge": "Fusionar",
+            "merge_title": "Fusionar ingredientes",
+            "merge_survivor": "¿Cuál conservar?",
+            "merge_description": "Los demás se eliminarán y sus asociaciones pasarán al elegido.",
+            "confirm_delete": "¿Eliminar este ingrediente? Se desasociará de todos los productos.",
+            "empty": "Aún no tienes ingredientes."
+        },
+        "upgrade_required": "El catálogo está disponible en planes Business y Enterprise."
+    },
     "translations": {
         "title": "Traducciones del menú",
         "subtitle": "Gestiona las traducciones de '{name}' en varios idiomas",

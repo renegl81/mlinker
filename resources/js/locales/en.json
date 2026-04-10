@@ -1,4 +1,44 @@
 {
+    "catalog": {
+        "title": "Catalog",
+        "products": {
+            "title": "Products",
+            "subtitle": "Manage every dish across your restaurant",
+            "search_placeholder": "Search by name...",
+            "filter_menu": "Menu",
+            "filter_section": "Section",
+            "filter_tag": "Tag",
+            "filter_allergen": "Allergen",
+            "column_name": "Name",
+            "column_price": "Price",
+            "column_menus": "Menus",
+            "column_tags": "Tags",
+            "column_actions": "Actions",
+            "bulk_selected": "{count} selected | {count} selected",
+            "bulk_duplicate": "Duplicate",
+            "bulk_delete": "Delete",
+            "bulk_attach": "Add to menu",
+            "confirm_delete": "Delete selected dishes? This cannot be undone.",
+            "empty": "No dishes yet. Create one from any menu."
+        },
+        "ingredients": {
+            "title": "Ingredients",
+            "subtitle": "Manage the ingredient catalog and its translations",
+            "search_placeholder": "Search ingredient...",
+            "column_name": "Name",
+            "column_usage": "In products",
+            "column_translations": "Translations",
+            "used_in_products": "Used in {count} product | Used in {count} products",
+            "edit_translations": "Edit translations",
+            "merge": "Merge",
+            "merge_title": "Merge ingredients",
+            "merge_survivor": "Which to keep?",
+            "merge_description": "Others will be removed and their associations reassigned to the chosen one.",
+            "confirm_delete": "Delete this ingredient? It will be unlinked from all products.",
+            "empty": "No ingredients yet."
+        },
+        "upgrade_required": "The catalog is available on Business and Enterprise plans."
+    },
     "translations": {
         "title": "Menu translations",
         "subtitle": "Manage translations of '{name}' across multiple languages",
