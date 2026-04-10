@@ -5,7 +5,7 @@ import MenuSeoHead from '@/components/public/MenuSeoHead.vue';
 import OpeningHoursDisplay from './components/OpeningHoursDisplay.vue';
 import SocialLinks from './components/SocialLinks.vue';
 import LocationCard from './components/LocationCard.vue';
-import { mapsDirectionsUrl, type OpeningHour } from '@/composables/useTenantHome';
+import { mapsDirectionsUrl, mapsEmbedUrl, groupOpeningHours, type OpeningHour } from '@/composables/useTenantHome';
 
 interface Menu {
     id: number;
@@ -46,16 +46,15 @@ const props = defineProps<{
     seo: SeoData;
 }>();
 
-const hero = computed(() => props.primaryLocation?.image_url ?? props.primaryLocation?.logo_url ?? null);
-const mapsUrl = computed(() =>
-    props.primaryLocation
-        ? mapsDirectionsUrl({
-              lat: props.primaryLocation.latitude,
-              lng: props.primaryLocation.longitude,
-              address: props.primaryLocation.address,
-          })
-        : null,
-);
+const loc = computed(() => props.primaryLocation);
+const hero = computed(() => loc.value?.image_url ?? null);
+const logo = computed(() => loc.value?.logo_url ?? null);
+const dirUrl = computed(() => loc.value ? mapsDirectionsUrl({ lat: loc.value.latitude, lng: loc.value.longitude, address: loc.value.address }) : null);
+const embedUrl = computed(() => loc.value ? mapsEmbedUrl({ lat: loc.value.latitude, lng: loc.value.longitude, address: loc.value.address, name: loc.value.name }) : null);
+const hoursGrouped = computed(() => loc.value?.opening_hours ? groupOpeningHours(loc.value.opening_hours) : []);
+const hasHours = computed(() => loc.value?.opening_hours && loc.value.opening_hours.length > 0);
+const hasMenus = computed(() => loc.value?.menus && loc.value.menus.length > 0);
+const hasSocial = computed(() => !!loc.value?.social_medias && Object.keys(loc.value.social_medias as object).length > 0);
 </script>
 
 <template>
@@ -63,635 +62,636 @@ const mapsUrl = computed(() =>
     <Head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&display=swap"
-            rel="stylesheet"
-        />
+        <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet" />
     </Head>
 
-    <div class="cafe">
-
-        <!-- ─── TOPBAR ─── -->
-        <nav class="cafe-nav">
-            <div class="cafe-nav-inner">
-                <div class="cafe-nav-brand">
-                    <img v-if="primaryLocation?.logo_url" :src="primaryLocation.logo_url" :alt="primaryLocation.name" class="cafe-nav-logo" />
-                    <span v-else class="cafe-nav-name">{{ primaryLocation?.name ?? tenant.name }}</span>
-                </div>
-                <div class="cafe-nav-links">
-                    <a v-if="primaryLocation?.menus?.length" :href="`/menu/${primaryLocation.menus[0].id}`" class="cafe-nav-cta">
-                        Ver carta
+    <div class="cf">
+        <!-- ═══ HERO ═══ -->
+        <header class="cf-hero">
+            <div v-if="hero" class="cf-hero-img" :style="{ backgroundImage: `url(${hero})` }" />
+            <div class="cf-hero-overlay" />
+            <div class="cf-hero-inner">
+                <img v-if="logo" :src="logo" :alt="loc?.name" class="cf-logo" />
+                <p v-if="loc?.city" class="cf-kicker">{{ loc.city }}</p>
+                <h1 class="cf-title">{{ loc?.name ?? tenant.name }}</h1>
+                <p v-if="loc?.description" class="cf-sub">{{ loc.description }}</p>
+                <div class="cf-hero-actions">
+                    <a v-if="loc?.phone" :href="`tel:${loc.phone}`" class="cf-btn cf-btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        Llamar
+                    </a>
+                    <a v-if="dirUrl" :href="dirUrl" target="_blank" rel="noopener" class="cf-btn cf-btn-outline">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        Cómo llegar
                     </a>
                 </div>
             </div>
-        </nav>
-
-        <!-- ─── HERO ─── -->
-        <header class="cafe-hero">
-            <div class="cafe-hero-content">
-                <div class="cafe-hero-image-wrap">
-                    <img v-if="hero" :src="hero" :alt="primaryLocation?.name ?? ''" class="cafe-hero-img" />
-                    <div v-else class="cafe-hero-img-placeholder">
-                        <svg viewBox="0 0 80 80" fill="none" class="cafe-placeholder-icon">
-                            <circle cx="40" cy="40" r="38" stroke="currentColor" stroke-width="1.5" />
-                            <path d="M26 50 Q40 28 54 50" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-                            <circle cx="40" cy="36" r="6" stroke="currentColor" stroke-width="1.5" />
-                        </svg>
-                    </div>
-                </div>
-
-                <div class="cafe-hero-text">
-                    <p class="cafe-eyebrow">{{ primaryLocation?.city ?? '' }}</p>
-                    <h1 class="cafe-title">{{ primaryLocation?.name ?? tenant.name }}</h1>
-                    <p v-if="primaryLocation?.description" class="cafe-sub">{{ primaryLocation.description }}</p>
-
-                    <div class="cafe-hero-actions">
-                        <a
-                            v-for="menu in (primaryLocation?.menus ?? [])"
-                            :key="menu.id"
-                            :href="`/menu/${menu.id}`"
-                            class="cafe-btn"
-                        >
-                            ☕ {{ menu.name }}
-                        </a>
-                    </div>
-
-                    <SocialLinks
-                        v-if="primaryLocation?.social_medias"
-                        :social-medias="primaryLocation.social_medias"
-                        size="md"
-                        class="cafe-hero-socials"
-                    />
-                </div>
-            </div>
-
-            <!-- Decorative wave -->
-            <div class="cafe-wave" aria-hidden="true">
-                <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
-                    <path d="M0,64 C240,120 480,0 720,64 C960,120 1200,0 1440,64 L1440,120 L0,120 Z" fill="var(--cafe-bg)" />
-                </svg>
+            <div class="cf-hero-wave" aria-hidden="true">
+                <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="var(--bg)"/></svg>
             </div>
         </header>
 
-        <!-- ─── MAIN ─── -->
-        <main class="cafe-main">
-
-            <template v-if="!isMultiLocation && primaryLocation">
-
-                <!-- Menús -->
-                <section v-if="primaryLocation.menus?.length" class="cafe-section">
-                    <h2 class="cafe-section-title">
-                        <span class="cafe-title-icon">☕</span>
-                        Nuestros menús
-                    </h2>
-                    <div class="cafe-menu-list">
-                        <a
-                            v-for="menu in primaryLocation.menus"
-                            :key="menu.id"
-                            :href="`/menu/${menu.id}`"
-                            class="cafe-menu-item"
-                        >
-                            <div class="cafe-menu-img-wrap">
-                                <img v-if="menu.image_path" :src="menu.image_path" :alt="menu.name" class="cafe-menu-img" loading="lazy" />
-                                <div v-else class="cafe-menu-img-placeholder">
-                                    <span class="cafe-menu-icon">🍽️</span>
-                                </div>
-                            </div>
-                            <div class="cafe-menu-info">
-                                <strong class="cafe-menu-name">{{ menu.name }}</strong>
-                                <span v-if="menu.description" class="cafe-menu-desc">{{ menu.description }}</span>
-                            </div>
-                            <span class="cafe-menu-arrow">→</span>
-                        </a>
+        <template v-if="!isMultiLocation && loc">
+            <!-- ═══ HORARIOS ═══ -->
+            <section v-if="hasHours" class="cf-section cf-hours-section">
+                <div class="cf-container">
+                    <div class="cf-section-header">
+                        <span class="cf-section-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </span>
+                        <h2 class="cf-section-title">Horario</h2>
                     </div>
-                </section>
-
-                <!-- Horarios + Info -->
-                <div class="cafe-bottom-grid">
-
-                    <section v-if="primaryLocation.opening_hours?.length" class="cafe-card">
-                        <h2 class="cafe-card-title">
-                            <span>🕐</span> Horario
-                        </h2>
-                        <OpeningHoursDisplay :hours="primaryLocation.opening_hours" />
-                    </section>
-
-                    <section class="cafe-card">
-                        <h2 class="cafe-card-title">
-                            <span>📍</span> Encuéntranos
-                        </h2>
-                        <address class="cafe-address">
-                            <p v-if="primaryLocation.address">{{ primaryLocation.address }}</p>
-                            <p v-if="primaryLocation.city">{{ primaryLocation.city }}</p>
-                        </address>
-                        <a v-if="primaryLocation.phone" :href="`tel:${primaryLocation.phone}`" class="cafe-phone">
-                            📞 {{ primaryLocation.phone }}
-                        </a>
-                        <a v-if="mapsUrl" :href="mapsUrl" target="_blank" rel="noopener" class="cafe-map-link">
-                            Ver en el mapa →
-                        </a>
-                    </section>
+                    <div class="cf-hours-compact">
+                        <div v-for="(group, i) in hoursGrouped" :key="i" class="cf-hours-row" :class="{ 'is-closed': group.isClosed }">
+                            <span class="cf-hours-range">{{ group.range }}</span>
+                            <span class="cf-hours-value">{{ group.hours }}</span>
+                        </div>
+                    </div>
                 </div>
-            </template>
+            </section>
 
-            <!-- Multi-location -->
-            <template v-else-if="isMultiLocation">
-                <section class="cafe-section">
-                    <h2 class="cafe-section-title">
-                        <span class="cafe-title-icon">☕</span>
-                        Nuestros locales
-                    </h2>
-                    <div class="cafe-locations-grid">
-                        <LocationCard v-for="loc in locations" :key="loc.id" :location="loc" />
+            <!-- ═══ NUESTRAS CARTAS ═══ -->
+            <section v-if="hasMenus" class="cf-section cf-menus-section">
+                <div class="cf-container">
+                    <div class="cf-section-header">
+                        <span class="cf-section-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                        </span>
+                        <h2 class="cf-section-title">Nuestras Cartas</h2>
                     </div>
-                </section>
-            </template>
-        </main>
+                    <p class="cf-section-subtitle">Hecho con cariño, servido con calor</p>
+                    <div class="cf-menu-cards">
+                        <a v-for="menu in loc.menus" :key="menu.id" :href="`/menu/${menu.id}`" class="cf-menu-card">
+                            <div v-if="menu.image_path" class="cf-menu-card-img-wrap">
+                                <img :src="menu.image_path" :alt="menu.name" class="cf-menu-card-img" loading="lazy" />
+                            </div>
+                            <div v-else class="cf-menu-card-img-wrap cf-menu-card-placeholder">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                            </div>
+                            <div class="cf-menu-card-body">
+                                <h3 class="cf-menu-card-name">{{ menu.name }}</h3>
+                                <p v-if="menu.description" class="cf-menu-card-desc">{{ menu.description }}</p>
+                                <span class="cf-menu-card-cta">Ver carta →</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </section>
 
-        <!-- ─── FOOTER ─── -->
-        <footer class="cafe-footer">
-            <p class="cafe-footer-name">{{ primaryLocation?.name ?? tenant.name }}</p>
-            <p v-if="primaryLocation?.address" class="cafe-footer-line">{{ primaryLocation.address }}, {{ primaryLocation.city }}</p>
-            <SocialLinks
-                v-if="primaryLocation?.social_medias"
-                :social-medias="primaryLocation.social_medias"
-                size="md"
-                class="cafe-footer-socials"
-            />
-            <p class="cafe-footer-credit">
-                Hecho con <a href="https://menulinker.com" target="_blank" rel="noopener">MenuLinker</a>
-            </p>
+            <!-- ═══ UBICACIÓN Y CONTACTO ═══ -->
+            <section class="cf-section cf-location-section">
+                <div class="cf-container">
+                    <div class="cf-section-header">
+                        <span class="cf-section-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        </span>
+                        <h2 class="cf-section-title">Encuéntranos</h2>
+                    </div>
+                    <div class="cf-location-grid">
+                        <div class="cf-map-wrap">
+                            <iframe v-if="embedUrl" :src="embedUrl" class="cf-map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen />
+                            <div v-else class="cf-map-placeholder">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            </div>
+                        </div>
+                        <div class="cf-contact-info">
+                            <address class="cf-address">
+                                <div v-if="loc.address" class="cf-contact-row">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                    <div>
+                                        <p>{{ loc.address }}</p>
+                                        <p v-if="loc.city">{{ loc.city }}</p>
+                                    </div>
+                                </div>
+                                <div v-if="loc.phone" class="cf-contact-row">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                    <a :href="`tel:${loc.phone}`">{{ loc.phone }}</a>
+                                </div>
+                            </address>
+                            <a v-if="dirUrl" :href="dirUrl" target="_blank" rel="noopener" class="cf-btn cf-btn-primary cf-btn-full">Cómo llegar</a>
+                            <div v-if="hasHours" class="cf-contact-hours">
+                                <h3 class="cf-contact-hours-title">Horario completo</h3>
+                                <OpeningHoursDisplay :hours="loc.opening_hours!" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══ REDES SOCIALES ═══ -->
+            <section v-if="hasSocial" class="cf-section cf-social-section">
+                <div class="cf-container">
+                    <div class="cf-section-header"><h2 class="cf-section-title">Síguenos</h2></div>
+                    <SocialLinks :social-medias="loc.social_medias" size="lg" class="cf-social-grid" />
+                </div>
+            </section>
+        </template>
+
+        <!-- ═══ MULTI-LOCATION ═══ -->
+        <template v-else-if="isMultiLocation">
+            <section class="cf-section cf-multi-section">
+                <div class="cf-container">
+                    <div class="cf-section-header"><h2 class="cf-section-title">Nuestros Locales</h2></div>
+                    <p class="cf-section-subtitle">{{ locations.length }} establecimientos para servirte</p>
+                    <div class="cf-locations-grid">
+                        <LocationCard v-for="l in locations" :key="l.id" :location="l" />
+                    </div>
+                </div>
+            </section>
+        </template>
+
+        <!-- ═══ FOOTER ═══ -->
+        <footer class="cf-footer">
+            <div class="cf-container cf-footer-inner">
+                <div class="cf-footer-brand">
+                    <img v-if="logo" :src="logo" :alt="loc?.name" class="cf-footer-logo" />
+                    <div>
+                        <p class="cf-footer-name">{{ loc?.name ?? tenant.name }}</p>
+                        <p v-if="loc?.address" class="cf-footer-line">{{ loc.address }}{{ loc?.city ? `, ${loc.city}` : '' }}</p>
+                        <p v-if="loc?.phone" class="cf-footer-line">{{ loc.phone }}</p>
+                    </div>
+                </div>
+                <SocialLinks v-if="hasSocial" :social-medias="loc!.social_medias" size="sm" class="cf-footer-socials" />
+                <p class="cf-footer-copy">Página creada con <a href="https://menulinker.com" target="_blank" rel="noopener">MenuLinker</a></p>
+            </div>
         </footer>
     </div>
 </template>
 
 <style scoped>
-/* ===== CAFÉ / SPECIALTY COFFEE TEMPLATE ===== */
-.cafe {
-    --cafe-bg: #fdf6ee;
-    --cafe-surface: #fff9f3;
-    --cafe-brown: #5c3a1e;
-    --cafe-brown-light: #8b5e3c;
-    --cafe-cream: #f0e6d2;
-    --cafe-ink: #2c1e0f;
-    --cafe-ink-soft: #7a5c3d;
-    --cafe-ink-faint: #b09070;
-    --cafe-accent: #c47e3f;
-    --cafe-accent-soft: rgba(196,126,63,0.12);
-    --cafe-border: #e8d8c4;
-    --cafe-round: 1.5rem;
-    --cafe-serif: 'DM Serif Display', 'Georgia', serif;
-    --cafe-sans: 'Nunito', 'Segoe UI', system-ui, sans-serif;
-
-    background: var(--cafe-bg);
-    color: var(--cafe-ink);
-    font-family: var(--cafe-sans);
+/* ── TOKENS ── */
+.cf {
+    --bg: oklch(0.97 0.02 80);
+    --surface: oklch(1 0.01 75);
+    --surface-2: oklch(0.94 0.025 75);
+    --ink: oklch(0.35 0.08 55);
+    --ink-soft: oklch(0.48 0.06 52);
+    --ink-faint: oklch(0.62 0.04 50);
+    --rule: oklch(0.88 0.025 70);
+    --accent: oklch(0.55 0.12 45);
+    --accent-light: oklch(0.55 0.12 45 / 0.1);
+    --accent-warm: oklch(0.63 0.14 48);
+    --serif: 'DM Serif Display', Georgia, serif;
+    --sans: 'Nunito', ui-sans-serif, system-ui, sans-serif;
+    --radius: 20px;
+    --radius-sm: 14px;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
-    min-height: 100vh;
-    overflow-x: hidden;
 }
 
 @media (prefers-color-scheme: dark) {
-    .cafe {
-        --cafe-bg: #1e1409;
-        --cafe-surface: #261b0e;
-        --cafe-brown: #d4a478;
-        --cafe-brown-light: #e8c09a;
-        --cafe-cream: #2e1f0e;
-        --cafe-ink: #f5ece0;
-        --cafe-ink-soft: #c8a882;
-        --cafe-ink-faint: #8a7060;
-        --cafe-accent: #e8a060;
-        --cafe-accent-soft: rgba(232,160,96,0.12);
-        --cafe-border: #3a2510;
+    .cf {
+        --bg: oklch(0.18 0.025 50);
+        --surface: oklch(0.22 0.028 52);
+        --surface-2: oklch(0.20 0.022 50);
+        --ink: oklch(0.96 0.015 78);
+        --ink-soft: oklch(0.78 0.018 72);
+        --ink-faint: oklch(0.58 0.012 68);
+        --rule: oklch(0.30 0.022 52);
+        --accent: oklch(0.72 0.13 50);
+        --accent-light: oklch(0.72 0.13 50 / 0.12);
+        --accent-warm: oklch(0.78 0.14 55);
     }
 }
 
-/* ─── NAV ─── */
-.cafe-nav {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    background: color-mix(in oklch, var(--cafe-bg) 88%, transparent);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--cafe-border);
-}
-
-.cafe-nav-inner {
-    max-width: 1100px;
+.cf-container {
+    max-width: 1040px;
     margin: 0 auto;
-    padding: 1rem clamp(1rem, 4vw, 2rem);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    padding: 0 clamp(1.25rem, 5vw, 2.5rem);
 }
 
-.cafe-nav-brand {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.cafe-nav-logo {
-    height: 2.25rem;
-    width: auto;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.cafe-nav-name {
-    font-family: var(--cafe-serif);
-    font-size: 1.15rem;
-    color: var(--cafe-brown);
-}
-
-.cafe-nav-cta {
-    padding: 0.5rem 1.4rem;
-    background: var(--cafe-accent);
-    color: #fff;
-    border-radius: 999px;
-    font-weight: 700;
-    font-size: 0.85rem;
-    text-decoration: none;
-    transition: background 200ms, transform 200ms;
-}
-
-.cafe-nav-cta:hover {
-    background: var(--cafe-brown-light);
-    transform: scale(1.04);
-}
-
-/* ─── HERO ─── */
-.cafe-hero {
+/* ── HERO ── */
+.cf-hero {
     position: relative;
-    background: var(--cafe-cream);
-    padding: clamp(2rem, 6vw, 4rem) clamp(1rem, 4vw, 2rem) 0;
-    overflow: hidden;
-}
-
-.cafe-hero-content {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-    align-items: center;
-    padding-bottom: 3rem;
-}
-
-@media (min-width: 768px) {
-    .cafe-hero-content {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-.cafe-hero-image-wrap {
-    position: relative;
-    border-radius: 50%;
-    aspect-ratio: 1;
-    max-width: 400px;
-    margin: 0 auto;
-    overflow: hidden;
-    box-shadow:
-        0 0 0 8px var(--cafe-bg),
-        0 0 0 16px var(--cafe-border),
-        0 20px 60px -10px rgba(92,58,30,0.35);
-    animation: cafe-float 6s ease-in-out infinite;
-}
-
-@keyframes cafe-float {
-    0%, 100% { transform: translateY(0); }
-    50%       { transform: translateY(-10px); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .cafe-hero-image-wrap { animation: none; }
-}
-
-.cafe-hero-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.cafe-hero-img-placeholder {
-    width: 100%;
-    height: 100%;
+    min-height: clamp(340px, 60svh, 560px);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--cafe-surface);
-    color: var(--cafe-accent);
-}
-
-.cafe-placeholder-icon {
-    width: 60%;
-    height: 60%;
-}
-
-.cafe-hero-text {
-    text-align: left;
-    animation: cafe-slide-in 800ms cubic-bezier(.2,.65,.2,1) both;
-}
-
-@keyframes cafe-slide-in {
-    from { opacity: 0; transform: translateX(20px); }
-    to   { opacity: 1; transform: translateX(0); }
-}
-
-.cafe-eyebrow {
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--cafe-accent);
-    margin: 0 0 0.75rem;
-}
-
-.cafe-title {
-    font-family: var(--cafe-serif);
-    font-style: italic;
-    font-weight: 400;
-    font-size: clamp(2.5rem, 8vw, 4rem);
-    line-height: 1.1;
-    color: var(--cafe-brown);
-    margin: 0 0 1rem;
-}
-
-.cafe-sub {
-    font-size: 1rem;
-    line-height: 1.7;
-    color: var(--cafe-ink-soft);
-    max-width: 44ch;
-    margin: 0 0 1.5rem;
-}
-
-.cafe-hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-}
-
-.cafe-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.75rem 1.75rem;
-    background: var(--cafe-brown);
-    color: #fff;
-    border-radius: 999px;
-    font-weight: 700;
-    font-size: 0.9rem;
-    text-decoration: none;
-    transition: background 200ms, transform 200ms, box-shadow 200ms;
-    box-shadow: 0 4px 12px rgba(92,58,30,0.25);
-}
-
-.cafe-btn:hover {
-    background: var(--cafe-accent);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(92,58,30,0.3);
-}
-
-.cafe-hero-socials {
-    color: var(--cafe-ink-soft);
-}
-
-.cafe-wave {
-    line-height: 0;
+    padding: clamp(3rem, 8vw, 5rem) clamp(1.25rem, 5vw, 2.5rem) clamp(4rem, 10vw, 6rem);
     overflow: hidden;
-    margin-top: -2px;
-}
-
-.cafe-wave svg {
-    width: 100%;
-    display: block;
-}
-
-/* ─── MAIN ─── */
-.cafe-main {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: clamp(2.5rem, 6vw, 4rem) clamp(1rem, 4vw, 2rem);
-}
-
-/* ─── SECTION ─── */
-.cafe-section {
-    margin-bottom: clamp(2.5rem, 6vw, 4rem);
-}
-
-.cafe-section-title {
-    font-family: var(--cafe-serif);
-    font-style: italic;
-    font-size: clamp(1.7rem, 4.5vw, 2.2rem);
-    font-weight: 400;
-    color: var(--cafe-brown);
-    margin: 0 0 1.75rem;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-}
-
-.cafe-title-icon {
-    font-style: normal;
-    font-size: 0.85em;
-}
-
-/* ─── MENU LIST ─── */
-.cafe-menu-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.cafe-menu-item {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    padding: 1rem 1.25rem;
-    background: var(--cafe-surface);
-    border: 1px solid var(--cafe-border);
-    border-radius: var(--cafe-round);
-    text-decoration: none;
-    color: inherit;
-    transition: box-shadow 250ms, transform 250ms;
-}
-
-.cafe-menu-item:hover {
-    box-shadow: 0 8px 24px -8px rgba(92,58,30,0.2);
-    transform: translateX(4px);
-}
-
-.cafe-menu-img-wrap {
-    width: 5rem;
-    height: 5rem;
-    border-radius: 1rem;
-    overflow: hidden;
-    flex-shrink: 0;
-    background: var(--cafe-cream);
-}
-
-.cafe-menu-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.cafe-menu-img-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.cafe-menu-icon {
-    font-size: 1.8rem;
-}
-
-.cafe-menu-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-}
-
-.cafe-menu-name {
-    font-family: var(--cafe-serif);
-    font-size: 1.1rem;
-    font-weight: 400;
-    color: var(--cafe-ink);
-}
-
-.cafe-menu-desc {
-    font-size: 0.83rem;
-    color: var(--cafe-ink-soft);
-    line-height: 1.5;
-}
-
-.cafe-menu-arrow {
-    font-size: 1.25rem;
-    color: var(--cafe-accent);
-    flex-shrink: 0;
-    transition: transform 200ms;
-}
-
-.cafe-menu-item:hover .cafe-menu-arrow {
-    transform: translateX(4px);
-}
-
-/* ─── BOTTOM GRID ─── */
-.cafe-bottom-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-}
-
-@media (min-width: 680px) {
-    .cafe-bottom-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-.cafe-card {
-    background: var(--cafe-surface);
-    border: 1px solid var(--cafe-border);
-    border-radius: var(--cafe-round);
-    padding: 1.75rem;
-}
-
-.cafe-card-title {
-    font-family: var(--cafe-serif);
-    font-style: italic;
-    font-weight: 400;
-    font-size: 1.25rem;
-    margin: 0 0 1.25rem;
-    color: var(--cafe-brown);
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.cafe-address {
-    font-style: normal;
-    font-size: 0.9rem;
-    line-height: 1.7;
-    color: var(--cafe-ink-soft);
-}
-
-.cafe-address p { margin: 0; }
-
-.cafe-phone {
-    display: block;
-    margin-top: 0.75rem;
-    font-weight: 600;
-    color: var(--cafe-accent);
-    text-decoration: none;
-    font-size: 0.92rem;
-}
-
-.cafe-map-link {
-    display: inline-block;
-    margin-top: 0.75rem;
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: var(--cafe-brown-light);
-    text-decoration: none;
-    transition: color 200ms;
-}
-
-.cafe-map-link:hover {
-    color: var(--cafe-accent);
-}
-
-/* ─── LOCATIONS GRID ─── */
-.cafe-locations-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
-    gap: 1.5rem;
-}
-
-/* ─── FOOTER ─── */
-.cafe-footer {
-    background: var(--cafe-brown);
-    color: rgba(255,249,243,0.85);
-    padding: clamp(2.5rem, 6vw, 4rem) clamp(1rem, 4vw, 2rem);
     text-align: center;
 }
 
-.cafe-footer-name {
-    font-family: var(--cafe-serif);
-    font-style: italic;
-    font-size: 1.6rem;
+.cf-hero-img {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: saturate(0.85) brightness(0.88);
+}
+
+.cf-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center bottom, oklch(0 0 0 / 0.58) 0%, oklch(0 0 0 / 0.28) 55%, oklch(0 0 0 / 0.12) 100%);
+}
+
+.cf-hero:not(:has(.cf-hero-img)) {
+    background: linear-gradient(150deg, var(--surface-2) 0%, var(--bg) 60%, oklch(0.90 0.04 55 / 0.4) 100%);
+    min-height: auto;
+    padding-top: clamp(5rem, 12vw, 8rem);
+    padding-bottom: clamp(3rem, 8vw, 5rem);
+}
+
+.cf-hero:not(:has(.cf-hero-img)) .cf-hero-overlay { display: none; }
+.cf-hero:not(:has(.cf-hero-img)) .cf-hero-inner { color: var(--ink); }
+.cf-hero:not(:has(.cf-hero-img)) .cf-hero-wave { display: none; }
+
+.cf-hero-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 640px;
+    color: oklch(0.99 0 0);
+    animation: cf-fade-up 900ms cubic-bezier(0.2, 0.65, 0.2, 1) both;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cf-logo {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    border-radius: var(--radius);
+    margin-bottom: 1.25rem;
+    background: oklch(1 0 0 / 0.15);
+    backdrop-filter: blur(10px);
+    padding: 10px;
+    box-shadow: 0 4px 20px oklch(0 0 0 / 0.2);
+}
+
+.cf-kicker {
+    font-family: var(--sans);
     font-weight: 400;
-    color: #fff9f3;
-    margin: 0 0 0.5rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin: 0 0 0.75rem;
+    opacity: 0.8;
 }
 
-.cafe-footer-line {
-    font-size: 0.85rem;
-    margin: 0.2rem 0;
-    opacity: 0.75;
+.cf-title {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(2.4rem, 8vw, 4.2rem);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 0;
 }
 
-.cafe-footer-socials {
-    justify-content: center;
-    margin-top: 1.25rem;
-    color: rgba(255,249,243,0.7);
+.cf-sub {
+    margin: 1.1rem 0 0;
+    font-size: clamp(0.95rem, 2vw, 1.08rem);
+    line-height: 1.7;
+    max-width: 46ch;
+    opacity: 0.88;
+    font-weight: 300;
 }
 
-.cafe-footer-credit {
+.cf-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
     margin-top: 2rem;
-    font-size: 0.72rem;
-    opacity: 0.45;
-    letter-spacing: 0.04em;
+    justify-content: center;
 }
 
-.cafe-footer-credit a {
+/* ── BUTTONS ── */
+.cf-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.85rem 1.6rem;
+    border-radius: 999px;
+    font-family: var(--sans);
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 220ms cubic-bezier(0.2, 0.65, 0.2, 1);
+    border: none;
+    cursor: pointer;
+}
+
+.cf-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+.cf-btn-primary {
+    background: var(--accent);
+    color: oklch(0.99 0 0);
+    box-shadow: 0 4px 18px oklch(0.55 0.12 45 / 0.35);
+}
+
+.cf-btn-primary:hover {
+    background: var(--accent-warm);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 26px oklch(0.55 0.12 45 / 0.42);
+}
+
+.cf-btn-outline {
+    background: oklch(1 0 0 / 0.15);
+    color: oklch(1 0 0);
+    backdrop-filter: blur(8px);
+    border: 1.5px solid oklch(1 0 0 / 0.3);
+}
+
+.cf-btn-outline:hover { background: oklch(1 0 0 / 0.25); }
+.cf-btn-full { width: 100%; justify-content: center; }
+
+/* ── WAVE ── */
+.cf-hero-wave {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 60px;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.cf-hero-wave svg { width: 100%; height: 100%; display: block; }
+
+/* ── SECTIONS ── */
+.cf-section { padding: clamp(3rem, 7vw, 5.5rem) 0; }
+.cf-section + .cf-section { border-top: 1px solid var(--rule); }
+
+.cf-section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+.cf-section-icon {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-light);
+    border-radius: var(--radius-sm);
+    color: var(--accent);
+    flex-shrink: 0;
+}
+
+.cf-section-icon svg { width: 22px; height: 22px; }
+
+.cf-section-title {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    line-height: 1.1;
+    margin: 0;
+    color: var(--ink);
+}
+
+.cf-section-subtitle {
+    margin: -0.5rem 0 2rem;
+    padding-left: calc(44px + 0.9rem);
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    line-height: 1.55;
+    font-style: italic;
+}
+
+/* ── HOURS ── */
+.cf-hours-section { background: var(--surface); }
+
+.cf-hours-compact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2.5rem;
+    padding-left: calc(44px + 0.9rem);
+}
+
+.cf-hours-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.cf-hours-range { font-weight: 700; min-width: 5rem; color: var(--ink); }
+.cf-hours-value { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.cf-hours-row.is-closed .cf-hours-value { opacity: 0.45; font-style: italic; }
+
+/* ── MENU CARDS ── */
+.cf-menu-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+@media (min-width: 560px) { .cf-menu-cards { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 900px) { .cf-menu-cards { grid-template-columns: repeat(3, 1fr); } }
+
+.cf-menu-card {
+    background: var(--surface);
+    border: 1.5px solid var(--rule);
+    border-radius: var(--radius);
+    overflow: hidden;
+    text-decoration: none;
     color: inherit;
-    text-decoration: underline;
-    text-underline-offset: 3px;
+    transition: transform 300ms cubic-bezier(0.2, 0.65, 0.2, 1), box-shadow 300ms;
+    box-shadow: 0 2px 12px oklch(0.55 0.12 45 / 0.06);
+}
+
+.cf-menu-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 36px -10px oklch(0.55 0.12 45 / 0.2);
+}
+
+.cf-menu-card-img-wrap {
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    background: var(--surface-2);
+}
+
+.cf-menu-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 500ms cubic-bezier(0.2, 0.65, 0.2, 1);
+}
+
+.cf-menu-card:hover .cf-menu-card-img { transform: scale(1.06); }
+
+.cf-menu-card-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-faint);
+    opacity: 0.3;
+}
+
+.cf-menu-card-placeholder svg { width: 3rem; height: 3rem; }
+
+.cf-menu-card-body { padding: 1.25rem 1.4rem 1.5rem; }
+
+.cf-menu-card-name {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 1.2rem;
+    margin: 0 0 0.4rem;
+    color: var(--ink);
+}
+
+.cf-menu-card-desc {
+    font-size: 0.87rem;
+    color: var(--ink-soft);
+    line-height: 1.6;
+    margin: 0 0 0.9rem;
+}
+
+.cf-menu-card-cta {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+}
+
+/* ── LOCATION + MAP ── */
+.cf-location-section { background: var(--surface-2); }
+
+.cf-location-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 768px) { .cf-location-grid { grid-template-columns: 1.3fr 1fr; } }
+
+.cf-map-wrap {
+    border-radius: var(--radius);
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    background: var(--surface);
+    box-shadow: 0 4px 20px oklch(0 0 0 / 0.07);
+}
+
+.cf-map { width: 100%; height: 100%; border: 0; }
+
+.cf-map-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-faint);
+    opacity: 0.2;
+}
+
+.cf-map-placeholder svg { width: 4rem; height: 4rem; }
+
+.cf-contact-info { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.cf-address { font-style: normal; display: flex; flex-direction: column; gap: 1rem; }
+
+.cf-contact-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    font-size: 0.95rem;
+    color: var(--ink);
+    line-height: 1.55;
+}
+
+.cf-contact-row svg { width: 20px; height: 20px; color: var(--accent); flex-shrink: 0; margin-top: 2px; }
+.cf-contact-row a { color: var(--accent); text-decoration: none; font-weight: 700; }
+.cf-contact-row a:hover { text-decoration: underline; }
+
+.cf-contact-hours { margin-top: 0.5rem; }
+
+.cf-contact-hours-title {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 1rem;
+    margin: 0 0 0.75rem;
+    color: var(--ink);
+}
+
+/* ── SOCIAL ── */
+.cf-social-section { background: var(--surface); text-align: center; }
+.cf-social-section .cf-section-header { justify-content: center; }
+.cf-social-grid { justify-content: center; }
+
+/* ── MULTI-LOCATION ── */
+.cf-locations-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+@media (min-width: 640px) { .cf-locations-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .cf-locations-grid { grid-template-columns: repeat(3, 1fr); } }
+
+/* ── FOOTER ── */
+.cf-footer {
+    padding: clamp(3rem, 6vw, 4rem) 0;
+    border-top: 1px solid var(--rule);
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+}
+
+.cf-footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, var(--accent-light) 0%, transparent 70%);
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.cf-footer-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.cf-footer-brand { display: flex; align-items: center; gap: 1rem; }
+
+.cf-footer-logo {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+    box-shadow: 0 2px 10px oklch(0 0 0 / 0.1);
+}
+
+.cf-footer-name {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 1.2rem;
+    margin: 0;
+    color: var(--ink);
+}
+
+.cf-footer-line { margin: 0.15rem 0; font-size: 0.82rem; color: var(--ink-soft); }
+.cf-footer-copy { font-size: 0.72rem; color: var(--ink-faint); margin-top: 0.5rem; }
+.cf-footer-copy a { color: var(--accent); text-decoration: none; }
+.cf-footer-copy a:hover { text-decoration: underline; }
+
+/* ── ANIMATIONS ── */
+@keyframes cf-fade-up {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cf-hero-inner { animation: none !important; }
+    .cf-menu-card,
+    .cf-menu-card-img,
+    .cf-btn { transition: none !important; }
 }
 </style>

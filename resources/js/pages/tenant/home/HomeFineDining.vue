@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import { computed, ref, onMounted } from 'vue';
+import { computed } from 'vue';
 import MenuSeoHead from '@/components/public/MenuSeoHead.vue';
 import OpeningHoursDisplay from './components/OpeningHoursDisplay.vue';
 import SocialLinks from './components/SocialLinks.vue';
 import LocationCard from './components/LocationCard.vue';
-import { mapsDirectionsUrl, type OpeningHour } from '@/composables/useTenantHome';
+import { mapsDirectionsUrl, mapsEmbedUrl, groupOpeningHours, type OpeningHour } from '@/composables/useTenantHome';
 
 interface Menu {
     id: number;
@@ -46,23 +46,18 @@ const props = defineProps<{
     seo: SeoData;
 }>();
 
-const hero = computed(() => props.primaryLocation?.image_url ?? null);
-const mapsUrl = computed(() =>
-    props.primaryLocation
-        ? mapsDirectionsUrl({
-              lat: props.primaryLocation.latitude,
-              lng: props.primaryLocation.longitude,
-              address: props.primaryLocation.address,
-          })
-        : null,
-);
+const loc = computed(() => props.primaryLocation);
+const hero = computed(() => loc.value?.image_url ?? null);
+const logo = computed(() => loc.value?.logo_url ?? null);
+const dirUrl = computed(() => loc.value ? mapsDirectionsUrl({ lat: loc.value.latitude, lng: loc.value.longitude, address: loc.value.address }) : null);
+const embedUrl = computed(() => loc.value ? mapsEmbedUrl({ lat: loc.value.latitude, lng: loc.value.longitude, address: loc.value.address, name: loc.value.name }) : null);
+const hoursGrouped = computed(() => loc.value?.opening_hours ? groupOpeningHours(loc.value.opening_hours) : []);
+const hasHours = computed(() => loc.value?.opening_hours && loc.value.opening_hours.length > 0);
+const hasMenus = computed(() => loc.value?.menus && loc.value.menus.length > 0);
+const hasSocial = computed(() => !!loc.value?.social_medias && Object.keys(loc.value.social_medias as object).length > 0);
 
-const loaded = ref(false);
-onMounted(() => {
-    requestAnimationFrame(() => {
-        setTimeout(() => { loaded.value = true; }, 80);
-    });
-});
+/* Números de orden para los menús en estilo fine-dining */
+const menuOrdinals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 </script>
 
 <template>
@@ -70,653 +65,671 @@ onMounted(() => {
     <Head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Cormorant+Upright:wght@300;400;500&family=Jost:wght@300;400;500&display=swap"
-            rel="stylesheet"
-        />
+        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" />
     </Head>
 
-    <div class="fd" :class="{ 'fd-loaded': loaded }">
-
-        <!-- ─── HERO fullscreen ─── -->
+    <div class="fd">
+        <!-- ═══ HERO ═══ -->
         <header class="fd-hero">
-            <!-- Image fills entire viewport -->
             <div v-if="hero" class="fd-hero-img" :style="{ backgroundImage: `url(${hero})` }" />
-            <div class="fd-hero-veil" />
-
-            <!-- Centered content -->
-            <div class="fd-hero-center">
-                <div class="fd-hero-eyebrow">
-                    <span class="fd-line" />
-                    <span class="fd-eyebrow-text">{{ primaryLocation?.city ?? '' }}</span>
-                    <span class="fd-line" />
+            <div class="fd-hero-overlay" />
+            <div class="fd-hero-inner">
+                <img v-if="logo" :src="logo" :alt="loc?.name" class="fd-logo" />
+                <p v-if="loc?.city" class="fd-kicker">{{ loc.city }}</p>
+                <!-- Linea ornamental -->
+                <div class="fd-ornament" aria-hidden="true"><span /><span class="fd-ornament-diamond" /><span /></div>
+                <h1 class="fd-title">{{ loc?.name ?? tenant.name }}</h1>
+                <p v-if="loc?.description" class="fd-sub">{{ loc.description }}</p>
+                <div class="fd-hero-actions">
+                    <a v-if="loc?.phone" :href="`tel:${loc.phone}`" class="fd-btn fd-btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        Reservas
+                    </a>
+                    <a v-if="dirUrl" :href="dirUrl" target="_blank" rel="noopener" class="fd-btn fd-btn-outline">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        Cómo llegar
+                    </a>
                 </div>
-
-                <h1 class="fd-name">{{ primaryLocation?.name ?? tenant.name }}</h1>
-
-                <p v-if="primaryLocation?.description" class="fd-tagline">
-                    {{ primaryLocation.description }}
-                </p>
-
-                <a
-                    v-if="primaryLocation?.menus?.length"
-                    :href="`/menu/${primaryLocation.menus[0].id}`"
-                    class="fd-hero-link"
-                >
-                    Descubrir la carta
-                </a>
-            </div>
-
-            <!-- Scroll indicator -->
-            <div class="fd-scroll" aria-hidden="true">
-                <span class="fd-scroll-tick" />
-                <span class="fd-scroll-tick" />
-                <span class="fd-scroll-tick" />
             </div>
         </header>
 
-        <!-- ─── INTRO ─── -->
-        <section v-if="primaryLocation?.description" class="fd-intro">
-            <div class="fd-intro-inner">
-                <div class="fd-rule-wrap" aria-hidden="true">
-                    <span class="fd-rule-thin" />
-                    <span class="fd-mark">✦</span>
-                    <span class="fd-rule-thin" />
+        <template v-if="!isMultiLocation && loc">
+            <!-- ═══ HORARIOS ═══ -->
+            <section v-if="hasHours" class="fd-section fd-hours-section">
+                <div class="fd-container">
+                    <div class="fd-section-header">
+                        <h2 class="fd-section-title">Horario</h2>
+                        <div class="fd-rule" aria-hidden="true" />
+                    </div>
+                    <div class="fd-hours-compact">
+                        <div v-for="(group, i) in hoursGrouped" :key="i" class="fd-hours-row" :class="{ 'is-closed': group.isClosed }">
+                            <span class="fd-hours-range">{{ group.range }}</span>
+                            <span class="fd-hours-dots" aria-hidden="true" />
+                            <span class="fd-hours-value">{{ group.hours }}</span>
+                        </div>
+                    </div>
                 </div>
-                <p class="fd-intro-text">{{ primaryLocation.description }}</p>
-            </div>
-        </section>
+            </section>
 
-        <!-- ─── MAIN ─── -->
-        <main class="fd-main">
-
-            <template v-if="!isMultiLocation && primaryLocation">
-
-                <!-- Menus -->
-                <section v-if="primaryLocation.menus?.length" class="fd-section">
-                    <div class="fd-section-cap">La Carta</div>
-                    <div class="fd-menu-list">
-                        <a
-                            v-for="(menu, i) in primaryLocation.menus"
-                            :key="menu.id"
-                            :href="`/menu/${menu.id}`"
-                            class="fd-menu-entry"
-                            :style="{ '--i': i } as Record<string, number>"
-                        >
-                            <div v-if="menu.image_path" class="fd-menu-img-wrap">
-                                <img :src="menu.image_path" :alt="menu.name" class="fd-menu-img" loading="lazy" />
-                            </div>
-                            <div class="fd-menu-text">
-                                <span class="fd-menu-numeral">{{ String(i + 1).padStart(2, '0') }}</span>
-                                <div class="fd-menu-info">
-                                    <h3 class="fd-menu-name">{{ menu.name }}</h3>
-                                    <p v-if="menu.description" class="fd-menu-desc">{{ menu.description }}</p>
-                                </div>
-                                <span class="fd-menu-arrow" aria-hidden="true">→</span>
-                            </div>
-                            <div class="fd-menu-divider" />
+            <!-- ═══ NUESTRAS CARTAS — lista numerada en estilo fine-dining ═══ -->
+            <section v-if="hasMenus" class="fd-section fd-menus-section">
+                <div class="fd-container">
+                    <div class="fd-section-header">
+                        <h2 class="fd-section-title">Menús</h2>
+                        <div class="fd-rule" aria-hidden="true" />
+                    </div>
+                    <p class="fd-section-subtitle">Una experiencia gastronómica de autor</p>
+                    <nav class="fd-menu-list" aria-label="Cartas">
+                        <a v-for="(menu, idx) in loc.menus" :key="menu.id" :href="`/menu/${menu.id}`" class="fd-menu-item">
+                            <span class="fd-menu-ordinal">{{ menuOrdinals[idx] ?? (idx + 1) }}</span>
+                            <span class="fd-menu-item-dots" aria-hidden="true" />
+                            <span class="fd-menu-item-content">
+                                <span class="fd-menu-item-name">{{ menu.name }}</span>
+                                <span v-if="menu.description" class="fd-menu-item-desc">{{ menu.description }}</span>
+                            </span>
+                            <span class="fd-menu-item-arrow" aria-hidden="true">→</span>
                         </a>
-                    </div>
-                </section>
+                    </nav>
+                </div>
+            </section>
 
-                <!-- Horarios -->
-                <section v-if="primaryLocation.opening_hours?.length" class="fd-section fd-section-alt">
-                    <div class="fd-section-cap">Reservas</div>
-                    <div class="fd-two-col">
-                        <div>
-                            <p class="fd-contact-label">Horario</p>
-                            <OpeningHoursDisplay :hours="primaryLocation.opening_hours" class="fd-oh" />
+            <!-- ═══ UBICACIÓN Y CONTACTO ═══ -->
+            <section class="fd-section fd-location-section">
+                <div class="fd-container">
+                    <div class="fd-section-header">
+                        <h2 class="fd-section-title">Encuéntranos</h2>
+                        <div class="fd-rule" aria-hidden="true" />
+                    </div>
+                    <div class="fd-location-grid">
+                        <div class="fd-map-wrap">
+                            <iframe v-if="embedUrl" :src="embedUrl" class="fd-map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen />
+                            <div v-else class="fd-map-placeholder">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            </div>
                         </div>
-                        <div>
-                            <p class="fd-contact-label">Contacto</p>
+                        <div class="fd-contact-info">
                             <address class="fd-address">
-                                <p v-if="primaryLocation.address">{{ primaryLocation.address }}</p>
-                                <p v-if="primaryLocation.city">{{ primaryLocation.city }}</p>
+                                <div v-if="loc.address" class="fd-contact-row">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                    <div>
+                                        <p>{{ loc.address }}</p>
+                                        <p v-if="loc.city">{{ loc.city }}</p>
+                                    </div>
+                                </div>
+                                <div v-if="loc.phone" class="fd-contact-row">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                    <a :href="`tel:${loc.phone}`">{{ loc.phone }}</a>
+                                </div>
                             </address>
-                            <a v-if="primaryLocation.phone" :href="`tel:${primaryLocation.phone}`" class="fd-phone">
-                                {{ primaryLocation.phone }}
-                            </a>
-                            <a v-if="mapsUrl" :href="mapsUrl" target="_blank" rel="noopener" class="fd-directions">
-                                Obtener indicaciones
-                            </a>
-                            <SocialLinks
-                                v-if="primaryLocation.social_medias"
-                                :social-medias="primaryLocation.social_medias"
-                                size="md"
-                                class="fd-socials"
-                            />
+                            <a v-if="dirUrl" :href="dirUrl" target="_blank" rel="noopener" class="fd-btn fd-btn-primary fd-btn-full">Cómo llegar</a>
+                            <div v-if="hasHours" class="fd-contact-hours">
+                                <h3 class="fd-contact-hours-title">Horario completo</h3>
+                                <OpeningHoursDisplay :hours="loc.opening_hours!" />
+                            </div>
                         </div>
                     </div>
-                </section>
+                </div>
+            </section>
 
-            </template>
+            <!-- ═══ REDES SOCIALES ═══ -->
+            <section v-if="hasSocial" class="fd-section fd-social-section">
+                <div class="fd-container">
+                    <div class="fd-section-header"><h2 class="fd-section-title">Síguenos</h2><div class="fd-rule" aria-hidden="true" /></div>
+                    <SocialLinks :social-medias="loc.social_medias" size="lg" class="fd-social-grid" />
+                </div>
+            </section>
+        </template>
 
-            <!-- Multi-location -->
-            <template v-else-if="isMultiLocation">
-                <section class="fd-section">
-                    <div class="fd-section-cap">Nuestras casas</div>
+        <!-- ═══ MULTI-LOCATION ═══ -->
+        <template v-else-if="isMultiLocation">
+            <section class="fd-section fd-multi-section">
+                <div class="fd-container">
+                    <div class="fd-section-header"><h2 class="fd-section-title">Nuestros Locales</h2><div class="fd-rule" aria-hidden="true" /></div>
+                    <p class="fd-section-subtitle">{{ locations.length }} establecimientos para servirte</p>
                     <div class="fd-locations-grid">
-                        <LocationCard v-for="loc in locations" :key="loc.id" :location="loc" />
+                        <LocationCard v-for="l in locations" :key="l.id" :location="l" />
                     </div>
-                </section>
-            </template>
+                </div>
+            </section>
+        </template>
 
-        </main>
-
-        <!-- ─── FOOTER ─── -->
+        <!-- ═══ FOOTER ═══ -->
         <footer class="fd-footer">
-            <div class="fd-rule-wrap" aria-hidden="true">
-                <span class="fd-rule-thin" />
-                <span class="fd-mark">◆</span>
-                <span class="fd-rule-thin" />
+            <div class="fd-container fd-footer-inner">
+                <div class="fd-ornament fd-ornament-sm" aria-hidden="true"><span /><span class="fd-ornament-diamond" /><span /></div>
+                <div class="fd-footer-brand">
+                    <img v-if="logo" :src="logo" :alt="loc?.name" class="fd-footer-logo" />
+                    <div>
+                        <p class="fd-footer-name">{{ loc?.name ?? tenant.name }}</p>
+                        <p v-if="loc?.address" class="fd-footer-line">{{ loc.address }}{{ loc?.city ? `, ${loc.city}` : '' }}</p>
+                        <p v-if="loc?.phone" class="fd-footer-line">{{ loc.phone }}</p>
+                    </div>
+                </div>
+                <SocialLinks v-if="hasSocial" :social-medias="loc!.social_medias" size="sm" class="fd-footer-socials" />
+                <p class="fd-footer-copy">Página creada con <a href="https://menulinker.com" target="_blank" rel="noopener">MenuLinker</a></p>
             </div>
-            <p class="fd-footer-name">{{ primaryLocation?.name ?? tenant.name }}</p>
-            <address class="fd-footer-address">
-                <span v-if="primaryLocation?.address">{{ primaryLocation.address }}</span>
-                <span v-if="primaryLocation?.city"> · {{ primaryLocation.city }}</span>
-            </address>
-            <SocialLinks
-                v-if="primaryLocation?.social_medias"
-                :social-medias="primaryLocation.social_medias"
-                size="sm"
-                class="fd-footer-socials"
-            />
-            <p class="fd-footer-credit">
-                <a href="https://menulinker.com" target="_blank" rel="noopener">MenuLinker</a>
-            </p>
         </footer>
     </div>
 </template>
 
 <style scoped>
-/* ===== FINE DINING / ALTA COCINA TEMPLATE ===== */
+/* ── TOKENS ── */
 .fd {
-    --fd-bg: #f9f7f4;
-    --fd-ink: #1a1814;
-    --fd-ink-soft: #6a6258;
-    --fd-ink-faint: #a89e90;
-    --fd-accent: #2a2620;
-    --fd-rule: #e0d8cc;
-    --fd-serif: 'Cormorant Garamond', 'IM Fell English', Georgia, serif;
-    --fd-serif-up: 'Cormorant Upright', 'Cormorant Garamond', serif;
-    --fd-sans: 'Jost', 'Helvetica Neue', system-ui, sans-serif;
-
-    background: var(--fd-bg);
-    color: var(--fd-ink);
-    font-family: var(--fd-sans);
+    --bg: oklch(0.975 0.008 85);
+    --surface: oklch(1 0.004 82);
+    --surface-2: oklch(0.965 0.010 82);
+    --ink: oklch(0.18 0.008 260);
+    --ink-soft: oklch(0.38 0.008 255);
+    --ink-faint: oklch(0.58 0.006 255);
+    --rule: oklch(0.86 0.010 80);
+    --gold: oklch(0.62 0.12 75);
+    --gold-light: oklch(0.78 0.10 78);
+    --gold-faint: oklch(0.62 0.12 75 / 0.12);
+    --accent: oklch(0.62 0.12 75);
+    --accent-light: oklch(0.62 0.12 75 / 0.08);
+    --serif: 'Cormorant Garamond', 'Garamond', Georgia, serif;
+    --sans: 'Jost', ui-sans-serif, system-ui, sans-serif;
+    --radius: 0px;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
     font-weight: 300;
     -webkit-font-smoothing: antialiased;
-    min-height: 100vh;
-    overflow-x: hidden;
+    letter-spacing: 0.01em;
 }
 
 @media (prefers-color-scheme: dark) {
     .fd {
-        --fd-bg: #110f0c;
-        --fd-ink: #f2ede5;
-        --fd-ink-soft: #9a9080;
-        --fd-ink-faint: #5a5248;
-        --fd-accent: #d4c8b8;
-        --fd-rule: #2a2620;
+        --bg: oklch(0.14 0.008 265);
+        --surface: oklch(0.17 0.009 263);
+        --surface-2: oklch(0.15 0.008 265);
+        --ink: oklch(0.96 0.006 82);
+        --ink-soft: oklch(0.74 0.008 78);
+        --ink-faint: oklch(0.54 0.006 75);
+        --rule: oklch(0.26 0.008 265);
+        --gold: oklch(0.70 0.12 78);
+        --gold-light: oklch(0.80 0.10 80);
+        --gold-faint: oklch(0.70 0.12 78 / 0.14);
+        --accent: oklch(0.70 0.12 78);
+        --accent-light: oklch(0.70 0.12 78 / 0.08);
     }
 }
 
-/* ─── LOAD ANIMATION ─── */
-.fd {
-    opacity: 0;
-    transition: opacity 1.2s ease;
-}
-.fd.fd-loaded {
-    opacity: 1;
+.fd-container {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 clamp(1.5rem, 6vw, 3rem);
 }
 
-/* ─── HERO ─── */
+/* ── HERO ── */
 .fd-hero {
     position: relative;
-    height: 100svh;
-    min-height: 600px;
+    min-height: 100svh;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: clamp(4rem, 10vw, 6rem) clamp(1.5rem, 6vw, 3rem);
     overflow: hidden;
+    text-align: center;
 }
 
 .fd-hero-img {
     position: absolute;
     inset: 0;
     background-size: cover;
-    background-position: center 35%;
-    transform: scale(1.08);
-    transition: transform 10s cubic-bezier(.15,.55,.15,1);
+    background-position: center;
+    filter: saturate(0.65) brightness(0.55);
+    /* Zoom suave continuo */
+    animation: fd-hero-zoom 20s ease-in-out infinite alternate;
 }
 
-.fd-loaded .fd-hero-img {
-    transform: scale(1.0);
-}
-
-.fd-hero-veil {
+.fd-hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-        to bottom,
-        rgba(17,15,12,0.35) 0%,
-        rgba(17,15,12,0.55) 50%,
-        rgba(17,15,12,0.78) 100%
-    );
+    background: linear-gradient(180deg, oklch(0 0 0 / 0.2) 0%, oklch(0 0 0 / 0.45) 60%, oklch(0 0 0 / 0.65) 100%);
 }
 
-.fd-hero-center {
+.fd-hero:not(:has(.fd-hero-img)) {
+    background: var(--surface-2);
+    min-height: clamp(400px, 65svh, 640px);
+}
+
+.fd-hero:not(:has(.fd-hero-img)) .fd-hero-overlay { display: none; }
+.fd-hero:not(:has(.fd-hero-img)) .fd-hero-img { display: none; }
+.fd-hero:not(:has(.fd-hero-img)) .fd-hero-inner { color: var(--ink); }
+
+.fd-hero-inner {
     position: relative;
-    z-index: 5;
-    text-align: center;
-    padding: 2rem;
-    color: #f5f0e8;
-    animation: fd-reveal 1.6s cubic-bezier(.2,.65,.2,1) 0.3s both;
+    z-index: 2;
+    max-width: 680px;
+    color: oklch(0.97 0.005 82);
+    animation: fd-fade-in 1200ms cubic-bezier(0.4, 0, 0.2, 1) both;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-@keyframes fd-reveal {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
+.fd-logo {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    margin-bottom: 2rem;
+    /* Sin border-radius — estética austera */
+    background: oklch(1 0 0 / 0.08);
+    padding: 8px;
 }
 
-.fd-hero-eyebrow {
+.fd-kicker {
+    font-family: var(--sans);
+    font-weight: 200;
+    font-size: 0.72rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    margin: 0 0 1.5rem;
+    opacity: 0.7;
+}
+
+/* ── Ornamento dorado ── */
+.fd-ornament {
     display: flex;
     align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    width: 100%;
     justify-content: center;
-    gap: 1.25rem;
+}
+
+.fd-ornament span:not(.fd-ornament-diamond) {
+    flex: 1;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.3;
+    max-width: 80px;
+}
+
+.fd-ornament-diamond {
+    width: 6px;
+    height: 6px;
+    background: currentColor;
+    transform: rotate(45deg);
+    opacity: 0.6;
+    flex: none !important;
+}
+
+.fd-ornament-sm {
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+}
+
+.fd-ornament-sm span:not(.fd-ornament-diamond) { max-width: 48px; }
+
+.fd-title {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(2.8rem, 9vw, 5.5rem);
+    line-height: 1.0;
+    letter-spacing: 0.03em;
+    margin: 0;
+    font-style: italic;
+}
+
+.fd-sub {
+    margin: 1.75rem 0 0;
+    font-family: var(--sans);
+    font-size: clamp(0.85rem, 1.8vw, 0.95rem);
+    line-height: 1.8;
+    max-width: 44ch;
+    opacity: 0.75;
+    font-weight: 200;
+    letter-spacing: 0.04em;
+}
+
+.fd-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 2.5rem;
+    justify-content: center;
+}
+
+/* ── BUTTONS — austeros, sin bordes redondeados ── */
+.fd-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.9rem 2rem;
+    border-radius: 0;
+    font-family: var(--sans);
+    font-size: 0.78rem;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background 250ms, color 250ms, border-color 250ms;
+    border: none;
+    cursor: pointer;
+}
+
+.fd-btn svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+.fd-btn-primary {
+    background: var(--gold);
+    color: oklch(0.99 0 0);
+}
+
+.fd-btn-primary:hover { background: var(--gold-light); }
+
+.fd-btn-outline {
+    background: transparent;
+    color: oklch(0.97 0 0);
+    border: 1px solid oklch(1 0 0 / 0.35);
+}
+
+.fd-btn-outline:hover {
+    background: oklch(1 0 0 / 0.08);
+    border-color: oklch(1 0 0 / 0.6);
+}
+
+.fd-btn-full { width: 100%; justify-content: center; }
+
+/* ── SECTIONS ── */
+.fd-section { padding: clamp(4rem, 9vw, 7rem) 0; }
+.fd-section + .fd-section { border-top: 1px solid var(--rule); }
+
+.fd-section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
     margin-bottom: 2.5rem;
 }
 
-.fd-line {
-    display: block;
+/* Línea que se extiende a la derecha del título */
+.fd-rule {
+    flex: 1;
     height: 1px;
-    width: clamp(40px, 8vw, 70px);
-    background: rgba(245,240,232,0.45);
+    background: var(--gold);
+    opacity: 0.35;
+    align-self: center;
 }
 
-.fd-eyebrow-text {
-    font-family: var(--fd-sans);
-    font-size: 0.62rem;
-    font-weight: 500;
-    letter-spacing: 0.45em;
-    text-transform: uppercase;
-    color: rgba(245,240,232,0.7);
+.fd-section-title {
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: clamp(1.5rem, 3.5vw, 2rem);
+    line-height: 1.1;
+    letter-spacing: 0.05em;
+    margin: 0;
+    color: var(--ink);
     white-space: nowrap;
 }
 
-.fd-name {
-    font-family: var(--fd-serif);
+.fd-section-subtitle {
+    margin: -1.5rem 0 2.5rem;
+    font-size: 0.82rem;
+    color: var(--ink-faint);
+    line-height: 1.6;
     font-style: italic;
-    font-weight: 300;
-    font-size: clamp(3rem, 12vw, 7.5rem);
-    line-height: 1.05;
-    letter-spacing: -0.01em;
-    margin: 0 0 1.75rem;
-    color: #f5f0e8;
+    letter-spacing: 0.06em;
 }
 
-.fd-tagline {
-    font-family: var(--fd-sans);
-    font-weight: 300;
-    font-size: clamp(0.9rem, 2vw, 1.05rem);
-    line-height: 1.8;
-    letter-spacing: 0.04em;
-    max-width: 46ch;
-    margin: 0 auto 2.5rem;
-    color: rgba(245,240,232,0.75);
-}
+/* ── HOURS ── */
+.fd-hours-section { background: var(--surface); }
 
-.fd-hero-link {
-    font-family: var(--fd-sans);
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: rgba(245,240,232,0.85);
-    text-decoration: none;
-    border-bottom: 1px solid rgba(245,240,232,0.4);
-    padding-bottom: 3px;
-    transition: color 300ms, border-color 300ms;
-}
-
-.fd-hero-link:hover {
-    color: #f5f0e8;
-    border-color: rgba(245,240,232,0.8);
-}
-
-.fd-scroll {
-    position: absolute;
-    bottom: 2.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 5;
+.fd-hours-compact {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 4px;
+    gap: 0.6rem;
+    max-width: 480px;
 }
 
-.fd-scroll-tick {
-    display: block;
-    width: 1px;
-    height: 8px;
-    background: rgba(245,240,232,0.4);
-    animation: fd-tick 2s ease-in-out infinite;
-}
-
-.fd-scroll-tick:nth-child(2) { animation-delay: 0.3s; }
-.fd-scroll-tick:nth-child(3) { animation-delay: 0.6s; }
-
-@keyframes fd-tick {
-    0%, 100% { opacity: 0.25; }
-    50%       { opacity: 1; }
-}
-
-/* ─── INTRO ─── */
-.fd-intro {
-    padding: clamp(4rem, 10vw, 7rem) clamp(1.25rem, 6vw, 4rem);
-}
-
-.fd-intro-inner {
-    max-width: 620px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-.fd-rule-wrap {
+.fd-hours-row {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 1.25rem;
-    margin-bottom: 2.5rem;
-    color: var(--fd-ink-faint);
+    gap: 0.75rem;
+    font-size: 0.88rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--rule);
 }
 
-.fd-rule-thin {
-    display: block;
-    height: 1px;
-    width: 60px;
-    background: currentColor;
-}
+.fd-hours-row:last-child { border-bottom: none; }
 
-.fd-mark {
-    font-size: 0.6rem;
-    letter-spacing: 0;
-}
-
-.fd-intro-text {
-    font-family: var(--fd-serif);
-    font-style: italic;
+.fd-hours-range {
+    font-family: var(--sans);
     font-weight: 300;
-    font-size: clamp(1.35rem, 3.5vw, 1.8rem);
-    line-height: 1.65;
-    letter-spacing: 0.01em;
-    color: var(--fd-ink-soft);
-    margin: 0;
+    min-width: 6rem;
+    color: var(--ink);
+    letter-spacing: 0.04em;
 }
 
-/* ─── MAIN ─── */
-.fd-main {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0 clamp(1.25rem, 4vw, 3rem);
+.fd-hours-dots {
+    flex: 1;
+    border-bottom: 1px dotted var(--rule);
+    margin-bottom: 2px;
 }
 
-/* ─── SECTION ─── */
-.fd-section {
-    padding: clamp(3rem, 8vw, 6rem) 0;
-    border-top: 1px solid var(--fd-rule);
+.fd-hours-value {
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+    font-weight: 300;
+    text-align: right;
 }
 
-.fd-section-alt {
-    background: transparent;
-}
+.fd-hours-row.is-closed .fd-hours-value { opacity: 0.4; font-style: italic; }
 
-.fd-section-cap {
-    font-family: var(--fd-sans);
-    font-size: 0.62rem;
-    font-weight: 500;
-    letter-spacing: 0.45em;
-    text-transform: uppercase;
-    color: var(--fd-ink-faint);
-    margin-bottom: 3rem;
-}
-
-/* ─── MENU LIST ─── */
+/* ── MENU LIST — estilo lista numerada fine-dining ── */
 .fd-menu-list {
     display: flex;
     flex-direction: column;
+    gap: 0;
+    border-top: 1px solid var(--rule);
 }
 
-.fd-menu-entry {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-    animation: fd-entry-in 700ms cubic-bezier(.2,.65,.2,1) both;
-    animation-delay: calc(var(--i, 0) * 120ms);
-}
-
-@keyframes fd-entry-in {
-    from { opacity: 0; transform: translateX(-12px); }
-    to   { opacity: 1; transform: translateX(0); }
-}
-
-.fd-menu-text {
+.fd-menu-item {
     display: flex;
     align-items: center;
-    gap: 2rem;
-    padding: 1.75rem 0;
-    transition: padding-left 300ms;
+    gap: 1rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--rule);
+    text-decoration: none;
+    color: inherit;
+    transition: background 200ms;
+    position: relative;
 }
 
-.fd-menu-entry:hover .fd-menu-text {
-    padding-left: 1.5rem;
-}
+.fd-menu-item:hover { background: var(--gold-faint); }
 
-.fd-menu-numeral {
-    font-family: var(--fd-serif);
-    font-style: italic;
+.fd-menu-ordinal {
+    font-family: var(--serif);
+    font-size: 0.75rem;
     font-weight: 300;
-    font-size: 0.88rem;
-    color: var(--fd-ink-faint);
-    flex-shrink: 0;
-    letter-spacing: 0.04em;
-    min-width: 2.2rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    min-width: 1.5rem;
+    text-align: center;
 }
 
-.fd-menu-info {
+.fd-menu-item-dots {
     flex: 1;
-}
-
-.fd-menu-name {
-    font-family: var(--fd-serif);
-    font-style: italic;
-    font-weight: 400;
-    font-size: clamp(1.4rem, 4vw, 1.9rem);
-    line-height: 1.2;
-    margin: 0;
-    color: var(--fd-ink);
-    transition: color 250ms;
-}
-
-.fd-menu-entry:hover .fd-menu-name {
-    color: var(--fd-ink-soft);
-}
-
-.fd-menu-desc {
-    font-size: 0.85rem;
-    color: var(--fd-ink-faint);
-    margin: 0.35rem 0 0;
-    line-height: 1.6;
-    max-width: 50ch;
-}
-
-.fd-menu-img-wrap {
-    width: 5rem;
-    height: 5rem;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-
-.fd-menu-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: saturate(0.7) brightness(0.95);
-    transition: filter 300ms;
-}
-
-.fd-menu-entry:hover .fd-menu-img {
-    filter: saturate(0.9) brightness(1);
-}
-
-.fd-menu-arrow {
-    font-size: 1rem;
-    color: var(--fd-ink-faint);
-    flex-shrink: 0;
-    transition: transform 250ms;
-}
-
-.fd-menu-entry:hover .fd-menu-arrow {
-    transform: translateX(6px);
-    color: var(--fd-ink-soft);
-}
-
-.fd-menu-divider {
+    border-bottom: 1px dotted var(--rule);
     height: 1px;
-    background: var(--fd-rule);
-    transition: margin 300ms;
+    align-self: center;
 }
 
-/* ─── TWO COL ─── */
-.fd-two-col {
+.fd-menu-item-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    text-align: right;
+    flex: 3;
+}
+
+.fd-menu-item-name {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 1.2rem;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+}
+
+.fd-menu-item-desc {
+    font-size: 0.78rem;
+    color: var(--ink-faint);
+    font-style: italic;
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+}
+
+.fd-menu-item-arrow {
+    font-family: var(--sans);
+    font-weight: 200;
+    font-size: 0.85rem;
+    color: var(--gold);
+    opacity: 0;
+    transition: opacity 200ms, transform 200ms;
+    margin-left: 0.5rem;
+}
+
+.fd-menu-item:hover .fd-menu-item-arrow {
+    opacity: 1;
+    transform: translateX(4px);
+}
+
+/* ── LOCATION + MAP ── */
+.fd-location-section { background: var(--surface-2); }
+
+.fd-location-grid {
     display: grid;
     grid-template-columns: 1fr;
     gap: 3rem;
 }
 
-@media (min-width: 680px) {
-    .fd-two-col { grid-template-columns: 1fr 1fr; }
+@media (min-width: 768px) { .fd-location-grid { grid-template-columns: 1.2fr 1fr; } }
+
+/* Mapa mínimo, discreto */
+.fd-map-wrap {
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--rule);
 }
 
-.fd-contact-label {
-    font-family: var(--fd-sans);
-    font-size: 0.62rem;
-    font-weight: 500;
-    letter-spacing: 0.45em;
-    text-transform: uppercase;
-    color: var(--fd-ink-faint);
-    margin: 0 0 1.5rem;
+.fd-map { width: 100%; height: 100%; border: 0; filter: saturate(0.5); }
+
+.fd-map-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--ink-faint);
+    opacity: 0.15;
 }
 
-.fd-oh {
-    color: var(--fd-ink-soft);
+.fd-map-placeholder svg { width: 3rem; height: 3rem; }
+
+.fd-contact-info { display: flex; flex-direction: column; gap: 2rem; }
+
+.fd-address { font-style: normal; display: flex; flex-direction: column; gap: 1.25rem; }
+
+.fd-contact-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
     font-size: 0.88rem;
+    color: var(--ink);
+    line-height: 1.7;
+    font-weight: 300;
+    letter-spacing: 0.03em;
 }
 
-.fd-address {
-    font-style: normal;
+.fd-contact-row svg { width: 16px; height: 16px; color: var(--gold); flex-shrink: 0; margin-top: 3px; }
+.fd-contact-row a { color: var(--gold); text-decoration: none; font-weight: 400; }
+.fd-contact-row a:hover { text-decoration: underline; }
+
+.fd-contact-hours { margin-top: 0.5rem; }
+
+.fd-contact-hours-title {
+    font-family: var(--serif);
+    font-weight: 300;
     font-size: 0.9rem;
-    line-height: 1.75;
-    color: var(--fd-ink-soft);
-}
-
-.fd-address p { margin: 0; }
-
-.fd-phone {
-    display: block;
-    margin-top: 0.75rem;
-    font-size: 0.9rem;
-    color: var(--fd-ink);
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    display: inline-block;
-    padding-bottom: 2px;
-    transition: border-color 200ms;
-}
-
-.fd-phone:hover {
-    border-color: var(--fd-ink-faint);
-}
-
-.fd-directions {
-    display: block;
-    margin-top: 0.75rem;
-    font-size: 0.78rem;
-    font-weight: 400;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--fd-ink-faint);
-    text-decoration: none;
-    transition: color 200ms;
+    margin: 0 0 1rem;
+    color: var(--gold);
 }
 
-.fd-directions:hover {
-    color: var(--fd-ink);
-}
+/* ── SOCIAL ── */
+.fd-social-section { background: var(--surface); text-align: center; }
+.fd-social-section .fd-section-header { justify-content: center; }
+.fd-social-section .fd-rule { display: none; }
+.fd-social-grid { justify-content: center; }
 
-.fd-socials {
-    margin-top: 1.5rem;
-    color: var(--fd-ink-faint);
-}
-
-/* ─── LOCATIONS ─── */
+/* ── MULTI-LOCATION ── */
 .fd-locations-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
-    gap: 2rem;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
 }
 
-/* ─── FOOTER ─── */
+@media (min-width: 640px) { .fd-locations-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .fd-locations-grid { grid-template-columns: repeat(3, 1fr); } }
+
+/* ── FOOTER ── */
 .fd-footer {
-    border-top: 1px solid var(--fd-rule);
-    padding: clamp(3rem, 8vw, 5rem) clamp(1.25rem, 4vw, 3rem);
+    padding: clamp(3.5rem, 7vw, 5rem) 0;
+    border-top: 1px solid var(--rule);
+    background: var(--surface);
+}
+
+.fd-footer-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
     text-align: center;
-    color: var(--fd-ink-faint);
+}
+
+.fd-footer-brand { display: flex; align-items: center; gap: 1.25rem; }
+
+.fd-footer-logo {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    /* Sin border-radius */
 }
 
 .fd-footer-name {
-    font-family: var(--fd-serif);
-    font-style: italic;
+    font-family: var(--serif);
     font-weight: 300;
-    font-size: 1.6rem;
-    letter-spacing: 0.01em;
-    color: var(--fd-ink-soft);
-    margin: 1.5rem 0 0.5rem;
+    font-size: 1.15rem;
+    letter-spacing: 0.06em;
+    font-style: italic;
+    margin: 0;
+    color: var(--ink);
 }
 
-.fd-footer-address {
-    font-style: normal;
-    font-size: 0.82rem;
-    letter-spacing: 0.04em;
-    color: var(--fd-ink-faint);
-    display: block;
-    margin: 0.25rem 0;
+.fd-footer-line { margin: 0.1rem 0; font-size: 0.78rem; color: var(--ink-faint); letter-spacing: 0.05em; font-weight: 200; }
+.fd-footer-copy { font-size: 0.68rem; color: var(--ink-faint); margin-top: 0.5rem; letter-spacing: 0.06em; }
+.fd-footer-copy a { color: var(--gold); text-decoration: none; }
+.fd-footer-copy a:hover { text-decoration: underline; }
+
+/* ── ANIMATIONS ── */
+@keyframes fd-hero-zoom {
+    from { transform: scale(1); }
+    to   { transform: scale(1.03); }
 }
 
-.fd-footer-socials {
-    justify-content: center;
-    margin-top: 1.25rem;
-    color: var(--fd-ink-faint);
-}
-
-.fd-footer-credit {
-    margin-top: 2.5rem;
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    opacity: 0.5;
-}
-
-.fd-footer-credit a {
-    color: inherit;
-    text-decoration: none;
+@keyframes fd-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .fd { transition: none; opacity: 1; }
-    .fd-hero-center, .fd-menu-entry { animation: none; }
-    .fd-hero-img { transition: none; }
-    .fd-scroll-tick { animation: none; }
+    .fd-hero-img { animation: none !important; }
+    .fd-hero-inner { animation: none !important; }
+    .fd-menu-item,
+    .fd-menu-item-arrow,
+    .fd-btn { transition: none !important; }
 }
 </style>

@@ -31,7 +31,7 @@ class LocationUpdateRequest extends FormRequest
             'latitude' => ['nullable', 'numeric'],
             'longitude' => ['nullable', 'numeric'],
             'logo_url' => ['nullable', 'string', 'max:255'],
-            'image_url' => ['nullable', 'string', 'max:255'],
+            'image_url' => ['nullable', 'string'],
             'languages' => ['nullable', 'array'],
             'currency' => ['nullable', 'string', 'max:3'],
             'time_zone' => ['nullable', 'string', 'max:30'],

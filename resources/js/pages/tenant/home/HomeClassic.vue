@@ -5,7 +5,7 @@ import MenuSeoHead from '@/components/public/MenuSeoHead.vue';
 import OpeningHoursDisplay from './components/OpeningHoursDisplay.vue';
 import SocialLinks from './components/SocialLinks.vue';
 import LocationCard from './components/LocationCard.vue';
-import { mapsDirectionsUrl, type OpeningHour } from '@/composables/useTenantHome';
+import { mapsDirectionsUrl, mapsEmbedUrl, groupOpeningHours, type OpeningHour } from '@/composables/useTenantHome';
 
 interface Menu {
     id: number;
@@ -46,16 +46,15 @@ const props = defineProps<{
     seo: SeoData;
 }>();
 
-const hero = computed(() => props.primaryLocation?.image_url ?? props.primaryLocation?.logo_url ?? null);
-const mapsUrl = computed(() =>
-    props.primaryLocation
-        ? mapsDirectionsUrl({
-              lat: props.primaryLocation.latitude,
-              lng: props.primaryLocation.longitude,
-              address: props.primaryLocation.address,
-          })
-        : null,
-);
+const loc = computed(() => props.primaryLocation);
+const hero = computed(() => loc.value?.image_url ?? null);
+const logo = computed(() => loc.value?.logo_url ?? null);
+const dirUrl = computed(() => loc.value ? mapsDirectionsUrl({ lat: loc.value.latitude, lng: loc.value.longitude, address: loc.value.address }) : null);
+const embedUrl = computed(() => loc.value ? mapsEmbedUrl({ lat: loc.value.latitude, lng: loc.value.longitude, address: loc.value.address, name: loc.value.name }) : null);
+const hoursGrouped = computed(() => loc.value?.opening_hours ? groupOpeningHours(loc.value.opening_hours) : []);
+const hasHours = computed(() => loc.value?.opening_hours && loc.value.opening_hours.length > 0);
+const hasMenus = computed(() => loc.value?.menus && loc.value.menus.length > 0);
+const hasSocial = computed(() => !!loc.value?.social_medias && Object.keys(loc.value.social_medias as object).length > 0);
 </script>
 
 <template>
@@ -63,575 +62,291 @@ const mapsUrl = computed(() =>
     <Head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,500&family=Lato:wght@300;400;700&display=swap"
-            rel="stylesheet"
-        />
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
     </Head>
 
     <div class="hc">
-        <!-- ─── HERO ─── -->
+        <!-- ═══ HERO ═══ -->
         <header class="hc-hero">
             <div v-if="hero" class="hc-hero-img" :style="{ backgroundImage: `url(${hero})` }" />
             <div class="hc-hero-overlay" />
             <div class="hc-hero-inner">
-                <p v-if="primaryLocation?.city" class="hc-kicker">{{ primaryLocation.city }}</p>
-                <h1 class="hc-title">
-                    {{ primaryLocation?.name ?? tenant.name }}
-                </h1>
-                <p v-if="primaryLocation?.description" class="hc-sub">{{ primaryLocation.description }}</p>
-                <div class="hc-ornament" aria-hidden="true">
-                    <span class="hc-rule" /><span class="hc-diamond">◆</span><span class="hc-rule" />
-                </div>
-                <div v-if="primaryLocation?.menus?.length && !isMultiLocation" class="hc-hero-ctas">
-                    <a
-                        v-for="menu in primaryLocation.menus"
-                        :key="menu.id"
-                        :href="`/menu/${menu.id}`"
-                        class="hc-btn-primary"
-                    >
-                        Ver {{ menu.name }}
+                <img v-if="logo" :src="logo" :alt="loc?.name" class="hc-logo" />
+                <p v-if="loc?.city" class="hc-kicker">{{ loc.city }}</p>
+                <h1 class="hc-title">{{ loc?.name ?? tenant.name }}</h1>
+                <p v-if="loc?.description" class="hc-sub">{{ loc.description }}</p>
+                <div class="hc-hero-actions">
+                    <a v-if="loc?.phone" :href="`tel:${loc.phone}`" class="hc-btn hc-btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        Llamar
+                    </a>
+                    <a v-if="dirUrl" :href="dirUrl" target="_blank" rel="noopener" class="hc-btn hc-btn-outline">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        Cómo llegar
                     </a>
                 </div>
             </div>
         </header>
 
-        <!-- ─── MAIN ─── -->
-        <main class="hc-main">
-
-            <!-- Single-location content -->
-            <template v-if="!isMultiLocation && primaryLocation">
-
-                <!-- Menus cards -->
-                <section v-if="primaryLocation.menus?.length" class="hc-section">
-                    <div class="hc-section-head">
-                        <h2 class="hc-section-title">Nuestra Carta</h2>
-                        <div class="hc-section-line" />
+        <template v-if="!isMultiLocation && loc">
+            <!-- ═══ HORARIOS ═══ -->
+            <section v-if="hasHours" class="hc-section hc-hours-section">
+                <div class="hc-container">
+                    <div class="hc-section-header">
+                        <span class="hc-section-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </span>
+                        <h2 class="hc-section-title">Horario</h2>
                     </div>
-                    <div class="hc-cards">
-                        <a
-                            v-for="menu in primaryLocation.menus"
-                            :key="menu.id"
-                            :href="`/menu/${menu.id}`"
-                            class="hc-card"
-                        >
-                            <div v-if="menu.image_path" class="hc-card-img-wrap">
-                                <img :src="menu.image_path" :alt="menu.name" class="hc-card-img" loading="lazy" />
+                    <div class="hc-hours-compact">
+                        <div v-for="(group, i) in hoursGrouped" :key="i" class="hc-hours-row" :class="{ 'is-closed': group.isClosed }">
+                            <span class="hc-hours-range">{{ group.range }}</span>
+                            <span class="hc-hours-value">{{ group.hours }}</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══ NUESTRAS CARTAS ═══ -->
+            <section v-if="hasMenus" class="hc-section hc-menus-section">
+                <div class="hc-container">
+                    <div class="hc-section-header">
+                        <span class="hc-section-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                        </span>
+                        <h2 class="hc-section-title">Nuestras Cartas</h2>
+                    </div>
+                    <p class="hc-section-subtitle">Consulta nuestra oferta gastronómica</p>
+                    <div class="hc-menu-cards">
+                        <a v-for="menu in loc.menus" :key="menu.id" :href="`/menu/${menu.id}`" class="hc-menu-card">
+                            <div v-if="menu.image_path" class="hc-menu-card-img-wrap">
+                                <img :src="menu.image_path" :alt="menu.name" class="hc-menu-card-img" loading="lazy" />
                             </div>
-                            <div class="hc-card-body">
-                                <h3 class="hc-card-title">{{ menu.name }}</h3>
-                                <p v-if="menu.description" class="hc-card-desc">{{ menu.description }}</p>
-                                <span class="hc-card-link">Ver carta →</span>
+                            <div v-else class="hc-menu-card-img-wrap hc-menu-card-placeholder">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+                            </div>
+                            <div class="hc-menu-card-body">
+                                <h3 class="hc-menu-card-name">{{ menu.name }}</h3>
+                                <p v-if="menu.description" class="hc-menu-card-desc">{{ menu.description }}</p>
+                                <span class="hc-menu-card-cta">Ver carta completa →</span>
                             </div>
                         </a>
                     </div>
-                </section>
-
-                <!-- Horarios + Contacto -->
-                <div class="hc-info-grid">
-
-                    <!-- Horarios -->
-                    <section v-if="primaryLocation.opening_hours?.length" class="hc-info-block">
-                        <h2 class="hc-info-title">Horario</h2>
-                        <OpeningHoursDisplay :hours="primaryLocation.opening_hours" />
-                    </section>
-
-                    <!-- Contacto -->
-                    <section class="hc-info-block">
-                        <h2 class="hc-info-title">Contacto</h2>
-                        <address class="hc-address">
-                            <p v-if="primaryLocation.address">{{ primaryLocation.address }}</p>
-                            <p v-if="primaryLocation.city">{{ primaryLocation.city }}</p>
-                            <a v-if="primaryLocation.phone" :href="`tel:${primaryLocation.phone}`" class="hc-phone">
-                                {{ primaryLocation.phone }}
-                            </a>
-                        </address>
-
-                        <div v-if="mapsUrl" class="hc-map-cta">
-                            <a :href="mapsUrl" target="_blank" rel="noopener" class="hc-btn-outline">
-                                Cómo llegar
-                            </a>
-                        </div>
-
-                        <SocialLinks
-                            v-if="primaryLocation.social_medias"
-                            :social-medias="primaryLocation.social_medias"
-                            size="md"
-                            class="hc-socials"
-                        />
-                    </section>
                 </div>
-            </template>
+            </section>
 
-            <!-- Multi-location grid -->
-            <template v-else-if="isMultiLocation">
-                <section class="hc-section">
-                    <div class="hc-section-head">
-                        <h2 class="hc-section-title">Nuestros Locales</h2>
-                        <div class="hc-section-line" />
+            <!-- ═══ UBICACIÓN Y CONTACTO ═══ -->
+            <section class="hc-section hc-location-section">
+                <div class="hc-container">
+                    <div class="hc-section-header">
+                        <span class="hc-section-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        </span>
+                        <h2 class="hc-section-title">Encuéntranos</h2>
                     </div>
+                    <div class="hc-location-grid">
+                        <div class="hc-map-wrap">
+                            <iframe v-if="embedUrl" :src="embedUrl" class="hc-map" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen />
+                            <div v-else class="hc-map-placeholder">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            </div>
+                        </div>
+                        <div class="hc-contact-info">
+                            <address class="hc-address">
+                                <div v-if="loc.address" class="hc-contact-row">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                                    <div>
+                                        <p>{{ loc.address }}</p>
+                                        <p v-if="loc.city">{{ loc.city }}</p>
+                                    </div>
+                                </div>
+                                <div v-if="loc.phone" class="hc-contact-row">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                    <a :href="`tel:${loc.phone}`">{{ loc.phone }}</a>
+                                </div>
+                            </address>
+                            <a v-if="dirUrl" :href="dirUrl" target="_blank" rel="noopener" class="hc-btn hc-btn-primary hc-btn-full">Cómo llegar</a>
+                            <div v-if="hasHours" class="hc-contact-hours">
+                                <h3 class="hc-contact-hours-title">Horario completo</h3>
+                                <OpeningHoursDisplay :hours="loc.opening_hours!" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ═══ REDES SOCIALES ═══ -->
+            <section v-if="hasSocial" class="hc-section hc-social-section">
+                <div class="hc-container">
+                    <div class="hc-section-header"><h2 class="hc-section-title">Síguenos</h2></div>
+                    <SocialLinks :social-medias="loc.social_medias" size="lg" class="hc-social-grid" />
+                </div>
+            </section>
+        </template>
+
+        <!-- ═══ MULTI-LOCATION ═══ -->
+        <template v-else-if="isMultiLocation">
+            <section class="hc-section hc-multi-section">
+                <div class="hc-container">
+                    <div class="hc-section-header"><h2 class="hc-section-title">Nuestros Locales</h2></div>
+                    <p class="hc-section-subtitle">{{ locations.length }} establecimientos para servirte</p>
                     <div class="hc-locations-grid">
-                        <LocationCard
-                            v-for="loc in locations"
-                            :key="loc.id"
-                            :location="loc"
-                        />
+                        <LocationCard v-for="l in locations" :key="l.id" :location="l" />
                     </div>
-                </section>
-            </template>
-        </main>
+                </div>
+            </section>
+        </template>
 
-        <!-- ─── FOOTER ─── -->
+        <!-- ═══ FOOTER ═══ -->
         <footer class="hc-footer">
-            <div class="hc-footer-inner">
-                <p class="hc-footer-name">{{ primaryLocation?.name ?? tenant.name }}</p>
-                <p v-if="primaryLocation?.address" class="hc-footer-line">{{ primaryLocation.address }}</p>
-                <p v-if="primaryLocation?.city" class="hc-footer-line">{{ primaryLocation.city }}</p>
-                <SocialLinks
-                    v-if="primaryLocation?.social_medias"
-                    :social-medias="primaryLocation.social_medias"
-                    size="sm"
-                    class="hc-footer-socials"
-                />
-                <p class="hc-footer-copy">
-                    Menú digital con
-                    <a href="https://menulinker.com" target="_blank" rel="noopener">MenuLinker</a>
-                </p>
+            <div class="hc-container hc-footer-inner">
+                <div class="hc-footer-brand">
+                    <img v-if="logo" :src="logo" :alt="loc?.name" class="hc-footer-logo" />
+                    <div>
+                        <p class="hc-footer-name">{{ loc?.name ?? tenant.name }}</p>
+                        <p v-if="loc?.address" class="hc-footer-line">{{ loc.address }}{{ loc?.city ? `, ${loc.city}` : '' }}</p>
+                        <p v-if="loc?.phone" class="hc-footer-line">{{ loc.phone }}</p>
+                    </div>
+                </div>
+                <SocialLinks v-if="hasSocial" :social-medias="loc!.social_medias" size="sm" class="hc-footer-socials" />
+                <p class="hc-footer-copy">Página creada con <a href="https://menulinker.com" target="_blank" rel="noopener">MenuLinker</a></p>
             </div>
         </footer>
     </div>
 </template>
 
 <style scoped>
-/* ===== CLASSIC RESTAURANT TEMPLATE ===== */
 .hc {
-    --hc-bg: #faf8f4;
-    --hc-paper: #ffffff;
-    --hc-ink: #1c1a17;
-    --hc-ink-soft: #5a5347;
-    --hc-ink-faint: #9a9087;
-    --hc-accent: #8b4513;
-    --hc-accent-light: #c8702e;
-    --hc-rule: #e8e0d4;
-    --hc-serif: 'Playfair Display', 'Georgia', serif;
-    --hc-sans: 'Lato', 'Helvetica Neue', system-ui, sans-serif;
-    --hc-radius: 0.75rem;
-
-    position: relative;
+    --bg: oklch(0.985 0.008 75);
+    --surface: oklch(1 0 0);
+    --surface-2: oklch(0.97 0.006 75);
+    --ink: oklch(0.18 0.02 40);
+    --ink-soft: oklch(0.42 0.015 40);
+    --ink-faint: oklch(0.62 0.012 40);
+    --rule: oklch(0.88 0.012 75);
+    --accent: oklch(0.42 0.08 30);
+    --accent-light: oklch(0.42 0.08 30 / 0.08);
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'Lato', ui-sans-serif, system-ui, sans-serif;
+    --radius: 14px;
     min-height: 100vh;
-    background: var(--hc-bg);
-    color: var(--hc-ink);
-    font-family: var(--hc-sans);
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
 }
-
 @media (prefers-color-scheme: dark) {
     .hc {
-        --hc-bg: #1a1714;
-        --hc-paper: #211e1a;
-        --hc-ink: #f0ebe2;
-        --hc-ink-soft: #b5aa9a;
-        --hc-ink-faint: #7a7168;
-        --hc-accent: #c8702e;
-        --hc-accent-light: #e8913d;
-        --hc-rule: #332e28;
+        --bg: oklch(0.14 0.01 40);
+        --surface: oklch(0.19 0.012 40);
+        --surface-2: oklch(0.16 0.01 40);
+        --ink: oklch(0.95 0.008 75);
+        --ink-soft: oklch(0.72 0.01 75);
+        --ink-faint: oklch(0.55 0.01 75);
+        --rule: oklch(0.28 0.01 40);
+        --accent: oklch(0.78 0.1 35);
+        --accent-light: oklch(0.78 0.1 35 / 0.12);
     }
 }
+.hc-container { max-width: 1040px; margin: 0 auto; padding: 0 clamp(1.25rem, 5vw, 2.5rem); }
 
-/* ─── HERO ─── */
-.hc-hero {
-    position: relative;
-    min-height: clamp(480px, 75svh, 680px);
-    display: flex;
-    align-items: flex-end;
-    overflow: hidden;
-}
+/* HERO */
+.hc-hero { position: relative; min-height: clamp(480px, 75svh, 700px); display: flex; align-items: flex-end; padding: clamp(2rem, 8vw, 5rem) clamp(1.25rem, 5vw, 2.5rem); overflow: hidden; }
+.hc-hero-img { position: absolute; inset: 0; background-size: cover; background-position: center; filter: saturate(0.9) contrast(1.04); }
+.hc-hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, oklch(0 0 0 / 0.15) 0%, oklch(0 0 0 / 0.3) 50%, oklch(0 0 0 / 0.75) 100%); }
+.hc-hero:not(:has(.hc-hero-img)) { background: linear-gradient(135deg, var(--surface-2), var(--bg)); min-height: auto; padding-top: clamp(5rem, 12vw, 8rem); padding-bottom: clamp(3rem, 8vw, 5rem); }
+.hc-hero:not(:has(.hc-hero-img)) .hc-hero-overlay { display: none; }
+.hc-hero:not(:has(.hc-hero-img)) .hc-hero-inner { color: var(--ink); }
+.hc-hero-inner { position: relative; z-index: 2; max-width: 720px; color: oklch(0.99 0 0); animation: fade-up 900ms cubic-bezier(.2,.65,.2,1) both; }
+.hc-logo { width: 72px; height: 72px; object-fit: contain; border-radius: 16px; margin-bottom: 1.25rem; background: oklch(1 0 0 / 0.1); backdrop-filter: blur(8px); padding: 8px; }
+.hc-kicker { font-family: var(--sans); font-weight: 300; font-size: 0.82rem; letter-spacing: 0.2em; text-transform: uppercase; margin: 0 0 0.75rem; opacity: 0.85; }
+.hc-title { font-family: var(--serif); font-weight: 700; font-size: clamp(2.75rem, 9vw, 5rem); line-height: 0.95; letter-spacing: -0.015em; margin: 0; }
+.hc-sub { margin: 1.25rem 0 0; font-size: clamp(1rem, 2vw, 1.15rem); line-height: 1.65; max-width: 52ch; opacity: 0.9; font-weight: 300; }
+.hc-hero-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+.hc-btn { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.85rem 1.5rem; border-radius: 999px; font-family: var(--sans); font-size: 0.88rem; font-weight: 700; text-decoration: none; transition: all 200ms; border: none; cursor: pointer; }
+.hc-btn svg { width: 18px; height: 18px; flex-shrink: 0; }
+.hc-btn-primary { background: var(--accent); color: oklch(1 0 0); }
+.hc-btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.hc-btn-outline { background: transparent; color: oklch(1 0 0); backdrop-filter: blur(8px); border: 1.5px solid oklch(1 0 0 / 0.4); }
+.hc-btn-outline:hover { background: oklch(1 0 0 / 0.15); }
+/* When hero has no image, buttons need dark text */
+.hc-hero:not(:has(.hc-hero-img)) .hc-btn-primary { background: var(--accent); color: oklch(1 0 0); }
+.hc-hero:not(:has(.hc-hero-img)) .hc-btn-outline { color: var(--ink); border-color: var(--rule); }
+.hc-hero:not(:has(.hc-hero-img)) .hc-btn-outline:hover { background: var(--accent-light); }
+.hc-btn-full { width: 100%; justify-content: center; }
 
-.hc-hero-img {
-    position: absolute;
-    inset: 0;
-    background-size: cover;
-    background-position: center 30%;
-    filter: saturate(0.85) contrast(1.05);
-    transform: scale(1.04);
-    transition: transform 12s ease;
-}
+/* SECTIONS */
+.hc-section { padding: clamp(3.5rem, 8vw, 6rem) 0; }
+.hc-section + .hc-section { border-top: 1px solid var(--rule); }
+.hc-section-header { display: flex; align-items: center; gap: 0.9rem; margin-bottom: 1.5rem; }
+.hc-section-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: var(--accent-light); border-radius: 12px; color: var(--accent); flex-shrink: 0; }
+.hc-section-icon svg { width: 20px; height: 20px; }
+.hc-section-title { font-family: var(--serif); font-weight: 600; font-size: clamp(1.6rem, 4vw, 2.25rem); line-height: 1.1; margin: 0; color: var(--ink); }
+.hc-section-subtitle { margin: -0.5rem 0 2rem; padding-left: calc(40px + 0.9rem); font-size: 0.95rem; color: var(--ink-soft); line-height: 1.5; }
 
-.hc-hero:hover .hc-hero-img {
-    transform: scale(1.0);
-}
+/* HOURS */
+.hc-hours-section { background: var(--surface); }
+.hc-hours-compact { display: flex; flex-wrap: wrap; gap: 0.75rem 2rem; padding-left: calc(40px + 0.9rem); }
+.hc-hours-row { display: flex; align-items: center; gap: 0.75rem; font-size: 0.95rem; }
+.hc-hours-range { font-weight: 700; min-width: 5rem; color: var(--ink); }
+.hc-hours-value { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.hc-hours-row.is-closed .hc-hours-value { opacity: 0.5; font-style: italic; }
 
-.hc-hero-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        170deg,
-        rgba(10, 8, 5, 0.15) 0%,
-        rgba(10, 8, 5, 0.35) 45%,
-        rgba(10, 8, 5, 0.82) 100%
-    );
-}
+/* MENU CARDS */
+.hc-menu-cards { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+@media (min-width: 640px) { .hc-menu-cards { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 900px) { .hc-menu-cards { grid-template-columns: repeat(3, 1fr); } }
+.hc-menu-card { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius); overflow: hidden; text-decoration: none; color: inherit; transition: transform 300ms cubic-bezier(.2,.65,.2,1), box-shadow 300ms; }
+.hc-menu-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -16px oklch(0 0 0 / 0.15); }
+.hc-menu-card-img-wrap { aspect-ratio: 16/10; overflow: hidden; background: var(--surface-2); }
+.hc-menu-card-img { width: 100%; height: 100%; object-fit: cover; transition: transform 500ms cubic-bezier(.2,.65,.2,1); }
+.hc-menu-card:hover .hc-menu-card-img { transform: scale(1.05); }
+.hc-menu-card-placeholder { display: flex; align-items: center; justify-content: center; color: var(--ink-faint); opacity: 0.3; }
+.hc-menu-card-placeholder svg { width: 3rem; height: 3rem; }
+.hc-menu-card-body { padding: 1.25rem 1.5rem 1.5rem; }
+.hc-menu-card-name { font-family: var(--serif); font-weight: 600; font-size: 1.15rem; margin: 0 0 0.4rem; color: var(--ink); }
+.hc-menu-card-desc { font-size: 0.88rem; color: var(--ink-soft); line-height: 1.55; margin: 0 0 0.9rem; }
+.hc-menu-card-cta { font-size: 0.82rem; font-weight: 700; color: var(--accent); letter-spacing: 0.02em; }
 
-.hc-hero-inner {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    max-width: 760px;
-    margin: 0 auto;
-    padding: clamp(1.5rem, 4vw, 3rem);
-    padding-top: clamp(4rem, 12vw, 7rem);
-    text-align: center;
-    color: #faf6f0;
-    animation: hc-fade-up 900ms cubic-bezier(.2,.65,.2,1) both;
-}
+/* LOCATION + MAP */
+.hc-location-section { background: var(--surface); }
+.hc-location-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+@media (min-width: 768px) { .hc-location-grid { grid-template-columns: 1.3fr 1fr; } }
+.hc-map-wrap { border-radius: var(--radius); overflow: hidden; aspect-ratio: 16/10; background: var(--surface-2); }
+.hc-map { width: 100%; height: 100%; border: 0; }
+.hc-map-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: var(--ink-faint); opacity: 0.2; }
+.hc-map-placeholder svg { width: 4rem; height: 4rem; }
+.hc-contact-info { display: flex; flex-direction: column; gap: 1.5rem; }
+.hc-address { font-style: normal; display: flex; flex-direction: column; gap: 1rem; }
+.hc-contact-row { display: flex; align-items: flex-start; gap: 0.85rem; font-size: 0.95rem; color: var(--ink); line-height: 1.5; }
+.hc-contact-row svg { width: 20px; height: 20px; color: var(--accent); flex-shrink: 0; margin-top: 2px; }
+.hc-contact-row a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.hc-contact-row a:hover { text-decoration: underline; }
+.hc-contact-hours { margin-top: 0.5rem; }
+.hc-contact-hours-title { font-family: var(--serif); font-weight: 600; font-size: 1rem; margin: 0 0 0.75rem; color: var(--ink); }
 
-.hc-kicker {
-    font-family: var(--hc-sans);
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.38em;
-    text-transform: uppercase;
-    opacity: 0.75;
-    margin-bottom: 1rem;
-}
+/* SOCIAL */
+.hc-social-section { background: var(--surface-2); text-align: center; }
+.hc-social-section .hc-section-header { justify-content: center; }
+.hc-social-grid { justify-content: center; }
 
-.hc-title {
-    font-family: var(--hc-serif);
-    font-weight: 400;
-    font-style: italic;
-    font-size: clamp(2.8rem, 10vw, 5.5rem);
-    line-height: 1.05;
-    letter-spacing: -0.01em;
-    margin: 0 0 1.2rem;
-    text-shadow: 0 2px 20px rgba(0,0,0,0.4);
-}
+/* MULTI */
+.hc-locations-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+@media (min-width: 640px) { .hc-locations-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .hc-locations-grid { grid-template-columns: repeat(3, 1fr); } }
 
-.hc-sub {
-    font-family: var(--hc-sans);
-    font-weight: 300;
-    font-size: clamp(0.95rem, 2.4vw, 1.15rem);
-    line-height: 1.65;
-    max-width: 52ch;
-    margin: 0 auto 1.5rem;
-    opacity: 0.88;
-}
+/* FOOTER */
+.hc-footer { padding: clamp(3rem, 6vw, 4rem) 0; border-top: 1px solid var(--rule); background: var(--surface); }
+.hc-footer-inner { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; text-align: center; }
+.hc-footer-brand { display: flex; align-items: center; gap: 1rem; }
+.hc-footer-logo { width: 48px; height: 48px; object-fit: contain; border-radius: 12px; }
+.hc-footer-name { font-family: var(--serif); font-weight: 600; font-size: 1.15rem; margin: 0; color: var(--ink); }
+.hc-footer-line { margin: 0.15rem 0; font-size: 0.82rem; color: var(--ink-soft); }
+.hc-footer-copy { font-size: 0.72rem; color: var(--ink-faint); margin-top: 0.5rem; }
+.hc-footer-copy a { color: var(--accent); text-decoration: none; }
+.hc-footer-copy a:hover { text-decoration: underline; }
 
-.hc-ornament {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 1.75rem;
-    opacity: 0.6;
-}
-
-.hc-rule {
-    display: block;
-    height: 1px;
-    width: clamp(40px, 10vw, 80px);
-    background: currentColor;
-}
-
-.hc-diamond {
-    font-size: 0.65rem;
-    letter-spacing: 0;
-}
-
-.hc-hero-ctas {
-    display: flex;
-    gap: 0.75rem;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.hc-btn-primary {
-    display: inline-block;
-    padding: 0.75rem 2rem;
-    border: 1.5px solid rgba(250,246,240,0.75);
-    border-radius: 0;
-    font-family: var(--hc-sans);
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #faf6f0;
-    text-decoration: none;
-    transition: background 250ms, color 250ms;
-}
-
-.hc-btn-primary:hover {
-    background: #faf6f0;
-    color: var(--hc-ink);
-}
-
-/* ─── MAIN ─── */
-.hc-main {
-    max-width: 1120px;
-    margin: 0 auto;
-    padding: clamp(3rem, 8vw, 6rem) clamp(1.25rem, 4vw, 2.5rem);
-}
-
-/* ─── SECTION HEAD ─── */
-.hc-section {
-    margin-bottom: clamp(3rem, 8vw, 5rem);
-}
-
-.hc-section-head {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    margin-bottom: 2.5rem;
-}
-
-.hc-section-title {
-    font-family: var(--hc-serif);
-    font-style: italic;
-    font-weight: 400;
-    font-size: clamp(1.8rem, 5vw, 2.6rem);
-    margin: 0;
-    color: var(--hc-ink);
-    white-space: nowrap;
-}
-
-.hc-section-line {
-    flex: 1;
-    height: 1px;
-    background: var(--hc-rule);
-}
-
-/* ─── MENU CARDS ─── */
-.hc-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
-    gap: 1.5rem;
-}
-
-.hc-card {
-    background: var(--hc-paper);
-    border: 1px solid var(--hc-rule);
-    border-radius: var(--hc-radius);
-    overflow: hidden;
-    text-decoration: none;
-    color: inherit;
-    transition: box-shadow 300ms, transform 300ms;
-    display: flex;
-    flex-direction: column;
-}
-
-.hc-card:hover {
-    box-shadow: 0 12px 32px -8px rgba(0,0,0,0.18);
-    transform: translateY(-3px);
-}
-
-.hc-card-img-wrap {
-    aspect-ratio: 16/9;
-    overflow: hidden;
-}
-
-.hc-card-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    filter: saturate(0.9);
-    transition: transform 400ms cubic-bezier(.2,.65,.2,1);
-}
-
-.hc-card:hover .hc-card-img {
-    transform: scale(1.06);
-}
-
-.hc-card-body {
-    padding: 1.25rem 1.5rem 1.5rem;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.hc-card-title {
-    font-family: var(--hc-serif);
-    font-style: italic;
-    font-weight: 400;
-    font-size: 1.35rem;
-    margin: 0 0 0.5rem;
-    color: var(--hc-ink);
-}
-
-.hc-card-desc {
-    font-size: 0.88rem;
-    line-height: 1.6;
-    color: var(--hc-ink-soft);
-    margin: 0 0 1rem;
-    flex: 1;
-}
-
-.hc-card-link {
-    font-family: var(--hc-sans);
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--hc-accent);
-    margin-top: auto;
-}
-
-/* ─── INFO GRID ─── */
-.hc-info-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-    background: var(--hc-paper);
-    border: 1px solid var(--hc-rule);
-    border-radius: var(--hc-radius);
-    padding: 2.5rem;
-}
-
-@media (min-width: 680px) {
-    .hc-info-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-.hc-info-block {}
-
-.hc-info-title {
-    font-family: var(--hc-serif);
-    font-style: italic;
-    font-weight: 400;
-    font-size: 1.4rem;
-    margin: 0 0 1.25rem;
-    color: var(--hc-ink);
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--hc-rule);
-    position: relative;
-}
-
-.hc-info-title::after {
-    content: '';
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 3rem;
-    height: 2px;
-    background: var(--hc-accent);
-}
-
-.hc-address {
-    font-style: normal;
-    font-size: 0.9rem;
-    line-height: 1.7;
-    color: var(--hc-ink-soft);
-}
-
-.hc-address p { margin: 0; }
-
-.hc-phone {
-    display: inline-block;
-    margin-top: 0.5rem;
-    color: var(--hc-accent);
-    font-weight: 700;
-    text-decoration: none;
-    font-size: 0.92rem;
-    letter-spacing: 0.02em;
-}
-
-.hc-phone:hover {
-    color: var(--hc-accent-light);
-}
-
-.hc-map-cta {
-    margin-top: 1.25rem;
-}
-
-.hc-btn-outline {
-    display: inline-block;
-    padding: 0.55rem 1.4rem;
-    border: 1.5px solid var(--hc-accent);
-    border-radius: 0;
-    font-family: var(--hc-sans);
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--hc-accent);
-    text-decoration: none;
-    transition: background 250ms, color 250ms;
-}
-
-.hc-btn-outline:hover {
-    background: var(--hc-accent);
-    color: var(--hc-bg);
-}
-
-.hc-socials {
-    margin-top: 1.5rem;
-    color: var(--hc-ink-soft);
-}
-
-/* ─── LOCATIONS GRID ─── */
-.hc-locations-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
-    gap: 1.5rem;
-}
-
-/* ─── FOOTER ─── */
-.hc-footer {
-    background: var(--hc-ink);
-    color: rgba(250,246,240,0.7);
-    padding: clamp(2.5rem, 6vw, 4rem) clamp(1.25rem, 4vw, 2.5rem);
-}
-
-.hc-footer-inner {
-    max-width: 760px;
-    margin: 0 auto;
-    text-align: center;
-}
-
-.hc-footer-name {
-    font-family: var(--hc-serif);
-    font-style: italic;
-    font-size: 1.5rem;
-    font-weight: 400;
-    color: rgba(250,246,240,0.95);
-    margin: 0 0 0.5rem;
-}
-
-.hc-footer-line {
-    margin: 0.15rem 0;
-    font-size: 0.83rem;
-    letter-spacing: 0.01em;
-}
-
-.hc-footer-socials {
-    justify-content: center;
-    margin-top: 1.25rem;
-    color: rgba(250,246,240,0.65);
-}
-
-.hc-footer-copy {
-    margin-top: 2rem;
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    opacity: 0.45;
-}
-
-.hc-footer-copy a {
-    color: inherit;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-}
-
-/* ─── ANIMATIONS ─── */
-@keyframes hc-fade-up {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .hc-hero-inner { animation: none; }
-    .hc-hero-img { transition: none; }
-}
+@keyframes fade-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .hc-hero-inner { animation: none !important; } }
 </style>

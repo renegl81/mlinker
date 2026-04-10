@@ -32,7 +32,7 @@ class LocationStoreRequest extends FormRequest
             'time_format' => 'nullable|string|max:30',
             'lang' => 'nullable|string|max:3',
             'logo_url' => 'nullable|string|max:255',
-            'image_url' => 'nullable|string|max:255',
+            'image_url' => 'nullable|string',
             'languages' => 'nullable|array',
             'description' => 'nullable|string|max:1000',
             'latitude' => 'nullable|numeric',

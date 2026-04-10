@@ -67,6 +67,7 @@ const form = useForm({
     time_zone: props.location.time_zone ?? null,
     lang: props.location.lang ?? null,
     languages: props.location.languages ?? [],
+    image_url: props.location.image_path ?? props.location.image_url ?? null,
 });
 
 function submit() {

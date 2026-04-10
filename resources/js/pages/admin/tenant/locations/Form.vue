@@ -254,6 +254,31 @@
                         </p>
                     </div>
 
+                    <!-- Location image -->
+                    <div class="space-y-2 md:col-span-2">
+                        <Label for="location_image">Foto del local</Label>
+                        <div class="flex items-start gap-4">
+                            <div v-if="imagePreview" class="relative shrink-0">
+                                <img :src="imagePreview" alt="Foto del local" class="h-32 w-48 rounded-xl object-cover border" />
+                                <button
+                                    type="button"
+                                    class="absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-destructive text-destructive-foreground text-xs shadow"
+                                    @click="removeImage"
+                                >✕</button>
+                            </div>
+                            <div class="flex-1">
+                                <input
+                                    id="location_image"
+                                    type="file"
+                                    accept="image/jpeg,image/jpg,image/png,image/webp"
+                                    class="block w-full text-sm text-muted-foreground file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-medium file:text-primary-foreground hover:file:bg-primary/90 cursor-pointer"
+                                    @change="handleFileChange"
+                                />
+                                <p class="mt-1.5 text-xs text-muted-foreground">JPG, PNG o WebP. Se usará en la web pública y en las cards del panel.</p>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="space-y-2 md:col-span-2">
                         <Label for="description">{{
                             messages.locations.fields.description
@@ -312,7 +337,7 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import { Check, ChevronDown, Save, X } from 'lucide-vue-next';
+import { Check, ChevronDown, ImageIcon, Save, X } from 'lucide-vue-next';
 import { index as locationsRoute } from '@/routes/tenant/locations';
 import { Country } from '@/types';
 import { cn } from '@/lib/utils';
@@ -343,6 +368,7 @@ interface Props {
         country_id?: number;
         latitude?: string;
         longitude?: string;
+        image_url?: string | null;
         errors: Record<string, string>;
         processing: boolean;
     };
@@ -358,8 +384,39 @@ const props = withDefaults(defineProps<Props>(), {
     isEdit: false,
 });
 
+const emit = defineEmits<{
+    submit: [];
+    'update:field': [field: string, value: any];
+}>();
+
 const page = usePage();
 const messages = page.props.messages as any;
+
+// Image preview logic
+const imagePreview = computed(() => {
+    const val = props.form.image_url;
+    if (!val || typeof val !== 'string') return null;
+    if (val.startsWith('data:') || val.startsWith('http')) return val;
+    return null;
+});
+
+function handleFileChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+        emit('update:field', 'image_url', reader.result as string);
+    };
+    reader.readAsDataURL(file);
+}
+
+function removeImage() {
+    emit('update:field', 'image_url', null);
+    const input = document.getElementById('location_image') as HTMLInputElement | null;
+    if (input) input.value = '';
+}
+
 const title = computed(() => {
     if (props.title) return props.title;
     return props.isEdit
@@ -381,9 +438,4 @@ const submitText = computed(() => {
 const processingText = computed(() => {
     return props.processingText || messages.locations.actions.saving;
 });
-
-defineEmits<{
-    submit: [];
-    'update:field': [field: string, value: any];
-}>();
 </script>

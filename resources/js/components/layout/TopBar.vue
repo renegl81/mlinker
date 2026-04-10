@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import LanguageSelector from '@/components/ui/LanguageSelector.vue';
-import UserInfo from '@/components/UserInfo.vue';
 import UserMenuContent from '@/components/UserMenuContent.vue';
 import {
     DropdownMenu,
@@ -187,12 +186,10 @@ function isActive(href: string): boolean {
                 <!-- User avatar dropdown -->
                 <DropdownMenu v-if="user">
                     <DropdownMenuTrigger
-                        class="rounded-lg outline-none ring-ring focus-visible:ring-2"
+                        class="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary outline-none ring-ring transition-colors hover:bg-primary/20 focus-visible:ring-2"
+                        :title="user.name"
                     >
-                        <UserInfo
-                            :user="user"
-                            class="flex cursor-pointer items-center gap-2 rounded-lg p-1 hover:bg-accent"
-                        />
+                        {{ user.name?.charAt(0)?.toUpperCase() }}
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" class="w-56" :side-offset="8">
                         <UserMenuContent :user="user" />

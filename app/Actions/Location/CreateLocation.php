@@ -3,6 +3,7 @@
 namespace App\Actions\Location;
 
 use App\Models\Location;
+use App\Support\ImageHelper;
 use Illuminate\Support\Str;
 
 class CreateLocation
@@ -11,6 +12,11 @@ class CreateLocation
     {
         $tenant = tenant();
         $slug = Str::slug($data['name']);
+
+        $imageUrl = null;
+        if (isset($data['image_url']) && is_string($data['image_url']) && str_starts_with($data['image_url'], 'data:image')) {
+            $imageUrl = ImageHelper::storeBase64Image($data['image_url'], 'locations');
+        }
 
         return Location::create([
             'name' => $data['name'],
@@ -29,6 +35,7 @@ class CreateLocation
             'social_medias' => $data['social_medias'] ?? [],
             'latitude' => $data['latitude'],
             'longitude' => $data['longitude'],
+            'image_url' => $imageUrl,
             'user_id' => auth()->id(),
             'tenant_id' => $tenant->id,
             'slug' => $slug,

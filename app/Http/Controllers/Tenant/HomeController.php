@@ -31,7 +31,7 @@ class HomeController extends Controller
         }
 
         $locations = Location::with([
-            'menus' => fn ($q) => $q->where('is_active', true)->select('id', 'name', 'description', 'image_path', 'location_id'),
+            'menus' => fn ($q) => $q->where('is_active', true),
             'openingHours',
         ])
             ->orderBy('name')

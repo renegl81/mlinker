@@ -59,6 +59,7 @@ interface FormState {
     time_zone?: string | null;
     lang?: string | null;
     languages?: Array<string>;
+    image_url?: string | null;
 }
 
 const form = useForm<FormState>({
@@ -76,6 +77,7 @@ const form = useForm<FormState>({
     time_zone: null,
     lang: null,
     languages: null as any,
+    image_url: null,
 });
 function updateField(field: string, value: any) {
     form[field] = value;
