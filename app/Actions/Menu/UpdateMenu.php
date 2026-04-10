@@ -12,8 +12,8 @@ class UpdateMenu
     {
         $menuData = [
             'name' => $data['name'],
-            'description' => $data['description'],
-            'template_id' => $data['template_id'],
+            'description' => $data['description'] ?? $menu->description,
+            'template_id' => $data['template_id'] ?? $menu->template_id,
             'is_active' => $data['is_active'] ?? true,
             'show_currency' => $data['show_currency'] ?? false,
             'show_prices' => $data['show_prices'] ?? true,

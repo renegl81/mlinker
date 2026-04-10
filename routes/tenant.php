@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\Tenant\LocationController;
 use App\Http\Controllers\Admin\Tenant\MenuController;
 use App\Http\Controllers\Admin\Tenant\OnboardingController;
 use App\Http\Controllers\Admin\Tenant\ProductController;
+use App\Http\Controllers\Admin\Tenant\TranslationController;
 use App\Http\Controllers\Admin\Tenant\UserController;
 use App\Http\Controllers\Tenant\HomeController;
 use App\Http\Middleware\EnsurePlanLimits;
@@ -82,6 +83,10 @@ Route::middleware([
                 Route::post('menus/{menu}/qr-code', [QRCodeController::class, 'generate'])->name('menus.qr-code.generate');
                 Route::get('menus/{menu}/qr-code/download', [QRCodeController::class, 'download'])->name('menus.qr-code.download');
                 Route::delete('menus/{menu}/qr-code', [QRCodeController::class, 'destroy'])->name('menus.qr-code.destroy');
+
+                // Traducciones de menú
+                Route::get('menus/{menu}/translations', [TranslationController::class, 'show'])->name('menus.translations.show');
+                Route::put('menus/{menu}/translations', [TranslationController::class, 'update'])->name('menus.translations.update');
 
                 // Billing
                 Route::prefix('billing')->as('billing.')->group(function () {

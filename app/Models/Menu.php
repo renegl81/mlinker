@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\MenuActivated;
 use App\Models\Traits\HasImage;
 use App\Models\Traits\HasTranslations;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -16,6 +17,15 @@ use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 class Menu extends Model
 {
     use BelongsToTenant, HasFactory, HasImage, HasTranslations;
+
+    protected static function booted(): void
+    {
+        static::updating(function (Menu $menu): void {
+            if ($menu->isDirty('is_active') && $menu->is_active === true) {
+                MenuActivated::dispatch($menu);
+            }
+        });
+    }
 
     /**
      * The attributes that are mass assignable.

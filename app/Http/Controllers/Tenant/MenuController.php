@@ -29,6 +29,16 @@ class MenuController extends Controller
 
         $plan = tenant()?->subscription?->plan;
         $showBranding = $plan?->show_branding ?? true;
+        $hasMultilang = $plan?->has_multilang ?? false;
+
+        // Detect requested locale
+        $requestedLocale = request()->query('lang', 'es');
+        $locale = in_array($requestedLocale, ['es', 'en']) ? $requestedLocale : 'es';
+
+        // Apply translations if plan allows multilang and locale differs from default
+        if ($hasMultilang && $locale !== 'es') {
+            $this->applyTranslations($menu, $locale);
+        }
 
         $shortUrl = route('tenant_public.tenant_menu_short', ['menu' => $menu->id]);
 
@@ -87,6 +97,26 @@ class MenuController extends Controller
             'meta' => $meta,
             'jsonLd' => $jsonLd,
             'shareUrl' => $shortUrl,
+            'locale' => $locale,
         ]);
+    }
+
+    /**
+     * Mutate the menu model (and nested relations) in place with translated values.
+     */
+    private function applyTranslations(Menu $menu, string $locale): void
+    {
+        $menu->name = $menu->getTranslated('name', $locale);
+        $menu->description = $menu->getTranslated('description', $locale);
+
+        foreach ($menu->sections as $section) {
+            $section->name = $section->getTranslated('name', $locale);
+            $section->description = $section->getTranslated('description', $locale);
+
+            foreach ($section->products as $product) {
+                $product->name = $product->getTranslated('name', $locale);
+                $product->description = $product->getTranslated('description', $locale);
+            }
+        }
     }
 }

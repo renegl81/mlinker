@@ -151,60 +151,59 @@
 
 ---
 
-### 🔜 FASE 8 — i18n frontend (feature premium)
+### ✅ FASE 8 — i18n frontend (feature premium) (HECHO)
 
-> **Motivación de negocio:** muy valorado en zonas turísticas. El menú multi-idioma es una feature premium (plan Pro con `has_multilang=true`).
+> **Motivación de negocio:** muy valorado en zonas turísticas. Feature premium (`has_multilang`).
 
-| # | Tarea | Detalle técnico | Estado |
-|---|---|---|---|
-| 8.1 | Instalar `vue-i18n` | `./vendor/bin/sail npm install vue-i18n@latest`. Configurar en `resources/js/app.ts` como plugin de Vue. Crear archivos `resources/lang/{es,en}/messages.json` con las traducciones del panel admin y las labels comunes. | ❌ |
-| 8.2 | Migrar strings hardcoded del admin | Sustituir el patrón actual `messages.menus.*` (que asume props globales desde el backend) por `$t('menus.singular')` de vue-i18n. Recorrer las páginas del admin y reemplazar strings en español por claves de traducción. | ❌ |
-| 8.3 | Selector de idioma en el header del panel | Componente `LanguageSelector.vue` en el header del `AppLayout`. Guarda el idioma seleccionado en `localStorage` y lo aplica al cargar. Opciones: ES, EN (ampliable). | ❌ |
-| 8.4 | Traducciones del menú público | Los campos `name`, `description` de Menu, Section y Product necesitan ser traducibles. Dos opciones (evaluar cuál es más viable): **(A)** Tabla `translations` existente (si hay — comprobar `TranslationFactory`), con campos `translatable_type`, `translatable_id`, `locale`, `field`, `value`. **(B)** Columna JSON `translations` en cada tabla (`{"en": {"name": "...", "description": "..."}, "fr": {...}}`). La opción B es más sencilla para el MVP. En `Tenant/MenuController`, detectar el idioma del navegador (`Accept-Language`) o param `?lang=en` y devolver los campos traducidos. | ❌ |
-| 8.5 | UI de traducción en el panel admin | En los formularios de Create/Edit de Menu, Section, Product: tabs por idioma. El idioma principal (español) es obligatorio. Los demás son opcionales. Solo visible para tenants con `has_multilang=true`. | ❌ |
-| 8.6 | Tests: i18n | Test que el menú público con `?lang=en` devuelve las traducciones en inglés. Test que sin traducciones, devuelve el idioma principal. Test que un tenant Free no puede guardar traducciones. | ❌ |
-
----
-
-### 🔜 FASE 9 — Mailables transaccionales
-
-| # | Tarea | Detalle técnico | Estado |
-|---|---|---|---|
-| 9.1 | `WelcomeMail` | Se envía al completar el onboarding (no al registrarse — ya hay `AccountActivationNotification`). Contiene: enlace al menú público, enlace para descargar el QR, tips rápidos ("Añade fotos a tus platos", "Comparte por WhatsApp"). Usar Mail components de Laravel con layout branded. | ❌ |
-| 9.2 | `AccountActivationMail` template | Ya existe el flow (`AccountActivationNotification`), pero el template por defecto de Laravel es genérico. Crear un template branded con logo de MenuLinker, colores de la marca, y copy en español. | ❌ |
-| 9.3 | `TenantInvitationMail` | Para cuando un owner invita a un usuario a su tenant. Contiene enlace de invitación firmado + nombre del negocio + rol asignado. | ❌ |
-| 9.4 | `MenuPublishedMail` | Se envía cuando un menú pasa de `is_active=false` a `true` por primera vez. Contiene: enlace al menú, QR adjunto (si existe), sugerencia de compartir. Listener en evento `MenuActivated` (crear evento custom). | ❌ |
-| 9.5 | Layout base de emails | Crear un `resources/views/vendor/mail/html/` layout personalizado que aplique a todos los mailables. Logo MenuLinker en header, footer con links de soporte, colores consistentes con la marca. | ❌ |
-| 9.6 | Tests: mailables | Test que `WelcomeMail` se envía al completar onboarding. Test que `MenuPublishedMail` se envía al activar un menú. Usar `Mail::fake()`. | ❌ |
+| # | Tarea | Estado |
+|---|---|---|
+| 8.1 | vue-i18n 11 instalado + configurado (app.ts + ssr.ts) + locales `es.json`/`en.json` | ✅ |
+| 8.2 | Strings comunes (nav, common, plans, billing) en archivos de locale — migración parcial | ✅ |
+| 8.3 | `LanguageSelector.vue` en sidebar footer, persiste en localStorage | ✅ |
+| 8.4 | Columna `translations` (JSONB) en menus/sections/products + trait `HasTranslations` + `?lang=en` en menú público | ✅ |
+| 8.5 | `TranslationController` + `Translations.vue` — UI de traducción por menú (campos EN editables), verificación de plan | ✅ |
+| 8.6 | `TranslationTest.php` — 7 tests: ?lang=en, fallback, plan sin multilang, 403 Free/Pro, guardado Business | ✅ |
 
 ---
 
-### 🔜 FASE 10 — API REST + Sanctum
+### ✅ FASE 9 — Mailables transaccionales (HECHO)
 
-> **Motivación de negocio:** feature del plan Business/Enterprise. Permite integraciones con TPV, apps propias, Google Business Profile, etc.
-
-| # | Tarea | Detalle técnico | Estado |
-|---|---|---|---|
-| 10.1 | Instalar Sanctum + configurar | `./vendor/bin/sail composer require laravel/sanctum`. Publicar config. Configurar token auth para tenants. Middleware `EnsureApiAccess` que verifica `plan.has_api_access`. | ❌ |
-| 10.2 | Eloquent Resources | Crear `MenuResource`, `ProductResource`, `LocationResource`, `SectionResource` en `app/Http/Resources/`. Incluir relaciones condicionales con `whenLoaded()`. | ❌ |
-| 10.3 | Endpoints API v1 | En `routes/api.php`: `GET /v1/menus` (listar del tenant), `GET /v1/menus/{id}` (detalle con secciones y productos), `GET /v1/locations` (listar), `GET /v1/locations/{id}`, `GET /v1/menus/{id}/qr-code` (URL del QR). Todos autenticados via Sanctum token + scoped al tenant. | ❌ |
-| 10.4 | Endpoint público de menú (cacheado) | `GET /api/public/menus/{id}` — sin auth, con cache HTTP de 5 min (`Cache-Control` + `ETag`). Rate limited a 60 req/min por IP. Para integraciones de terceros (Google, redes sociales). | ❌ |
-| 10.5 | Documentación API | Instalar `knuckleswtf/scribe` o `l5-swagger`. Generar docs automáticos accesibles en `/docs/api`. Incluir ejemplos de request/response para cada endpoint. | ❌ |
-| 10.6 | Tests: API | Test de autenticación via token. Test que un tenant sin `has_api_access` recibe 403. Test de los endpoints principales con datos reales. Test de rate limiting. | ❌ |
+| # | Tarea | Estado |
+|---|---|---|
+| 9.1 | `WelcomeMail` integrado en `OnboardingController::complete()` con try/catch | ✅ |
+| 9.2 | (Las vistas vendor de mail están personalizadas con branding MenuLinker — cubre el template activation) | ✅ |
+| 9.3 | `TenantInvitationMail` con enlace de invitación + rol | ✅ |
+| 9.4 | `MenuPublishedMail` + evento `MenuActivated` + listener `SendMenuPublishedMail` | ✅ |
+| 9.5 | Vistas `vendor/mail/html/header.blade.php`, `footer.blade.php` y `themes/default.css` con logo + color purple | ✅ |
+| 9.6 | `MailableTest.php` — 8 tests: envío onboarding, construcción de mailables, evento MenuActivated | ✅ |
 
 ---
 
-### 🔜 FASE 11 — Cobertura de tests
+### ✅ FASE 10 — API REST + Sanctum (HECHO)
 
-> **Mínimo aceptable para lanzamiento:**
+> **Motivación de negocio:** feature Business/Enterprise. Integraciones con TPV, apps propias, Google Business.
 
-| # | Tarea | Detalle técnico | Estado |
-|---|---|---|---|
-| 11.1 | Tests de Actions principales | Un test por cada Action en `app/Actions/`. Prioridad: `Location/{Create,Update,Delete}`, `Menu/{Create,Update,Delete}`, `QrCode/GenerateQrCode` (ya hecho), `Plan/CheckLimit` (ya en FASE 2). | ❌ |
-| 11.2 | Tests HTTP de CRUD admin | Test de cada endpoint CRUD de Locations, Menus, Products (index, store, update, destroy). Verificar que devuelven las Inertia pages correctas y que los datos se persisten. | ❌ |
-| 11.3 | Tests de aislamiento entre tenants | Un tenant NO puede ver, editar ni borrar datos de otro tenant. Crear 2 tenants con datos cada uno. Autenticarse como tenant A e intentar acceder a recursos del tenant B → debe dar 404 o 403. Cubrir: locations, menus, products, QR codes. | ❌ |
-| 11.4 | Tests del flujo completo registro → onboarding → menú público | Test end-to-end: registro, activación, onboarding wizard, generación QR, visita al menú público. Verificar que todo el happy path funciona encadenado. | ❌ |
-| 11.5 | Mantener tests existentes | Los 63 tests actuales (auth, settings, users, public menu, QR) deben seguir pasando. Ejecutar `sail pest` completo antes de cada merge. | ✅ |
+| # | Tarea | Estado |
+|---|---|---|
+| 10.1 | Sanctum instalado, `HasApiTokens` en Tenant, migración ajustada (tokenable_id → varchar para IDs string) + middleware `EnsureApiAccess` + `InitializeTenancyFromSanctum` | ✅ |
+| 10.2 | Resources: Menu, Section, Product, Location, Allergen, Ingredient (con `whenLoaded`) | ✅ |
+| 10.3 | `ApiMenuController` + `ApiLocationController` con endpoints v1 (index/show/qr-code) | ✅ |
+| 10.4 | Endpoint público `public/menus/{id}` con throttle 60/min, sin auth | ✅ |
+| 10.5 | Documentación API — OMITIDO para MVP (sin scribe/swagger) | ⏭️ |
+| 10.6 | `ApiMenuTest.php` — 9 tests: 401, 403 sin API access, listados, show, QR, público, 404 inactivo | ✅ |
+
+---
+
+### ✅ FASE 11 — Cobertura de tests (HECHO)
+
+| # | Tarea | Estado |
+|---|---|---|
+| 11.1 | Tests Actions: `LocationActionsTest.php` (9) + `MenuActionsTest.php` (9) | ✅ |
+| 11.2 | Tests HTTP CRUD: `LocationControllerTest.php` (11) + `MenuControllerTest.php` (10) | ✅ |
+| 11.3 | **Tests de aislamiento** `TenantIsolationTest.php` (9) — locations/menus/sections/products/API tokens/admin dashboard | ✅ |
+| 11.4 | `EndToEndTest.php` (6) — registro→onboarding→QR→menú público, límite Free, webhook downgrade | ✅ |
+| 11.5 | Todos los tests existentes siguen pasando | ✅ |
+| bug | Fixed: `UpdateMenu.php` accedía a `$data['template_id']` sin null-safety | ✅ |
 
 ---
 
@@ -267,20 +266,31 @@ Una tarea se considera **completada** cuando:
 
 ---
 
-## Próximo paso inmediato (continuación de la sesión 2026-04-09)
+## Estado actual (2026-04-10)
 
-**FASE 1 casi completa.** Solo queda:
+**🎉 MVP técnico completado.** Todas las fases del plan (0-11) están implementadas.
 
-1. Verificar que la URL del QR en local funciona con `*.flowsuite.com` → ajustar `GenerateQrCode::buildPublicMenuUrl` si hace falta usar el dominio real del tenant (tarea 1.11)
+- **194 tests pasando, 763 assertions**
+- Pint + ESLint limpios
+- FASES completas: Auth/Multi-tenancy → Menú público + QR → Freemium + límites → SEO + branding → Onboarding guiado → Imágenes → Stripe → Analytics → i18n → Mailables → API REST → Cobertura de tests
 
-Después seguir con la **FASE 2 (modelo freemium + límites por plan)** — es la base sobre la que se construye todo lo demás.
+### Tareas pendientes antes del lanzamiento
 
-### Orden de ejecución recomendado
+1. **Tarea 1.11**: Verificar resolución de subdominio del tenant en local (`*.flowsuite.com → host-gateway`) y ajustar `GenerateQrCode::buildPublicMenuUrl` si hace falta
+2. **Config Stripe real**: Seguir `docs/stripe-setup.md` para crear productos/precios en Stripe dashboard y actualizar `PlanSeeder` con los `stripe_price_id` reales
+3. **Posible ajuste Cashier**: Si Cashier no persiste `stripe_id` en el JSONB del tenant, añadirlo a `getCustomColumns()` de `App\Models\Tenant` (ver nota en `docs/stripe-setup.md`)
+4. **Documentación API**: Opcionalmente, instalar `scribe` o escribir `docs/api.md` manual para clientes externos (omitido en FASE 10)
+5. **Datos de producción**: seed de Countries, Allergens, Ingredients comunes si no están ya
+6. **Domain/DNS en producción**: configurar dominio real + SSL + DNS wildcard para subdominios de tenants
+7. **Rebranding**: completar el rebranding MenuFlow → MenuLinker en containers Docker (`flowsuite-*`), database name, network, etc. (tarea de deuda técnica)
+8. **Mailables conectados a webhooks**: actualmente los mailables de billing existen pero no se disparan desde los webhooks de Stripe — conectarlos
 
-```
-FASE 1 (cerrar) → FASE 2 (freemium) → FASE 3 (crecimiento orgánico) → FASE 4 (onboarding)
-→ FASE 5 (imágenes) → FASE 6 (Stripe) → FASE 7 (analytics) → FASE 8 (i18n)
-→ FASE 9 (emails) → FASE 10 (API) → FASE 11 (tests)
-```
+### Siguientes mejoras (post-MVP)
 
-**Justificación:** Las FASES 2-4 son de **adquisición y retención** (sin pagar Stripe). La FASE 6 (cobros) se puede hacer en paralelo con 5 y 7 pero no debería bloquear el lanzamiento del free tier. Un MVP funcional con plan Free puede salir al mercado tras completar las FASES 1-5.
+- UI de gestión de tokens API en settings del tenant
+- Tabs de idioma en formularios existentes de Menu/Section/Product (en lugar de página aparte)
+- Integración con Google Business Profile (publicar menús automáticamente)
+- App móvil o PWA para el panel admin
+- Analytics más avanzados (funnel de conversión, heatmap de productos)
+- Marketplace de templates visuales premium
+- Integración con TPV (Square, Lightspeed)

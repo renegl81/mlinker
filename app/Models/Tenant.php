@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Laravel\Cashier\Billable;
+use Laravel\Sanctum\HasApiTokens;
 use Stancl\Tenancy\Database\Concerns\HasDomains;
 use Stancl\Tenancy\Database\Models\Tenant as BaseTenant;
 
 class Tenant extends BaseTenant
 {
-    use Billable, HasDomains;
+    use Billable, HasApiTokens, HasDomains;
 
     public static function getCustomColumns(): array
     {

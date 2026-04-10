@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App\Events\MenuActivated;
+use App\Listeners\SendMenuPublishedMail;
 use App\Models\Subscription;
 use App\Models\Tenant;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Cashier\Cashier;
 
@@ -24,5 +27,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Cashier::useCustomerModel(Tenant::class);
         Cashier::useSubscriptionModel(Subscription::class);
+
+        Event::listen(MenuActivated::class, SendMenuPublishedMail::class);
     }
 }

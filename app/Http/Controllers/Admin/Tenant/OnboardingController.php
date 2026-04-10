@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Tenant;
 
 use App\Actions\QrCode\GenerateQrCode;
 use App\Http\Controllers\Controller;
+use App\Mail\WelcomeMail;
 use App\Models\Country;
 use App\Models\Location;
 use App\Models\Menu;
@@ -13,6 +14,9 @@ use App\Models\Template;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -161,11 +165,28 @@ class OnboardingController extends Controller
 
         $menu = Menu::findOrFail((int) $request->input('menu_id'));
 
-        (new GenerateQrCode)->execute($menu);
+        $qr = (new GenerateQrCode)->execute($menu);
 
         $tenant = tenant();
         $tenant->onboarding_completed_at = now();
         $tenant->save();
+
+        $user = auth()->user();
+        if ($user) {
+            try {
+                $menuUrl = $qr->url;
+                $qrDownloadUrl = $qr->image_url
+                    ? Storage::disk('public')->url($qr->image_url)
+                    : $menuUrl;
+
+                Mail::to($user)->send(new WelcomeMail($user, $menuUrl, $qrDownloadUrl));
+            } catch (\Throwable $e) {
+                Log::error('WelcomeMail failed', [
+                    'user_id' => $user->id,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
 
         return redirect()->route('tenant.dashboard')
             ->with('success', '¡Tu menú está listo!');

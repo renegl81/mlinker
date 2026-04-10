@@ -19,6 +19,7 @@ import {
     ArrowLeft,
     BookOpen,
     Download,
+    Globe,
     Image as ImageIcon,
     Pencil,
     QrCode as QrCodeIcon,
@@ -100,6 +101,12 @@ function remove() {
                     />
                 </div>
                 <div class="flex items-center gap-2">
+                    <Button variant="outline" as-child>
+                        <Link :href="`/panel/menus/${menu.id}/translations`">
+                            <Globe class="mr-2 h-4 w-4" />
+                            Traducciones
+                        </Link>
+                    </Button>
                     <Button variant="outline" as-child>
                         <Link :href="menuRouteEdit(menu.id).url">
                             <Pencil class="mr-2 h-4 w-4" />
