@@ -137,7 +137,8 @@
         "users": "Users",
         "documentation": "Documentation",
         "profile": "Profile",
-        "logout": "Log out"
+        "logout": "Log out",
+        "more": "More"
     },
     "plans": {
         "free": "Free",

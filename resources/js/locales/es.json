@@ -137,7 +137,8 @@
         "users": "Usuarios",
         "documentation": "Documentación",
         "profile": "Perfil",
-        "logout": "Cerrar sesión"
+        "logout": "Cerrar sesión",
+        "more": "Más"
     },
     "plans": {
         "free": "Gratuito",
