@@ -79,9 +79,12 @@ class GenerateQrCode
         $domain = $tenant?->domains()->first()?->domain;
 
         if ($domain) {
-            $scheme = parse_url(config('app.url'), PHP_URL_SCHEME) ?: 'http';
+            $appUrl = config('app.url');
+            $scheme = parse_url($appUrl, PHP_URL_SCHEME) ?: 'http';
+            $port = parse_url($appUrl, PHP_URL_PORT);
+            $portSuffix = $port ? ':'.$port : '';
 
-            return "{$scheme}://{$domain}/m/{$menu->id}";
+            return "{$scheme}://{$domain}{$portSuffix}/m/{$menu->id}";
         }
 
         return route('tenant_public.tenant_menu_short', ['menu' => $menu->id]);

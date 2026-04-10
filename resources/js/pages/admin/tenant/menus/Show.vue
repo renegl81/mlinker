@@ -47,6 +47,7 @@ interface Product {
     description: string | null;
     price: string | number | null;
     image_url: string | null;
+    image_path: string | null;
     tags: string[] | null;
     allergens: Allergen[];
 }
@@ -455,14 +456,14 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
                                             <!-- Product image placeholder or thumb -->
                                             <div class="shrink-0">
                                                 <div
-                                                    v-if="!product.image_url"
+                                                    v-if="!product.image_path"
                                                     class="flex h-10 w-10 items-center justify-center rounded-md bg-gradient-to-br from-purple-500 to-pink-500 text-base font-bold text-white"
                                                 >
                                                     {{ product.name.charAt(0).toUpperCase() }}
                                                 </div>
                                                 <img
                                                     v-else
-                                                    :src="product.image_url"
+                                                    :src="product.image_path"
                                                     :alt="product.name"
                                                     class="h-10 w-10 rounded-md object-cover"
                                                 />

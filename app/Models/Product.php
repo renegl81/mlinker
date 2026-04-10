@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Traits\HasImage;
 use App\Models\Traits\HasTranslations;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -26,6 +27,29 @@ class Product extends Model
         'tags',
         'image_url',
     ];
+
+    protected $appends = [
+        'image_path',
+    ];
+
+    protected function imagePath(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if (! $this->image_url) {
+                    return null;
+                }
+
+                if (str_starts_with($this->image_url, 'data:') || str_starts_with($this->image_url, 'http')) {
+                    return $this->image_url;
+                }
+
+                $tenantId = tenant('id');
+
+                return rtrim(config('app.url'), '/').route('tenant_image', ['tenant' => 'tenant'.$tenantId, 'path' => $this->image_url], false);
+            }
+        );
+    }
 
     /**
      * Get the attributes that should be cast.

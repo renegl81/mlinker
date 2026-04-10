@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Plan;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 class PlanFactory extends Factory
 {
@@ -21,7 +22,8 @@ class PlanFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'slug' => fake()->unique()->slug(2),
+            // Slug column is varchar(30); build a short unique slug that fits.
+            'slug' => 'plan-'.Str::lower(Str::random(12)),
             'price' => fake()->randomFloat(2, 0, 999999.99),
             'period' => 'month',
             'description' => fake()->text(),
