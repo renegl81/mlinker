@@ -8,14 +8,12 @@ const columns = [
             { label: 'Funcionalidades', href: '/#features' },
             { label: 'Precios', href: '/#pricing' },
             { label: 'Plantillas', href: '/#features' },
-            { label: 'API', href: '/doc' },
         ],
     },
     {
         title: 'Empresa',
         links: [
             { label: 'Contacto', href: '/contact' },
-            { label: 'Blog', href: '#' },
         ],
     },
     {
@@ -29,8 +27,7 @@ const columns = [
     {
         title: 'Soporte',
         links: [
-            { label: 'FAQ', href: '/faq' },
-            { label: 'Documentación', href: '/doc' },
+            { label: 'Preguntas frecuentes', href: '/faq' },
         ],
     },
 ];

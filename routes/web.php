@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook'])->name('stripe.webhook');
 
-Route::get('/doc', [DocumentationController::class, 'index'])->name('documentation');
+Route::redirect('/doc', '/faq')->name('documentation');
 Route::get('/sitemap.xml', [HomeController::class, 'sitemap'])->name('sitemap');
 
 // Páginas públicas con prefijo de idioma opcional

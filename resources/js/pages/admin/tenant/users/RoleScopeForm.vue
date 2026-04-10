@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { Crown, Pencil } from 'lucide-vue-next';
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 interface Location {
     id: number;
@@ -54,7 +57,7 @@ const isEditor = computed(() => props.form.role === 'editor');
     <div class="space-y-5">
         <!-- Role picker -->
         <div class="space-y-2">
-            <p class="panel-label">Rol</p>
+            <p class="panel-label">{{ t('panel.users.role_label') }}</p>
             <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <button
                     type="button"
@@ -72,7 +75,7 @@ const isEditor = computed(() => props.form.role === 'editor');
                     <div class="min-w-0">
                         <p class="text-sm font-semibold text-foreground">Owner</p>
                         <p class="mt-0.5 text-xs text-muted-foreground">
-                            Acceso total: usuarios, facturación, locations y menús.
+                            {{ t('panel.users.owner_description') }}
                         </p>
                     </div>
                 </button>
@@ -93,7 +96,7 @@ const isEditor = computed(() => props.form.role === 'editor');
                     <div class="min-w-0">
                         <p class="text-sm font-semibold text-foreground">Editor</p>
                         <p class="mt-0.5 text-xs text-muted-foreground">
-                            Solo gestión de menús, productos e ingredientes.
+                            {{ t('panel.users.editor_description') }}
                         </p>
                     </div>
                 </button>
@@ -103,7 +106,7 @@ const isEditor = computed(() => props.form.role === 'editor');
 
         <!-- Scope (only for editors) -->
         <div v-if="isEditor" class="space-y-3 rounded-xl border bg-card text-card-foreground p-4">
-            <p class="panel-label">Alcance del Editor</p>
+            <p class="panel-label">{{ t('panel.users.scope_label') }}</p>
 
             <div class="space-y-2">
                 <label class="flex cursor-pointer items-start gap-2.5 text-sm">
@@ -116,9 +119,9 @@ const isEditor = computed(() => props.form.role === 'editor');
                         @change="setScope('all')"
                     />
                     <div>
-                        <span class="font-medium text-foreground">Todas las locations</span>
+                        <span class="font-medium text-foreground">{{ t('panel.users.scope_all') }}</span>
                         <p class="text-xs text-muted-foreground">
-                            Puede gestionar los menús de todas las locations actuales y futuras del tenant.
+                            {{ t('panel.users.scope_all_description') }}
                         </p>
                     </div>
                 </label>
@@ -133,9 +136,9 @@ const isEditor = computed(() => props.form.role === 'editor');
                         @change="setScope('locations')"
                     />
                     <div>
-                        <span class="font-medium text-foreground">Locations específicas</span>
+                        <span class="font-medium text-foreground">{{ t('panel.users.scope_specific') }}</span>
                         <p class="text-xs text-muted-foreground">
-                            Selecciona qué locations puede gestionar.
+                            {{ t('panel.users.scope_specific_description') }}
                         </p>
                     </div>
                 </label>
@@ -147,7 +150,7 @@ const isEditor = computed(() => props.form.role === 'editor');
                 class="mt-2 space-y-1.5 rounded-md border bg-background p-3 max-h-48 overflow-y-auto"
             >
                 <div v-if="locations.length === 0" class="text-xs text-muted-foreground italic">
-                    Aún no hay locations. Crea una location primero.
+                    {{ t('panel.users.no_locations_yet') }}
                 </div>
                 <label
                     v-for="loc in locations"

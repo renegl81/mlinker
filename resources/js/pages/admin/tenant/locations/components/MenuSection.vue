@@ -23,6 +23,9 @@ import {
 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import ProductsDialog from './ProductsDialog.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 interface Props {
     locationId: number;
@@ -113,7 +116,7 @@ const closeProductsDialog = () => {
                                         menu.is_active ? 'default' : 'secondary'
                                     "
                                 >
-                                    {{ menu.is_active ? 'Activo' : 'Inactivo' }}
+                                    {{ menu.is_active ? t('common.active') : t('common.inactive') }}
                                 </Badge>
                             </TableCell>
                             <TableCell class="text-right">

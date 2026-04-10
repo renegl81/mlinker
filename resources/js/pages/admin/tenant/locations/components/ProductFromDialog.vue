@@ -12,6 +12,9 @@ import { Textarea } from '@/components/ui/textarea';
 import type { Menu, Product } from '@/types';
 import { useForm, usePage } from '@inertiajs/vue3';
 import { computed, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 interface Props {
     open: boolean;
@@ -187,7 +190,7 @@ const handleSubmit = () => {
                         v-if="product?.image_url && !form.image"
                         class="text-xs text-muted-foreground"
                     >
-                        Imagen actual: {{ product.image_url }}
+                        {{ t('panel.product_form.current_image') }}: {{ product.image_url }}
                     </p>
                 </div>
 

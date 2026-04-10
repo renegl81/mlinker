@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { Head, useForm, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import AppLayout from '@/layouts/AppLayout.vue';
+
+const { t } = useI18n();
 import SettingsLayout from '@/layouts/settings/Layout.vue';
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import type { BreadcrumbItem } from '@/types';
@@ -21,7 +24,7 @@ const props = defineProps<{
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
-    { title: 'Página web pública', href: '#' },
+    { title: t('settings.website_title'), href: '#' },
 ];
 
 const form = useForm({
@@ -47,20 +50,20 @@ const publicUrl = computed(() => tenantId.value ? `https://${tenantId.value}.men
 
 <template>
     <AppLayout :breadcrumbs="breadcrumbs">
-        <Head title="Página web pública" />
+        <Head :title="t('settings.website_title')" />
 
         <SettingsLayout>
             <div class="space-y-6">
                 <HeadingSmall
-                    title="Página web pública"
-                    description="Configura si quieres publicar una página web pública en tu subdominio de MenuLinker."
+                    :title="t('settings.website_title')"
+                    :description="t('settings.website_description')"
                 />
 
                 <form class="space-y-8" @submit.prevent="save">
 
                     <!-- Toggle has_website -->
                     <div class="space-y-4">
-                        <h3 class="text-sm font-semibold text-foreground">Visibilidad</h3>
+                        <h3 class="text-sm font-semibold text-foreground">{{ t('settings.visibility') }}</h3>
                         <label class="flex cursor-pointer items-start gap-4 rounded-lg border border-border bg-card p-4 transition-colors hover:bg-accent/30">
                             <input
                                 v-model="form.has_website"
@@ -68,9 +71,9 @@ const publicUrl = computed(() => tenantId.value ? `https://${tenantId.value}.men
                                 class="mt-0.5 h-4 w-4 rounded border-border accent-primary"
                             />
                             <div>
-                                <p class="text-sm font-medium text-foreground">Publicar página web</p>
+                                <p class="text-sm font-medium text-foreground">{{ t('settings.publish_website') }}</p>
                                 <p class="mt-0.5 text-sm text-muted-foreground">
-                                    Tus clientes podrán ver tu carta, horarios y contacto en tu subdominio.
+                                    {{ t('settings.publish_website_hint') }}
                                     <template v-if="publicUrl">
                                         <a
                                             :href="publicUrl"
@@ -78,7 +81,7 @@ const publicUrl = computed(() => tenantId.value ? `https://${tenantId.value}.men
                                             rel="noopener"
                                             class="ml-1 text-primary underline underline-offset-4"
                                         >
-                                            Ver mi web →
+                                            {{ t('settings.see_my_web') }}
                                         </a>
                                     </template>
                                 </p>
@@ -89,7 +92,7 @@ const publicUrl = computed(() => tenantId.value ? `https://${tenantId.value}.men
                     <template v-if="form.has_website">
                         <!-- Business type -->
                         <div class="space-y-3">
-                            <h3 class="text-sm font-semibold text-foreground">Tipo de negocio</h3>
+                            <h3 class="text-sm font-semibold text-foreground">{{ t('panel.onboarding.business_type') }}</h3>
                             <div class="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
                                 <button
                                     v-for="(label, value) in businessTypes"
@@ -113,7 +116,7 @@ const publicUrl = computed(() => tenantId.value ? `https://${tenantId.value}.men
 
                         <!-- Template selector -->
                         <div class="space-y-3">
-                            <h3 class="text-sm font-semibold text-foreground">Plantilla</h3>
+                            <h3 class="text-sm font-semibold text-foreground">{{ t('settings.template') }}</h3>
                             <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
                                 <label
                                     v-for="([key, tmpl]) in availableTemplates"
@@ -151,7 +154,7 @@ const publicUrl = computed(() => tenantId.value ? `https://${tenantId.value}.men
                             :disabled="form.processing"
                             class="inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
                         >
-                            Guardar cambios
+                            {{ t('common.save') }}
                         </button>
                         <Transition
                             enter-active-class="transition ease-in-out"
@@ -160,7 +163,7 @@ const publicUrl = computed(() => tenantId.value ? `https://${tenantId.value}.men
                             leave-to-class="opacity-0"
                         >
                             <p v-if="form.recentlySuccessful" class="text-sm text-muted-foreground">
-                                Guardado correctamente.
+                                {{ t('settings.saved_successfully') }}
                             </p>
                         </Transition>
                     </div>

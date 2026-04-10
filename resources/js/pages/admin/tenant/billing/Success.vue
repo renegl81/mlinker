@@ -4,10 +4,13 @@ import { Card, CardContent } from '@/components/ui/card';
 import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem } from '@/types';
 import { CheckCircle } from 'lucide-vue-next';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const breadcrumbItems: BreadcrumbItem[] = [
-    { title: 'Facturación', href: '/panel/billing/plans' },
-    { title: 'Pago completado', href: '#' },
+    { title: t('nav.billing'), href: '/panel/billing/plans' },
+    { title: t('panel.billing.success_title'), href: '#' },
 ];
 </script>
 
@@ -21,18 +24,18 @@ const breadcrumbItems: BreadcrumbItem[] = [
                     </div>
 
                     <div class="space-y-2">
-                        <h1 class="text-2xl font-bold">Suscripcion activada</h1>
+                        <h1 class="text-2xl font-bold">{{ t('panel.billing.success_title') }}</h1>
                         <p class="text-muted-foreground">
-                            Tu pago se ha procesado correctamente. Tu nuevo plan ya esta activo.
+                            {{ t('panel.billing.success_body') }}
                         </p>
                     </div>
 
                     <div class="flex w-full flex-col gap-3">
                         <Button as-child class="w-full">
-                            <a href="/panel">Ir al panel</a>
+                            <a href="/panel">{{ t('panel.billing.go_to_panel') }}</a>
                         </Button>
                         <Button variant="outline" as-child class="w-full">
-                            <a href="/panel/billing/manage">Ver mi suscripcion</a>
+                            <a href="/panel/billing/manage">{{ t('panel.billing.manage_subscription') }}</a>
                         </Button>
                     </div>
                 </CardContent>

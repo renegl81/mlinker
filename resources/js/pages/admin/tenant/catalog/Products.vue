@@ -375,7 +375,7 @@ function formatPrice(price: string | number | null): string {
 
                 <!-- Pagination -->
                 <div v-if="products.last_page > 1" class="flex items-center justify-between border-t px-4 py-3 text-xs text-muted-foreground">
-                    <span>{{ products.total }} en total</span>
+                    <span>{{ t('panel.users.total', { count: products.total }) }}</span>
                     <div class="flex gap-1">
                         <Link
                             v-for="link in products.links"

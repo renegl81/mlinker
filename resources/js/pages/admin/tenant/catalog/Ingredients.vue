@@ -363,7 +363,7 @@ const targetLocales = computed(() =>
                 </table>
 
                 <div v-if="ingredients.last_page > 1" class="flex items-center justify-between border-t px-4 py-3 text-xs text-muted-foreground">
-                    <span>{{ ingredients.total }} en total</span>
+                    <span>{{ t('panel.users.total', { count: ingredients.total }) }}</span>
                 </div>
             </div>
         </div>

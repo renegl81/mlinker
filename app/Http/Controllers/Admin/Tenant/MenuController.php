@@ -105,9 +105,19 @@ class MenuController extends Controller
             'qrCode',
         ]);
 
+        $domain = tenant()?->domains()->first()?->domain;
+        $appUrl = config('app.url');
+        $scheme = parse_url($appUrl, PHP_URL_SCHEME) ?: 'http';
+        $port = parse_url($appUrl, PHP_URL_PORT);
+        $portSuffix = $port ? ':'.$port : '';
+        $publicMenuUrl = $domain
+            ? "{$scheme}://{$domain}{$portSuffix}/menu/{$menu->id}"
+            : route('tenant_public.tenant_menu_show', ['menu' => $menu->id]);
+
         return Inertia::render('admin/tenant/menus/Show', [
             'menu' => $menu,
             'qrCodeImageUrl' => $this->resolveQrImageUrl($menu),
+            'publicMenuUrl' => $publicMenuUrl,
         ]);
     }
 

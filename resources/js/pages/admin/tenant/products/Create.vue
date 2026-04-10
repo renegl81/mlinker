@@ -5,6 +5,9 @@ import type { BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/vue3';
 import type { Allergen, CatalogIngredient, Ingredient, Section } from './Form.vue';
 import ProductForm from './Form.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 interface Menu {
     id: number;
@@ -24,9 +27,9 @@ interface Props {
 const props = defineProps<Props>();
 
 const breadcrumbItems: BreadcrumbItem[] = [
-    { title: 'Menús', href: `/panel/locations/${props.menu.location_id}/menus` },
+    { title: t('nav.menus'), href: `/panel/locations/${props.menu.location_id}/menus` },
     { title: props.menu.name, href: `/panel/menus/${props.menu.id}` },
-    { title: 'Nuevo plato', href: '#' },
+    { title: t('panel.product_form.create_title'), href: '#' },
 ];
 
 const form = useForm({
@@ -53,13 +56,13 @@ function submit() {
 </script>
 
 <template>
-    <Head title="Nuevo plato" />
+    <Head :title="t('panel.product_form.create_title')" />
 
     <AppLayout :breadcrumbs="breadcrumbItems">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <HeadingSmall
-                title="Nuevo plato"
-                description="Añade un nuevo producto al menú"
+                :title="t('panel.product_form.create_title')"
+                :description="t('panel.product_form.create_description')"
             />
 
             <ProductForm

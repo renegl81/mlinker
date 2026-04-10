@@ -8,6 +8,9 @@ import type { BreadcrumbItem } from '@/types';
 import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import { ArrowLeft, Save } from 'lucide-vue-next';
 import RoleScopeForm from './RoleScopeForm.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const page = usePage();
 const messages = page.props.messages as any;
@@ -60,13 +63,13 @@ function submit() {
                 </Button>
                 <HeadingSmall
                     :title="messages.users.actions.create"
-                    description="Crea un nuevo usuario y asígnalo a un rol dentro del tenant"
+                    :description="t('panel.users.create_description')"
                 />
             </div>
 
             <form @submit.prevent="submit" class="space-y-5">
                 <div class="rounded-xl border bg-card text-card-foreground p-5 space-y-4">
-                    <p class="panel-label">Información básica</p>
+                    <p class="panel-label">{{ t('panel.users.basic_info') }}</p>
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div class="space-y-1.5">
                             <Label class="panel-label">{{ messages.users.fields.name }} *</Label>

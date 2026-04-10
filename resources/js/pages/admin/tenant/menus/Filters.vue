@@ -4,7 +4,7 @@
             <CollapsibleTrigger as-child>
                 <Button variant="ghost" size="sm">
                     <Filter class="mr-2 h-4 w-4" />
-                    {{ isOpen ? 'Ocultar filtros' : 'Mostrar filtros' }}
+                    {{ isOpen ? t('panel.common.hide_filters') : t('panel.common.show_filters') }}
                     <ChevronDown
                         class="ml-2 h-4 w-4 transition-transform"
                         :class="{ 'rotate-180': isOpen }"
@@ -18,7 +18,7 @@
                 @click="clearFilters"
             >
                 <X class="mr-2 h-4 w-4" />
-                Limpiar filtros
+                {{ t('panel.common.clear_filters') }}
             </Button>
         </div>
         <CollapsibleContent class="mt-4">
@@ -26,33 +26,33 @@
                 <CardContent class="pt-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         <div class="space-y-2">
-                            <Label for="filter-name">Nombre</Label>
+                            <Label for="filter-name">{{ t('common.name') }}</Label>
                             <Input
                                 id="filter-name"
                                 v-model="localFilters.name"
-                                placeholder="Buscar por nombre"
+                                :placeholder="t('panel.filters.search_name')"
                             />
                         </div>
 
                         <div class="space-y-2">
-                            <Label for="filter-status">Estado</Label>
+                            <Label for="filter-status">{{ t('common.status') }}</Label>
                             <SelectRoot
                                 v-model="localFilters.is_active"
                             >
                                 <SelectTrigger id="filter-status">
-                                    <SelectValue placeholder="Seleccionar estado" />
+                                    <SelectValue :placeholder="t('panel.filters.select_status')" />
                                 </SelectTrigger>
                                 <SelectPortal>
                                     <SelectContent>
                                         <SelectViewport class="p-1">
                                             <SelectItem value="">
-                                                <SelectItemText>Todos</SelectItemText>
+                                                <SelectItemText>{{ t('panel.filters.all_statuses') }}</SelectItemText>
                                             </SelectItem>
                                             <SelectItem value="1">
-                                                <SelectItemText>Activo</SelectItemText>
+                                                <SelectItemText>{{ t('common.active') }}</SelectItemText>
                                             </SelectItem>
                                             <SelectItem value="0">
-                                                <SelectItemText>Inactivo</SelectItemText>
+                                                <SelectItemText>{{ t('common.inactive') }}</SelectItemText>
                                             </SelectItem>
                                         </SelectViewport>
                                     </SelectContent>
@@ -64,11 +64,11 @@
                     <div class="flex justify-end gap-2 mt-6">
                         <Button variant="outline" @click="clearFilters">
                             <X class="mr-2 h-4 w-4" />
-                            Limpiar
+                            {{ t('panel.common.clear') }}
                         </Button>
                         <Button @click="applyFilters">
                             <Search class="mr-2 h-4 w-4" />
-                            Buscar
+                            {{ t('panel.filters.search_button') }}
                         </Button>
                     </div>
                 </CardContent>
@@ -95,6 +95,9 @@ import {
     SelectItemText
 } from 'reka-ui'
 import { Filter, ChevronDown, X, Search } from 'lucide-vue-next'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 export interface MenuFilters {
     name?: string

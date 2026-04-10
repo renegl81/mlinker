@@ -6,6 +6,9 @@ import type { BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/vue3';
 import { BarChart2, Eye, Star, TrendingUp, Lock } from 'lucide-vue-next';
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 interface DayView {
     date: string;
@@ -79,17 +82,17 @@ const dummyMax = computed(() => {
     return Math.max(...dummyDays.value.map((d) => d.count), 1);
 });
 
-const sourceLabels: Record<string, string> = {
+const sourceLabels = computed<Record<string, string>>(() => ({
     QR: 'QR',
     WhatsApp: 'WhatsApp',
     Google: 'Google',
-    Social: 'Redes sociales',
-    Directo: 'Directo',
-};
+    Social: t('panel.dashboard.source_social'),
+    Directo: t('panel.dashboard.source_direct'),
+}));
 </script>
 
 <template>
-    <Head title="Dashboard" />
+    <Head :title="t('panel.dashboard.title')" />
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex flex-col gap-6 p-4">
@@ -97,9 +100,9 @@ const sourceLabels: Record<string, string> = {
             <!-- Header con plan badge -->
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-2xl font-bold">Dashboard</h1>
+                    <h1 class="text-2xl font-bold">{{ t('panel.dashboard.title') }}</h1>
                     <p class="text-sm text-muted-foreground">
-                        Últimos {{ current_period.days }} días
+                        {{ t('panel.dashboard.last_days', { days: current_period.days }) }}
                         ({{ current_period.start }} — {{ current_period.end }})
                     </p>
                 </div>
@@ -109,7 +112,7 @@ const sourceLabels: Record<string, string> = {
                         ? 'bg-primary text-primary-foreground'
                         : 'bg-muted text-muted-foreground border'"
                 >
-                    Plan {{ currentPlan }}
+                    {{ t('panel.dashboard.plan', { plan: currentPlan }) }}
                 </span>
             </div>
 
@@ -121,20 +124,20 @@ const sourceLabels: Record<string, string> = {
                     <Card>
                         <CardHeader class="flex flex-row items-center justify-between pb-2">
                             <CardTitle class="text-sm font-medium text-muted-foreground">
-                                Visitas este mes
+                                {{ t('panel.dashboard.visits_month') }}
                             </CardTitle>
                             <Eye class="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
                             <div class="text-4xl font-bold">{{ total_views.toLocaleString() }}</div>
-                            <p class="mt-1 text-xs text-muted-foreground">escaneos / aperturas de menú</p>
+                            <p class="mt-1 text-xs text-muted-foreground">{{ t('panel.dashboard.scans') }}</p>
                         </CardContent>
                     </Card>
 
                     <Card>
                         <CardHeader class="flex flex-row items-center justify-between pb-2">
                             <CardTitle class="text-sm font-medium text-muted-foreground">
-                                Menú más popular
+                                {{ t('panel.dashboard.top_menu') }}
                             </CardTitle>
                             <Star class="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
@@ -143,7 +146,7 @@ const sourceLabels: Record<string, string> = {
                                 {{ topMenu ? topMenu.name : '—' }}
                             </div>
                             <p class="mt-1 text-xs text-muted-foreground">
-                                {{ topMenu ? `${topMenu.count.toLocaleString()} visitas` : 'Sin datos aún' }}
+                                {{ topMenu ? `${topMenu.count.toLocaleString()} ${t('panel.dashboard.visits_col').toLowerCase()}` : t('panel.dashboard.no_data') }}
                             </p>
                         </CardContent>
                     </Card>
@@ -151,13 +154,13 @@ const sourceLabels: Record<string, string> = {
                     <Card>
                         <CardHeader class="flex flex-row items-center justify-between pb-2">
                             <CardTitle class="text-sm font-medium text-muted-foreground">
-                                Fuente principal
+                                {{ t('panel.dashboard.main_source') }}
                             </CardTitle>
                             <TrendingUp class="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
                             <div class="text-2xl font-bold">{{ mainSource }}</div>
-                            <p class="mt-1 text-xs text-muted-foreground">origen de tráfico dominante</p>
+                            <p class="mt-1 text-xs text-muted-foreground">{{ t('panel.dashboard.top_traffic') }}</p>
                         </CardContent>
                     </Card>
                 </div>
@@ -167,7 +170,7 @@ const sourceLabels: Record<string, string> = {
                     <CardHeader>
                         <CardTitle class="flex items-center gap-2 text-base font-semibold">
                             <BarChart2 class="h-4 w-4" />
-                            Visitas por día
+                            {{ t('panel.dashboard.visits_by_day') }}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -200,18 +203,18 @@ const sourceLabels: Record<string, string> = {
                 <div class="grid gap-4 md:grid-cols-2">
                     <Card>
                         <CardHeader>
-                            <CardTitle class="text-base font-semibold">Top 5 menús</CardTitle>
+                            <CardTitle class="text-base font-semibold">{{ t('panel.dashboard.top5_menus') }}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div v-if="top_menus.length === 0" class="text-sm text-muted-foreground">
-                                Sin visitas registradas todavía.
+                                {{ t('panel.dashboard.no_visits') }}
                             </div>
                             <table v-else class="w-full text-sm">
                                 <thead>
                                     <tr class="border-b text-left text-muted-foreground">
                                         <th class="pb-2 font-medium">#</th>
-                                        <th class="pb-2 font-medium">Menú</th>
-                                        <th class="pb-2 text-right font-medium">Visitas</th>
+                                        <th class="pb-2 font-medium">{{ t('panel.dashboard.menu_col') }}</th>
+                                        <th class="pb-2 text-right font-medium">{{ t('panel.dashboard.visits_col') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -231,7 +234,7 @@ const sourceLabels: Record<string, string> = {
 
                     <Card>
                         <CardHeader>
-                            <CardTitle class="text-base font-semibold">Origen de las visitas</CardTitle>
+                            <CardTitle class="text-base font-semibold">{{ t('panel.dashboard.origin') }}</CardTitle>
                         </CardHeader>
                         <CardContent>
                             <div class="space-y-3">
@@ -266,13 +269,13 @@ const sourceLabels: Record<string, string> = {
                     <Card>
                         <CardHeader class="flex flex-row items-center justify-between pb-2">
                             <CardTitle class="text-sm font-medium text-muted-foreground">
-                                Visitas este mes
+                                {{ t('panel.dashboard.visits_month') }}
                             </CardTitle>
                             <Eye class="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
                             <div class="text-4xl font-bold">{{ total_views.toLocaleString() }}</div>
-                            <p class="mt-1 text-xs text-muted-foreground">escaneos / aperturas de menú</p>
+                            <p class="mt-1 text-xs text-muted-foreground">{{ t('panel.dashboard.scans') }}</p>
                         </CardContent>
                     </Card>
 
@@ -280,7 +283,7 @@ const sourceLabels: Record<string, string> = {
                     <Card class="relative overflow-hidden">
                         <CardHeader class="flex flex-row items-center justify-between pb-2">
                             <CardTitle class="text-sm font-medium text-muted-foreground">
-                                Menú más popular
+                                {{ t('panel.dashboard.top_menu') }}
                             </CardTitle>
                             <Star class="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
@@ -297,7 +300,7 @@ const sourceLabels: Record<string, string> = {
                     <Card class="relative overflow-hidden">
                         <CardHeader class="flex flex-row items-center justify-between pb-2">
                             <CardTitle class="text-sm font-medium text-muted-foreground">
-                                Fuente principal
+                                {{ t('panel.dashboard.main_source') }}
                             </CardTitle>
                             <TrendingUp class="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
@@ -316,7 +319,7 @@ const sourceLabels: Record<string, string> = {
                     <CardHeader>
                         <CardTitle class="flex items-center gap-2 text-base font-semibold">
                             <BarChart2 class="h-4 w-4" />
-                            Visitas por día
+                            {{ t('panel.dashboard.visits_by_day') }}
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -337,13 +340,13 @@ const sourceLabels: Record<string, string> = {
                     <!-- Overlay -->
                     <div class="absolute inset-0 flex flex-col items-center justify-center bg-background/75 backdrop-blur-[2px] gap-3 px-4 text-center">
                         <Lock class="h-7 w-7 text-muted-foreground" />
-                        <p class="text-sm font-semibold">Desbloquea Analytics con el plan Pro</p>
-                        <p class="text-xs text-muted-foreground">Visualiza el detalle de visitas, menús populares y fuentes de tráfico.</p>
+                        <p class="text-sm font-semibold">{{ t('panel.dashboard.unlock_analytics') }}</p>
+                        <p class="text-xs text-muted-foreground">{{ t('panel.dashboard.unlock_description') }}</p>
                         <Link
                             href="/panel/billing/plans"
                             class="mt-1 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-primary/90 transition-colors"
                         >
-                            Ver planes
+                            {{ t('panel.billing.view_plans') }}
                         </Link>
                     </div>
                 </Card>

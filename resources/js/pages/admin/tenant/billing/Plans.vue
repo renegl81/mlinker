@@ -53,39 +53,39 @@ const currentPlanId = computed(() => props.currentSubscription?.plan_id ?? null)
 const isFreePlan = computed(() => props.currentSubscription?.stripe_status === 'free');
 
 const breadcrumbItems: BreadcrumbItem[] = [
-    { title: 'Facturación', href: '#' },
-    { title: 'Planes', href: '#' },
+    { title: t('nav.billing'), href: '#' },
+    { title: t('panel.billing.plans_title'), href: '#' },
 ];
 
 function formatPrice(price: string): string {
     const num = parseFloat(price);
-    if (num === 0) return 'Gratis';
+    if (num === 0) return t('panel.billing.free');
     return `${num.toFixed(2).replace('.', ',')}€`;
 }
 
 function formatLimit(val: number, label: string): string {
-    if (val === 0) return `${label} ilimitados`;
+    if (val === 0) return t('panel.billing.unlimited', { label });
     return `${val} ${label}`;
 }
 
 function getPlanFeatures(plan: Plan): string[] {
     const features: string[] = [];
-    features.push(formatLimit(plan.max_locations, 'ubicaciones'));
-    features.push(formatLimit(plan.max_menus_per_location, 'menús por ubicación'));
-    features.push(formatLimit(plan.max_products, 'productos'));
+    features.push(formatLimit(plan.max_locations, t('panel.billing.locations')));
+    features.push(formatLimit(plan.max_menus_per_location, t('panel.billing.menus_per_location')));
+    features.push(formatLimit(plan.max_products, t('panel.billing.products')));
     if (plan.max_images === 0) {
-        features.push('Imágenes ilimitadas');
+        features.push(t('panel.billing.unlimited_images'));
     } else if (plan.max_images > 0) {
-        features.push(`${plan.max_images} imágenes`);
+        features.push(`${plan.max_images} ${t('panel.billing.images')}`);
     } else {
-        features.push('Sin imágenes');
+        features.push(t('panel.billing.no_images'));
     }
-    if (plan.has_analytics) features.push('Analíticas');
-    if (plan.has_custom_qr) features.push('QR personalizado');
-    if (plan.has_multilang) features.push('Multiidioma');
-    if (plan.has_api_access) features.push('Acceso API');
-    if (plan.has_custom_domain) features.push('Dominio personalizado');
-    if (!plan.show_branding) features.push('Sin branding MenuLinker');
+    if (plan.has_analytics) features.push(t('panel.billing.analytics'));
+    if (plan.has_custom_qr) features.push(t('panel.billing.custom_qr'));
+    if (plan.has_multilang) features.push(t('panel.billing.multilang'));
+    if (plan.has_api_access) features.push(t('panel.billing.api_access'));
+    if (plan.has_custom_domain) features.push(t('panel.billing.custom_domain'));
+    if (!plan.show_branding) features.push(t('panel.billing.no_branding'));
     return features;
 }
 
@@ -98,12 +98,12 @@ function isEnterprise(plan: Plan): boolean {
 }
 
 function getCtaLabel(plan: Plan): string {
-    if (isCurrentPlan(plan)) return 'Plan actual';
-    if (isEnterprise(plan)) return 'Contactar';
+    if (isCurrentPlan(plan)) return t('billing.plan_current');
+    if (isEnterprise(plan)) return t('panel.billing.contact');
     if (isFreePlan.value) {
-        return plan.trial_days > 0 ? `Empezar prueba de ${plan.trial_days} días` : 'Mejorar';
+        return plan.trial_days > 0 ? t('panel.billing.start_trial', { days: plan.trial_days }) : t('billing.upgrade');
     }
-    return 'Cambiar a este plan';
+    return t('panel.billing.switch_plan');
 }
 
 function selectPlan(plan: Plan) {
@@ -124,8 +124,8 @@ function selectPlan(plan: Plan) {
     <AppLayout :breadcrumbs="breadcrumbItems">
         <div class="flex h-full flex-1 flex-col gap-6 rounded-xl p-4">
             <HeadingSmall
-                title="Planes y precios"
-                description="Elige el plan que mejor se adapte a tu negocio."
+                :title="t('panel.billing.plans_title')"
+                :description="t('panel.billing.plans_description')"
             />
 
             <!-- Flash messages -->
@@ -149,7 +149,7 @@ function selectPlan(plan: Plan) {
                     <!-- Current plan badge -->
                     <div v-if="isCurrentPlan(plan)" class="absolute -top-3 left-1/2 -translate-x-1/2">
                         <Badge class="bg-primary text-primary-foreground px-3 py-0.5 text-xs font-semibold shadow">
-                            Plan actual
+                            {{ t('billing.plan_current') }}
                         </Badge>
                     </div>
 
@@ -157,7 +157,7 @@ function selectPlan(plan: Plan) {
                     <div v-if="plan.slug === 'pro' && !isCurrentPlan(plan)" class="absolute -top-3 left-1/2 -translate-x-1/2">
                         <Badge variant="secondary" class="px-3 py-0.5 text-xs font-semibold shadow">
                             <Zap class="mr-1 h-3 w-3" />
-                            Popular
+                            {{ t('panel.billing.popular') }}
                         </Badge>
                     </div>
 
@@ -169,7 +169,7 @@ function selectPlan(plan: Plan) {
                             <span v-if="parseFloat(plan.price) > 0" class="text-sm text-muted-foreground">/ mes</span>
                         </div>
                         <p v-if="plan.trial_days > 0 && !isCurrentPlan(plan)" class="text-xs text-green-600 font-medium mt-1">
-                            {{ plan.trial_days }} días de prueba gratis
+                            {{ t('panel.billing.trial_days_free', { days: plan.trial_days }) }}
                         </p>
                     </CardHeader>
 
@@ -202,7 +202,7 @@ function selectPlan(plan: Plan) {
             <!-- Link to manage -->
             <div v-if="!isFreePlan" class="text-center">
                 <a href="/panel/billing/manage" class="text-sm text-muted-foreground underline hover:text-foreground">
-                    Gestionar suscripción actual
+                    {{ t('panel.billing.manage_current') }}
                 </a>
             </div>
         </div>

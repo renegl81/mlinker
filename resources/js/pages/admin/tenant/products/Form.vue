@@ -379,8 +379,8 @@ function selectSuggestion(name: string) {
                 <!-- Tags -->
                 <Card>
                     <CardHeader>
-                        <CardTitle>Etiquetas</CardTitle>
-                        <CardDescription>Características dietéticas del plato</CardDescription>
+                        <CardTitle>{{ t('panel.product_form.tags_title') }}</CardTitle>
+                        <CardDescription>{{ t('panel.product_form.tags_description') }}</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div class="grid grid-cols-2 gap-2">
@@ -406,8 +406,8 @@ function selectSuggestion(name: string) {
                 <!-- Allergens -->
                 <Card>
                     <CardHeader>
-                        <CardTitle>Alérgenos</CardTitle>
-                        <CardDescription>Selecciona los alérgenos presentes en el plato</CardDescription>
+                        <CardTitle>{{ t('panel.product_form.allergens_title') }}</CardTitle>
+                        <CardDescription>{{ t('panel.product_form.allergens_description') }}</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div
@@ -432,7 +432,7 @@ function selectSuggestion(name: string) {
                             </button>
                         </div>
                         <p v-else class="text-sm text-muted-foreground">
-                            No hay alérgenos configurados.
+                            {{ t('panel.product_form.no_allergens') }}
                         </p>
                     </CardContent>
                 </Card>
@@ -440,8 +440,8 @@ function selectSuggestion(name: string) {
                 <!-- Ingredients -->
                 <Card>
                     <CardHeader>
-                        <CardTitle>Ingredientes</CardTitle>
-                        <CardDescription>Añade los ingredientes del plato</CardDescription>
+                        <CardTitle>{{ t('translations.ingredients_label') }}</CardTitle>
+                        <CardDescription>{{ t('panel.product_form.ingredients_description') }}</CardDescription>
                     </CardHeader>
                     <CardContent class="space-y-3">
                         <!-- Tag input -->
@@ -449,7 +449,7 @@ function selectSuggestion(name: string) {
                             <div class="relative flex-1">
                                 <Input
                                     v-model="ingredientInput"
-                                    placeholder="Escribir ingrediente..."
+                                    :placeholder="t('panel.product_form.ingredient_placeholder')"
                                     @keydown="handleIngredientKeydown"
                                 />
                                 <!-- Suggestions -->
@@ -468,15 +468,15 @@ function selectSuggestion(name: string) {
                                         <span
                                             v-if="suggestion.shared"
                                             class="flex items-center gap-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium text-primary"
-                                            title="Disponible en el catálogo compartido — se importará como copia privada"
+                                            :title="t('panel.product_form.catalog_shared_hint')"
                                         >
                                             <Users class="h-2.5 w-2.5" />
-                                            Catálogo
+                                            {{ t('panel.product_form.catalog_label') }}
                                         </span>
                                         <Sparkles
                                             v-if="suggestion.hasTranslations"
                                             class="h-3 w-3 text-emerald-500"
-                                            title="Incluye traducciones"
+                                            :title="t('panel.product_form.has_translations_hint')"
                                         />
                                     </button>
                                 </div>
@@ -508,7 +508,7 @@ function selectSuggestion(name: string) {
                             </span>
                         </div>
                         <p v-else class="text-xs text-muted-foreground">
-                            Aún no hay ingredientes añadidos.
+                            {{ t('panel.product_form.no_ingredients') }}
                         </p>
                     </CardContent>
                 </Card>

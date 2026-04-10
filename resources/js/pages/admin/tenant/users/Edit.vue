@@ -8,6 +8,9 @@ import type { BreadcrumbItem } from '@/types';
 import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
 import { ArrowLeft, Save } from 'lucide-vue-next';
 import RoleScopeForm from './RoleScopeForm.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const page = usePage();
 const messages = page.props.messages as any;
@@ -87,7 +90,7 @@ const isSelfEdit = props.user.id === props.currentUserId;
 
             <form @submit.prevent="submit" class="space-y-5">
                 <div class="rounded-xl border bg-card text-card-foreground p-5 space-y-4">
-                    <p class="panel-label">Información básica</p>
+                    <p class="panel-label">{{ t('panel.users.basic_info') }}</p>
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div class="space-y-1.5">
                             <Label class="panel-label">{{ messages.users.fields.name }} *</Label>
@@ -104,12 +107,12 @@ const isSelfEdit = props.user.id === props.currentUserId;
                             <p v-if="form.errors.email" class="text-xs text-destructive">{{ form.errors.email }}</p>
                         </div>
                         <div class="space-y-1.5">
-                            <Label class="panel-label">Nueva contraseña (opcional)</Label>
-                            <Input v-model="form.password" type="password" class="panel-input" placeholder="Dejar en blanco para no cambiar" />
+                            <Label class="panel-label">{{ t('panel.users.new_password') }}</Label>
+                            <Input v-model="form.password" type="password" class="panel-input" :placeholder="t('panel.users.password_blank_hint')" />
                             <p v-if="form.errors.password" class="text-xs text-destructive">{{ form.errors.password }}</p>
                         </div>
                         <div class="space-y-1.5">
-                            <Label class="panel-label">Confirmar contraseña</Label>
+                            <Label class="panel-label">{{ t('panel.users.confirm_password') }}</Label>
                             <Input v-model="form.password_confirmation" type="password" class="panel-input" />
                         </div>
                     </div>
@@ -122,7 +125,7 @@ const isSelfEdit = props.user.id === props.currentUserId;
                     @update:field="updateField"
                 />
                 <div v-else class="rounded-xl border bg-muted/30 p-4 text-sm text-muted-foreground">
-                    No puedes cambiar tu propio rol.
+                    {{ t('panel.users.cannot_change_own_role') }}
                 </div>
 
                 <div class="flex justify-end gap-2">

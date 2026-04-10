@@ -1,17 +1,17 @@
 <template>
-    <Head title="Editar Menú" />
+    <Head :title="t('panel.menus.edit_title')" />
     <AppLayout :breadcrumbs="breadcrumbItems">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <HeadingSmall
-                title="Editar Menú"
-                description="Modifica la información del menú"
+                :title="t('panel.menus.edit_title')"
+                :description="t('panel.menus.edit_description')"
             />
 
             <MenuForm
                 :form="form"
-                title="Información del Menú"
-                description="Actualiza los datos del menú."
-                submit-text="Guardar Cambios"
+                :title="t('panel.menus.info_title')"
+                :description="t('panel.menus.edit_form_description')"
+                :submit-text="t('common.save')"
                 :is-edit="true"
                 :location="props.location"
                 :templates="props.templates"
@@ -30,6 +30,9 @@ import { update } from '@/routes/tenant/menus'
 import type { BreadcrumbItem, Location, Template } from '@/types'
 import { Head, useForm } from '@inertiajs/vue3'
 import MenuForm from './Form.vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface Menu {
     id: number
@@ -55,11 +58,11 @@ const props = defineProps<Props>()
 
 const breadcrumbItems: BreadcrumbItem[] = [
     {
-        title: 'Menús',
+        title: t('nav.menus'),
         href: locationMenusRoute(props.menu.location_id).url,
     },
     {
-        title: 'Editar',
+        title: t('common.edit'),
         href: '#',
     },
 ]

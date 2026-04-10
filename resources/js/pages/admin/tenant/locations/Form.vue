@@ -256,10 +256,10 @@
 
                     <!-- Location image -->
                     <div class="space-y-2 md:col-span-2">
-                        <Label for="location_image">Foto del local</Label>
+                        <Label for="location_image">{{ t('panel.locations.photo_label') }}</Label>
                         <div class="flex items-start gap-4">
                             <div v-if="imagePreview" class="relative shrink-0">
-                                <img :src="imagePreview" alt="Foto del local" class="h-32 w-48 rounded-xl object-cover border" />
+                                <img :src="imagePreview" :alt="t('panel.locations.photo_label')" class="h-32 w-48 rounded-xl object-cover border" />
                                 <button
                                     type="button"
                                     class="absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-destructive text-destructive-foreground text-xs shadow"
@@ -274,7 +274,7 @@
                                     class="block w-full text-sm text-muted-foreground file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-4 file:py-2 file:text-sm file:font-medium file:text-primary-foreground hover:file:bg-primary/90 cursor-pointer"
                                     @change="handleFileChange"
                                 />
-                                <p class="mt-1.5 text-xs text-muted-foreground">JPG, PNG o WebP. Se usará en la web pública y en las cards del panel.</p>
+                                <p class="mt-1.5 text-xs text-muted-foreground">{{ t('panel.locations.photo_hint') }}</p>
                             </div>
                         </div>
                     </div>
@@ -305,8 +305,8 @@
                     </div>
                     <!-- Brand colors -->
                     <div class="space-y-2 md:col-span-2">
-                        <Label>Colores de marca</Label>
-                        <p class="text-xs text-muted-foreground mb-2">Se usarán en la página pública de tu negocio para personalizar la apariencia.</p>
+                        <Label>{{ t('panel.locations.brand_colors') }}</Label>
+                        <p class="text-xs text-muted-foreground mb-2">{{ t('panel.locations.brand_colors_hint') }}</p>
                         <div class="flex flex-wrap gap-4">
                             <div class="flex items-center gap-2">
                                 <input
@@ -316,7 +316,7 @@
                                     @input="$emit('update:field', 'primary_color', ($event.target as HTMLInputElement).value)"
                                 />
                                 <div>
-                                    <span class="text-sm font-medium">Primario</span>
+                                    <span class="text-sm font-medium">{{ t('panel.locations.color_primary') }}</span>
                                     <span class="block text-xs text-muted-foreground">{{ form.primary_color || '#0d9488' }}</span>
                                 </div>
                             </div>
@@ -328,7 +328,7 @@
                                     @input="$emit('update:field', 'secondary_color', ($event.target as HTMLInputElement).value)"
                                 />
                                 <div>
-                                    <span class="text-sm font-medium">Secundario</span>
+                                    <span class="text-sm font-medium">{{ t('panel.locations.color_secondary') }}</span>
                                     <span class="block text-xs text-muted-foreground">{{ form.secondary_color || '#f59e0b' }}</span>
                                 </div>
                             </div>
@@ -356,6 +356,9 @@
 <script setup lang="ts">
 import { Link, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

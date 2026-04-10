@@ -4,7 +4,7 @@
             <CollapsibleTrigger as-child>
                 <Button variant="ghost" size="sm">
                     <Filter class="mr-2 h-4 w-4" />
-                    {{ isOpen ? 'Ocultar filtros' : 'Mostrar filtros' }}
+                    {{ isOpen ? t('panel.common.hide_filters') : t('panel.common.show_filters') }}
                     <ChevronDown
                         class="ml-2 h-4 w-4 transition-transform"
                         :class="{ 'rotate-180': isOpen }"
@@ -18,7 +18,7 @@
                 @click="clearFilters"
             >
                 <X class="mr-2 h-4 w-4" />
-                Limpiar filtros
+                {{ t('panel.common.clear_filters') }}
             </Button>
         </div>
         <CollapsibleContent class="mt-4">
@@ -26,20 +26,20 @@
                 <CardContent class="pt-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         <div class="space-y-2">
-                            <Label for="filter-name">Nombre</Label>
+                            <Label for="filter-name">{{ t('common.name') }}</Label>
                             <Input
                                 id="filter-name"
                                 v-model="localFilters.name"
-                                placeholder="Buscar por nombre"
+                                :placeholder="t('panel.filters.search_name')"
                             />
                         </div>
 
                         <div class="space-y-2">
-                            <Label for="filter-lastname">Apellido</Label>
+                            <Label for="filter-lastname">{{ t('panel.common.last_name') }}</Label>
                             <Input
                                 id="filter-lastname"
                                 v-model="localFilters.last_name"
-                                placeholder="Buscar por apellido"
+                                :placeholder="t('panel.filters.search_surname')"
                             />
                         </div>
 
@@ -49,61 +49,61 @@
                                 id="filter-email"
                                 type="email"
                                 v-model="localFilters.email"
-                                placeholder="Buscar por email"
+                                :placeholder="t('panel.filters.search_email')"
                             />
                         </div>
 
                         <div class="space-y-2">
-                            <Label for="filter-phone">Teléfono</Label>
+                            <Label for="filter-phone">{{ t('panel.common.phone') }}</Label>
                             <Input
                                 id="filter-phone"
                                 v-model="localFilters.phone"
-                                placeholder="Buscar por teléfono"
+                                :placeholder="t('panel.filters.search_phone')"
                             />
                         </div>
 
                         <div class="space-y-2">
-                            <Label for="filter-country">País</Label>
+                            <Label for="filter-country">{{ t('panel.common.country') }}</Label>
                             <Input
                                 id="filter-country"
                                 v-model="localFilters.country"
-                                placeholder="Buscar por país"
+                                :placeholder="t('panel.filters.search_country')"
                             />
                         </div>
 
                         <div class="space-y-2">
-                            <Label for="filter-province">Provincia</Label>
+                            <Label for="filter-province">{{ t('panel.common.province') }}</Label>
                             <Input
                                 id="filter-province"
                                 v-model="localFilters.province"
-                                placeholder="Buscar por provincia"
+                                :placeholder="t('panel.filters.search_province')"
                             />
                         </div>
 
                         <div class="space-y-2">
-                            <Label for="filter-city">Ciudad</Label>
+                            <Label for="filter-city">{{ t('panel.common.city') }}</Label>
                             <Input
                                 id="filter-city"
                                 v-model="localFilters.city"
-                                placeholder="Buscar por ciudad"
+                                :placeholder="t('panel.filters.search_city')"
                             />
                         </div>
 
                         <div class="space-y-2">
-                            <Label for="filter-postal">Código Postal</Label>
+                            <Label for="filter-postal">{{ t('panel.common.postal_code') }}</Label>
                             <Input
                                 id="filter-postal"
                                 v-model="localFilters.postal_code"
-                                placeholder="Buscar por código postal"
+                                :placeholder="t('panel.filters.search_postal')"
                             />
                         </div>
 
                         <div class="space-y-2">
-                            <Label for="filter-address">Dirección</Label>
+                            <Label for="filter-address">{{ t('panel.common.address') }}</Label>
                             <Input
                                 id="filter-address"
                                 v-model="localFilters.address"
-                                placeholder="Buscar por dirección"
+                                :placeholder="t('panel.filters.search_address')"
                             />
                         </div>
                     </div>
@@ -111,11 +111,11 @@
                     <div class="flex justify-end gap-2 mt-6">
                         <Button variant="outline" @click="clearFilters">
                             <X class="mr-2 h-4 w-4" />
-                            Limpiar
+                            {{ t('panel.common.clear') }}
                         </Button>
                         <Button @click="applyFilters">
                             <Search class="mr-2 h-4 w-4" />
-                            Buscar
+                            {{ t('panel.filters.search_button') }}
                         </Button>
                     </div>
                 </CardContent>
@@ -132,6 +132,9 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
 import { Filter, ChevronDown, X, Search } from 'lucide-vue-next'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 export interface UserFilters {
     name?: string

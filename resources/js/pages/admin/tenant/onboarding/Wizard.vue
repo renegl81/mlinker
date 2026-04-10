@@ -2,6 +2,9 @@
 import { router, useForm } from '@inertiajs/vue3';
 import { Check, Globe, Loader2, Plus, Sparkles, Store, UtensilsCrossed, X, Zap } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 interface Location {
     id: number;
@@ -36,13 +39,13 @@ const websiteForm = useForm({
     business_type: 'restaurant' as string,
 });
 
-const businessTypes = [
-    { value: 'restaurant', label: 'Restaurante', emoji: '🍽️' },
-    { value: 'cafe',       label: 'Cafetería',   emoji: '☕' },
-    { value: 'bar',        label: 'Bar / Pub',   emoji: '🍹' },
-    { value: 'fastfood',   label: 'Street Food', emoji: '🍔' },
-    { value: 'finedining', label: 'Alta Cocina', emoji: '⭐' },
-];
+const businessTypes = computed(() => [
+    { value: 'restaurant', label: t('panel.onboarding.type_restaurant'), emoji: '🍽️' },
+    { value: 'cafe',       label: t('panel.onboarding.type_cafe'),       emoji: '☕' },
+    { value: 'bar',        label: t('panel.onboarding.type_bar'),        emoji: '🍹' },
+    { value: 'fastfood',   label: t('panel.onboarding.type_fastfood'),   emoji: '🍔' },
+    { value: 'finedining', label: t('panel.onboarding.type_finedining'), emoji: '⭐' },
+]);
 
 function submitWebsite() {
     websiteForm.post(route('tenant.onboarding.website'));
@@ -106,7 +109,7 @@ function submitProducts() {
     productsError.value = '';
     const valid = productRows.value.every((p) => p.name.trim() && p.price && p.section_name.trim());
     if (!valid) {
-        productsError.value = 'Completa todos los campos de los productos.';
+        productsError.value = t('panel.onboarding.products_error');
         return;
     }
 
@@ -131,15 +134,15 @@ function submitComplete() {
 }
 
 // ─── Progress ─────────────────────────────────────────────────────────────────
-const steps = [
-    { label: 'Tu web' },
-    { label: 'Tu negocio' },
-    { label: 'Tu menú' },
-    { label: 'Tus platos' },
-    { label: '¡Listo!' },
-];
+const steps = computed(() => [
+    { label: t('panel.onboarding.step_website') },
+    { label: t('panel.onboarding.step_business') },
+    { label: t('panel.onboarding.step_menu') },
+    { label: t('panel.onboarding.step_dishes') },
+    { label: t('panel.onboarding.step_done') },
+]);
 
-const progressPercent = computed(() => Math.round((props.step / (steps.length - 1)) * 100));
+const progressPercent = computed(() => Math.round((props.step / (steps.value.length - 1)) * 100));
 
 // ─── Shared classes ───────────────────────────────────────────────────────────
 const inputClass =
@@ -204,9 +207,9 @@ const errorClass = 'text-xs text-red-400';
                     <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/15">
                         <Globe class="h-6 w-6 text-purple-400" />
                     </div>
-                    <h1 class="mb-2 text-2xl font-bold text-white">Tu página web</h1>
+                    <h1 class="mb-2 text-2xl font-bold text-white">{{ t('panel.onboarding.website_title') }}</h1>
                     <p class="mb-6 text-sm text-slate-400">
-                        Publica tu propia web pública en tu dominio de MenuLinker. Tus clientes podrán ver tu carta, horarios y contacto.
+                        {{ t('panel.onboarding.website_body') }}
                     </p>
 
                     <form class="space-y-6" @submit.prevent="submitWebsite">
@@ -226,9 +229,9 @@ const errorClass = 'text-xs text-red-400';
                                 />
                             </button>
                             <div>
-                                <p class="text-sm font-semibold text-white">Publicar mi página web</p>
+                                <p class="text-sm font-semibold text-white">{{ t('panel.onboarding.publish_website') }}</p>
                                 <p class="mt-0.5 text-xs text-slate-400">
-                                    Si lo activas, tu subdominio será visible públicamente con tu carta y datos de contacto.
+                                    {{ t('panel.onboarding.publish_website_hint') }}
                                 </p>
                             </div>
                         </div>
@@ -243,7 +246,7 @@ const errorClass = 'text-xs text-red-400';
                             leave-to-class="opacity-0 -translate-y-2"
                         >
                             <div v-if="websiteForm.has_website" class="space-y-3">
-                                <p :class="labelClass">Tipo de negocio</p>
+                                <p :class="labelClass">{{ t('panel.onboarding.business_type') }}</p>
                                 <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
                                     <button
                                         v-for="bt in businessTypes"
@@ -270,7 +273,7 @@ const errorClass = 'text-xs text-red-400';
                             class="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-6 font-semibold text-white shadow-lg shadow-purple-500/20 transition-all hover:from-purple-500 hover:to-pink-500 disabled:cursor-not-allowed disabled:opacity-60"
                         >
                             <Loader2 v-if="websiteForm.processing" class="h-4 w-4 animate-spin" />
-                            <span>Continuar</span>
+                            <span>{{ t('panel.onboarding.continue') }}</span>
                             <span v-if="!websiteForm.processing">→</span>
                         </button>
                     </form>
@@ -281,50 +284,50 @@ const errorClass = 'text-xs text-red-400';
                     <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/15">
                         <Store class="h-6 w-6 text-purple-400" />
                     </div>
-                    <h1 class="mb-2 text-2xl font-bold text-white">Tu negocio</h1>
+                    <h1 class="mb-2 text-2xl font-bold text-white">{{ t('panel.onboarding.business_title') }}</h1>
                     <p class="mb-6 text-sm text-slate-400">
-                        Cuéntanos un poco sobre tu local. Esto solo tomará un minuto.
+                        {{ t('panel.onboarding.business_body') }}
                     </p>
 
                     <form class="space-y-5" @submit.prevent="submitLocation">
                         <div class="space-y-2">
                             <label for="loc-name" :class="labelClass">
-                                Nombre del local <span class="text-red-400">*</span>
+                                {{ t('panel.onboarding.location_name') }} <span class="text-red-400">*</span>
                             </label>
                             <input
                                 id="loc-name"
                                 v-model="locationForm.name"
                                 type="text"
-                                placeholder="Ej. Cafetería El Sol"
+                                :placeholder="t('panel.onboarding.location_name_placeholder')"
                                 :class="[inputClass, locationForm.errors.name && 'border-red-500']"
                             />
                             <p v-if="locationForm.errors.name" :class="errorClass">{{ locationForm.errors.name }}</p>
                         </div>
 
                         <div class="space-y-2">
-                            <label for="loc-address" :class="labelClass">Dirección</label>
+                            <label for="loc-address" :class="labelClass">{{ t('panel.onboarding.address') }}</label>
                             <input
                                 id="loc-address"
                                 v-model="locationForm.address"
                                 type="text"
-                                placeholder="Calle Mayor, 10"
+                                :placeholder="t('panel.onboarding.address_placeholder')"
                                 :class="inputClass"
                             />
                         </div>
 
                         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
                             <div class="space-y-2">
-                                <label for="loc-city" :class="labelClass">Ciudad</label>
+                                <label for="loc-city" :class="labelClass">{{ t('panel.onboarding.city') }}</label>
                                 <input
                                     id="loc-city"
                                     v-model="locationForm.city"
                                     type="text"
-                                    placeholder="Madrid"
+                                    :placeholder="t('panel.onboarding.city_placeholder')"
                                     :class="inputClass"
                                 />
                             </div>
                             <div class="space-y-2">
-                                <label for="loc-phone" :class="labelClass">Teléfono</label>
+                                <label for="loc-phone" :class="labelClass">{{ t('panel.onboarding.phone') }}</label>
                                 <input
                                     id="loc-phone"
                                     v-model="locationForm.phone"
@@ -341,7 +344,7 @@ const errorClass = 'text-xs text-red-400';
                             class="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-6 font-semibold text-white shadow-lg shadow-purple-500/20 transition-all hover:from-purple-500 hover:to-pink-500 disabled:cursor-not-allowed disabled:opacity-60"
                         >
                             <Loader2 v-if="locationForm.processing" class="h-4 w-4 animate-spin" />
-                            <span>Continuar</span>
+                            <span>{{ t('panel.onboarding.continue') }}</span>
                             <span v-if="!locationForm.processing">→</span>
                         </button>
                     </form>
@@ -352,8 +355,8 @@ const errorClass = 'text-xs text-red-400';
                     <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/15">
                         <UtensilsCrossed class="h-6 w-6 text-purple-400" />
                     </div>
-                    <h1 class="mb-2 text-2xl font-bold text-white">Tu menú</h1>
-                    <p class="mb-6 text-sm text-slate-400">Dale un nombre a tu menú digital.</p>
+                    <h1 class="mb-2 text-2xl font-bold text-white">{{ t('panel.onboarding.menu_title') }}</h1>
+                    <p class="mb-6 text-sm text-slate-400">{{ t('panel.onboarding.menu_body') }}</p>
 
                     <form class="space-y-5" @submit.prevent="submitMenu">
                         <div
@@ -365,25 +368,25 @@ const errorClass = 'text-xs text-red-400';
 
                         <div class="space-y-2">
                             <label for="menu-name" :class="labelClass">
-                                Nombre del menú <span class="text-red-400">*</span>
+                                {{ t('panel.onboarding.menu_name') }} <span class="text-red-400">*</span>
                             </label>
                             <input
                                 id="menu-name"
                                 v-model="menuForm.name"
                                 type="text"
-                                placeholder="Ej. Carta de Verano"
+                                :placeholder="t('panel.onboarding.menu_name_placeholder')"
                                 :class="[inputClass, menuForm.errors.name && 'border-red-500']"
                             />
                             <p v-if="menuForm.errors.name" :class="errorClass">{{ menuForm.errors.name }}</p>
                         </div>
 
                         <div class="space-y-2">
-                            <label for="menu-desc" :class="labelClass">Descripción</label>
+                            <label for="menu-desc" :class="labelClass">{{ t('common.description') }}</label>
                             <input
                                 id="menu-desc"
                                 v-model="menuForm.description"
                                 type="text"
-                                placeholder="Una breve descripción (opcional)"
+                                :placeholder="t('panel.onboarding.menu_desc_placeholder')"
                                 :class="inputClass"
                             />
                         </div>
@@ -394,7 +397,7 @@ const errorClass = 'text-xs text-red-400';
                             class="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-6 font-semibold text-white shadow-lg shadow-purple-500/20 transition-all hover:from-purple-500 hover:to-pink-500 disabled:cursor-not-allowed disabled:opacity-60"
                         >
                             <Loader2 v-if="menuForm.processing" class="h-4 w-4 animate-spin" />
-                            <span>Continuar</span>
+                            <span>{{ t('panel.onboarding.continue') }}</span>
                             <span v-if="!menuForm.processing">→</span>
                         </button>
                     </form>
@@ -405,9 +408,9 @@ const errorClass = 'text-xs text-red-400';
                     <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/15">
                         <Zap class="h-6 w-6 text-purple-400" />
                     </div>
-                    <h1 class="mb-2 text-2xl font-bold text-white">Tus platos</h1>
+                    <h1 class="mb-2 text-2xl font-bold text-white">{{ t('panel.onboarding.dishes_title') }}</h1>
                     <p class="mb-6 text-sm text-slate-400">
-                        Añade al menos un producto a tu menú. Podrás añadir más desde el panel.
+                        {{ t('panel.onboarding.dishes_body') }}
                     </p>
 
                     <div class="mb-4 space-y-4">
@@ -418,13 +421,13 @@ const errorClass = 'text-xs text-red-400';
                         >
                             <div class="mb-3 flex items-center justify-between">
                                 <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                    Plato #{{ index + 1 }}
+                                    {{ t('panel.onboarding.dish_number', { n: index + 1 }) }}
                                 </span>
                                 <button
                                     v-if="productRows.length > 1"
                                     type="button"
                                     class="text-slate-500 transition-colors hover:text-red-400"
-                                    title="Eliminar"
+                                    :title="t('common.delete')"
                                     @click="removeProduct(index)"
                                 >
                                     <X class="h-4 w-4" />
@@ -433,16 +436,16 @@ const errorClass = 'text-xs text-red-400';
 
                             <div class="grid grid-cols-1 gap-3 sm:grid-cols-[1fr_7rem]">
                                 <div class="space-y-2">
-                                    <label :class="labelClass">Nombre</label>
+                                    <label :class="labelClass">{{ t('common.name') }}</label>
                                     <input
                                         v-model="row.name"
                                         type="text"
-                                        placeholder="Ej. Ensalada César"
+                                        :placeholder="t('panel.onboarding.dish_name_placeholder')"
                                         :class="inputClass"
                                     />
                                 </div>
                                 <div class="space-y-2">
-                                    <label :class="labelClass">Precio (€)</label>
+                                    <label :class="labelClass">{{ t('panel.product_form.field_price') }}</label>
                                     <input
                                         v-model="row.price"
                                         type="number"
@@ -455,17 +458,17 @@ const errorClass = 'text-xs text-red-400';
                             </div>
 
                             <div class="mt-3 space-y-2">
-                                <label :class="labelClass">Sección</label>
+                                <label :class="labelClass">{{ t('panel.product_form.field_section') }}</label>
                                 <select v-model="row.section_name" :class="inputClass">
                                     <option v-for="opt in sectionOptions" :key="opt" :value="opt" class="bg-slate-900">
                                         {{ opt }}
                                     </option>
-                                    <option value="__custom__" class="bg-slate-900">Otra…</option>
+                                    <option value="__custom__" class="bg-slate-900">{{ t('panel.onboarding.other_section') }}</option>
                                 </select>
                                 <input
                                     v-if="row.section_name === '__custom__'"
                                     type="text"
-                                    placeholder="Ej. Tapas"
+                                    :placeholder="t('panel.onboarding.custom_section_placeholder')"
                                     :class="[inputClass, 'mt-2']"
                                     @input="(e: Event) => (row.section_name = (e.target as HTMLInputElement).value)"
                                 />
@@ -479,7 +482,7 @@ const errorClass = 'text-xs text-red-400';
                         @click="addProduct"
                     >
                         <Plus class="h-4 w-4" />
-                        Añadir otro plato
+                        {{ t('panel.onboarding.add_dish') }}
                     </button>
 
                     <p v-if="productsError" :class="[errorClass, 'mb-3']">{{ productsError }}</p>
@@ -491,7 +494,7 @@ const errorClass = 'text-xs text-red-400';
                         @click="submitProducts"
                     >
                         <Loader2 v-if="productsProcessing" class="h-4 w-4 animate-spin" />
-                        <span>Continuar</span>
+                        <span>{{ t('panel.onboarding.continue') }}</span>
                         <span v-if="!productsProcessing">→</span>
                     </button>
                 </template>
@@ -503,26 +506,26 @@ const errorClass = 'text-xs text-red-400';
                             🎉
                         </div>
                     </div>
-                    <h1 class="mb-2 text-center text-2xl font-bold text-white">¡Tu menú está casi listo!</h1>
+                    <h1 class="mb-2 text-center text-2xl font-bold text-white">{{ t('panel.onboarding.complete_title') }}</h1>
                     <p class="mb-6 text-center text-sm text-slate-400">
-                        Haz clic en "Finalizar" para generar el código QR de tu menú y acceder al panel de administración.
+                        {{ t('panel.onboarding.complete_body') }}
                     </p>
 
                     <div class="mb-6 rounded-lg border border-slate-800 bg-slate-950/50 p-5">
-                        <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">Resumen</p>
+                        <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">{{ t('panel.onboarding.summary') }}</p>
                         <ul class="space-y-2 text-sm">
                             <li v-if="location" class="flex items-start gap-2">
                                 <Check class="mt-0.5 h-4 w-4 shrink-0 text-purple-400" />
-                                <span class="text-slate-400">Local: <span class="font-medium text-white">{{ location.name }}</span></span>
+                                <span class="text-slate-400">{{ t('panel.onboarding.summary_location') }}: <span class="font-medium text-white">{{ location.name }}</span></span>
                             </li>
                             <li v-if="menu" class="flex items-start gap-2">
                                 <Check class="mt-0.5 h-4 w-4 shrink-0 text-purple-400" />
-                                <span class="text-slate-400">Menú: <span class="font-medium text-white">{{ menu.name }}</span></span>
+                                <span class="text-slate-400">{{ t('panel.onboarding.summary_menu') }}: <span class="font-medium text-white">{{ menu.name }}</span></span>
                             </li>
                             <li v-if="products?.length" class="flex items-start gap-2">
                                 <Check class="mt-0.5 h-4 w-4 shrink-0 text-purple-400" />
                                 <span class="text-slate-400">
-                                    <span class="font-medium text-white">{{ products.length }}</span> producto{{ products.length === 1 ? '' : 's' }} añadido{{ products.length === 1 ? '' : 's' }}
+                                    <span class="font-medium text-white">{{ products.length }}</span> {{ t('panel.onboarding.products_added', products.length) }}
                                 </span>
                             </li>
                         </ul>
@@ -536,14 +539,14 @@ const errorClass = 'text-xs text-red-400';
                     >
                         <Loader2 v-if="completeProcessing" class="h-4 w-4 animate-spin" />
                         <Sparkles v-else class="h-4 w-4" />
-                        <span>Finalizar y generar QR</span>
+                        <span>{{ t('panel.onboarding.finish') }}</span>
                     </button>
                 </template>
             </div>
 
             <!-- Footer -->
             <p class="mt-8 text-xs text-slate-600">
-                Paso {{ step + 1 }} de {{ steps.length }}
+                {{ t('panel.onboarding.step_counter', { current: step + 1, total: steps.length }) }}
             </p>
         </div>
     </div>

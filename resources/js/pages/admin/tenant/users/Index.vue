@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 import AppLayout from '@/layouts/AppLayout.vue';
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -119,11 +122,11 @@ const canCreate = props.hasTeam && props.currentUserRole === 'owner';
                 class="border-amber-500 bg-amber-50 text-amber-900 dark:bg-amber-950 dark:text-amber-200"
             >
                 <Lock class="size-4 text-amber-600" />
-                <AlertTitle>Gestión de equipo no disponible</AlertTitle>
+                <AlertTitle>{{ t('panel.users.team_unavailable_title') }}</AlertTitle>
                 <AlertDescription>
-                    Invita a colaboradores a tu tenant actualizando a un plan Pro o superior.
+                    {{ t('panel.users.team_unavailable_body') }}
                     <Link href="/panel/billing/plans" class="ml-1 font-semibold underline underline-offset-2">
-                        Ver planes
+                        {{ t('panel.users.view_plans') }}
                     </Link>
                 </AlertDescription>
             </Alert>
@@ -134,9 +137,9 @@ const canCreate = props.hasTeam && props.currentUserRole === 'owner';
                 class="border-sky-500 bg-sky-50 text-sky-900 dark:bg-sky-950 dark:text-sky-200"
             >
                 <Lock class="size-4 text-sky-600" />
-                <AlertTitle>Solo visualización</AlertTitle>
+                <AlertTitle>{{ t('panel.users.view_only_title') }}</AlertTitle>
                 <AlertDescription>
-                    Solo los owners del tenant pueden crear, editar o eliminar usuarios.
+                    {{ t('panel.users.view_only_body') }}
                 </AlertDescription>
             </Alert>
 
@@ -147,7 +150,7 @@ const canCreate = props.hasTeam && props.currentUserRole === 'owner';
                         <Search class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                         <Input
                             v-model="searchQuery"
-                            placeholder="Buscar por nombre o email..."
+                            :placeholder="t('panel.users.search_placeholder')"
                             class="panel-input pl-9"
                             @update:model-value="applyFilters"
                         />
@@ -157,11 +160,11 @@ const canCreate = props.hasTeam && props.currentUserRole === 'owner';
                         class="panel-input h-9 rounded-md border px-3 text-sm"
                         @change="applyFilters"
                     >
-                        <option value="">Todos los roles</option>
+                        <option value="">{{ t('panel.users.all_roles') }}</option>
                         <option value="owner">Owner</option>
                         <option value="editor">Editor</option>
                     </select>
-                    <Button variant="outline" @click="clearFilters">Limpiar</Button>
+                    <Button variant="outline" @click="clearFilters">{{ t('panel.common.clear') }}</Button>
                 </div>
             </div>
 
@@ -169,15 +172,15 @@ const canCreate = props.hasTeam && props.currentUserRole === 'owner';
             <div class="rounded-xl border bg-card text-card-foreground overflow-hidden">
                 <div v-if="users.data.length === 0" class="py-12 text-center">
                     <UserCog class="mx-auto mb-3 h-10 w-10 text-muted-foreground/30" />
-                    <p class="text-sm text-muted-foreground">No hay usuarios que coincidan con los filtros.</p>
+                    <p class="text-sm text-muted-foreground">{{ t('panel.users.no_results') }}</p>
                 </div>
                 <Table v-else>
                     <TableHeader>
                         <TableRow>
                             <TableHead class="panel-label">{{ messages.users.fields.name }}</TableHead>
                             <TableHead class="panel-label">{{ messages.users.fields.email }}</TableHead>
-                            <TableHead class="panel-label">Rol</TableHead>
-                            <TableHead class="panel-label">Scope</TableHead>
+                            <TableHead class="panel-label">{{ t('panel.users.role_column') }}</TableHead>
+                            <TableHead class="panel-label">{{ t('panel.users.scope_column') }}</TableHead>
                             <TableHead class="text-right panel-label">{{ messages.actions.label }}</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -209,9 +212,9 @@ const canCreate = props.hasTeam && props.currentUserRole === 'owner';
                                     v-if="u.tenant_permissions?.scope === 'locations'"
                                     class="text-xs text-muted-foreground"
                                 >
-                                    {{ (u.tenant_permissions.location_ids ?? []).length }} location(es)
+                                    {{ (u.tenant_permissions.location_ids ?? []).length }} {{ t('panel.users.locations_label') }}
                                 </span>
-                                <span v-else class="text-xs text-muted-foreground">Todas</span>
+                                <span v-else class="text-xs text-muted-foreground">{{ t('panel.users.all_locations') }}</span>
                             </TableCell>
                             <TableCell class="text-right">
                                 <div class="flex justify-end gap-1.5">
@@ -234,7 +237,7 @@ const canCreate = props.hasTeam && props.currentUserRole === 'owner';
                     </TableBody>
                 </Table>
                 <div v-if="users.last_page > 1" class="flex items-center justify-between border-t px-4 py-3 text-xs text-muted-foreground">
-                    <span>{{ users.total }} en total</span>
+                    <span>{{ t('panel.users.total', { count: users.total }) }}</span>
                     <div class="flex gap-1">
                         <Button variant="outline" size="sm" :disabled="!users.prev_page_url" @click="go(users.prev_page_url)">
                             <ChevronLeft class="h-4 w-4" />

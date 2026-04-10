@@ -14,6 +14,9 @@ import { index as menusRoute } from '@/routes/tenant/locations/menus';
 import { Location, Template } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
 import { Check, ChevronDown, Image as ImageIcon, Save, Trash2, X } from 'lucide-vue-next';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 import {
     SelectContent,
     SelectIcon,
@@ -224,7 +227,7 @@ const handleFileChange = async (event: Event) => {
                             class="flex h-32 flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed bg-muted/10 text-muted-foreground"
                         >
                             <ImageIcon class="h-8 w-8 opacity-40" />
-                            <span class="text-xs">Sin imagen seleccionada</span>
+                            <span class="text-xs">{{ messages.menus?.fields?.image_none || t('panel.product_form.image_none') }}</span>
                         </div>
 
                         <Input

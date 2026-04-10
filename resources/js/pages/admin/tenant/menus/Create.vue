@@ -1,17 +1,17 @@
 <template>
-    <Head title="Crear Menú" />
+    <Head :title="t('panel.menus.create_title')" />
     <AppLayout :breadcrumbs="breadcrumbItems">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <HeadingSmall
-                title="Crear Menú"
-                description="Agrega un nuevo menú al sistema"
+                :title="t('panel.menus.create_title')"
+                :description="t('panel.menus.create_description')"
             />
 
             <MenuForm
                 :form="form"
-                title="Información del Menú"
-                description="Completa los datos del nuevo menú."
-                submit-text="Crear Menú"
+                :title="t('panel.menus.info_title')"
+                :description="t('panel.menus.create_form_description')"
+                :submit-text="t('panel.menus.create_title')"
                 :location="props.location"
                 :templates="props.templates"
                 @submit="submit"
@@ -28,6 +28,9 @@ import HeadingSmall from '@/components/HeadingSmall.vue';
 import MenuForm from './Form.vue';
 import type { BreadcrumbItem, Location, Template } from '@/types';
 import { index as menusRoute, store } from '@/routes/tenant/locations/menus';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const props = defineProps<{
     location: Location;
