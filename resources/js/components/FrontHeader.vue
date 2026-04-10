@@ -2,18 +2,11 @@
 import AppLogo from '@/components/AppLogo.vue';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { route } from 'ziggy-js';
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuTrigger
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-    NavigationMenu,
-    NavigationMenuItem,
-    NavigationMenuList,
-    navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu';
 import {
     Sheet,
     SheetContent,
@@ -21,8 +14,6 @@ import {
 } from '@/components/ui/sheet';
 import UserMenuContent from '@/components/UserMenuContent.vue';
 import { getInitials } from '@/composables/useInitials';
-import { urlIsActive } from '@/lib/utils';
-import type { NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
 import { Menu } from 'lucide-vue-next';
 import { computed } from 'vue';
@@ -30,14 +21,22 @@ import { computed } from 'vue';
 const page = usePage();
 const auth = computed(() => page.props.auth);
 
-const mainNavItems: NavItem[] = [];
+interface NavLink {
+    label: string;
+    href: string;
+}
 
+const links: NavLink[] = [
+    { label: 'Funcionalidades', href: '#features' },
+    { label: 'Precios', href: '#pricing' },
+];
 </script>
 
 <template>
     <div class="sticky top-0 z-50">
         <div class="border-b border-white/5 bg-slate-950/80 backdrop-blur-md supports-[backdrop-filter]:bg-slate-950/50">
             <div class="mx-auto flex h-16 items-center px-4 md:max-w-7xl">
+                <!-- Mobile hamburger -->
                 <div class="lg:hidden">
                     <Sheet>
                         <SheetTrigger :as-child="true">
@@ -45,46 +44,58 @@ const mainNavItems: NavItem[] = [];
                                 <Menu class="h-5 w-5" />
                             </Button>
                         </SheetTrigger>
-                        <SheetContent side="left" class="w-[300px] p-6 bg-slate-950 border-r border-slate-800 text-white">
+                        <SheetContent side="left" class="w-[280px] p-6 bg-slate-950 border-r border-slate-800 text-white">
+                            <nav class="mt-8 space-y-4">
+                                <a
+                                    v-for="link in links"
+                                    :key="link.href"
+                                    :href="link.href"
+                                    class="block text-lg font-medium text-slate-300 hover:text-white transition"
+                                >
+                                    {{ link.label }}
+                                </a>
+                                <template v-if="!auth?.user">
+                                    <div class="pt-6 border-t border-slate-800 space-y-3">
+                                        <Link href="/login" class="block text-slate-300 hover:text-white transition">
+                                            Iniciar sesión
+                                        </Link>
+                                        <Link href="/register" class="block bg-white text-slate-950 font-bold text-center py-3 px-6 rounded-full">
+                                            Crear cuenta gratis
+                                        </Link>
+                                    </div>
+                                </template>
+                            </nav>
                         </SheetContent>
                     </Sheet>
                 </div>
 
-                <Link :href="route('tenant_public.tenant_home')" class="flex items-center gap-x-2">
-                    <AppLogo class="text-white fill-white" /> </Link>
+                <!-- Logo -->
+                <Link href="/" class="flex items-center gap-x-2">
+                    <AppLogo class="text-white fill-white" />
+                </Link>
 
-                <div class="hidden h-full lg:flex lg:flex-1">
-                    <NavigationMenu class="ml-10 flex h-full items-stretch">
-                        <NavigationMenuList class="flex h-full items-stretch space-x-2">
-                            <NavigationMenuItem v-for="(item, index) in mainNavItems" :key="index" class="relative flex h-full items-center">
-                                <Link
-                                    :class="[
-                                        navigationMenuTriggerStyle(),
-                                        // Estilos para links activos y normales en modo oscuro
-                                        urlIsActive(item.href, page.url) ? 'text-white bg-slate-800' : 'text-slate-400 hover:text-white hover:bg-slate-800/50',
-                                        'h-9 cursor-pointer px-3 bg-transparent'
-                                    ]"
-                                    :href="item.href"
-                                >
-                                    <component v-if="item.icon" :is="item.icon" class="mr-2 h-4 w-4" />
-                                    {{ item.title }}
-                                </Link>
-                            </NavigationMenuItem>
-                        </NavigationMenuList>
-                    </NavigationMenu>
-                </div>
+                <!-- Desktop nav -->
+                <nav class="hidden lg:flex lg:flex-1 ml-10 items-center gap-6">
+                    <a
+                        v-for="link in links"
+                        :key="link.href"
+                        :href="link.href"
+                        class="text-sm font-medium text-slate-400 hover:text-white transition"
+                    >
+                        {{ link.label }}
+                    </a>
+                </nav>
 
-                <div class="ml-auto flex items-center space-x-2">
-                    <div class="hidden space-x-4 lg:flex items-center">
-                        <template v-if="!auth?.user">
-                            <Link :href="route('login')" class="text-sm font-medium text-slate-300 hover:text-white transition">
-                                Log in
-                            </Link>
-                            <Link :href="route('register')" class="text-sm font-bold bg-white text-slate-950 px-4 py-2 rounded-full hover:bg-slate-200 transition">
-                                Sign up
-                            </Link>
-                        </template>
-                    </div>
+                <!-- Right side -->
+                <div class="ml-auto flex items-center space-x-3">
+                    <template v-if="!auth?.user">
+                        <Link href="/login" class="hidden lg:inline text-sm font-medium text-slate-300 hover:text-white transition">
+                            Iniciar sesión
+                        </Link>
+                        <Link href="/register" class="text-sm font-bold bg-white text-slate-950 px-5 py-2 rounded-full hover:bg-slate-200 transition">
+                            Empezar gratis
+                        </Link>
+                    </template>
 
                     <DropdownMenu v-if="auth?.user">
                         <DropdownMenuTrigger :as-child="true">

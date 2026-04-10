@@ -4,92 +4,77 @@ import { CheckIcon } from '@heroicons/vue/24/solid';
 
 interface Plan {
     name: string;
+    slug: string;
     price: string | null;
     period: string;
     description: string;
-    features: string[];
-    highlighted: boolean;
-    cta: string;
-    ctaHref: string;
-    badge?: string;
+    max_locations: number;
+    max_menus_per_location: number;
+    max_products: number;
+    has_analytics: boolean;
+    has_custom_qr: boolean;
+    has_multilang: boolean;
+    has_catalog: boolean;
+    has_team: boolean;
+    has_api_access: boolean;
+    has_custom_domain: boolean;
+    show_branding: boolean;
+    trial_days: number;
 }
 
-const plans: Plan[] = [
-    {
-        name: 'Free',
-        price: '0',
-        period: 'mes',
-        description: 'Para empezar sin coste',
-        features: [
-            '1 local',
-            '1 menú por local',
-            '25 productos',
-            'QR básico',
-            'Branding MenuLinker',
-        ],
-        highlighted: false,
-        cta: 'Empezar gratis',
-        ctaHref: '/register',
-    },
-    {
-        name: 'Pro',
-        price: '14.99',
-        period: 'mes',
-        description: 'Para negocios en crecimiento',
-        features: [
-            '3 locales',
-            '5 menús por local',
-            'Productos ilimitados',
-            'QR personalizado',
-            'Analytics',
-            '14 días de prueba gratuita',
-        ],
-        highlighted: true,
-        badge: 'MÁS POPULAR',
-        cta: 'Empezar prueba gratuita',
-        ctaHref: '/register?plan=pro',
-    },
-    {
-        name: 'Business',
-        price: '34.99',
-        period: 'mes',
-        description: 'Para cadenas y grupos',
-        features: [
-            '10 locales',
-            'Menús ilimitados',
-            'Productos ilimitados',
-            'Dominio personalizado',
-            'Multi-idioma',
-            'Analytics avanzados',
-            '14 días de prueba gratuita',
-        ],
-        highlighted: false,
-        cta: 'Empezar prueba gratuita',
-        ctaHref: '/register?plan=business',
-    },
-    {
-        name: 'Enterprise',
-        price: null,
-        period: 'mes',
-        description: 'Para grandes corporaciones',
-        features: [
-            'Locales ilimitados',
-            'Menús ilimitados',
-            'Acceso API completo',
-            'Dominio personalizado',
-            'Multi-idioma',
-            'Manager dedicado',
-            'SLA 99.9%',
-        ],
-        highlighted: false,
-        cta: 'Contactar',
-        ctaHref: 'mailto:hello@menulinker.com',
-    },
-];
+interface Props {
+    plans: Plan[];
+}
+
+const props = defineProps<Props>();
+
+function features(plan: Plan): string[] {
+    const f: string[] = [];
+
+    if (plan.max_locations === 0) f.push('Locales ilimitados');
+    else f.push(`${plan.max_locations} ${plan.max_locations === 1 ? 'local' : 'locales'}`);
+
+    if (plan.max_menus_per_location === 0) f.push('Menús ilimitados');
+    else f.push(`${plan.max_menus_per_location} ${plan.max_menus_per_location === 1 ? 'menú' : 'menús'} por local`);
+
+    if (plan.max_products === 0 && plan.slug !== 'free') f.push('Productos ilimitados');
+    else if (plan.max_products > 0) f.push(`${plan.max_products} productos`);
+
+    if (plan.has_custom_qr) f.push('QR personalizado');
+    else f.push('QR básico');
+
+    if (plan.has_analytics) f.push('Analytics');
+    if (plan.has_multilang) f.push('Multi-idioma automático');
+    if (plan.has_catalog) f.push('Catálogo centralizado');
+    if (plan.has_team) f.push('Gestión de equipo');
+    if (plan.has_custom_domain) f.push('Dominio personalizado');
+    if (plan.has_api_access) f.push('Acceso API completo');
+    if (plan.show_branding) f.push('Branding MenuLinker');
+    if (plan.trial_days > 0) f.push(`${plan.trial_days} días de prueba gratuita`);
+
+    return f;
+}
+
+function isHighlighted(plan: Plan): boolean {
+    return plan.slug === 'pro';
+}
+
+function ctaText(plan: Plan): string {
+    if (plan.slug === 'free') return 'Empezar gratis';
+    if (plan.slug === 'enterprise') return 'Contactar';
+    if (plan.trial_days > 0) return 'Empezar prueba gratuita';
+    return 'Suscribirse';
+}
+
+function ctaHref(plan: Plan): string {
+    if (plan.slug === 'enterprise') return 'mailto:hello@menulinker.com';
+    if (plan.slug === 'free') return '/register';
+    return `/register?plan=${plan.slug}`;
+}
 </script>
 
 <template>
-    <section class="py-24 bg-slate-950 border-t border-slate-900">
+    <section id="pricing" class="py-24 bg-slate-950 border-t border-slate-900">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
                 <h2 class="text-4xl font-bold text-white mb-4">Planes Simples</h2>
@@ -99,51 +84,54 @@ const plans: Plan[] = [
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto items-start">
                 <div
                     v-for="plan in plans"
-                    :key="plan.name"
+                    :key="plan.slug"
                     :class="[
                         'relative rounded-3xl p-8 border transition-all duration-300',
-                        plan.highlighted
-                            ? 'bg-slate-900/80 border-purple-500 shadow-[0_0_30px_rgba(168,85,247,0.15)] z-10 lg:-translate-y-4'
+                        isHighlighted(plan)
+                            ? 'bg-slate-900/80 border-teal-500 shadow-[0_0_30px_rgba(20,184,166,0.15)] z-10 lg:-translate-y-4'
                             : 'bg-slate-950 border-slate-800 hover:border-slate-700',
                     ]"
                 >
                     <div
-                        v-if="plan.badge"
-                        class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg whitespace-nowrap"
+                        v-if="isHighlighted(plan)"
+                        class="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-teal-600 to-cyan-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg whitespace-nowrap"
                     >
-                        {{ plan.badge }}
+                        MÁS POPULAR
                     </div>
 
                     <h3 class="text-xl font-bold text-white mb-2">{{ plan.name }}</h3>
                     <p class="text-slate-400 text-sm mb-6">{{ plan.description }}</p>
 
                     <div class="mb-8 flex items-baseline">
-                        <template v-if="plan.price !== null">
+                        <template v-if="plan.price !== null && Number(plan.price) > 0">
                             <span class="text-4xl font-bold text-white">€{{ plan.price }}</span>
                             <span class="text-slate-500 ml-2">/{{ plan.period }}</span>
                         </template>
-                        <template v-else>
+                        <template v-else-if="plan.slug === 'enterprise'">
                             <span class="text-2xl font-bold text-white">A medida</span>
+                        </template>
+                        <template v-else>
+                            <span class="text-4xl font-bold text-white">Gratis</span>
                         </template>
                     </div>
 
                     <ul class="space-y-4 mb-8">
-                        <li v-for="feature in plan.features" :key="feature" class="flex items-start">
-                            <CheckIcon class="w-5 h-5 text-purple-400 mr-3 mt-0.5 shrink-0" />
+                        <li v-for="feature in features(plan)" :key="feature" class="flex items-start">
+                            <CheckIcon class="w-5 h-5 text-teal-400 mr-3 mt-0.5 shrink-0" />
                             <span class="text-slate-300 text-sm">{{ feature }}</span>
                         </li>
                     </ul>
 
                     <Link
-                        :href="plan.ctaHref"
+                        :href="ctaHref(plan)"
                         :class="[
                             'block w-full text-center py-3 px-6 rounded-xl font-bold transition-all',
-                            plan.highlighted
+                            isHighlighted(plan)
                                 ? 'bg-white text-slate-950 hover:bg-slate-200'
                                 : 'bg-slate-800 text-white hover:bg-slate-700',
                         ]"
                     >
-                        {{ plan.cta }}
+                        {{ ctaText(plan) }}
                     </Link>
                 </div>
             </div>

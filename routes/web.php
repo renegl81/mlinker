@@ -22,6 +22,7 @@ Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook']
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/doc', [DocumentationController::class, 'index'])->name('documentation');
+Route::get('/sitemap.xml', [HomeController::class, 'sitemap'])->name('sitemap');
 Route::get('/tenant_image/{tenant}/{path}', TenantImageController::class)
     ->where('path', '.*')
     ->name('tenant_image');

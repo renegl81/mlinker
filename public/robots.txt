@@ -1,2 +1,7 @@
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /panel/
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://menulinker.com/sitemap.xml
