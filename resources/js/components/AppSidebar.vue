@@ -35,8 +35,9 @@ import { index as locations } from '@/routes/tenant/locations';
 
 const page = usePage();
 const messages = page.props.messages as any;
-const tenantProps = page.props.tenant as { plan_features?: { catalog?: boolean } } | null;
+const tenantProps = page.props.tenant as { plan_features?: { catalog?: boolean; team?: boolean }; user_role?: string | null } | null;
 const hasCatalog = !!tenantProps?.plan_features?.catalog;
+const isOwner = tenantProps?.user_role === 'owner' || !!page.props.auth?.user?.is_admin;
 
 const mainNavItems: NavItem[] = [
     {
@@ -49,7 +50,7 @@ const mainNavItems: NavItem[] = [
         title: messages.locations.plural,
         href: locations(),
         icon: Building2Icon,
-        role: 'owner',
+        role: 'owner, editor',
     },
     ...(hasCatalog
         ? [
@@ -67,12 +68,16 @@ const mainNavItems: NavItem[] = [
               },
           ]
         : []),
-    {
-        title: messages.users.plural,
-        href: page.props.auth?.user?.is_admin ? users() : tenantUsers(),
-        icon: UserGroupIcon,
-        role: 'owner, admin',
-    },
+    ...(isOwner
+        ? [
+              {
+                  title: messages.users.plural,
+                  href: page.props.auth?.user?.is_admin ? users() : tenantUsers(),
+                  icon: UserGroupIcon,
+                  role: 'owner, admin',
+              },
+          ]
+        : []),
 ];
 
 const footerNavItems: NavItem[] = [

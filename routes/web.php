@@ -28,8 +28,8 @@ Route::get('/tenant_image/{tenant}/{path}', TenantImageController::class)
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
 
-// Definir las rutas UNA SOLA VEZ - Laravel manejará los dominios automáticamente
-Route::prefix('admin')->middleware(['auth', 'verified', 'admin'])->group(function () {
+// Panel de administración legacy (Inertia/Vue) — movido a /superadmin para ceder /admin a Filament
+Route::prefix('superadmin')->middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('users', UserController::class);
     Route::resource('locations', LocationController::class)->except('create', 'edit');

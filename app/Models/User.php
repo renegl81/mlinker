@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -13,7 +15,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 
-class User extends Authenticatable implements MustVerifyEmailContract
+class User extends Authenticatable implements FilamentUser, MustVerifyEmailContract
 {
     use HasFactory, MustVerifyEmail, Notifiable, TwoFactorAuthenticatable;
 
@@ -64,6 +66,11 @@ class User extends Authenticatable implements MustVerifyEmailContract
             'country_id' => 'integer',
             'is_active' => 'boolean',
         ];
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->hasRole('Admin');
     }
 
     public function markAsActive(): void
@@ -148,6 +155,61 @@ class User extends Authenticatable implements MustVerifyEmailContract
         $tenant = $this->tenants()->where('tenant_id', $tenantId)->first();
 
         return $tenant?->pivot->role;
+    }
+
+    /**
+     * Check if the user is the owner of the current tenant.
+     */
+    public function isCurrentTenantOwner(): bool
+    {
+        return $this->currentTenantRole() === 'owner';
+    }
+
+    /**
+     * Get the permissions JSON stored in the current tenant's pivot.
+     * Returns a default scope=all when missing (backwards compatibility).
+     *
+     * @return array<string, mixed>
+     */
+    public function currentTenantPermissions(): array
+    {
+        if (! tenancy()->initialized) {
+            return ['scope' => 'all'];
+        }
+
+        $pivot = $this->tenants()
+            ->where('tenant_id', tenant('id'))
+            ->first()?->pivot;
+
+        if (! $pivot) {
+            return ['scope' => 'all'];
+        }
+
+        $perms = $pivot->permissions;
+        if (is_string($perms)) {
+            $perms = json_decode($perms, true) ?: [];
+        }
+
+        return is_array($perms) && ! empty($perms) ? $perms : ['scope' => 'all'];
+    }
+
+    /**
+     * Returns true if the user can access (view/edit) the given location id
+     * based on their current tenant role and scope.
+     */
+    public function canAccessLocation(int $locationId): bool
+    {
+        if ($this->isCurrentTenantOwner()) {
+            return true;
+        }
+
+        $perms = $this->currentTenantPermissions();
+
+        if (($perms['scope'] ?? 'all') === 'all') {
+            return true;
+        }
+
+        return in_array($locationId, (array) ($perms['location_ids'] ?? []), true);
     }
 
     /**

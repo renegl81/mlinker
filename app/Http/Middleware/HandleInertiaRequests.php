@@ -79,15 +79,19 @@ class HandleInertiaRequests extends Middleware
 
         $plan = $subscription?->plan ?? \App\Models\Plan::free();
 
+        $user = auth()->user();
+
         return [
             'id' => tenant()->id,
             'plan_features' => [
                 'multilang' => (bool) ($plan?->has_multilang ?? false),
                 'catalog' => (bool) ($plan?->has_catalog ?? false),
+                'team' => (bool) ($plan?->has_team ?? false),
                 'analytics' => (bool) ($plan?->has_analytics ?? false),
                 'custom_qr' => (bool) ($plan?->has_custom_qr ?? false),
                 'api_access' => (bool) ($plan?->has_api_access ?? false),
             ],
+            'user_role' => $user instanceof \App\Models\User ? $user->currentTenantRole() : null,
         ];
     }
 }
