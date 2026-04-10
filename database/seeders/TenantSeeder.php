@@ -50,6 +50,9 @@ class TenantSeeder extends Seeder
                 []
             );
 
+            $businessType = $this->mapBusinessType($profile['type'] ?? 'restaurant');
+            $homeTemplate = config("menulinker.default_home_template.{$businessType}", 'HomeClassic');
+
             DB::table('tenants')->updateOrInsert(
                 ['id' => $tenantId],
                 [
@@ -59,6 +62,9 @@ class TenantSeeder extends Seeder
                     'trial_ends_at' => now()->addDays(14),
                     'stripe_connect_id' => 'acct_'.str_pad((string) ($index + 7000), 10, '0', STR_PAD_LEFT),
                     'data' => json_encode(['business_type' => $profile['type'], 'cuisine' => $profile['cuisine']]),
+                    'has_website'   => true,
+                    'business_type' => $businessType,
+                    'home_template' => $homeTemplate,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]
@@ -396,6 +402,17 @@ class TenantSeeder extends Seeder
         ];
 
         return $catalog[$cuisine] ?? $catalog['espanola'];
+    }
+
+    private function mapBusinessType(string $type): string
+    {
+        return match ($type) {
+            'cafe', 'coffee', 'bakery'        => 'cafe',
+            'bar', 'pub', 'cocktail'          => 'bar',
+            'fastfood', 'fast_food', 'street' => 'fastfood',
+            'finedining', 'fine_dining'       => 'finedining',
+            default                           => 'restaurant',
+        };
     }
 
     private function tenantProfiles(): array

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { router, useForm } from '@inertiajs/vue3';
-import { Check, Loader2, Plus, Sparkles, X } from 'lucide-vue-next';
+import { Check, Globe, Loader2, Plus, Sparkles, Store, UtensilsCrossed, X, Zap } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
 
 interface Location {
@@ -30,7 +30,25 @@ const props = defineProps<{
     products?: Product[];
 }>();
 
-// ─── Step 0: Location ───────────────────────────────────────────────────────
+// ─── Step 0: Tu web ───────────────────────────────────────────────────────────
+const websiteForm = useForm({
+    has_website: true,
+    business_type: 'restaurant' as string,
+});
+
+const businessTypes = [
+    { value: 'restaurant', label: 'Restaurante', emoji: '🍽️' },
+    { value: 'cafe',       label: 'Cafetería',   emoji: '☕' },
+    { value: 'bar',        label: 'Bar / Pub',   emoji: '🍹' },
+    { value: 'fastfood',   label: 'Street Food', emoji: '🍔' },
+    { value: 'finedining', label: 'Alta Cocina', emoji: '⭐' },
+];
+
+function submitWebsite() {
+    websiteForm.post(route('tenant.onboarding.website'));
+}
+
+// ─── Step 1: Location ─────────────────────────────────────────────────────────
 const locationForm = useForm({
     name: props.location?.name ?? '',
     address: props.location?.address ?? '',
@@ -42,33 +60,27 @@ function submitLocation() {
     locationForm.post(route('tenant.onboarding.location'));
 }
 
-// ─── Step 1: Menu ────────────────────────────────────────────────────────────
+// ─── Step 2: Menu ─────────────────────────────────────────────────────────────
 const menuForm = useForm({
     name: props.menu?.name ?? '',
     description: props.menu?.description ?? '',
     location_id: props.location?.id ?? 0,
 });
 
-// Keep location_id in sync with props after step 0 completes and props update.
 watch(
     () => props.location?.id,
     (id) => {
-        if (id) {
-            menuForm.location_id = id;
-        }
+        if (id) menuForm.location_id = id;
     },
     { immediate: true },
 );
 
 function submitMenu() {
-    // Safety: ensure we always send the latest location id from props.
-    if (props.location?.id) {
-        menuForm.location_id = props.location.id;
-    }
+    if (props.location?.id) menuForm.location_id = props.location.id;
     menuForm.post(route('tenant.onboarding.menu'));
 }
 
-// ─── Step 2: Products ────────────────────────────────────────────────────────
+// ─── Step 3: Products ─────────────────────────────────────────────────────────
 const sectionOptions = ['Entrantes', 'Principales', 'Postres', 'Bebidas'];
 
 interface ProductRow {
@@ -84,9 +96,7 @@ function addProduct() {
 }
 
 function removeProduct(index: number) {
-    if (productRows.value.length > 1) {
-        productRows.value.splice(index, 1);
-    }
+    if (productRows.value.length > 1) productRows.value.splice(index, 1);
 }
 
 const productsError = ref('');
@@ -103,18 +113,12 @@ function submitProducts() {
     productsProcessing.value = true;
     router.post(
         route('tenant.onboarding.products'),
-        {
-            menu_id: props.menu?.id,
-            products: productRows.value,
-        },
-        {
-            preserveScroll: true,
-            onFinish: () => (productsProcessing.value = false),
-        },
+        { menu_id: props.menu?.id, products: productRows.value },
+        { preserveScroll: true, onFinish: () => (productsProcessing.value = false) },
     );
 }
 
-// ─── Step 3: Complete ────────────────────────────────────────────────────────
+// ─── Step 4: Complete ─────────────────────────────────────────────────────────
 const completeProcessing = ref(false);
 
 function submitComplete() {
@@ -126,8 +130,9 @@ function submitComplete() {
     );
 }
 
-// ─── Progress ────────────────────────────────────────────────────────────────
+// ─── Progress ─────────────────────────────────────────────────────────────────
 const steps = [
+    { label: 'Tu web' },
     { label: 'Tu negocio' },
     { label: 'Tu menú' },
     { label: 'Tus platos' },
@@ -136,7 +141,7 @@ const steps = [
 
 const progressPercent = computed(() => Math.round((props.step / (steps.length - 1)) * 100));
 
-// ─── Shared input classes (explicit colors, no theme tokens) ────────────────
+// ─── Shared classes ───────────────────────────────────────────────────────────
 const inputClass =
     'flex h-11 w-full rounded-lg border border-slate-700 bg-slate-900/60 px-4 py-2 text-sm text-white placeholder:text-slate-500 transition-colors focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/30';
 const labelClass = 'text-sm font-medium text-slate-300';
@@ -193,8 +198,89 @@ const errorClass = 'text-xs text-red-400';
 
             <!-- Card -->
             <div class="w-full max-w-xl rounded-2xl border border-slate-800 bg-slate-900/60 p-8 shadow-2xl backdrop-blur-sm">
-                <!-- ── Paso 0: Tu negocio ── -->
+
+                <!-- ── Paso 0: Tu web ── -->
                 <template v-if="step === 0">
+                    <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/15">
+                        <Globe class="h-6 w-6 text-purple-400" />
+                    </div>
+                    <h1 class="mb-2 text-2xl font-bold text-white">Tu página web</h1>
+                    <p class="mb-6 text-sm text-slate-400">
+                        Publica tu propia web pública en tu dominio de MenuLinker. Tus clientes podrán ver tu carta, horarios y contacto.
+                    </p>
+
+                    <form class="space-y-6" @submit.prevent="submitWebsite">
+                        <!-- Toggle has_website -->
+                        <div class="flex items-start gap-4 rounded-xl border border-slate-700 bg-slate-900/60 p-4">
+                            <button
+                                type="button"
+                                role="switch"
+                                :aria-checked="websiteForm.has_website"
+                                class="relative mt-0.5 h-6 w-11 flex-shrink-0 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500"
+                                :class="websiteForm.has_website ? 'bg-purple-600' : 'bg-slate-700'"
+                                @click="websiteForm.has_website = !websiteForm.has_website"
+                            >
+                                <span
+                                    class="absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white transition-transform"
+                                    :class="websiteForm.has_website ? 'translate-x-5' : 'translate-x-0'"
+                                />
+                            </button>
+                            <div>
+                                <p class="text-sm font-semibold text-white">Publicar mi página web</p>
+                                <p class="mt-0.5 text-xs text-slate-400">
+                                    Si lo activas, tu subdominio será visible públicamente con tu carta y datos de contacto.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Business type (only if has_website) -->
+                        <Transition
+                            enter-active-class="transition-all duration-300"
+                            enter-from-class="opacity-0 -translate-y-2"
+                            enter-to-class="opacity-100 translate-y-0"
+                            leave-active-class="transition-all duration-200"
+                            leave-from-class="opacity-100 translate-y-0"
+                            leave-to-class="opacity-0 -translate-y-2"
+                        >
+                            <div v-if="websiteForm.has_website" class="space-y-3">
+                                <p :class="labelClass">Tipo de negocio</p>
+                                <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                                    <button
+                                        v-for="bt in businessTypes"
+                                        :key="bt.value"
+                                        type="button"
+                                        class="flex flex-col items-center gap-1.5 rounded-xl border-2 px-3 py-3 text-sm font-medium transition-all"
+                                        :class="
+                                            websiteForm.business_type === bt.value
+                                                ? 'border-purple-500 bg-purple-500/15 text-white'
+                                                : 'border-slate-700 bg-slate-900/60 text-slate-400 hover:border-slate-600 hover:text-white'
+                                        "
+                                        @click="websiteForm.business_type = bt.value"
+                                    >
+                                        <span class="text-xl leading-none">{{ bt.emoji }}</span>
+                                        <span class="text-xs">{{ bt.label }}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </Transition>
+
+                        <button
+                            type="submit"
+                            :disabled="websiteForm.processing"
+                            class="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-6 font-semibold text-white shadow-lg shadow-purple-500/20 transition-all hover:from-purple-500 hover:to-pink-500 disabled:cursor-not-allowed disabled:opacity-60"
+                        >
+                            <Loader2 v-if="websiteForm.processing" class="h-4 w-4 animate-spin" />
+                            <span>Continuar</span>
+                            <span v-if="!websiteForm.processing">→</span>
+                        </button>
+                    </form>
+                </template>
+
+                <!-- ── Paso 1: Tu negocio ── -->
+                <template v-else-if="step === 1">
+                    <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/15">
+                        <Store class="h-6 w-6 text-purple-400" />
+                    </div>
                     <h1 class="mb-2 text-2xl font-bold text-white">Tu negocio</h1>
                     <p class="mb-6 text-sm text-slate-400">
                         Cuéntanos un poco sobre tu local. Esto solo tomará un minuto.
@@ -261,8 +347,11 @@ const errorClass = 'text-xs text-red-400';
                     </form>
                 </template>
 
-                <!-- ── Paso 1: Tu menú ── -->
-                <template v-else-if="step === 1">
+                <!-- ── Paso 2: Tu menú ── -->
+                <template v-else-if="step === 2">
+                    <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/15">
+                        <UtensilsCrossed class="h-6 w-6 text-purple-400" />
+                    </div>
                     <h1 class="mb-2 text-2xl font-bold text-white">Tu menú</h1>
                     <p class="mb-6 text-sm text-slate-400">Dale un nombre a tu menú digital.</p>
 
@@ -311,8 +400,11 @@ const errorClass = 'text-xs text-red-400';
                     </form>
                 </template>
 
-                <!-- ── Paso 2: Tus platos ── -->
-                <template v-else-if="step === 2">
+                <!-- ── Paso 3: Tus platos ── -->
+                <template v-else-if="step === 3">
+                    <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/15">
+                        <Zap class="h-6 w-6 text-purple-400" />
+                    </div>
                     <h1 class="mb-2 text-2xl font-bold text-white">Tus platos</h1>
                     <p class="mb-6 text-sm text-slate-400">
                         Añade al menos un producto a tu menú. Podrás añadir más desde el panel.
@@ -404,8 +496,8 @@ const errorClass = 'text-xs text-red-400';
                     </button>
                 </template>
 
-                <!-- ── Paso 3: ¡Listo! ── -->
-                <template v-else-if="step === 3">
+                <!-- ── Paso 4: ¡Listo! ── -->
+                <template v-else-if="step === 4">
                     <div class="mb-4 flex items-center justify-center">
                         <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-pink-500 text-4xl shadow-lg shadow-purple-500/30">
                             🎉

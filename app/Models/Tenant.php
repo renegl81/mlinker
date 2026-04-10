@@ -19,12 +19,16 @@ class Tenant extends BaseTenant
             'id',
             'onboarding_completed_at',
             'onboarding_step',
+            'has_website',
+            'business_type',
+            'home_template',
         ];
     }
 
     protected $casts = [
         'onboarding_completed_at' => 'datetime',
         'onboarding_step' => 'integer',
+        'has_website' => 'boolean',
     ];
 
     public function subscription(): HasOne

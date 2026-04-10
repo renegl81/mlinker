@@ -167,9 +167,9 @@ class EndToEndTest extends TestCase
 
         $this->assertDatabaseHas('locations', ['name' => 'Mi Café', 'tenant_id' => 'e2e-wizard-tenant']);
         $tenant->refresh();
-        $this->assertEquals(1, $tenant->onboarding_step);
+        $this->assertEquals(2, $tenant->onboarding_step);
 
-        // Step 1: create menu
+        // Step 2: create menu
         $location = Location::first();
         $this->actingAs($user)->post($baseUrl.route('tenant.onboarding.menu', [], false), [
             'name' => 'Carta de la Casa',
@@ -179,9 +179,9 @@ class EndToEndTest extends TestCase
 
         $this->assertDatabaseHas('menus', ['name' => 'Carta de la Casa', 'tenant_id' => 'e2e-wizard-tenant']);
         $tenant->refresh();
-        $this->assertEquals(2, $tenant->onboarding_step);
+        $this->assertEquals(3, $tenant->onboarding_step);
 
-        // Step 2: create products
+        // Step 3: create products
         $menu = Menu::first();
         $this->actingAs($user)->post($baseUrl.route('tenant.onboarding.products', [], false), [
             'menu_id' => $menu->id,
@@ -194,7 +194,7 @@ class EndToEndTest extends TestCase
         $this->assertDatabaseHas('sections', ['name' => 'Bebidas', 'menu_id' => $menu->id]);
         $this->assertDatabaseHas('products', ['name' => 'Café con leche', 'tenant_id' => 'e2e-wizard-tenant']);
         $tenant->refresh();
-        $this->assertEquals(3, $tenant->onboarding_step);
+        $this->assertEquals(4, $tenant->onboarding_step);
     }
 
     // =========================================================================

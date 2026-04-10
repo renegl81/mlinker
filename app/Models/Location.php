@@ -87,6 +87,11 @@ class Location extends Model
         return $this->hasMany(Menu::class);
     }
 
+    public function openingHours(): HasMany
+    {
+        return $this->hasMany(OpeningHour::class)->orderBy('weekday');
+    }
+
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class);

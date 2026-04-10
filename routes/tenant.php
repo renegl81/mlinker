@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\Tenant\ImageUploadController;
 use App\Http\Controllers\Admin\Tenant\LocationController;
 use App\Http\Controllers\Admin\Tenant\MenuController;
 use App\Http\Controllers\Admin\Tenant\OnboardingController;
+use App\Http\Controllers\Admin\Tenant\WebsiteSettingsController;
 use App\Http\Controllers\Admin\Tenant\ProductController;
 use App\Http\Controllers\Admin\Tenant\SectionController;
 use App\Http\Controllers\Admin\Tenant\TranslationController;
@@ -52,6 +53,7 @@ Route::middleware([
         // Rutas de onboarding (FUERA del RedirectToOnboarding para evitar bucles)
         Route::prefix('panel/onboarding')->as('onboarding.')->group(function () {
             Route::get('/', [OnboardingController::class, 'show'])->name('show');
+            Route::post('/website', [OnboardingController::class, 'storeWebsite'])->name('website');
             Route::post('/location', [OnboardingController::class, 'storeLocation'])->name('location');
             Route::post('/menu', [OnboardingController::class, 'storeMenu'])->name('menu');
             Route::post('/products', [OnboardingController::class, 'storeProducts'])->name('products');
@@ -109,6 +111,12 @@ Route::middleware([
                     Route::put('ingredients/{ingredient}/translations', [CatalogIngredientController::class, 'updateTranslations'])->name('ingredients.translations');
                     Route::delete('ingredients/{ingredient}', [CatalogIngredientController::class, 'destroy'])->name('ingredients.destroy');
                     Route::post('ingredients/merge', [CatalogIngredientController::class, 'merge'])->name('ingredients.merge');
+                });
+
+                // Website settings
+                Route::prefix('settings')->as('settings.')->group(function () {
+                    Route::get('website', [WebsiteSettingsController::class, 'show'])->name('website.show');
+                    Route::put('website', [WebsiteSettingsController::class, 'update'])->name('website.update');
                 });
 
                 // Billing

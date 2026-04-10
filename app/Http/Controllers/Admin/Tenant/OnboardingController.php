@@ -43,6 +43,28 @@ class OnboardingController extends Controller
         ]);
     }
 
+    public function storeWebsite(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'has_website'   => ['required', 'boolean'],
+            'business_type' => ['nullable', 'string', 'in:restaurant,cafe,bar,fastfood,finedining'],
+        ]);
+
+        $tenant = tenant();
+        $tenant->has_website   = (bool) $data['has_website'];
+
+        if ($data['has_website']) {
+            $businessType = $data['business_type'] ?? 'restaurant';
+            $tenant->business_type  = $businessType;
+            $tenant->home_template  = config("menulinker.default_home_template.{$businessType}", 'HomeClassic');
+        }
+
+        $tenant->onboarding_step = 1;
+        $tenant->save();
+
+        return redirect()->route('tenant.onboarding.show');
+    }
+
     public function storeLocation(Request $request): RedirectResponse
     {
         $data = $request->validate([
@@ -87,7 +109,7 @@ class OnboardingController extends Controller
             Log::error('UeAllergenSeeder failed', ['tenant' => $tenant->id, 'error' => $e->getMessage()]);
         }
 
-        $tenant->onboarding_step = 1;
+        $tenant->onboarding_step = 2;
         $tenant->save();
 
         return redirect()->route('tenant.onboarding.show');
@@ -115,7 +137,7 @@ class OnboardingController extends Controller
         ]);
 
         $tenant = tenant();
-        $tenant->onboarding_step = 2;
+        $tenant->onboarding_step = 3;
         $tenant->save();
 
         return redirect()->route('tenant.onboarding.show');
@@ -185,7 +207,7 @@ class OnboardingController extends Controller
             }
         }
 
-        $tenant->onboarding_step = 3;
+        $tenant->onboarding_step = 4;
         $tenant->save();
 
         return redirect()->route('tenant.onboarding.show');

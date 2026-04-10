@@ -98,7 +98,7 @@ class OnboardingTest extends TestCase
     }
 
     #[Test]
-    public function store_location_creates_location_and_advances_to_step_1(): void
+    public function store_location_creates_location_and_advances_to_step_2(): void
     {
         $response = $this->actingAs($this->user)
             ->post($this->tenantUrl('tenant.onboarding.location'), [
@@ -117,7 +117,7 @@ class OnboardingTest extends TestCase
         ]);
 
         $this->tenant->refresh();
-        $this->assertEquals(1, $this->tenant->onboarding_step);
+        $this->assertEquals(2, $this->tenant->onboarding_step);
     }
 
     #[Test]
@@ -132,12 +132,12 @@ class OnboardingTest extends TestCase
     }
 
     #[Test]
-    public function store_menu_creates_menu_and_advances_to_step_2(): void
+    public function store_menu_creates_menu_and_advances_to_step_3(): void
     {
         $location = Location::factory()->create(['tenant_id' => 'test-tenant']);
         Template::factory()->create(['component_name' => 'Basic', 'is_active' => true]);
 
-        $this->tenant->onboarding_step = 1;
+        $this->tenant->onboarding_step = 2;
         $this->tenant->save();
 
         $response = $this->actingAs($this->user)
@@ -156,7 +156,7 @@ class OnboardingTest extends TestCase
         ]);
 
         $this->tenant->refresh();
-        $this->assertEquals(2, $this->tenant->onboarding_step);
+        $this->assertEquals(3, $this->tenant->onboarding_step);
     }
 
     #[Test]
@@ -177,7 +177,7 @@ class OnboardingTest extends TestCase
         $location = Location::factory()->create(['tenant_id' => 'test-tenant']);
         $menu = Menu::factory()->create(['location_id' => $location->id, 'tenant_id' => 'test-tenant']);
 
-        $this->tenant->onboarding_step = 2;
+        $this->tenant->onboarding_step = 3;
         $this->tenant->save();
 
         $response = $this->actingAs($this->user)
@@ -197,7 +197,7 @@ class OnboardingTest extends TestCase
         $this->assertDatabaseHas('products', ['name' => 'Pizza Margarita', 'tenant_id' => 'test-tenant']);
 
         $this->tenant->refresh();
-        $this->assertEquals(3, $this->tenant->onboarding_step);
+        $this->assertEquals(4, $this->tenant->onboarding_step);
     }
 
     #[Test]
@@ -223,7 +223,7 @@ class OnboardingTest extends TestCase
         $location = Location::factory()->create(['tenant_id' => 'test-tenant']);
         $menu = Menu::factory()->create(['location_id' => $location->id, 'tenant_id' => 'test-tenant', 'is_active' => true]);
 
-        $this->tenant->onboarding_step = 3;
+        $this->tenant->onboarding_step = 4;
         $this->tenant->save();
 
         $response = $this->actingAs($this->user)
