@@ -28,7 +28,7 @@ function changeLocale(code: SupportedLocale) {
     }
 }
 
-const currentLocale = () => locales.find((l) => l.code === locale.value) ?? locales[0];
+const currentLocaleEntry = () => locales.find((l) => l.code === (locale.value as SupportedLocale)) ?? locales[0];
 </script>
 
 <template>
@@ -45,7 +45,7 @@ const currentLocale = () => locales.find((l) => l.code === locale.value) ?? loca
                 v-for="loc in locales"
                 :key="loc.code"
                 class="flex cursor-pointer items-center gap-2"
-                :class="{ 'font-semibold text-primary': loc.code === locale }"
+                :class="{ 'font-semibold text-primary': loc.code === locale.value }"
                 @click="changeLocale(loc.code)"
             >
                 <span>{{ loc.flag }}</span>

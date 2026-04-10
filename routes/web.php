@@ -17,20 +17,36 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\StripeWebhookController;
 use App\Http\Controllers\TenantImageController;
+use App\Http\Middleware\SetLocaleFromUrl;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook'])->name('stripe.webhook');
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/doc', [DocumentationController::class, 'index'])->name('documentation');
 Route::get('/sitemap.xml', [HomeController::class, 'sitemap'])->name('sitemap');
 
-// Public pages
-Route::get('/faq', [PageController::class, 'faq'])->name('faq');
-Route::get('/contact', [PageController::class, 'contact'])->name('contact');
-Route::get('/privacy', [PageController::class, 'privacy'])->name('privacy');
-Route::get('/terms', [PageController::class, 'terms'])->name('terms');
-Route::get('/cookies', [PageController::class, 'cookies'])->name('cookies');
+// Páginas públicas con prefijo de idioma opcional
+Route::middleware(SetLocaleFromUrl::class)->group(function () {
+    // Sin prefijo (español por defecto)
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/faq', [PageController::class, 'faq'])->name('faq');
+    Route::get('/contact', [PageController::class, 'contact'])->name('contact');
+    Route::get('/privacy', [PageController::class, 'privacy'])->name('privacy');
+    Route::get('/terms', [PageController::class, 'terms'])->name('terms');
+    Route::get('/cookies', [PageController::class, 'cookies'])->name('cookies');
+
+    // Con prefijo de idioma (es queda sin prefijo — es el default)
+    Route::prefix('{locale}')
+        ->where(['locale' => 'en|ca|gl|eu'])
+        ->group(function () {
+            Route::get('/', [HomeController::class, 'index'])->name('home.locale');
+            Route::get('/faq', [PageController::class, 'faq'])->name('faq.locale');
+            Route::get('/contact', [PageController::class, 'contact'])->name('contact.locale');
+            Route::get('/privacy', [PageController::class, 'privacy'])->name('privacy.locale');
+            Route::get('/terms', [PageController::class, 'terms'])->name('terms.locale');
+            Route::get('/cookies', [PageController::class, 'cookies'])->name('cookies.locale');
+        });
+});
 Route::get('/tenant_image/{tenant}/{path}', TenantImageController::class)
     ->where('path', '.*')
     ->name('tenant_image');

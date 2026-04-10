@@ -6,7 +6,8 @@ import PricingSection from '@/components/home/PricingSection.vue';
 import TestimonialsSection from '@/components/home/TestimonialsSection.vue';
 import FrontLayout from '@/layouts/app/FrontLayout.vue';
 import { Head } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 interface Plan {
     name: string;
@@ -38,9 +39,21 @@ interface Seo {
 interface Props {
     plans: Plan[];
     seo: Seo;
+    locale: string;
+    availableLocales: string[];
 }
 
 const props = defineProps<Props>();
+
+const { locale: i18nLocale } = useI18n();
+
+onMounted(() => {
+    if (props.locale && i18nLocale.value !== props.locale) {
+        i18nLocale.value = props.locale;
+    }
+});
+
+const baseUrl = computed(() => props.seo.url.replace(/\/$/, ''));
 
 const jsonLdOrganization = computed(() => JSON.stringify({
     '@context': 'https://schema.org',
@@ -110,6 +123,14 @@ const jsonLdFaq = computed(() => JSON.stringify({
         <title>{{ seo.title }}</title>
         <meta name="description" :content="seo.description" />
         <link rel="canonical" :href="seo.url" />
+
+        <!-- hreflang SEO -->
+        <link rel="alternate" hreflang="es" :href="baseUrl + '/'" />
+        <link rel="alternate" hreflang="en" :href="baseUrl + '/en'" />
+        <link rel="alternate" hreflang="ca" :href="baseUrl + '/ca'" />
+        <link rel="alternate" hreflang="gl" :href="baseUrl + '/gl'" />
+        <link rel="alternate" hreflang="eu" :href="baseUrl + '/eu'" />
+        <link rel="alternate" hreflang="x-default" :href="baseUrl + '/'" />
 
         <!-- Open Graph -->
         <meta property="og:type" content="website" />

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import FrontLayout from '@/layouts/app/FrontLayout.vue';
 import { Head } from '@inertiajs/vue3';
+import { computed, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 interface Seo {
     title: string;
@@ -8,7 +10,24 @@ interface Seo {
     url: string;
 }
 
-defineProps<{ seo: Seo }>();
+interface Props {
+    seo: Seo;
+    locale: string;
+    availableLocales: string[];
+}
+
+const props = defineProps<Props>();
+
+const { t, locale: i18nLocale } = useI18n();
+
+onMounted(() => {
+    if (props.locale && i18nLocale.value !== props.locale) {
+        i18nLocale.value = props.locale;
+    }
+});
+
+const baseUrl = computed(() => props.seo.url.replace(/\/privacy$/, '').replace(/\/$/, ''));
+const cleanPath = '/privacy';
 
 const sections = [
     { id: 'responsable', label: 'Responsable del tratamiento' },
@@ -32,14 +51,22 @@ const lastUpdated = '10 de abril de 2026';
         <meta name="description" :content="seo.description" />
         <link rel="canonical" :href="seo.url" />
         <meta name="robots" content="noindex" />
+
+        <!-- hreflang SEO -->
+        <link rel="alternate" hreflang="es" :href="baseUrl + cleanPath" />
+        <link rel="alternate" hreflang="en" :href="baseUrl + '/en' + cleanPath" />
+        <link rel="alternate" hreflang="ca" :href="baseUrl + '/ca' + cleanPath" />
+        <link rel="alternate" hreflang="gl" :href="baseUrl + '/gl' + cleanPath" />
+        <link rel="alternate" hreflang="eu" :href="baseUrl + '/eu' + cleanPath" />
+        <link rel="alternate" hreflang="x-default" :href="baseUrl + cleanPath" />
     </Head>
 
     <FrontLayout>
         <section class="bg-slate-50 border-b border-slate-100 py-12">
             <div class="container mx-auto px-4 max-w-5xl">
                 <span class="inline-block px-3 py-1 rounded-full bg-teal-50 text-teal-600 text-xs font-bold uppercase tracking-wider mb-4">Legal</span>
-                <h1 class="text-3xl md:text-4xl font-bold text-slate-900 mb-2">Política de privacidad</h1>
-                <p class="text-slate-400 text-sm">Última actualización: {{ lastUpdated }}</p>
+                <h1 class="text-3xl md:text-4xl font-bold text-slate-900 mb-2">{{ t('pages.privacy.title') }}</h1>
+                <p class="text-slate-400 text-sm">{{ t('pages.privacy.last_updated') }}: {{ lastUpdated }}</p>
             </div>
         </section>
 

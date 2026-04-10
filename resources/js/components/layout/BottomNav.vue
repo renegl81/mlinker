@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { dashboard, documentation } from '@/routes';
+import { dashboard } from '@/routes';
 import { dashboard as panel } from '@/routes/tenant/index';
 import { index as locations } from '@/routes/tenant/locations';
 import { index as tenantUsers } from '@/routes/tenant/users';
@@ -93,9 +93,8 @@ const secondaryItems = computed((): SecondaryNavItem[] => [
         : []),
     {
         title: t('nav.documentation'),
-        href: toUrl(documentation()),
+        href: '/panel/docs',
         icon: BookOpen,
-        external: true,
     },
 ]);
 

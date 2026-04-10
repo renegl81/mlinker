@@ -34,6 +34,9 @@ import {
     Trash2,
 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 interface Allergen {
     id: number;
@@ -106,7 +109,7 @@ function downloadQr() {
     window.location.href = `/panel/menus/${props.menu.id}/qr-code/download`;
 }
 function deleteQr() {
-    if (!confirm('¿Eliminar el código QR de este menú?')) return;
+    if (!confirm(t('panel.menu_show.delete_qr_confirm'))) return;
     router.delete(`/panel/menus/${props.menu.id}/qr-code`, { preserveScroll: true });
 }
 
@@ -119,7 +122,7 @@ function remove() {
 
 // ── Products ────────────────────────────────────────────────────────────────
 function deleteProduct(productId: number) {
-    if (!confirm('¿Eliminar este plato? Esta acción no se puede deshacer.')) return;
+    if (!confirm(t('panel.menu_show.delete_dish_confirm'))) return;
     router.delete(`/panel/products/${productId}`, { preserveScroll: true });
 }
 
@@ -184,7 +187,7 @@ function submitEditSection(section: Section) {
 }
 
 function deleteSection(sectionId: number) {
-    if (!confirm('¿Eliminar esta sección? Los platos no se borrarán.')) return;
+    if (!confirm(t('panel.menu_show.delete_section_confirm'))) return;
     router.delete(`/panel/sections/${sectionId}`, { preserveScroll: true });
 }
 
@@ -306,7 +309,7 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
                                 >
                                     <div class="flex flex-col items-center gap-2">
                                         <ImageIcon class="h-8 w-8 opacity-40" />
-                                        <span class="text-xs">Sin imagen</span>
+                                        <span class="text-xs">{{ t('panel.menu_show.no_image') }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -318,11 +321,11 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
                         <CardHeader class="flex flex-row items-center justify-between space-y-0">
                             <CardTitle class="flex items-center gap-2 text-lg">
                                 <BookOpen class="h-5 w-5 text-primary" />
-                                Secciones y platos
+                                {{ t('panel.menu_show.sections_title') }}
                             </CardTitle>
                             <Button size="sm" variant="outline" @click="showAddSection = !showAddSection">
                                 <Plus class="mr-1 h-4 w-4" />
-                                Añadir sección
+                                {{ t('panel.menu_show.add_section') }}
                             </Button>
                         </CardHeader>
                         <CardContent>
@@ -331,28 +334,28 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
                                 v-if="showAddSection"
                                 class="mb-4 rounded-lg border border-dashed bg-muted/20 p-4"
                             >
-                                <h4 class="mb-3 text-sm font-semibold">Nueva sección</h4>
+                                <h4 class="mb-3 text-sm font-semibold">{{ t('panel.menu_show.new_section') }}</h4>
                                 <div class="space-y-3">
                                     <div class="space-y-1">
-                                        <Label for="new_section_name">Nombre *</Label>
+                                        <Label for="new_section_name">{{ t('panel.menu_show.section_name') }}</Label>
                                         <Input
                                             id="new_section_name"
                                             v-model="newSectionName"
-                                            placeholder="Ej. Entrantes"
+                                            :placeholder="t('panel.menu_show.section_placeholder')"
                                             @keydown.enter.prevent="submitAddSection"
                                         />
                                     </div>
                                     <div class="space-y-1">
-                                        <Label for="new_section_desc">Descripción</Label>
+                                        <Label for="new_section_desc">{{ t('panel.menu_show.section_desc') }}</Label>
                                         <Input
                                             id="new_section_desc"
                                             v-model="newSectionDescription"
-                                            placeholder="Opcional..."
+                                            :placeholder="t('panel.menu_show.section_desc_placeholder')"
                                         />
                                     </div>
                                     <div class="flex gap-2">
-                                        <Button size="sm" @click="submitAddSection">Guardar</Button>
-                                        <Button size="sm" variant="outline" @click="showAddSection = false">Cancelar</Button>
+                                        <Button size="sm" @click="submitAddSection">{{ t('common.save') }}</Button>
+                                        <Button size="sm" variant="outline" @click="showAddSection = false">{{ t('common.cancel') }}</Button>
                                     </div>
                                 </div>
                             </div>
@@ -382,7 +385,7 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
                                                 class="h-7 w-7"
                                                 :disabled="sectionIdx === 0"
                                                 @click="moveSection(menu.sections, section.id, 'up')"
-                                                title="Subir sección"
+                                                :title="t('panel.menu_show.move_up')"
                                             >
                                                 <ArrowUp class="h-3 w-3" />
                                             </Button>
@@ -392,7 +395,7 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
                                                 class="h-7 w-7"
                                                 :disabled="sectionIdx === menu.sections.length - 1"
                                                 @click="moveSection(menu.sections, section.id, 'down')"
-                                                title="Bajar sección"
+                                                :title="t('panel.menu_show.move_down')"
                                             >
                                                 <ArrowDown class="h-3 w-3" />
                                             </Button>
@@ -405,7 +408,7 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
                                             >
                                                 <Link :href="`/panel/menus/${menu.id}/products/create?section_id=${section.id}`">
                                                     <Plus class="mr-1 h-3 w-3" />
-                                                    Añadir plato
+                                                    {{ t('panel.menu_show.add_dish') }}
                                                 </Link>
                                             </Button>
                                             <!-- Edit section -->
@@ -414,7 +417,7 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
                                                 variant="ghost"
                                                 class="h-7 w-7"
                                                 @click="startEditSection(section)"
-                                                title="Editar sección"
+                                                :title="t('panel.menu_show.edit_section')"
                                             >
                                                 <Pencil class="h-3 w-3" />
                                             </Button>
@@ -424,7 +427,7 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
                                                 variant="ghost"
                                                 class="h-7 w-7 text-destructive hover:text-destructive"
                                                 @click="deleteSection(section.id)"
-                                                title="Eliminar sección"
+                                                :title="t('panel.menu_show.delete_section')"
                                             >
                                                 <Trash2 class="h-3 w-3" />
                                             </Button>
@@ -434,11 +437,11 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
                                     <!-- Inline edit section form -->
                                     <div v-else class="rounded-lg border border-primary/30 bg-primary/5 p-3 mb-2">
                                         <div class="space-y-2">
-                                            <Input v-model="editSectionName" placeholder="Nombre de la sección" />
-                                            <Input v-model="editSectionDescription" placeholder="Descripción (opcional)" />
+                                            <Input v-model="editSectionName" :placeholder="t('panel.menu_show.section_name_placeholder')" />
+                                            <Input v-model="editSectionDescription" :placeholder="t('panel.menu_show.section_desc_edit_placeholder')" />
                                             <div class="flex gap-2">
-                                                <Button size="sm" @click="submitEditSection(section)">Guardar</Button>
-                                                <Button size="sm" variant="outline" @click="cancelEditSection">Cancelar</Button>
+                                                <Button size="sm" @click="submitEditSection(section)">{{ t('common.save') }}</Button>
+                                                <Button size="sm" variant="outline" @click="cancelEditSection">{{ t('common.cancel') }}</Button>
                                             </div>
                                         </div>
                                     </div>
@@ -519,7 +522,7 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
                                                     class="h-7 w-7"
                                                     as-child
                                                 >
-                                                    <Link :href="`/panel/products/${product.id}/edit`" title="Editar plato">
+                                                    <Link :href="`/panel/products/${product.id}/edit`" :title="t('panel.menu_show.edit_dish')">
                                                         <Pencil class="h-3 w-3" />
                                                     </Link>
                                                 </Button>
@@ -529,7 +532,7 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
                                                     variant="ghost"
                                                     class="h-7 w-7 text-destructive hover:text-destructive"
                                                     @click="deleteProduct(product.id)"
-                                                    title="Eliminar plato"
+                                                    :title="t('panel.menu_show.delete_dish')"
                                                 >
                                                     <Trash2 class="h-3 w-3" />
                                                 </Button>
@@ -541,11 +544,11 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
                                         v-else
                                         class="flex items-center justify-between rounded-md border border-dashed bg-muted/10 p-3 text-xs text-muted-foreground"
                                     >
-                                        <span>Esta sección aún no tiene platos.</span>
+                                        <span>{{ t('panel.menu_show.section_no_dishes') }}</span>
                                         <Button size="sm" variant="ghost" class="h-7 px-2 text-xs" as-child>
                                             <Link :href="`/panel/menus/${menu.id}/products/create?section_id=${section.id}`">
                                                 <Plus class="mr-1 h-3 w-3" />
-                                                Añadir plato
+                                                {{ t('panel.menu_show.add_dish') }}
                                             </Link>
                                         </Button>
                                     </div>
@@ -558,11 +561,11 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
                             >
                                 <BookOpen class="mb-2 h-8 w-8 text-muted-foreground/30" />
                                 <p class="mb-3 text-sm text-muted-foreground">
-                                    No hay secciones en este menú.
+                                    {{ t('panel.menu_show.no_sections') }}
                                 </p>
                                 <Button size="sm" @click="showAddSection = true">
                                     <Plus class="mr-2 h-4 w-4" />
-                                    Añadir primera sección
+                                    {{ t('panel.menu_show.add_first_section') }}
                                 </Button>
                             </div>
                         </CardContent>
@@ -604,7 +607,7 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
                         <CardHeader>
                             <CardTitle class="flex items-center gap-2 text-md font-semibold">
                                 <QrCodeIcon class="h-4 w-4 text-primary" />
-                                Código QR
+                                {{ t('panel.menu_show.qr_title') }}
                             </CardTitle>
                         </CardHeader>
                         <CardContent class="space-y-3">
@@ -614,7 +617,7 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
                             >
                                 <img
                                     :src="qrCodeImageUrl"
-                                    alt="Código QR del menú"
+                                    :alt="t('panel.menu_show.qr_title')"
                                     class="h-40 w-40 object-contain"
                                 />
                             </div>
@@ -623,13 +626,13 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
                                 class="flex h-40 flex-col items-center justify-center rounded-lg border-2 border-dashed text-muted-foreground"
                             >
                                 <QrCodeIcon class="h-8 w-8 opacity-40" />
-                                <span class="mt-2 text-xs">Sin QR generado</span>
+                                <span class="mt-2 text-xs">{{ t('panel.menu_show.qr_none') }}</span>
                             </div>
 
                             <div class="flex flex-col gap-2">
                                 <Button @click="generateQr" class="w-full" size="sm">
                                     <RefreshCw class="mr-2 h-4 w-4" />
-                                    {{ qrCodeImageUrl ? 'Regenerar' : 'Generar QR' }}
+                                    {{ qrCodeImageUrl ? t('panel.menu_show.qr_regenerate') : t('panel.menu_show.qr_generate') }}
                                 </Button>
                                 <Button
                                     v-if="qrCodeImageUrl"
@@ -639,7 +642,7 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
                                     @click="downloadQr"
                                 >
                                     <Download class="mr-2 h-4 w-4" />
-                                    Descargar PNG
+                                    {{ t('panel.menu_show.qr_download') }}
                                 </Button>
                                 <Button
                                     v-if="qrCodeImageUrl"
@@ -649,7 +652,7 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
                                     @click="deleteQr"
                                 >
                                     <Trash2 class="mr-2 h-4 w-4" />
-                                    Eliminar QR
+                                    {{ t('panel.menu_show.qr_delete') }}
                                 </Button>
                             </div>
                         </CardContent>

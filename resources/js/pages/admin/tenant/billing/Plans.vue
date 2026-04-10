@@ -8,6 +8,9 @@ import type { BreadcrumbItem } from '@/types';
 import { router, usePage } from '@inertiajs/vue3';
 import { Check, Zap } from 'lucide-vue-next';
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 interface Plan {
     id: number;
@@ -110,7 +113,7 @@ function selectPlan(plan: Plan) {
         return;
     }
     if (!plan.stripe_price_id) {
-        alert('Este plan no está disponible online. Contacta con nosotros.');
+        alert(t('panel.billing.plan_unavailable'));
         return;
     }
     router.post('/panel/billing/checkout', { plan_slug: plan.slug });

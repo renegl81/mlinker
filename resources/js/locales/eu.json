@@ -262,5 +262,241 @@
             "all_statuses": "Guztiak",
             "search_button": "Bilatu"
         }
+    },
+    "pages": {
+        "faq": {
+            "title": "Maiz egiten diren galderak",
+            "subtitle": "MenuLinker-i buruz jakin behar duzun guztia. Ez duzu zure erantzuna aurkitzen?",
+            "contact_link": "Idatzi iezaguzu",
+            "cta_title": "Oraindik zalantzak dituzu?",
+            "cta_subtitle": "MenuLinker-eko taldeak 48 ordu baliodunetan erantzuten du.",
+            "cta_button": "Laguntzarekin harremanetan jarri",
+            "q1": "Zenbat balio du MenuLinker-ek?",
+            "a1": "MenuLinker-ek doako plan iraunkorra du 1 kokapen eta 1 menurekin, 30 produktu eta oinarrizko QR-rekin. Ordaindutako planak hilabetean 14,99€-tik hasten dira (hileko fakturaketa) eta 14 eguneko doako proba sartzen da, txartelik gabe.",
+            "q2": "Nola funtzionatzen du QR-dun menu digitalak?",
+            "a2": "Paneletik zure menua sortzen duzu, atalak eta produktuak antolatzen dituzu, diseinuaren txantiloia aukeratzen duzu eta zure QR pertsonalizatua sortzen duzu. Zure bezeroek telefonoko kamerarekin QR-a eskaneatzen dute eta une berean eguneratutako menua ikusten dute. Ez da inongo aplikaziorik deskargatu behar.",
+            "q3": "Nire menua hainbat hizkuntzatan itzul dezaket?",
+            "a3": "Bai, Business eta Enterprise planekin MenuLinker-ek automatikoki itzultzen du zure menua ingelesera, frantsesera, alemanera, italierara, portugesera, katalanera eta beste hizkuntzara. Kalitatea bermatzeko eskuz ere editatu ditzakezu.",
+            "q4": "Alergiak agertzen al dira menuan?",
+            "a4": "Bai. UE Arautegi 1169/2011 arabera nahitaez adierazi beharreko 14 alergeno esleitu ditzakezu plater bakoitzari. Alergiak ikono argiez agertzen dira menu digitalean.",
+            "q5": "Prezioak eta platerak denbora errealean alda ditzaket?",
+            "a5": "Bai, panelean egiten duzun edozein aldaketa (prezioa, erabilgarritasuna, deskribapena, argazkia) berehala islatzen da QR aktibo guztietan.",
+            "q6": "Zein menu txantiloi daude eskuragarri?",
+            "a6": "MenuLinker-ek menu publikorako 8 diseinu-txantiloi ditu. Txantiloiaren aldaketa edozein unetan egin dezakezu datuak galdu gabe.",
+            "q7": "Kontu batetik hainbat kokapen kudeatu ditzaket?",
+            "a7": "Bai. Planaren arabera, hainbat kokapen panel bakar batetik kudeatu ditzakezu. Kokapen bakoitzak bere menuak, ordutegiak eta QR-ak izan ditzake.",
+            "q8": "Nola funtzionatzen du doako probak?",
+            "a8": "Pro eta Business planek 14 eguneko doako proba dute kreditu txartelik behar gabe.",
+            "q9": "Nire harpidetza edozein unetan bertan behera utzi al dezaket?",
+            "a9": "Bai, konpromiso edo zigorrik gabe. Edozein unetan bertan behera utzi dezakezu eta zure kontua doako planera pasatzen da ordaindutako aldia amaitzen denean.",
+            "q10": "Nire datuak seguru al daude?",
+            "a10": "Bai. MenuLinker-ek DBAO-ren arabera funtzionatzen du. Datu guztiak Europar Batasuneko zerbitzarietan gordetzen dira, transferentzia-zifrakearekin (TLS) eta atsedenaldian.",
+            "q11": "Zer laguntza eskaintzen du MenuLinker-ek?",
+            "a11": "Plan guztiek emailez laguntza dute 48 ordu baliodunetan erantzunarekin. Business eta Enterprise planek lehentasunezko laguntzara eta txatera sarbidea dute.",
+            "q12": "Programatzen jakin behar al dut MenuLinker erabiltzeko?",
+            "a12": "Ez. MenuLinker edozein pertsonak ezagutza teknikorik gabe erabil dezan diseinatuta dago. Zure lehenengo menua sortzeak 5 minutu baino gutxiago behar du."
+        },
+        "contact": {
+            "badge": "Kontaktua",
+            "title": "Nola lagun diezazukegu?",
+            "subtitle": "Gure taldea prest dago zure zalantzak erantzuteko, onboardingean laguntzeko edo zure hobekuntza-proposamenak entzuteko.",
+            "form_title": "Bidali mezu bat",
+            "name_label": "Izena",
+            "name_placeholder": "Maria Garcia",
+            "email_label": "Email",
+            "email_placeholder": "maria@jatetxea.com",
+            "subject_label": "Gaia",
+            "subject_placeholder": "Aukeratu gai bat…",
+            "subject_support": "Laguntza teknikoa",
+            "subject_sales": "Merkataritza-kontsulta",
+            "subject_billing": "Fakturaketa eta ordainketak",
+            "subject_demo": "Demo eskaera",
+            "subject_other": "Besteak",
+            "message_label": "Mezua",
+            "message_placeholder": "Esan iezaguzu nola lagun diezazukegun…",
+            "submit": "Mezua bidali",
+            "privacy_notice": "Formulario hau bidaliz, gure",
+            "privacy_link": "pribatutasun politika",
+            "info_email_title": "Email",
+            "info_hours_title": "Laguntza-ordutegia",
+            "info_hours_body": "Astelehenetik ostiralera, 9:00 – 18:00 (CET / CEST)\nEmailen erantzuna 48 ordu baliodunetan baino gutxiagoan.",
+            "info_links_title": "Zerbait zehatza bilatzen ari zara?",
+            "link_faq": "Maiz egiten diren galderak",
+            "link_docs": "Dokumentazio teknikoa",
+            "response_title": "Erantzun-denbora",
+            "response_body": "Mezu guztiei 48 ordu baliodunetan baino gutxiagoan erantzuten diegu. Business eta Enterprise planetan premia-laguntza behar baduzu, lehentasunezko sarbidea duzu."
+        },
+        "privacy": {
+            "title": "Pribatutasun politika",
+            "last_updated": "Azken eguneraketa"
+        },
+        "terms": {
+            "title": "Baldintzak eta kondizio orokorrak",
+            "last_updated": "Azken eguneraketa"
+        },
+        "cookies": {
+            "title": "Cookie politika",
+            "last_updated": "Azken eguneraketa"
+        }
+    },
+    "docs": {
+        "title": "Dokumentazioa",
+        "subtitle": "MenuLinker-en etekinik handiena ateratzeko behar duzun guztia",
+        "back": "Dokumentaziora itzuli",
+        "read_more": "Irakurri gehiago",
+        "topics": {
+            "getting-started": {
+                "title": "Lehen urratsak",
+                "description": "Zure kontua konfiguratu eta lehen menua minutu gutxian argitaratzen ikasi."
+            },
+            "locations": {
+                "title": "Tokien kudeaketa",
+                "description": "Zure negozioaren establezimenduak sortu eta kudeatu."
+            },
+            "menus": {
+                "title": "Menuak eta kartak",
+                "description": "Zure kartak sekzioetan antolatu eta txantiloi ezin hobea aukeratu."
+            },
+            "products": {
+                "title": "Produktuak eta osagaiak",
+                "description": "Platerrak gehitu alergenoekin, osagaiekin, prezioekin eta etiketarekin."
+            },
+            "translations": {
+                "title": "Itzulpenak eta hizkuntzak",
+                "description": "Eskatu zure menua hainbat hizkuntzatan modu automatikoan."
+            },
+            "qr-codes": {
+                "title": "QR kodeak",
+                "description": "Zure maharako eta espazioentzako QR kodeak sortu eta pertsonalizatu."
+            },
+            "team": {
+                "title": "Taldea kudeatu",
+                "description": "Laguntzaileak gonbidatu eta haien baimenak toki bakoitzeko kontrolatu."
+            },
+            "billing": {
+                "title": "Fakturaketa eta planak",
+                "description": "Eskuragarri dauden planak ulertu eta zure harpidetza kudeatu."
+            },
+            "website": {
+                "title": "Zure webgunea",
+                "description": "Zure negozioaren webgune publikoa aktibatu eta pertsonalizatu."
+            }
+        },
+        "getting_started": {
+            "intro_title": "Ongi etorri MenuLinker-era",
+            "intro_body": "MenuLinker ostalaritzako SaaS plataforma bat da, QR kode bidez eskuragarri dauden menu digitalak sortzeko aukera ematen dizuna. Zure bezeroek mahian QR eskaneatzen dute eta berehala sartzen dira eguneratutako menura, aplikaziorik deskargatu gabe.",
+            "step1_title": "1. urratsa: Sortu zure lehen tokia",
+            "step1_body": "Joan «Tokiak» atalera eta sakatu «Toki berria». Sartu establezimenduko izena, helbide osoa eta harremanetarako telefono zenbakia.",
+            "step2_title": "2. urratsa: Sortu zure lehen menua",
+            "step2_body": "Tokiaren barruan, sakatu «Menu berria». Eman izen bat eta aukeratu eskuragarri dauden diseinu txantiloietako bat.",
+            "step3_title": "3. urratsa: Gehitu zure platerak",
+            "step3_body": "Sartu menuan eta sortu sekzioak (Lehenengo platerak, Bigarren platerak, Postreak…). Sekzio bakoitzaren barruan gehitu platerak izen, deskribapen, prezio eta aukeran irudi batekin.",
+            "step4_title": "4. urratsa: Sortu QR kodea eta partekatu",
+            "step4_body": "Menuaren orritik, sakatu «QR sortu». Deskargatu QR alta bereizmena duen formatuan eta inprimatu zure mahaietan jartzeko.",
+            "tip": "Aholkua: Oinarrizko plan doainarekin hasi zaitezke. Ez da kreditu txartelik behar plataforma probatzeko."
+        },
+        "locations": {
+            "what_title": "Zer da toki bat MenuLinker-en?",
+            "what_body": "Toki batek zure negozioaren establezimendu fisiko bat adierazten du: jatetxe bat, taberna bat, kafetegi bat edo edozein salmenta puntu.",
+            "create_title": "Nola sortu toki bat",
+            "create_body": "Joan «Tokiak» atalera nabigazio menuan eta sakatu «Toki berria» botoia. Bete formularioa izenarekin, helbidearekin, hiria eta herrialdea.",
+            "fields_title": "Tokiaren eremu garrantzitsuak",
+            "fields_body": "Izenaz eta helbideaz gain, hau konfiguratu dezakezu: harremanetarako telefonoa, irekitze-ordutegia, argazki nagusia eta marka koloreak.",
+            "multi_title": "Hainbat toki kudeatzea",
+            "multi_body": "Hainbat establezimenduri baldin baduzu, denak panel beretik kudeatu ditzakezu. Business eta goragoko planek toki kopuru mugagabea ahalbidetzen dute.",
+            "tip": "Aholkua: Tokiaren argazkia zure webgune publikoan agertzen da. Erabili kalitate handiko irudi bat lehen inpresio ona egiteko."
+        },
+        "menus": {
+            "what_title": "Zer da menu bat?",
+            "what_body": "Menu bat QR eskaneatzen dutenean zure bezeroek ikusiko duten platerraren katalogoa da.",
+            "create_title": "Menu bat sortu eta txantiloia aukeratu",
+            "create_body": "Tokiaren orritik, sakatu «Menu berria». Aukeratu izen deskribatzaile bat eta eskuragarri dauden 8 diseinu txantiloietako bat.",
+            "sections_title": "Sekzioak: zure karta antolatzea",
+            "sections_body": "Sekzioak zure kartako kategoriak dira: Lehenengo platerak, Bigarren platerak, Postreak, Edariak, etab.",
+            "reorder_title": "Sekzioak berrantolatu",
+            "reorder_body": "Arrastatu sekzioak ordena aldatzeko. Bezeroek zuk ezarritako ordenan ikusiko dituzte sekzioak.",
+            "activate_title": "Menu bat aktibatu eta desaktibatu",
+            "activate_body": "Toki bakoitzeko hainbat menu eduki ditzakezu eta behar duzunaren arabera aktibatu edo desaktibatu.",
+            "templates_title": "Eskuragarri dauden 8 txantiloiak",
+            "templates_body": "MenuLinker-ek 8 diseinu txantiloi eskaintzen ditu negozio mota ezberdintarako, guztiak mugikorrerako optimizatuta.",
+            "tip": "Aholkua: Aldi berean hainbat menu aktibo eduki ditzakezu toki bakoitzeko, bakoitza bere QR kodearekin."
+        },
+        "products": {
+            "add_title": "Nola gehitu plater bat",
+            "add_body": "Menu baten barruan, hautatu sekzioa eta sakatu «Plater gehitu». Sartu izena eta, nahi baduzu, deskribapen bat.",
+            "fields_title": "Platerraren eremuak",
+            "fields_body": "Plater bakoitzak eduki dezake: izena, deskribapen zehatza, prezioa, kalorien kopurua (kcal) eta irudi bat.",
+            "allergens_title": "Alergenoak: nola esleitu",
+            "allergens_body": "MenuLinker-ek Europako araudiaren arabera adierazpena derrigorrezkoa den 14 alergenoak ditu.",
+            "ingredients_title": "Osagaiak",
+            "ingredients_body": "Plater bakoitzaren osagai zerrenda gehitu dezakezu. Osagaiak zure menu guztietan partekatutako katalogo batean gordetzen dira.",
+            "tags_title": "Etiketak (tags)",
+            "tags_body": "Gehitu etiketak zure platerrari ezaugarri garrantzitsuak nabarmentzeko: begetarianoa, beganoa, glutenrik gabekoa, pikantea, laktosarik gabekoa.",
+            "catalog_title": "Katalogo zentralizatua",
+            "catalog_body": "Business eta goragoko planekin, produktu eta osagaien katalogo zentralizatua duzu.",
+            "merge_title": "Osagai bikoiztuak batu",
+            "merge_body": "Osagai bikoiztuak badituzu, osagaien katalogetik batu ditzakezu.",
+            "tip": "Aholkua: Sartzen dituzun osagaiak automatikoki iradokitzen dira plater berriak gehitzean."
+        },
+        "translations": {
+            "how_title": "Nola funtzionatzen du hizkuntza anizkoitzak",
+            "how_body": "MenuLinker-ek zure menua hainbat hizkuntzatan eskaintzeko aukera ematen du. Bezeroek hizkuntza hautatzailea ikusiko dute menu digitalean.",
+            "auto_title": "Itzulpen automatikoa",
+            "auto_body": "MenuLinker-ek adimen artifiziala erabiliz zure menuaren itzulpen automatikoak sor ditzake.",
+            "add_title": "Hizkuntza berri bat gehitu",
+            "add_body": "Menuaren «Itzulpenak» ataletik, sakatu «Hizkuntza gehitu» eta hautatu gehitu nahi duzun hizkuntza.",
+            "remove_title": "Hizkuntza bat ezabatu",
+            "remove_body": "Zure menutik hizkuntza bat ezabatzeko, sartu «Itzulpenak» atalean, lokalizatu hizkuntza eta erabili ezabatzeko aukera.",
+            "selector_title": "Hizkuntza hautatzailea menu publikoan",
+            "selector_body": "Zure menuak hizkuntza bat baino gehiago duenean, hautatzaile bat agertzen da automatikoki menu digitalaren goialdean.",
+            "tip": "Aholkua: Itzulpen automatikoak hasierako puntu ona dira, baina beti komeni da berrikustea."
+        },
+        "qr_codes": {
+            "generate_title": "Nola sortu QR kode bat zure menurako",
+            "generate_body": "Menuaren orritik, sakatu «QR sortu» botoia. MenuLinker-ek automatikoki menu horrekin lotutako QR kode bakarra sortuko du.",
+            "customize_title": "QR pertsonalizazioa",
+            "customize_body": "QR kodearen koloreak pertsonalizatu ditzakezu zure negozioaren bisual nortasunarekin bat etortzeko.",
+            "download_title": "Deskargatu alta bereizmenean",
+            "download_body": "Deskargatu QR PNG formatuan alta bereizmenarekin (gutxienez 1000×1000 pixel).",
+            "placement_title": "Non jarri QR kodea",
+            "placement_body": "Posizio eraginkorrenak hauek dira: mahaietan, sarrera atean, zure webgune ofizialean eta sare sozialetan.",
+            "tip": "Aholkua: QR kodeak beti zure kartaren azken bertsiora zuzentzen du. Ez duzu QR berririk inprimatu behar menua eguneratzen duzun bakoitzean."
+        },
+        "team": {
+            "roles_title": "Rolak: Owner eta Editor",
+            "roles_body": "MenuLinker-ek bi erabiltzaile rol ditu panelean. Ownerrak funtzio guztietarako sarbide osoa du. Editoreak menu edukietarako sarbide mugatua du.",
+            "editor_title": "Zer egin dezake Editor batek?",
+            "editor_body": "Editor batek menuak, sekzioak eta platerak sortu eta alda ditzake. Ezin ditu fakturazio ezarpenak ikusi ezta beste erabiltzaileak kudeatu ere.",
+            "scope_title": "Toki baten arabera esparrua",
+            "scope_body": "Editoreen sarbidea toki zehatz batzuetara mugatu daiteke.",
+            "manage_title": "Erabiltzaileak sortu eta kudeatu",
+            "manage_body": "Paneleko «Taldea» ataletik, sakatu «Erabiltzailea gonbidatu». Sartu pertsonaren emaila eta hautatu bere rola.",
+            "plan_title": "Plan eskakizuna",
+            "plan_body": "Taldea kudeatzea Pro planatetik aurrera dago eskuragarri."
+        },
+        "billing": {
+            "plans_title": "Eskuragarri dauden planak",
+            "plans_body": "MenuLinker-ek hainbat plan eskaintzen ditu behar ezberdinei egokituta: oinarrizko plan doaina, Pro plana eta Business plana.",
+            "change_title": "Nola aldatu plana",
+            "change_body": "Joan «Fakturaketa» atalera panelean eta sakatu «Planak ikusi». Hautatu aldatu nahi duzun plana eta berretsi.",
+            "trial_title": "Doako proba aldia",
+            "trial_body": "Ordainpeko plan guztiek 14 eguneko doako proba aldia dute.",
+            "cancel_title": "Harpidetza bertan behera utzi edo geldiarazi",
+            "cancel_body": "Zure harpidetza edozein unetan bertan behera utzi dezakezu fakturazio ataletik.",
+            "stripe_title": "Fakturaketa eta ordainketak Stripe bidez",
+            "stripe_body": "Ordainketak Stripe bidez modu seguruan prozesatzen dira. Automatikoki jasoko dituzu fakturak emailez."
+        },
+        "website": {
+            "what_title": "Zure negozioaren webgunea",
+            "what_body": "MenuLinker-ek azpidomeinu edo domeinu pertsonalizatu batetik eskuragarri dagoen webgune publiko bat duen zure negoziorako.",
+            "activate_title": "Nola aktibatu",
+            "activate_body": "Onboarding prozesuan zure webgunea aktibatzeko aukera ematen da. Salto egin baduzu, «Ezarpenak → Web publikoa» ataletik edozein unetan aktibatu dezakezu.",
+            "template_title": "Negozio mota eta txantiloia aukeratu",
+            "template_body": "Hautatu zure establezimendua hobekien deskribatzen duen negozio mota eta aukeratu bisual txantiloi bat.",
+            "content_title": "Zure webgunean zer agertzen den",
+            "content_body": "Zure webgune publikoak automatikoki erakusten du: irekitze-ordutegia, zure karta aktiboa, harremanetarako datuak eta kokapen mapa.",
+            "branding_title": "Pertsonalizatutako marka koloreak",
+            "branding_body": "Tokiaren ezarpenetatik zure markaren kolore primarioa eta sekundarioa konfiguratu ditzakezu."
+        }
     }
 }

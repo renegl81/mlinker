@@ -263,10 +263,87 @@
             "search_button": "Buscar"
         }
     },
+    "pages": {
+        "faq": {
+            "title": "Preguntas frecuentes",
+            "subtitle": "Todo lo que necesitas saber sobre MenuLinker. ¿No encuentras tu respuesta?",
+            "contact_link": "Escríbenos",
+            "cta_title": "¿Aún tienes dudas?",
+            "cta_subtitle": "El equipo de MenuLinker responde en menos de 48h laborables.",
+            "cta_button": "Contactar con soporte",
+            "q1": "¿Cuánto cuesta MenuLinker?",
+            "a1": "MenuLinker tiene un plan gratuito para siempre que incluye 1 local y 1 menú con hasta 30 productos y QR básico. Los planes de pago empiezan en 14,99€/mes (facturación mensual) e incluyen prueba gratuita de 14 días sin tarjeta de crédito.",
+            "q2": "¿Cómo funciona el menú digital con QR?",
+            "a2": "Creas tu carta desde el panel de control, organizas las secciones y productos, eliges una plantilla de diseño y generas tu código QR personalizado. Tus clientes escanean el QR con la cámara de su móvil y acceden al menú actualizado al instante. No hace falta descargar ninguna app.",
+            "q3": "¿Puedo traducir mi menú a varios idiomas?",
+            "a3": "Sí, con los planes Business y Enterprise MenuLinker traduce automáticamente tu carta a inglés, francés, alemán, italiano, portugués, catalán y más idiomas. Puedes revisar y editar cada traducción manualmente para garantizar la calidad. El cliente elige el idioma en la carta digital.",
+            "q4": "¿Se muestran los alérgenos en el menú?",
+            "a4": "Sí. Puedes asignar los 14 alérgenos de declaración obligatoria según el Reglamento UE 1169/2011 a cada plato. Los alérgenos se muestran con iconos claros en la carta digital.",
+            "q5": "¿Puedo cambiar precios y platos en tiempo real?",
+            "a5": "Sí, cualquier cambio que hagas en el panel (precio, disponibilidad, descripción, foto) se refleja inmediatamente en todos los QR activos. No hay que reimprimir ni regenerar el código QR. Ideal para platos del día o temporada.",
+            "q6": "¿Qué plantillas de menú hay disponibles?",
+            "a6": "MenuLinker incluye 8 plantillas de diseño para la carta pública: desde estilos minimalistas y modernos hasta diseños más clásicos con tipografía elegante. Puedes cambiar de plantilla en cualquier momento sin perder tus datos.",
+            "q7": "¿Puedo gestionar varios locales desde una sola cuenta?",
+            "a7": "Sí. Dependiendo del plan, puedes gestionar múltiples locales (ubicaciones) desde un único panel. Cada local puede tener sus propias cartas, horarios y QR. Perfecto para cadenas o grupos de restauración.",
+            "q8": "¿Cómo funciona la prueba gratuita de pago?",
+            "a8": "Los planes Pro y Business incluyen 14 días de prueba gratuita sin necesidad de introducir tarjeta de crédito. Al finalizar el período de prueba, puedes suscribirte o pasar automáticamente al plan gratuito sin perder tus datos.",
+            "q9": "¿Puedo cancelar mi suscripción en cualquier momento?",
+            "a9": "Sí, sin permanencia ni penalizaciones. Cancelas desde el panel en cualquier momento y tu cuenta pasa al plan gratuito al finalizar el período ya pagado. Nunca te cobraremos de más.",
+            "q10": "¿Mis datos están seguros?",
+            "a10": "Sí. MenuLinker opera conforme al RGPD. Todos los datos se almacenan en servidores dentro de la Unión Europea, con cifrado en tránsito (TLS) y en reposo. Realizamos copias de seguridad diarias.",
+            "q11": "¿Qué soporte ofrece MenuLinker?",
+            "a11": "Todos los planes incluyen soporte por email con respuesta en menos de 48h laborables. Los planes Business y Enterprise tienen acceso a soporte prioritario y chat en horario laboral (lunes a viernes, 9h–18h CET).",
+            "q12": "¿Necesito saber programar para usar MenuLinker?",
+            "a12": "No. MenuLinker está diseñado para que cualquier persona pueda usarlo sin conocimientos técnicos. Crear tu primera carta lleva menos de 5 minutos."
+        },
+        "contact": {
+            "badge": "Contacto",
+            "title": "¿En qué podemos ayudarte?",
+            "subtitle": "Nuestro equipo está disponible para resolver tus dudas, acompañarte en el onboarding o escuchar tus propuestas de mejora.",
+            "form_title": "Envíanos un mensaje",
+            "name_label": "Nombre",
+            "name_placeholder": "María García",
+            "email_label": "Email",
+            "email_placeholder": "maria@restaurante.com",
+            "subject_label": "Asunto",
+            "subject_placeholder": "Selecciona un asunto…",
+            "subject_support": "Soporte técnico",
+            "subject_sales": "Consulta comercial",
+            "subject_billing": "Facturación y pagos",
+            "subject_demo": "Solicitud de demo",
+            "subject_other": "Otro",
+            "message_label": "Mensaje",
+            "message_placeholder": "Cuéntanos en qué podemos ayudarte…",
+            "submit": "Enviar mensaje",
+            "privacy_notice": "Al enviar este formulario, aceptas nuestra",
+            "privacy_link": "política de privacidad",
+            "info_email_title": "Email",
+            "info_hours_title": "Horario de soporte",
+            "info_hours_body": "Lunes a viernes, 9:00 – 18:00 (CET / CEST)\nRespuesta por email en menos de 48h laborables.",
+            "info_links_title": "¿Buscas algo concreto?",
+            "link_faq": "Preguntas frecuentes",
+            "link_docs": "Documentación técnica",
+            "response_title": "Tiempo de respuesta",
+            "response_body": "Respondemos a todos los mensajes en menos de 48h laborables. Para soporte urgente en planes Business y Enterprise, tienes acceso prioritario."
+        },
+        "privacy": {
+            "title": "Política de privacidad",
+            "last_updated": "Última actualización"
+        },
+        "terms": {
+            "title": "Términos y condiciones",
+            "last_updated": "Última actualización"
+        },
+        "cookies": {
+            "title": "Política de cookies",
+            "last_updated": "Última actualización"
+        }
+    },
     "docs": {
         "title": "Documentación",
         "subtitle": "Todo lo que necesitas para sacar el máximo partido a MenuLinker",
         "back": "Volver a la documentación",
+        "read_more": "Leer más",
         "topics": {
             "getting-started": {
                 "title": "Primeros pasos",

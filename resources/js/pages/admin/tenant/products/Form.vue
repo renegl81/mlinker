@@ -351,7 +351,7 @@ function selectSuggestion(name: string) {
                                 type="button"
                                 class="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-background/90 text-foreground shadow-md transition-colors hover:bg-destructive hover:text-destructive-foreground"
                                 @click="removeImage"
-                                aria-label="Eliminar imagen"
+                                :aria-label="t('panel.product_form.remove_image')"
                             >
                                 <Trash2 class="h-4 w-4" />
                             </button>
@@ -361,7 +361,7 @@ function selectSuggestion(name: string) {
                             class="flex h-32 flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed bg-muted/10 text-muted-foreground"
                         >
                             <ImageIcon class="h-8 w-8 opacity-40" />
-                            <span class="text-xs">Sin imagen seleccionada</span>
+                            <span class="text-xs">{{ t('panel.product_form.image_none') }}</span>
                         </div>
                         <Input
                             id="product_image"
@@ -369,7 +369,7 @@ function selectSuggestion(name: string) {
                             accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
                             @change="handleFileChange"
                         />
-                        <p class="text-xs text-muted-foreground">JPG, PNG, GIF o WebP. Máx. 2 MB.</p>
+                        <p class="text-xs text-muted-foreground">{{ t('panel.product_form.image_formats') }}</p>
                     </CardContent>
                 </Card>
             </div>
@@ -521,7 +521,7 @@ function selectSuggestion(name: string) {
                 <Button variant="outline" type="button" as-child>
                     <a :href="cancelHref">
                         <X class="mr-2 h-4 w-4" />
-                        Cancelar
+                        {{ t('common.cancel') }}
                     </a>
                 </Button>
                 <Button
@@ -531,12 +531,12 @@ function selectSuggestion(name: string) {
                     @click="$emit('delete')"
                 >
                     <Trash2 class="mr-2 h-4 w-4" />
-                    Eliminar
+                    {{ t('common.delete') }}
                 </Button>
             </div>
             <Button type="submit" :disabled="form.processing">
                 <Save class="mr-2 h-4 w-4" />
-                {{ form.processing ? 'Guardando...' : (isEdit ? 'Guardar cambios' : 'Crear plato') }}
+                {{ form.processing ? t('panel.product_form.saving') : (isEdit ? t('panel.product_form.save_changes') : t('panel.product_form.create_dish')) }}
             </Button>
         </div>
     </form>

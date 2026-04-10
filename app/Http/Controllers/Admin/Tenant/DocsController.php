@@ -140,7 +140,7 @@ class DocsController extends Controller
         $topic = collect($topics)->firstWhere('slug', $slug);
 
         if ($topic === null) {
-            throw new NotFoundHttpException();
+            throw new NotFoundHttpException;
         }
 
         return Inertia::render('admin/tenant/docs/Show', [

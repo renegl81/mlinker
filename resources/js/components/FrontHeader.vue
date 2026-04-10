@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import {
     DropdownMenu,
     DropdownMenuContent,
+    DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
@@ -13,13 +14,16 @@ import {
 } from '@/components/ui/sheet';
 import UserMenuContent from '@/components/UserMenuContent.vue';
 import { getInitials } from '@/composables/useInitials';
-import { Link, usePage } from '@inertiajs/vue3';
-import { Menu } from 'lucide-vue-next';
+import { Link, router, usePage } from '@inertiajs/vue3';
+import { Globe, Menu } from 'lucide-vue-next';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const page = usePage();
 const auth = computed(() => page.props.auth);
 const scrolled = ref(false);
+
+const { locale: i18nLocale } = useI18n();
 
 function onScroll() {
     scrolled.value = window.scrollY > 12;
@@ -39,6 +43,31 @@ const links: NavLink[] = [
     { label: 'FAQ', href: '/faq' },
     { label: 'Contacto', href: '/contact' },
 ];
+
+const UI_LOCALES = [
+    { code: 'es', label: 'Español', flag: '🇪🇸' },
+    { code: 'en', label: 'English', flag: '🇬🇧' },
+    { code: 'ca', label: 'Català', flag: '🏳️' },
+    { code: 'gl', label: 'Galego', flag: '🏳️' },
+    { code: 'eu', label: 'Euskara', flag: '🏳️' },
+];
+
+const currentLocaleLabel = computed(() => {
+    const found = UI_LOCALES.find((l) => l.code === i18nLocale.value);
+    return found ? found.code.toUpperCase() : 'ES';
+});
+
+function switchLocale(code: string) {
+    i18nLocale.value = code;
+    if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('locale', code);
+    }
+    const currentPath = window.location.pathname;
+    // Remove existing locale prefix if any
+    const cleanPath = currentPath.replace(/^\/(en|ca|gl|eu)(\/|$)/, '/');
+    const newPath = code === 'es' ? cleanPath : `/${code}${cleanPath === '/' ? '' : cleanPath}`;
+    router.visit(newPath);
+}
 </script>
 
 <template>
@@ -97,6 +126,25 @@ const links: NavLink[] = [
                                     </Link>
                                 </div>
                             </template>
+
+                            <!-- Selector de idioma en mobile -->
+                            <div class="pt-5 mt-5 border-t border-slate-100">
+                                <p class="px-3 text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Idioma</p>
+                                <div class="space-y-0.5">
+                                    <button
+                                        v-for="loc in UI_LOCALES"
+                                        :key="loc.code"
+                                        class="flex w-full items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors"
+                                        :class="i18nLocale === loc.code
+                                            ? 'bg-teal-50 text-teal-700 font-semibold'
+                                            : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'"
+                                        @click="switchLocale(loc.code)"
+                                    >
+                                        <span>{{ loc.flag }}</span>
+                                        <span>{{ loc.label }}</span>
+                                    </button>
+                                </div>
+                            </div>
                         </nav>
                     </SheetContent>
                 </Sheet>
@@ -126,6 +174,32 @@ const links: NavLink[] = [
 
             <!-- Right side -->
             <div class="ml-auto flex items-center gap-2">
+                <!-- Selector de idioma desktop -->
+                <DropdownMenu>
+                    <DropdownMenuTrigger :as-child="true">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            class="hidden lg:inline-flex items-center gap-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 px-2.5"
+                        >
+                            <Globe class="h-4 w-4" />
+                            <span class="text-xs font-semibold">{{ currentLocaleLabel }}</span>
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" class="w-44">
+                        <DropdownMenuItem
+                            v-for="loc in UI_LOCALES"
+                            :key="loc.code"
+                            class="flex items-center gap-2.5 cursor-pointer"
+                            :class="i18nLocale === loc.code ? 'font-semibold text-teal-700 bg-teal-50' : ''"
+                            @click="switchLocale(loc.code)"
+                        >
+                            <span>{{ loc.flag }}</span>
+                            <span>{{ loc.label }}</span>
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+
                 <template v-if="!auth?.user">
                     <Link
                         href="/login"

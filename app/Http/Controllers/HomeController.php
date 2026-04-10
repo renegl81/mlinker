@@ -23,6 +23,8 @@ class HomeController extends Controller
                 'url' => config('app.url'),
                 'image' => config('app.url').'/images/og-home.jpg',
             ],
+            'locale' => app()->getLocale(),
+            'availableLocales' => ['es', 'en', 'ca', 'gl', 'eu'],
         ]);
     }
 

@@ -3,6 +3,9 @@ import HeadingSmall from '@/components/HeadingSmall.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem } from '@/types';
 import { Head, useForm, router } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 import type { Allergen, CatalogIngredient, Ingredient, Section } from './Form.vue';
 import ProductForm from './Form.vue';
 
@@ -69,19 +72,19 @@ function submit() {
 }
 
 function deleteProduct() {
-    if (!confirm('¿Eliminar este plato? Esta acción no se puede deshacer.')) return;
+    if (!confirm(t('panel.product_edit.delete_confirm'))) return;
     router.delete(`/panel/products/${props.product.id}`);
 }
 </script>
 
 <template>
-    <Head :title="`Editar: ${product.name}`" />
+    <Head :title="t('panel.product_edit.head_title', { name: product.name })" />
 
     <AppLayout :breadcrumbs="breadcrumbItems">
         <div class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
             <HeadingSmall
-                :title="`Editar: ${product.name}`"
-                description="Modifica la información del plato"
+                :title="t('panel.product_edit.head_title', { name: product.name })"
+                :description="t('panel.product_edit.description')"
             />
 
             <ProductForm

@@ -262,5 +262,241 @@
             "all_statuses": "Todos",
             "search_button": "Buscar"
         }
+    },
+    "pages": {
+        "faq": {
+            "title": "Preguntas frecuentes",
+            "subtitle": "Todo o que necesitas saber sobre MenuLinker. Non atopas a túa resposta?",
+            "contact_link": "Escríbenos",
+            "cta_title": "Aínda tes dúbidas?",
+            "cta_subtitle": "O equipo de MenuLinker responde en menos de 48h laborables.",
+            "cta_button": "Contactar co soporte",
+            "q1": "Canto custa MenuLinker?",
+            "a1": "MenuLinker ten un plan gratuíto para sempre que inclúe 1 local e 1 menú con ata 30 produtos e QR básico. Os plans de pago comezan en 14,99€/mes (facturación mensual) e inclúen proba gratuíta de 14 días sen tarxeta de crédito.",
+            "q2": "Como funciona o menú dixital con QR?",
+            "a2": "Creas a túa carta dende o panel de control, organizas as seccións e produtos, escolles un modelo de deseño e xeras o teu código QR personalizado. Os teus clientes escanean o QR coa cámara do seu móbil e acceden ao menú actualizado ao instante. Non fai falta descargar ningunha app.",
+            "q3": "Podo traducir o meu menú a varios idiomas?",
+            "a3": "Si, cos plans Business e Enterprise MenuLinker traduce automaticamente a túa carta a inglés, francés, alemán, italiano, portugués, catalán e máis idiomas. Podes revisar e editar cada tradución manualmente para garantir a calidade.",
+            "q4": "Móstranse os aléxenos no menú?",
+            "a4": "Si. Podes asignar os 14 aléxenos de declaración obrigatoria segundo o Regulamento UE 1169/2011 a cada prato. Os aléxenos móstranse con iconas claras na carta dixital.",
+            "q5": "Podo cambiar prezos e pratos en tempo real?",
+            "a5": "Si, calquera cambio que fagas no panel (prezo, dispoñibilidade, descrición, foto) reflíctese inmediatamente en todos os QR activos. Non hai que reimprimir nin rexenerar o código QR.",
+            "q6": "Que modelos de menú están dispoñibles?",
+            "a6": "MenuLinker inclúe 8 modelos de deseño para a carta pública. Podes cambiar de modelo en calquera momento sen perder os teus datos.",
+            "q7": "Podo xestionar varios locais dende unha soa conta?",
+            "a7": "Si. Dependendo do plan, podes xestionar múltiples locais dende un único panel. Cada local pode ter as súas propias cartas, horarios e QR.",
+            "q8": "Como funciona a proba gratuíta de pago?",
+            "a8": "Os plans Pro e Business inclúen 14 días de proba gratuíta sen necesidade de introducir tarxeta de crédito.",
+            "q9": "Podo cancelar a miña subscrición en calquera momento?",
+            "a9": "Si, sen permanencia nin penalizacións. Cancelas dende o panel en calquera momento e a túa conta pasa ao plan gratuíto ao finalizar o período xa pagado.",
+            "q10": "Os meus datos están seguros?",
+            "a10": "Si. MenuLinker opera conforme ao RXPD. Todos os datos gárdanse en servidores dentro da Unión Europea, con cifrado en tránsito (TLS) e en repouso.",
+            "q11": "Que soporte ofrece MenuLinker?",
+            "a11": "Todos os plans inclúen soporte por email con resposta en menos de 48h laborables. Os plans Business e Enterprise teñen acceso a soporte prioritario.",
+            "q12": "Necesito saber programar para usar MenuLinker?",
+            "a12": "Non. MenuLinker está deseñado para que calquera persoa poida usalo sen coñecementos técnicos. Crear a túa primeira carta leva menos de 5 minutos."
+        },
+        "contact": {
+            "badge": "Contacto",
+            "title": "En que podemos axudarte?",
+            "subtitle": "O noso equipo está dispoñible para resolver as túas dúbidas, acompañarte no onboarding ou escoitar as túas propostas de mellora.",
+            "form_title": "Envíanos unha mensaxe",
+            "name_label": "Nome",
+            "name_placeholder": "María García",
+            "email_label": "Email",
+            "email_placeholder": "maria@restaurante.com",
+            "subject_label": "Asunto",
+            "subject_placeholder": "Selecciona un asunto…",
+            "subject_support": "Soporte técnico",
+            "subject_sales": "Consulta comercial",
+            "subject_billing": "Facturación e pagos",
+            "subject_demo": "Solicitude de demo",
+            "subject_other": "Outro",
+            "message_label": "Mensaxe",
+            "message_placeholder": "Cóntanos en que podemos axudarte…",
+            "submit": "Enviar mensaxe",
+            "privacy_notice": "Ao enviar este formulario, aceptas a nosa",
+            "privacy_link": "política de privacidade",
+            "info_email_title": "Email",
+            "info_hours_title": "Horario de soporte",
+            "info_hours_body": "Luns a venres, 9:00 – 18:00 (CET / CEST)\nResposta por email en menos de 48h laborables.",
+            "info_links_title": "Buscas algo concreto?",
+            "link_faq": "Preguntas frecuentes",
+            "link_docs": "Documentación técnica",
+            "response_title": "Tempo de resposta",
+            "response_body": "Respondemos a todas as mensaxes en menos de 48h laborables. Para soporte urxente en plans Business e Enterprise, tes acceso prioritario."
+        },
+        "privacy": {
+            "title": "Política de privacidade",
+            "last_updated": "Última actualización"
+        },
+        "terms": {
+            "title": "Termos e condicións",
+            "last_updated": "Última actualización"
+        },
+        "cookies": {
+            "title": "Política de cookies",
+            "last_updated": "Última actualización"
+        }
+    },
+    "docs": {
+        "title": "Documentación",
+        "subtitle": "Todo o que precisas para aproveitar ao máximo MenuLinker",
+        "back": "Volver á documentación",
+        "read_more": "Ler máis",
+        "topics": {
+            "getting-started": {
+                "title": "Primeiros pasos",
+                "description": "Aprende a configurar a túa conta e publicar a túa primeira carta en minutos."
+            },
+            "locations": {
+                "title": "Xestión de locais",
+                "description": "Crea e xestiona os establecementos do teu negocio."
+            },
+            "menus": {
+                "title": "Menús e cartas",
+                "description": "Organiza as túas cartas en seccións e escolle a plantilla perfecta."
+            },
+            "products": {
+                "title": "Produtos e ingredientes",
+                "description": "Engade pratos con alérxenos, ingredientes, prezos e etiquetas."
+            },
+            "translations": {
+                "title": "Traducións e idiomas",
+                "description": "Ofrece a túa carta en varios idiomas de forma automática."
+            },
+            "qr-codes": {
+                "title": "Códigos QR",
+                "description": "Xera e personaliza os QR para as túas mesas e espazos."
+            },
+            "team": {
+                "title": "Xestión do equipo",
+                "description": "Invita colaboradores e controla os seus permisos por local."
+            },
+            "billing": {
+                "title": "Facturación e plans",
+                "description": "Entende os plans dispoñibles e xestiona a túa subscrición."
+            },
+            "website": {
+                "title": "A túa páxina web",
+                "description": "Activa e personaliza a túa páxina web pública de negocio."
+            }
+        },
+        "getting_started": {
+            "intro_title": "Benvido a MenuLinker",
+            "intro_body": "MenuLinker é unha plataforma SaaS para hostalería que che permite crear menús dixitais accesibles mediante códigos QR. Os teus clientes escanean o QR na mesa e acceden ao menú actualizado ao instante, sen descargar ningunha app.",
+            "step1_title": "Paso 1: Crea o teu primeiro local",
+            "step1_body": "Vai á sección «Locais» e preme «Novo local». Introduce o nome do establecemento, o seu enderezo completo e un número de teléfono de contacto.",
+            "step2_title": "Paso 2: Crea o teu primeiro menú",
+            "step2_body": "Dentro do local, preme «Novo menú». Dálle un nome e escolle unha das plantillas de deseño dispoñibles.",
+            "step3_title": "Paso 3: Engade os teus pratos",
+            "step3_body": "Accede ao menú e crea seccións (Entrantes, Principais, Sobremesas…). Dentro de cada sección engade os pratos co seu nome, descrición, prezo e opcionalmente unha imaxe.",
+            "step4_title": "Paso 4: Xera o QR e compárteo",
+            "step4_body": "Desde a páxina do menú, preme «Xerar QR». Descarga o QR en alta resolución e impríimeo para colocalo nas túas mesas.",
+            "tip": "Consello: Podes empezar completamente gratis co plan básico. Non precisas tarxeta de crédito para probar a plataforma."
+        },
+        "locations": {
+            "what_title": "Que é un local en MenuLinker?",
+            "what_body": "Un local representa un establecemento físico do teu negocio: un restaurante, un bar, unha cafetería ou calquera punto de venda.",
+            "create_title": "Como crear un local",
+            "create_body": "Vai a «Locais» no menú de navegación e preme o botón «Novo local». Enche o formulario co nome, enderezo, cidade e país.",
+            "fields_title": "Campos importantes do local",
+            "fields_body": "Ademais do nome e o enderezo, podes configurar: o teléfono de contacto, os horarios de apertura, unha foto principal e os cores de marca.",
+            "multi_title": "Xestión de múltiples locais",
+            "multi_body": "Se tes máis dun establecemento, podes xestionalos todos desde o mesmo panel. Os plans Business e superiores permiten un número ilimitado de locais.",
+            "tip": "Consello: A foto do local móstrase na túa páxina web pública. Usa unha imaxe de calidade para causar boa impresión."
+        },
+        "menus": {
+            "what_title": "Que é un menú?",
+            "what_body": "Un menú é o catálogo de pratos que verán os teus clientes ao escanear o QR.",
+            "create_title": "Crear un menú e escoller plantilla",
+            "create_body": "Desde a páxina do local, preme «Novo menú». Escolle un nome descritivo e selecciona unha das 8 plantillas de deseño dispoñibles.",
+            "sections_title": "Seccións: como organizar a túa carta",
+            "sections_body": "As seccións son as categorías da túa carta: Entrantes, Principais, Sobremesas, Bebidas, etc.",
+            "reorder_title": "Reordenar seccións",
+            "reorder_body": "Arrastra as seccións para cambiar a súa orde. O cliente verá as seccións na orde que establezcas.",
+            "activate_title": "Activar e desactivar un menú",
+            "activate_body": "Podes ter varios menús por local e activar ou desactivar cada un segundo necesites.",
+            "templates_title": "As 8 plantillas dispoñibles",
+            "templates_body": "MenuLinker ofrece 8 plantillas de deseño para adaptarse a distintos tipos de negocio, todas optimizadas para móbil.",
+            "tip": "Consello: Podes ter varios menús activos simultaneamente por local, cada un co seu propio QR."
+        },
+        "products": {
+            "add_title": "Como engadir un prato",
+            "add_body": "Dentro dun menú, selecciona a sección e preme «Engadir prato». Introduce o nome e, se queres, unha descrición.",
+            "fields_title": "Campos do prato",
+            "fields_body": "Cada prato pode ter: nome, descrición detallada, prezo, calorías (kcal) e unha imaxe.",
+            "allergens_title": "Alérxenos: como asignalos",
+            "allergens_body": "MenuLinker inclúe os 14 alérxenos de declaración obrigatoria segundo a normativa europea.",
+            "ingredients_title": "Ingredientes",
+            "ingredients_body": "Podes engadir a lista de ingredientes de cada prato. Os ingredientes gárdanse nun catálogo compartido entre todos os teus menús.",
+            "tags_title": "Etiquetas (tags)",
+            "tags_body": "Engade etiquetas aos teus pratos: vexetariano, vegano, sen glute, picante, sen lactosa.",
+            "catalog_title": "O catálogo centralizado",
+            "catalog_body": "Cos plans Business e superiores, dispós dun catálogo centralizado de produtos e ingredientes.",
+            "merge_title": "Fusionar ingredientes duplicados",
+            "merge_body": "Se tes ingredientes duplicados, podes fusionalos desde o catálogo de ingredientes.",
+            "tip": "Consello: Os ingredientes que introduces suxírense automaticamente ao engadir novos pratos."
+        },
+        "translations": {
+            "how_title": "Como funciona o multi-idioma",
+            "how_body": "MenuLinker permite ofrecer a túa carta en varios idiomas. Os clientes verán un selector de idioma no menú dixital.",
+            "auto_title": "Tradución automática",
+            "auto_body": "MenuLinker pode xerar traducións automáticas da túa carta usando intelixencia artificial.",
+            "add_title": "Engadir un novo idioma",
+            "add_body": "Desde a sección «Traducións» do menú, preme «Engadir idioma» e selecciona o idioma que queres incorporar.",
+            "remove_title": "Eliminar un idioma",
+            "remove_body": "Para eliminar un idioma do teu menú, accede a «Traducións», localiza o idioma e usa a opción de eliminar.",
+            "selector_title": "O selector de idioma no menú público",
+            "selector_body": "Cando o teu menú ten máis dun idioma, aparece automaticamente un selector na parte superior do menú dixital.",
+            "tip": "Consello: As traducións automáticas son un bo punto de partida, pero sempre convén revisalas."
+        },
+        "qr_codes": {
+            "generate_title": "Como xerar un QR para o teu menú",
+            "generate_body": "Desde a páxina do menú, preme o botón «Xerar QR». MenuLinker creará automaticamente un código QR único vinculado a ese menú.",
+            "customize_title": "Personalización do QR",
+            "customize_body": "Podes personalizar os cores do QR para que coincidan coa identidade visual do teu negocio.",
+            "download_title": "Descargar en alta resolución",
+            "download_body": "Descarga o QR en formato PNG de alta resolución (mínimo 1000×1000 píxeles).",
+            "placement_title": "Onde colocar o QR",
+            "placement_body": "As posicións máis efectivas son: nas mesas, na porta de entrada, na túa páxina web oficial e nas redes sociais.",
+            "tip": "Consello: O QR sempre apunta á última versión publicada da túa carta. Non precisas imprimir un novo QR cada vez que actualices o menú."
+        },
+        "team": {
+            "roles_title": "Roles: Owner e Editor",
+            "roles_body": "MenuLinker ten dous roles de usuario no panel. O Owner ten acceso completo a todas as funcións. O Editor ten acceso limitado ao contido dos menús.",
+            "editor_title": "Que pode facer un Editor?",
+            "editor_body": "Un Editor pode crear e modificar menús, seccións e pratos. Non pode acceder á configuración de facturación nin xestionar outros usuarios.",
+            "scope_title": "Scope por local",
+            "scope_body": "É posible restrinxir o acceso dun Editor a un ou varios locais específicos.",
+            "manage_title": "Crear e xestionar usuarios",
+            "manage_body": "Desde a sección «Equipo» do panel, preme «Invitar usuario». Introduce o email da persoa e selecciona o seu rol.",
+            "plan_title": "Requisito de plan",
+            "plan_body": "A xestión do equipo está dispoñible a partir do plan Pro."
+        },
+        "billing": {
+            "plans_title": "Os plans dispoñibles",
+            "plans_body": "MenuLinker ofrece varios plans adaptados a distintas necesidades: o plan básico gratuíto, o plan Pro e o plan Business.",
+            "change_title": "Como cambiar de plan",
+            "change_body": "Vai a «Facturación» no panel e preme «Ver plans». Selecciona o plan ao que queres cambiar e confirma.",
+            "trial_title": "Período de proba gratuíto",
+            "trial_body": "Todos os plans de pago inclúen un período de proba gratuíto de 14 días.",
+            "cancel_title": "Cancelar ou pausar a subscrición",
+            "cancel_body": "Podes cancelar a túa subscrición en calquera momento desde a sección de facturación.",
+            "stripe_title": "Facturación e pagos con Stripe",
+            "stripe_body": "Os pagos procésanse de forma segura a través de Stripe. Recibirás facturas automáticas por email."
+        },
+        "website": {
+            "what_title": "A túa propia páxina web de negocio",
+            "what_body": "MenuLinker inclúe unha páxina web pública para o teu negocio accesible desde un subdominio ou desde o teu propio dominio personalizado.",
+            "activate_title": "Como activala",
+            "activate_body": "Durante o proceso de onboarding ofréceselle a opción de activar a túa páxina web. Se a saltaches, podes activala en calquera momento desde «Axustes → Web pública».",
+            "template_title": "Escoller tipo de negocio e plantilla",
+            "template_body": "Selecciona o tipo de negocio que mellor describa o teu establecemento e escolle unha plantilla visual.",
+            "content_title": "Que se mostra na túa web",
+            "content_body": "A túa páxina web pública mostra automaticamente: os horarios de apertura, a túa carta activa, os datos de contacto e un mapa de localización.",
+            "branding_title": "Cores de marca personalizados",
+            "branding_body": "Desde os axustes do local podes configurar os cores primario e secundario da túa marca."
+        }
     }
 }

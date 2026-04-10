@@ -262,5 +262,241 @@
             "all_statuses": "Tots",
             "search_button": "Cercar"
         }
+    },
+    "pages": {
+        "faq": {
+            "title": "Preguntes freqüents",
+            "subtitle": "Tot el que necessites saber sobre MenuLinker. No trobes la teva resposta?",
+            "contact_link": "Escriu-nos",
+            "cta_title": "Encara tens dubtes?",
+            "cta_subtitle": "L'equip de MenuLinker respon en menys de 48h laborables.",
+            "cta_button": "Contactar amb suport",
+            "q1": "Quant costa MenuLinker?",
+            "a1": "MenuLinker té un pla gratuït per sempre que inclou 1 local i 1 menú amb fins a 30 productes i QR bàsic. Els plans de pagament comencen a 14,99€/mes (facturació mensual) i inclouen prova gratuïta de 14 dies sense targeta de crèdit.",
+            "q2": "Com funciona el menú digital amb QR?",
+            "a2": "Crees la teva carta des del panell de control, organitzes les seccions i productes, tries una plantilla de disseny i generes el teu codi QR personalitzat. Els teus clients escanegen el QR amb la càmera del seu mòbil i accedeixen al menú actualitzat a l'instant. No cal descarregar cap app.",
+            "q3": "Puc traduir el meu menú a diversos idiomes?",
+            "a3": "Sí, amb els plans Business i Enterprise MenuLinker tradueix automàticament la teva carta a anglès, francès, alemany, italià, portuguès, català i més idiomes. Pots revisar i editar cada traducció manualment per garantir la qualitat.",
+            "q4": "Es mostren els al·lèrgens al menú?",
+            "a4": "Sí. Pots assignar els 14 al·lèrgens de declaració obligatòria segons el Reglament UE 1169/2011 a cada plat. Els al·lèrgens es mostren amb icones clares a la carta digital.",
+            "q5": "Puc canviar preus i plats en temps real?",
+            "a5": "Sí, qualsevol canvi que facis al panell (preu, disponibilitat, descripció, foto) es reflecteix immediatament en tots els QR actius. No cal reimprimir ni regenerar el codi QR.",
+            "q6": "Quines plantilles de menú hi ha disponibles?",
+            "a6": "MenuLinker inclou 8 plantilles de disseny per a la carta pública. Pots canviar de plantilla en qualsevol moment sense perdre les teves dades.",
+            "q7": "Puc gestionar diversos locals des d'un sol compte?",
+            "a7": "Sí. Depenent del pla, pots gestionar múltiples locals des d'un únic panell. Cada local pot tenir les seves pròpies cartes, horaris i QR.",
+            "q8": "Com funciona la prova gratuïta de pagament?",
+            "a8": "Els plans Pro i Business inclouen 14 dies de prova gratuïta sense necessitat d'introduir targeta de crèdit.",
+            "q9": "Puc cancel·lar la meva subscripció en qualsevol moment?",
+            "a9": "Sí, sense permanència ni penalitzacions. Cancel·les des del panell en qualsevol moment i el teu compte passa al pla gratuït en finalitzar el període ja pagat.",
+            "q10": "Les meves dades estan segures?",
+            "a10": "Sí. MenuLinker opera conforme al RGPD. Totes les dades s'emmagatzemen en servidors dins de la Unió Europea, amb xifratge en trànsit (TLS) i en repòs.",
+            "q11": "Quin suport ofereix MenuLinker?",
+            "a11": "Tots els plans inclouen suport per email amb resposta en menys de 48h laborables. Els plans Business i Enterprise tenen accés a suport prioritari.",
+            "q12": "Necessito saber programar per usar MenuLinker?",
+            "a12": "No. MenuLinker està dissenyat perquè qualsevol persona pugui usar-lo sense coneixements tècnics. Crear la teva primera carta porta menys de 5 minuts."
+        },
+        "contact": {
+            "badge": "Contacte",
+            "title": "En què podem ajudar-te?",
+            "subtitle": "El nostre equip està disponible per resoldre els teus dubtes, acompanyar-te en l'onboarding o escoltar les teves propostes de millora.",
+            "form_title": "Envia'ns un missatge",
+            "name_label": "Nom",
+            "name_placeholder": "Maria Garcia",
+            "email_label": "Email",
+            "email_placeholder": "maria@restaurant.com",
+            "subject_label": "Assumpte",
+            "subject_placeholder": "Selecciona un assumpte…",
+            "subject_support": "Suport tècnic",
+            "subject_sales": "Consulta comercial",
+            "subject_billing": "Facturació i pagaments",
+            "subject_demo": "Sol·licitud de demo",
+            "subject_other": "Altres",
+            "message_label": "Missatge",
+            "message_placeholder": "Explica'ns en què podem ajudar-te…",
+            "submit": "Enviar missatge",
+            "privacy_notice": "En enviar aquest formulari, acceptes la nostra",
+            "privacy_link": "política de privacitat",
+            "info_email_title": "Email",
+            "info_hours_title": "Horari de suport",
+            "info_hours_body": "De dilluns a divendres, 9:00 – 18:00 (CET / CEST)\nResposta per email en menys de 48h laborables.",
+            "info_links_title": "Busques alguna cosa concreta?",
+            "link_faq": "Preguntes freqüents",
+            "link_docs": "Documentació tècnica",
+            "response_title": "Temps de resposta",
+            "response_body": "Responem a tots els missatges en menys de 48h laborables. Per a suport urgent en plans Business i Enterprise, tens accés prioritari."
+        },
+        "privacy": {
+            "title": "Política de privacitat",
+            "last_updated": "Darrera actualització"
+        },
+        "terms": {
+            "title": "Termes i condicions",
+            "last_updated": "Darrera actualització"
+        },
+        "cookies": {
+            "title": "Política de cookies",
+            "last_updated": "Darrera actualització"
+        }
+    },
+    "docs": {
+        "title": "Documentació",
+        "subtitle": "Tot el que necessites per aprofitar al màxim MenuLinker",
+        "back": "Tornar a la documentació",
+        "read_more": "Llegir més",
+        "topics": {
+            "getting-started": {
+                "title": "Primers passos",
+                "description": "Aprèn a configurar el teu compte i publicar la teva primera carta en minuts."
+            },
+            "locations": {
+                "title": "Gestió de locals",
+                "description": "Crea i gestiona els establiments del teu negoci."
+            },
+            "menus": {
+                "title": "Menús i cartes",
+                "description": "Organitza les teves cartes en seccions i tria la plantilla perfecta."
+            },
+            "products": {
+                "title": "Productes i ingredients",
+                "description": "Afegeix plats amb al·lèrgens, ingredients, preus i etiquetes."
+            },
+            "translations": {
+                "title": "Traduccions i idiomes",
+                "description": "Ofereix la teva carta en diversos idiomes de forma automàtica."
+            },
+            "qr-codes": {
+                "title": "Codis QR",
+                "description": "Genera i personalitza els QR per a les teves taules i espais."
+            },
+            "team": {
+                "title": "Gestió d'equip",
+                "description": "Convida col·laboradors i controla els seus permisos per local."
+            },
+            "billing": {
+                "title": "Facturació i plans",
+                "description": "Entén els plans disponibles i gestiona la teva subscripció."
+            },
+            "website": {
+                "title": "El teu lloc web",
+                "description": "Activa i personalitza el teu lloc web públic de negoci."
+            }
+        },
+        "getting_started": {
+            "intro_title": "Benvingut a MenuLinker",
+            "intro_body": "MenuLinker és una plataforma SaaS per a hostaleria que et permet crear menús digitals accessibles mitjançant codis QR. Els teus clients escanegen el QR a la taula i accedeixen al menú actualitzat a l'instant, sense descarregar cap app.",
+            "step1_title": "Pas 1: Crea el teu primer local",
+            "step1_body": "Vés a la secció «Locals» i prem «Nou local». Introdueix el nom de l'establiment, la seva adreça completa i un telèfon de contacte. El local és la unitat base: cada local pot tenir un o diversos menús.",
+            "step2_title": "Pas 2: Crea el teu primer menú",
+            "step2_body": "Dins del local, prem «Nou menú». Dóna-li un nom (per exemple, «Carta d'estiu») i tria una de les plantilles de disseny disponibles. La plantilla defineix l'aparença visual que veuran els teus clients.",
+            "step3_title": "Pas 3: Afegeix els teus plats",
+            "step3_body": "Accedeix al menú i crea seccions (Entrants, Principals, Postres…). Dins de cada secció afegeix els plats amb el seu nom, descripció, preu i opcionalment una imatge. Pots assignar al·lèrgens i ingredients a cada plat.",
+            "step4_title": "Pas 4: Genera el QR i comparteix-lo",
+            "step4_body": "Des de la pàgina del menú, prem «Generar QR». Descarrega el QR en alta resolució i imprimeix-lo per col·locar-lo a les teves taules. Cada vegada que actualitzis el menú, el QR seguirà apuntant a la versió més recent automàticament.",
+            "tip": "Consell: Pots començar completament gratis amb el pla bàsic. No necessites targeta de crèdit per provar la plataforma."
+        },
+        "locations": {
+            "what_title": "Què és un local a MenuLinker?",
+            "what_body": "Un local representa un establiment físic del teu negoci: un restaurant, un bar, una cafeteria o qualsevol punt de venda. Cada local té la seva pròpia configuració, menús, horaris i identitat visual.",
+            "create_title": "Com crear un local",
+            "create_body": "Vés a «Locals» al menú de navegació i prem el botó «Nou local». Omple el formulari amb el nom, adreça, ciutat i país. Un cop creat, podràs completar la resta d'informació des de la pàgina d'edició.",
+            "fields_title": "Camps importants del local",
+            "fields_body": "A més del nom i l'adreça, pots configurar: el telèfon de contacte perquè els clients puguin trucar directament, els horaris d'obertura per a cada dia de la setmana, una foto principal que es mostra al teu lloc web públic, i els colors de marca per personalitzar l'aparença dels teus menús.",
+            "multi_title": "Gestió de múltiples locals",
+            "multi_body": "Si tens més d'un establiment, pots gestionar-los tots des del mateix panell. Els plans Business i superiors permeten un nombre il·limitat de locals. Cada local manté els seus propis menús i configuració de forma independent.",
+            "tip": "Consell: La foto del local es mostra al teu lloc web públic. Usa una imatge de qualitat (mínim 800×600 píxels) per causar una bona primera impressió."
+        },
+        "menus": {
+            "what_title": "Què és un menú?",
+            "what_body": "Un menú (o carta) és el catàleg de plats que veuran els teus clients en escanejar el QR. Cada menú pertany a un local i té una plantilla de disseny, un nom i un conjunt de seccions amb els seus plats.",
+            "create_title": "Crear un menú i triar plantilla",
+            "create_body": "Des de la pàgina del local, prem «Nou menú». Tria un nom descriptiu (per exemple, «Carta de dinar» o «Carta de vins») i selecciona una de les 8 plantilles de disseny disponibles. La plantilla es pot canviar en qualsevol moment sense perdre el contingut.",
+            "sections_title": "Seccions: com organitzar la teva carta",
+            "sections_body": "Les seccions són les categories de la teva carta: Entrants, Principals, Postres, Begudes, etc. Crea tantes seccions com necessitis i afegeix els plats dins de cadascuna. Les seccions es mostren en l'ordre que defineixis.",
+            "reorder_title": "Reordenar seccions",
+            "reorder_body": "Arrossega les seccions per canviar el seu ordre. El client veurà les seccions en l'ordre que estableixes. Això et permet destacar les seccions més importants, com els especials del dia, en primer lloc.",
+            "activate_title": "Activar i desactivar un menú",
+            "activate_body": "Pots tenir diversos menús per local i activar o desactivar cadascun segons necessitis. Només els menús actius són accessibles a través del QR. Això et permet preparar menús de temporada abans de publicar-los.",
+            "templates_title": "Les 8 plantilles disponibles",
+            "templates_body": "MenuLinker ofereix 8 plantilles de disseny per adaptar-se a diferents tipus de negoci: des de dissenys elegants per a restaurants de cuina d'autor fins a estils informals per a bars i cafeteries. Cada plantilla està optimitzada per a mòbil i inclou suport per a imatges, al·lèrgens i múltiples idiomes.",
+            "tip": "Consell: Pots tenir diversos menús actius simultàniament per local. Per exemple, una carta de dia, una carta de nit i una carta de vins, cadascun amb el seu propi QR."
+        },
+        "products": {
+            "add_title": "Com afegir un plat",
+            "add_body": "Dins d'un menú, selecciona la secció on vols afegir el plat i prem «Afegir plat». Introdueix el nom i, si vols, una descripció. Desa el plat i podràs completar la resta d'informació des de la pantalla d'edició.",
+            "fields_title": "Camps del plat",
+            "fields_body": "Cada plat pot tenir: nom, descripció detallada, preu (amb suport per a moneda local), calories (kcal), i una imatge. La imatge es mostra al menú digital i millora notablement l'experiència del client.",
+            "allergens_title": "Al·lèrgens: com assignar-los",
+            "allergens_body": "MenuLinker inclou els 14 al·lèrgens de declaració obligatòria segons la normativa europea. En editar cada plat, marca els al·lèrgens presents. Aquesta informació es mostra de forma visible al menú perquè els clients puguin prendre decisions informades.",
+            "ingredients_title": "Ingredients",
+            "ingredients_body": "Pots afegir la llista d'ingredients de cada plat. Els ingredients es guarden en un catàleg compartit entre tots els teus menús, la qual cosa evita duplicats i facilita la gestió. Quan escriguis el nom d'un ingredient, la plataforma et suggerirà coincidències del teu catàleg.",
+            "tags_title": "Etiquetes (tags)",
+            "tags_body": "Afegeix etiquetes als teus plats per destacar característiques importants: vegetarià, vegà, sense gluten, picant, sense lactosa. Aquestes etiquetes es mostren amb icones al menú digital, ajudant els clients a identificar ràpidament els plats que s'adapten a les seves preferències.",
+            "catalog_title": "El catàleg centralitzat",
+            "catalog_body": "Amb els plans Business i superiors, disposes d'un catàleg centralitzat de productes i ingredients. Des del catàleg pots gestionar tots els teus plats de forma global, assignar-los a múltiples menús alhora i mantenir la coherència entre locals.",
+            "merge_title": "Fusionar ingredients duplicats",
+            "merge_body": "Si tens ingredients duplicats (per exemple, «Tomàquet» i «tomàquet»), pots fusionar-los des del catàleg d'ingredients. La fusió actualitza automàticament tots els plats que usaven els ingredients duplicats.",
+            "tip": "Consell: Els ingredients que introdueixes es suggereixen automàticament en afegir nous plats. Mantén els noms consistents per aprofitar al màxim el catàleg compartit."
+        },
+        "translations": {
+            "how_title": "Com funciona el multi-idioma",
+            "how_body": "MenuLinker permet oferir la teva carta en diversos idiomes. Cada menú té un idioma principal (l'idioma en què introdueixes el contingut) i pot tenir idiomes addicionals. Els clients veuran un selector d'idioma al menú digital.",
+            "auto_title": "Traducció automàtica",
+            "auto_body": "MenuLinker pot generar traduccions automàtiques de la teva carta utilitzant intel·ligència artificial. La traducció automàtica cobreix el nom i la descripció de cada plat, així com els noms de les seccions. El procés tarda uns segons per idioma.",
+            "add_title": "Afegir un nou idioma",
+            "add_body": "Des de la secció «Traduccions» del menú, prem «Afegir idioma» i selecciona l'idioma que vols incorporar. Pots optar per la traducció automàtica o introduir les traduccions manualment. Ambdues opcions es poden combinar.",
+            "remove_title": "Eliminar un idioma",
+            "remove_body": "Per eliminar un idioma del teu menú, accedeix a «Traduccions», localitza l'idioma i usa l'opció d'eliminar. Aquesta acció esborra totes les traduccions d'aquell idioma per a aquell menú. L'idioma principal no es pot eliminar.",
+            "selector_title": "El selector d'idioma al menú públic",
+            "selector_body": "Quan el teu menú té més d'un idioma, apareix automàticament un selector a la part superior del menú digital. Els clients poden canviar d'idioma amb un toc. L'idioma seleccionat es manté durant tota la sessió.",
+            "tip": "Consell: Les traduccions automàtiques són un bon punt de partida, però sempre convé revisar-les. Els termes culinaris específics o els noms propis de plats poden requerir ajust manual."
+        },
+        "qr_codes": {
+            "generate_title": "Com generar un QR per al teu menú",
+            "generate_body": "Des de la pàgina del menú, prem el botó «Generar QR». MenuLinker crearà automàticament un codi QR únic vinculat a aquell menú. Un cop generat, el QR es manté actiu indefinidament.",
+            "customize_title": "Personalització del QR",
+            "customize_body": "Pots personalitzar els colors del QR perquè coincideixin amb la identitat visual del teu negoci. També és possible incloure el logo del teu establiment al centre del QR. Els QR personalitzats tenen una millor taxa d'escaneig quan contrasten bé amb el fons.",
+            "download_title": "Descarregar en alta resolució",
+            "download_body": "Descarrega el QR en format PNG d'alta resolució (mínim 1000×1000 píxels). Aquesta resolució és suficient per a impressió professional en mides de fins a A5. Per a formats majors, es recomana escalar mantenint el marge blanc al voltant.",
+            "placement_title": "On col·locar el QR",
+            "placement_body": "Les posicions més efectives són: a les taules (en un suport o laminat), a la porta d'entrada o aparador, al teu lloc web oficial, i als teus perfils de xarxes socials. Com més punts d'accés, major adopció per part dels clients.",
+            "tip": "Consell: El QR sempre apunta a la darrera versió publicada de la teva carta. No cal imprimir un nou QR cada vegada que actualitzis el menú; els canvis es reflecteixen automàticament."
+        },
+        "team": {
+            "roles_title": "Rols: Owner i Editor",
+            "roles_body": "MenuLinker té dos rols d'usuari al panell de tenant. L'Owner (propietari) té accés complet a totes les funcions, incloent facturació, ajustos i gestió d'usuaris. L'Editor té accés limitat al contingut dels menús.",
+            "editor_title": "Què pot fer un Editor?",
+            "editor_body": "Un Editor pot crear i modificar menús, seccions i plats. No pot accedir a la configuració de facturació, no pot gestionar altres usuaris i no pot canviar la configuració global del tenant. És el rol adequat per al personal de cuina o els encarregats de sala.",
+            "scope_title": "Scope per local",
+            "scope_body": "És possible restringir l'accés d'un Editor a un o diversos locals específics. Així, si tens diversos establiments, pots assignar un equip diferent a cadascun sense que tinguin accés als menús dels altres locals.",
+            "manage_title": "Crear i gestionar usuaris",
+            "manage_body": "Des de la secció «Equip» del panell, prem «Convidar usuari». Introdueix l'email de la persona i selecciona el seu rol. Rebrà un email d'invitació per crear el seu compte. Des d'aquesta mateixa secció pots editar rols o revocar l'accés en qualsevol moment.",
+            "plan_title": "Requisit de pla",
+            "plan_body": "La gestió d'equip està disponible a partir del pla Pro. Amb el pla bàsic només pot haver-hi un usuari (l'Owner). Actualitza el teu pla des de la secció de facturació per afegir col·laboradors."
+        },
+        "billing": {
+            "plans_title": "Els plans disponibles",
+            "plans_body": "MenuLinker ofereix diversos plans adaptats a diferents necessitats: el pla bàsic gratuït per començar, el pla Pro per a negocis que necessiten múltiples usuaris i funcions avançades, i el pla Business per a cadenes o grups amb múltiples locals i catàleg centralitzat. Els detalls actualitzats i preus estan disponibles a la secció de plans.",
+            "change_title": "Com canviar de pla",
+            "change_body": "Vés a «Facturació» al panell i prem «Veure plans». Selecciona el pla al qual vols canviar i confirma. Si puges de pla, el canvi és immediat i es prorrategen els dies restants del cicle actual. Si baixes de pla, el canvi s'aplica a l'inici del següent cicle de facturació.",
+            "trial_title": "Període de prova gratuït",
+            "trial_body": "Tots els plans de pagament inclouen un període de prova gratuït de 14 dies. Durant aquest període tens accés complet a totes les funcions del pla triat. No es realitza cap càrrec fins que finalitza el període de prova i no cal introduir targeta per començar.",
+            "cancel_title": "Cancel·lar o pausar la subscripció",
+            "cancel_body": "Pots cancel·lar la teva subscripció en qualsevol moment des de la secció de facturació. En cancel·lar, mantens l'accés a les funcions de pagament fins al final del període facturat. No hi ha penalitzacions ni permanències.",
+            "stripe_title": "Facturació i pagaments amb Stripe",
+            "stripe_body": "Els pagaments es processen de forma segura a través de Stripe, un dels processadors de pagament més utilitzats del món. Rebràs factures automàtiques per email cada vegada que es renovi la teva subscripció. Pots consultar l'historial de pagaments des del portal de facturació."
+        },
+        "website": {
+            "what_title": "El teu propi lloc web de negoci",
+            "what_body": "MenuLinker inclou un lloc web públic per al teu negoci accessible des d'un subdomini o des del teu propi domini personalitzat. Aquesta pàgina mostra automàticament la informació del teu establiment, la teva carta i les teves dades de contacte.",
+            "activate_title": "Com activar-lo",
+            "activate_body": "Durant el procés d'onboarding se t'ofereix l'opció d'activar el teu lloc web. Si el vas saltar, pots activar-lo en qualsevol moment des de «Ajustos → Web pública». Simplement activa l'interruptor i la teva pàgina serà visible de manera immediata.",
+            "template_title": "Triar tipus de negoci i plantilla",
+            "template_body": "Selecciona el tipus de negoci que millor descrigui el teu establiment (restaurant, bar, cafeteria, etc.) i tria una plantilla visual. La plantilla defineix l'estructura i l'estil de la teva pàgina pública.",
+            "content_title": "Què es mostra al teu web",
+            "content_body": "El teu lloc web públic mostra automàticament: els horaris d'obertura del teu local, la teva carta activa amb opció de veure el menú digital, les dades de contacte (telèfon, adreça) i un mapa de localització.",
+            "branding_title": "Colors de marca personalitzats",
+            "branding_body": "Des dels ajustos del local pots configurar els colors primari i secundari de la teva marca. Aquests colors s'apliquen al teu lloc web públic i als elements del teu menú digital, donant una imatge coherent i professional."
+        }
     }
 }

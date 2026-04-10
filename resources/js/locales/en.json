@@ -262,5 +262,241 @@
             "all_statuses": "All",
             "search_button": "Search"
         }
+    },
+    "pages": {
+        "faq": {
+            "title": "Frequently asked questions",
+            "subtitle": "Everything you need to know about MenuLinker. Can't find your answer?",
+            "contact_link": "Write to us",
+            "cta_title": "Still have questions?",
+            "cta_subtitle": "The MenuLinker team replies in less than 48 business hours.",
+            "cta_button": "Contact support",
+            "q1": "How much does MenuLinker cost?",
+            "a1": "MenuLinker has a free forever plan that includes 1 location and 1 menu with up to 30 products and a basic QR code. Paid plans start at €14.99/month (monthly billing) and include a 14-day free trial with no credit card required.",
+            "q2": "How does the digital menu with QR work?",
+            "a2": "You create your menu from the control panel, organise sections and products, choose a design template and generate your personalised QR code. Your customers scan the QR with their phone camera and access the updated menu instantly. No app download needed.",
+            "q3": "Can I translate my menu into multiple languages?",
+            "a3": "Yes, with Business and Enterprise plans MenuLinker automatically translates your menu into English, French, German, Italian, Portuguese, Catalan and more. You can review and edit each translation manually to ensure quality. Customers choose the language in the digital menu.",
+            "q4": "Are allergens displayed on the menu?",
+            "a4": "Yes. You can assign the 14 mandatory declaration allergens according to EU Regulation 1169/2011 to each dish. Allergens are displayed with clear icons in the digital menu.",
+            "q5": "Can I change prices and dishes in real time?",
+            "a5": "Yes, any change you make in the panel (price, availability, description, photo) is immediately reflected across all active QR codes. No need to reprint or regenerate the QR code. Perfect for daily specials or seasonal dishes.",
+            "q6": "What menu templates are available?",
+            "a6": "MenuLinker includes 8 design templates for the public menu: from minimalist and modern styles to more classic designs with elegant typography. You can change the template at any time without losing your data.",
+            "q7": "Can I manage multiple locations from a single account?",
+            "a7": "Yes. Depending on the plan, you can manage multiple locations from a single panel. Each location can have its own menus, opening hours and QR codes. Perfect for chains or restaurant groups.",
+            "q8": "How does the paid free trial work?",
+            "a8": "Pro and Business plans include a 14-day free trial with no credit card required. At the end of the trial period, you can subscribe or automatically switch to the free plan without losing your data.",
+            "q9": "Can I cancel my subscription at any time?",
+            "a9": "Yes, with no commitment or penalties. Cancel from the panel at any time and your account switches to the free plan at the end of the already paid period. We will never overcharge you.",
+            "q10": "Is my data secure?",
+            "a10": "Yes. MenuLinker operates in accordance with GDPR. All data is stored on servers within the European Union, with encryption in transit (TLS) and at rest. We perform daily backups.",
+            "q11": "What support does MenuLinker offer?",
+            "a11": "All plans include email support with a response in less than 48 business hours. Business and Enterprise plans have access to priority support and chat during business hours (Monday to Friday, 9am–6pm CET).",
+            "q12": "Do I need programming knowledge to use MenuLinker?",
+            "a12": "No. MenuLinker is designed so that anyone can use it without technical knowledge. Creating your first menu takes less than 5 minutes."
+        },
+        "contact": {
+            "badge": "Contact",
+            "title": "How can we help you?",
+            "subtitle": "Our team is available to answer your questions, guide you through onboarding or hear your improvement suggestions.",
+            "form_title": "Send us a message",
+            "name_label": "Name",
+            "name_placeholder": "John Smith",
+            "email_label": "Email",
+            "email_placeholder": "john@restaurant.com",
+            "subject_label": "Subject",
+            "subject_placeholder": "Select a subject…",
+            "subject_support": "Technical support",
+            "subject_sales": "Sales enquiry",
+            "subject_billing": "Billing and payments",
+            "subject_demo": "Demo request",
+            "subject_other": "Other",
+            "message_label": "Message",
+            "message_placeholder": "Tell us how we can help you…",
+            "submit": "Send message",
+            "privacy_notice": "By submitting this form, you agree to our",
+            "privacy_link": "privacy policy",
+            "info_email_title": "Email",
+            "info_hours_title": "Support hours",
+            "info_hours_body": "Monday to Friday, 9:00 am – 6:00 pm (CET / CEST)\nEmail response in less than 48 business hours.",
+            "info_links_title": "Looking for something specific?",
+            "link_faq": "Frequently asked questions",
+            "link_docs": "Technical documentation",
+            "response_title": "Response time",
+            "response_body": "We reply to all messages in less than 48 business hours. For urgent support on Business and Enterprise plans, you have priority access."
+        },
+        "privacy": {
+            "title": "Privacy policy",
+            "last_updated": "Last updated"
+        },
+        "terms": {
+            "title": "Terms and conditions",
+            "last_updated": "Last updated"
+        },
+        "cookies": {
+            "title": "Cookie policy",
+            "last_updated": "Last updated"
+        }
+    },
+    "docs": {
+        "title": "Documentation",
+        "subtitle": "Everything you need to get the most out of MenuLinker",
+        "back": "Back to documentation",
+        "read_more": "Read more",
+        "topics": {
+            "getting-started": {
+                "title": "Getting started",
+                "description": "Learn how to set up your account and publish your first menu in minutes."
+            },
+            "locations": {
+                "title": "Location management",
+                "description": "Create and manage your business establishments."
+            },
+            "menus": {
+                "title": "Menus & cards",
+                "description": "Organise your menus into sections and choose the perfect template."
+            },
+            "products": {
+                "title": "Products & ingredients",
+                "description": "Add dishes with allergens, ingredients, prices and tags."
+            },
+            "translations": {
+                "title": "Translations & languages",
+                "description": "Offer your menu in multiple languages automatically."
+            },
+            "qr-codes": {
+                "title": "QR codes",
+                "description": "Generate and customise QR codes for your tables and spaces."
+            },
+            "team": {
+                "title": "Team management",
+                "description": "Invite collaborators and control their permissions per location."
+            },
+            "billing": {
+                "title": "Billing & plans",
+                "description": "Understand the available plans and manage your subscription."
+            },
+            "website": {
+                "title": "Your website",
+                "description": "Activate and customise your public business website."
+            }
+        },
+        "getting_started": {
+            "intro_title": "Welcome to MenuLinker",
+            "intro_body": "MenuLinker is a SaaS platform for the hospitality industry that lets you create digital menus accessible via QR codes. Your customers scan the QR at the table and instantly access the updated menu — no app download required.",
+            "step1_title": "Step 1: Create your first location",
+            "step1_body": "Go to the «Locations» section and click «New location». Enter the establishment name, full address and a contact phone number. The location is the base unit — each location can have one or more menus.",
+            "step2_title": "Step 2: Create your first menu",
+            "step2_body": "Inside the location, click «New menu». Give it a name (for example, «Summer menu») and choose one of the available design templates. The template defines the visual appearance your customers will see.",
+            "step3_title": "Step 3: Add your dishes",
+            "step3_body": "Access the menu and create sections (Starters, Mains, Desserts…). Within each section add dishes with their name, description, price and optionally an image. You can assign allergens and ingredients to each dish.",
+            "step4_title": "Step 4: Generate the QR and share it",
+            "step4_body": "From the menu page, click «Generate QR». Download the high-resolution QR and print it to place on your tables. Every time you update the menu, the QR will automatically point to the latest version.",
+            "tip": "Tip: You can start completely free with the basic plan. No credit card is required to try the platform."
+        },
+        "locations": {
+            "what_title": "What is a location in MenuLinker?",
+            "what_body": "A location represents a physical establishment of your business: a restaurant, a bar, a café or any point of sale. Each location has its own configuration, menus, opening hours and visual identity.",
+            "create_title": "How to create a location",
+            "create_body": "Go to «Locations» in the navigation menu and click «New location». Fill in the form with the name, address, city and country. Once created, you can complete the rest of the information from the edit page.",
+            "fields_title": "Important location fields",
+            "fields_body": "In addition to the name and address, you can configure: a contact phone number so customers can call directly, opening hours for each day of the week, a main photo displayed on your public website, and brand colours to customise the appearance of your menus.",
+            "multi_title": "Managing multiple locations",
+            "multi_body": "If you have more than one establishment, you can manage them all from the same panel. Business and higher plans allow an unlimited number of locations. Each location maintains its own menus and configuration independently.",
+            "tip": "Tip: The location photo is displayed on your public website. Use a quality image (minimum 800×600 pixels) to make a great first impression."
+        },
+        "menus": {
+            "what_title": "What is a menu?",
+            "what_body": "A menu (or card) is the catalogue of dishes your customers will see when they scan the QR. Each menu belongs to a location and has a design template, a name and a set of sections with their dishes.",
+            "create_title": "Creating a menu and choosing a template",
+            "create_body": "From the location page, click «New menu». Choose a descriptive name (for example, «Lunch menu» or «Wine list») and select one of the 8 available design templates. The template can be changed at any time without losing the content.",
+            "sections_title": "Sections: how to organise your menu",
+            "sections_body": "Sections are the categories of your menu: Starters, Mains, Desserts, Drinks, etc. Create as many sections as you need and add dishes within each one. Sections are displayed in the order you define.",
+            "reorder_title": "Reordering sections",
+            "reorder_body": "Drag sections to change their order. Customers will see sections in the order you set. This lets you highlight the most important sections, such as daily specials, first.",
+            "activate_title": "Activating and deactivating a menu",
+            "activate_body": "You can have several menus per location and activate or deactivate each one as needed. Only active menus are accessible via QR. This lets you prepare seasonal menus before publishing them.",
+            "templates_title": "The 8 available templates",
+            "templates_body": "MenuLinker offers 8 design templates to suit different types of business: from elegant designs for fine dining restaurants to informal styles for bars and cafés. Each template is optimised for mobile and includes support for images, allergens and multiple languages.",
+            "tip": "Tip: You can have several menus active simultaneously per location. For example, a lunch menu, a dinner menu and a wine list, each with its own QR code."
+        },
+        "products": {
+            "add_title": "How to add a dish",
+            "add_body": "Inside a menu, select the section where you want to add the dish and click «Add dish». Enter the name and, if you wish, a description. Save the dish and you will be able to complete the remaining information from the edit screen.",
+            "fields_title": "Dish fields",
+            "fields_body": "Each dish can have: a name, detailed description, price (with local currency support), calories (kcal) and an image. The image is displayed in the digital menu and noticeably improves the customer experience.",
+            "allergens_title": "Allergens: how to assign them",
+            "allergens_body": "MenuLinker includes the 14 mandatory declaration allergens according to European regulation. In the editing of each dish, mark the allergens present. This information is displayed prominently in the menu so customers can make informed decisions.",
+            "ingredients_title": "Ingredients",
+            "ingredients_body": "You can add the list of ingredients for each dish. Ingredients are saved in a shared catalogue across all your menus, avoiding duplicates and simplifying management. When you type an ingredient name, the platform will suggest matches from your catalogue.",
+            "tags_title": "Tags",
+            "tags_body": "Add tags to your dishes to highlight important characteristics: vegetarian, vegan, gluten-free, spicy, lactose-free. These tags are displayed with icons in the digital menu, helping customers quickly identify dishes that suit their preferences.",
+            "catalog_title": "The centralised catalogue",
+            "catalog_body": "With Business and higher plans, you have a centralised catalogue of products and ingredients. From the catalogue you can manage all your dishes globally, assign them to multiple menus at once and maintain consistency across locations.",
+            "merge_title": "Merging duplicate ingredients",
+            "merge_body": "If you have duplicate ingredients (for example, «Tomato» and «tomato»), you can merge them from the ingredients catalogue. The merge automatically updates all dishes that used the duplicate ingredients.",
+            "tip": "Tip: The ingredients you enter are automatically suggested when adding new dishes. Keep names consistent to get the most out of the shared catalogue."
+        },
+        "translations": {
+            "how_title": "How multi-language works",
+            "how_body": "MenuLinker allows you to offer your menu in multiple languages. Each menu has a primary language (the language in which you enter the content) and can have additional languages. Customers will see a language selector in the digital menu.",
+            "auto_title": "Automatic translation",
+            "auto_body": "MenuLinker can generate automatic translations of your menu using artificial intelligence. The automatic translation covers the name and description of each dish, as well as section names. The process takes a few seconds per language.",
+            "add_title": "Adding a new language",
+            "add_body": "From the «Translations» section of the menu, click «Add language» and select the language you want to add. You can opt for automatic translation or enter the translations manually. Both options can be combined.",
+            "remove_title": "Removing a language",
+            "remove_body": "To remove a language from your menu, go to «Translations», locate the language and use the delete option. This action deletes all translations for that language for that menu. The primary language cannot be deleted.",
+            "selector_title": "The language selector in the public menu",
+            "selector_body": "When your menu has more than one language, a selector automatically appears at the top of the digital menu. Customers can switch language with a tap. The selected language is maintained throughout the session.",
+            "tip": "Tip: Automatic translations are a good starting point, but it is always worth reviewing them. Specific culinary terms or proper dish names may require manual adjustment."
+        },
+        "qr_codes": {
+            "generate_title": "How to generate a QR for your menu",
+            "generate_body": "From the menu page, click the «Generate QR» button. MenuLinker will automatically create a unique QR code linked to that menu. Once generated, the QR remains active indefinitely.",
+            "customize_title": "QR customisation",
+            "customize_body": "You can customise the colours of the QR to match your business visual identity. It is also possible to include your establishment logo in the centre of the QR. Customised QR codes have a better scan rate when they contrast well with the background.",
+            "download_title": "Download in high resolution",
+            "download_body": "Download the QR in high-resolution PNG format (minimum 1000×1000 pixels). This resolution is sufficient for professional printing at sizes up to A5. For larger formats, it is recommended to scale up while maintaining the white border around it.",
+            "placement_title": "Where to place the QR",
+            "placement_body": "The most effective positions are: on tables (in a stand or laminated), at the entrance door or shop window, on your official website, and on your social media profiles. The more access points, the greater adoption by customers.",
+            "tip": "Tip: The QR always points to the latest published version of your menu. You do not need to print a new QR every time you update the menu; changes are reflected automatically."
+        },
+        "team": {
+            "roles_title": "Roles: Owner and Editor",
+            "roles_body": "MenuLinker has two user roles in the tenant panel. The Owner has full access to all features, including billing, settings and user management. The Editor has limited access to menu content.",
+            "editor_title": "What can an Editor do?",
+            "editor_body": "An Editor can create and modify menus, sections and dishes. They cannot access billing settings, cannot manage other users and cannot change the global tenant configuration. This is the right role for kitchen staff or floor managers.",
+            "scope_title": "Scope by location",
+            "scope_body": "It is possible to restrict an Editor's access to one or more specific locations. This way, if you have several establishments, you can assign a different team to each one without them having access to the menus of other locations.",
+            "manage_title": "Creating and managing users",
+            "manage_body": "From the «Team» section of the panel, click «Invite user». Enter the person's email and select their role. They will receive an invitation email to create their account. From that same section you can edit roles or revoke access at any time.",
+            "plan_title": "Plan requirement",
+            "plan_body": "Team management is available from the Pro plan onwards. With the basic plan there can only be one user (the Owner). Upgrade your plan from the billing section to add collaborators."
+        },
+        "billing": {
+            "plans_title": "The available plans",
+            "plans_body": "MenuLinker offers several plans adapted to different needs: the free basic plan to get started, the Pro plan for businesses that need multiple users and advanced features, and the Business plan for chains or groups with multiple locations and a centralised catalogue. Updated details and prices are available in the plans section.",
+            "change_title": "How to change your plan",
+            "change_body": "Go to «Billing» in the panel and click «View plans». Select the plan you want to change to and confirm. If you upgrade, the change is immediate and the remaining days of the current cycle are prorated. If you downgrade, the change applies at the start of the next billing cycle.",
+            "trial_title": "Free trial period",
+            "trial_body": "All paid plans include a 14-day free trial. During that period you have full access to all the features of the chosen plan. No charge is made until the trial period ends and no card is required to get started.",
+            "cancel_title": "Cancelling or pausing your subscription",
+            "cancel_body": "You can cancel your subscription at any time from the billing section. Upon cancellation, you retain access to the paid features until the end of the billed period. There are no penalties or minimum terms.",
+            "stripe_title": "Billing and payments with Stripe",
+            "stripe_body": "Payments are processed securely through Stripe, one of the most widely used payment processors in the world. You will receive automatic invoices by email each time your subscription renews. You can view the payment history from the billing portal."
+        },
+        "website": {
+            "what_title": "Your own business website",
+            "what_body": "MenuLinker includes a public website for your business accessible from a subdomain or from your own custom domain. This page automatically displays your establishment information, your menu and your contact details.",
+            "activate_title": "How to activate it",
+            "activate_body": "During the onboarding process you are offered the option to activate your website. If you skipped it, you can activate it at any time from «Settings → Public website». Simply toggle the switch and your page will be visible immediately.",
+            "template_title": "Choosing a business type and template",
+            "template_body": "Select the business type that best describes your establishment (restaurant, bar, café, etc.) and choose a visual template. The template defines the structure and style of your public page.",
+            "content_title": "What is shown on your website",
+            "content_body": "Your public website automatically shows: your location's opening hours, your active menu with the option to view the digital menu, contact details (phone, address) and a location map.",
+            "branding_title": "Custom brand colours",
+            "branding_body": "From the location settings you can configure your brand's primary and secondary colours. These colours are applied to your public website and to the elements of your digital menu, giving a consistent and professional image."
+        }
     }
 }
