@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources\Payments\Schemas;
 
-use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\DateTimePicker;
+use Filament\Schemas\Components\Select;
+use Filament\Schemas\Components\TextInput;
 use Filament\Schemas\Schema;
 
 class PaymentForm
