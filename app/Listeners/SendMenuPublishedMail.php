@@ -52,9 +52,9 @@ class SendMenuPublishedMail
             $port = parse_url($appUrl, PHP_URL_PORT);
             $portSuffix = $port ? ':'.$port : '';
 
-            return "{$scheme}://{$domain}{$portSuffix}/m/{$menu->id}";
+            return "{$scheme}://{$domain}{$portSuffix}/menu/{$menu->id}";
         }
 
-        return route('tenant_public.tenant_menu_short', ['menu' => $menu->id]);
+        return route('tenant_public.tenant_menu_show', ['menu' => $menu->id]);
     }
 }

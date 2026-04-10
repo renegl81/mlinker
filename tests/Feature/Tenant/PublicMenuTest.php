@@ -251,7 +251,7 @@ class PublicMenuTest extends TestCase
             'is_active' => true,
         ]);
 
-        $response = $this->get(route('tenant_public.tenant_menu_short', ['menu' => $menu->id]));
+        $response = $this->get(route('tenant_public.tenant_menu_show', ['menu' => $menu->id]));
 
         $response->assertStatus(200);
         $response->assertInertia(fn ($page) => $page

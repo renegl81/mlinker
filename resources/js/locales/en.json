@@ -1,4 +1,17 @@
 {
+    "public_menu": {
+        "empty": "This menu has no dishes yet.",
+        "section_empty": "Dishes coming soon to this section.",
+        "branding": "Digital menu by MenuLinker · Build your own",
+        "kcal": "kcal",
+        "language": "Language",
+        "tags": {
+            "vegetarian": "Vegetarian",
+            "vegan": "Vegan",
+            "spicy": "Spicy",
+            "gluten_free": "Gluten free"
+        }
+    },
     "common": {
         "save": "Save",
         "cancel": "Cancel",

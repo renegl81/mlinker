@@ -40,7 +40,7 @@ class MenuController extends Controller
             $this->applyTranslations($menu, $locale);
         }
 
-        $shortUrl = route('tenant_public.tenant_menu_short', ['menu' => $menu->id]);
+        $shortUrl = route('tenant_public.tenant_menu_show', ['menu' => $menu->id]);
 
         $meta = [
             'title' => "{$menu->name} — {$menu->location->name}",
@@ -98,6 +98,8 @@ class MenuController extends Controller
             'jsonLd' => $jsonLd,
             'shareUrl' => $shortUrl,
             'locale' => $locale,
+            'hasMultilang' => $hasMultilang,
+            'availableLocales' => ['es', 'en'],
         ]);
     }
 

@@ -91,6 +91,26 @@ export interface Template{
     created_at: string;
     updated_at: string;
 }
+export interface Allergen {
+    id: number;
+    name: string;
+    code: string | null;
+}
+
+export interface Ingredient {
+    id: number;
+    name: string;
+}
+
+export interface Section {
+    id: number;
+    name: string;
+    description: string | null;
+    sort_order?: number;
+    menu_id?: number;
+    products?: Product[];
+}
+
 export interface Menu {
     id: number;
     name: string;
@@ -101,8 +121,10 @@ export interface Menu {
     template: Template | null;
     location: Location;
     products?: Product[];
+    sections?: Section[];
     location_id: number;
     tenant_id: number;
+    show_prices: boolean;
     show_currency: boolean;
     show_calories: boolean;
     is_active: boolean;
@@ -114,9 +136,13 @@ export interface Product {
     id: number;
     name: string;
     description: string | null;
-    price: number;
-    calories: number | null;
+    price: number | string;
+    calories: number | string | null;
     image_url: string | null;
+    image_path?: string | null;
+    tags?: string[] | null;
+    allergens?: Allergen[];
+    ingredients?: Ingredient[];
     tenant_id: string;
     created_at: string;
     updated_at: string;

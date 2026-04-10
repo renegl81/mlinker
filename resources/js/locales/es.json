@@ -1,4 +1,17 @@
 {
+    "public_menu": {
+        "empty": "Este menú aún no tiene platos disponibles.",
+        "section_empty": "Pronto verás platos en esta sección.",
+        "branding": "Carta digital por MenuLinker · Crea la tuya",
+        "kcal": "kcal",
+        "language": "Idioma",
+        "tags": {
+            "vegetarian": "Vegetariano",
+            "vegan": "Vegano",
+            "spicy": "Picante",
+            "gluten_free": "Sin gluten"
+        }
+    },
     "common": {
         "save": "Guardar",
         "cancel": "Cancelar",

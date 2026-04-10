@@ -92,14 +92,14 @@ class MailableTest extends TestCase
     {
         $mailable = new WelcomeMail(
             user: $this->user,
-            menuUrl: 'http://test.localhost/m/1',
+            menuUrl: 'http://test.localhost/menu/1',
             qrDownloadUrl: 'http://test.localhost/storage/qr.png',
         );
 
         $this->assertSame('¡Tu menú digital está listo!', $mailable->envelope()->subject);
         $this->assertSame('mail.welcome', $mailable->content()->view);
         $this->assertSame($this->user, $mailable->user);
-        $this->assertSame('http://test.localhost/m/1', $mailable->menuUrl);
+        $this->assertSame('http://test.localhost/menu/1', $mailable->menuUrl);
         $this->assertSame('http://test.localhost/storage/qr.png', $mailable->qrDownloadUrl);
     }
 
@@ -146,12 +146,12 @@ class MailableTest extends TestCase
         $mailable = new MenuPublishedMail(
             user: $this->user,
             menu: $menu,
-            publicUrl: 'http://test.localhost/m/1',
+            publicUrl: 'http://test.localhost/menu/1',
         );
 
         $this->assertSame($this->user, $mailable->user);
         $this->assertSame($menu->id, $mailable->menu->id);
-        $this->assertSame('http://test.localhost/m/1', $mailable->publicUrl);
+        $this->assertSame('http://test.localhost/menu/1', $mailable->publicUrl);
         $this->assertSame('mail.menu-published', $mailable->content()->view);
     }
 
@@ -168,7 +168,7 @@ class MailableTest extends TestCase
         $mailable = new MenuPublishedMail(
             user: $this->user,
             menu: $menu,
-            publicUrl: 'http://test.localhost/m/1',
+            publicUrl: 'http://test.localhost/menu/1',
         );
 
         $this->assertSame("Tu menú 'Carta de Invierno' está publicado", $mailable->envelope()->subject);

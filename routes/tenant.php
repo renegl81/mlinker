@@ -35,7 +35,6 @@ Route::middleware([
 ])->as('tenant_public.')->group(function () {
     Route::get('/', HomeController::class)->name('tenant_home');
     Route::get('/menu/{menu}', App\Http\Controllers\Tenant\MenuController::class)->name('tenant_menu_show');
-    Route::get('/m/{menu}', App\Http\Controllers\Tenant\MenuController::class)->name('tenant_menu_short');
 });
 
 // Rutas protegidas del tenant (requieren tenant obligatorio)
