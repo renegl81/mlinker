@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasTranslations;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -9,7 +10,7 @@ use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 class Ingredient extends Model
 {
-    use BelongsToTenant, HasFactory;
+    use BelongsToTenant, HasFactory, HasTranslations;
 
     /**
      * The attributes that are mass assignable.
@@ -19,6 +20,7 @@ class Ingredient extends Model
     protected $fillable = [
         'name',
         'description',
+        'translations',
     ];
 
     /**
@@ -30,6 +32,7 @@ class Ingredient extends Model
     {
         return [
             'id' => 'integer',
+            'translations' => 'array',
         ];
     }
 

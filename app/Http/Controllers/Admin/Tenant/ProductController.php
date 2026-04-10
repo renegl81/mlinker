@@ -18,6 +18,7 @@ use App\Models\Ingredient;
 use App\Models\Menu;
 use App\Models\Product;
 use App\Models\Section;
+use App\Services\IngredientCatalog;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -25,7 +26,7 @@ use Inertia\Response;
 
 class ProductController extends Controller
 {
-    public function create(Request $request, Menu $menu): Response
+    public function create(Request $request, Menu $menu, IngredientCatalog $catalog): Response
     {
         $menu->load('sections');
 
@@ -45,6 +46,7 @@ class ProductController extends Controller
             'sections' => $menu->sections,
             'allergens' => Allergen::orderBy('name')->get(),
             'ingredients' => Ingredient::orderBy('name')->get(),
+            'catalogIngredients' => $catalog->popular(),
             'defaultSectionId' => $request->query('section_id'),
         ]);
     }
@@ -64,7 +66,7 @@ class ProductController extends Controller
             ->with('success', 'Producto creado correctamente.');
     }
 
-    public function edit(Product $product): Response
+    public function edit(Product $product, IngredientCatalog $catalog): Response
     {
         $product->load(['sections.menu', 'allergens', 'ingredients']);
 
@@ -76,6 +78,7 @@ class ProductController extends Controller
             'sections' => $menu ? Section::where('menu_id', $menu->id)->orderBy('sort_order')->get() : collect(),
             'allergens' => Allergen::orderBy('name')->get(),
             'ingredients' => Ingredient::orderBy('name')->get(),
+            'catalogIngredients' => $catalog->popular(),
         ]);
     }
 

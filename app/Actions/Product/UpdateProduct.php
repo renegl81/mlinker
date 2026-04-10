@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Actions\Product;
 
-use App\Models\Ingredient;
 use App\Models\Product;
+use App\Services\IngredientCatalog;
 use App\Support\ImageHelper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class UpdateProduct
 {
+    public function __construct(private readonly IngredientCatalog $ingredientCatalog) {}
+
     public function execute(Product $product, array $data): Product
     {
         $productData = [
@@ -68,7 +70,7 @@ class UpdateProduct
             DB::table('allergen_product')->insert($rows);
         }
 
-        // Sync ingredients (by name — create if not exists)
+        // Sync ingredients (by name — reuse cross-tenant translations on import)
         DB::table('ingredient_product')->where('product_id', $product->id)->delete();
         if (! empty($data['ingredient_names'])) {
             foreach ($data['ingredient_names'] as $name) {
@@ -76,9 +78,7 @@ class UpdateProduct
                 if ($name === '') {
                     continue;
                 }
-                $ingredient = Ingredient::firstOrCreate(
-                    ['name' => $name, 'tenant_id' => tenant('id')],
-                );
+                $ingredient = $this->ingredientCatalog->findOrImport($name);
                 DB::table('ingredient_product')->insertOrIgnore([
                     'ingredient_id' => $ingredient->id,
                     'product_id' => $product->id,

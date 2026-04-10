@@ -3,7 +3,7 @@ import HeadingSmall from '@/components/HeadingSmall.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/vue3';
-import type { Allergen, Ingredient, Section } from './Form.vue';
+import type { Allergen, CatalogIngredient, Ingredient, Section } from './Form.vue';
 import ProductForm from './Form.vue';
 
 interface Menu {
@@ -17,6 +17,7 @@ interface Props {
     sections: Section[];
     allergens: Allergen[];
     ingredients: Ingredient[];
+    catalogIngredients?: CatalogIngredient[];
     defaultSectionId?: string | null;
 }
 
@@ -66,6 +67,7 @@ function submit() {
                 :sections="sections"
                 :allergens="allergens"
                 :ingredients="ingredients"
+                :catalog-ingredients="catalogIngredients"
                 :cancel-href="`/panel/menus/${menu.id}`"
                 @submit="submit"
                 @update:field="updateField"

@@ -3,21 +3,30 @@ import { router } from '@inertiajs/vue3';
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+interface LocaleMeta {
+    native: string;
+    flag: string;
+}
+
 interface Props {
     current: string;
     available?: string[];
+    localesMeta?: Record<string, LocaleMeta>;
 }
 
 const props = withDefaults(defineProps<Props>(), {
     available: () => ['es', 'en'],
+    localesMeta: () => ({
+        es: { native: 'Español', flag: '🇪🇸' },
+        en: { native: 'English', flag: '🇬🇧' },
+    }),
 });
 
 const { locale } = useI18n();
 
-const LABELS: Record<string, { native: string; flag: string }> = {
-    es: { native: 'Español', flag: '🇪🇸' },
-    en: { native: 'English', flag: '🇬🇧' },
-};
+function label(code: string): LocaleMeta {
+    return props.localesMeta[code] ?? { native: code.toUpperCase(), flag: '🏳️' };
+}
 
 const open = ref(false);
 const rootRef = ref<HTMLElement | null>(null);
@@ -74,7 +83,7 @@ onBeforeUnmount(() => {
             aria-haspopup="listbox"
             @click="toggle"
         >
-            <span class="lang-flag" aria-hidden="true">{{ LABELS[current]?.flag }}</span>
+            <span class="lang-flag" aria-hidden="true">{{ label(current).flag }}</span>
             <span class="lang-code">{{ current }}</span>
             <svg
                 class="lang-caret"
@@ -105,8 +114,8 @@ onBeforeUnmount(() => {
                     :class="{ 'is-active': code === current }"
                     @click="choose(code)"
                 >
-                    <span class="lang-flag" aria-hidden="true">{{ LABELS[code]?.flag }}</span>
-                    <span class="lang-native">{{ LABELS[code]?.native }}</span>
+                    <span class="lang-flag" aria-hidden="true">{{ label(code).flag }}</span>
+                    <span class="lang-native">{{ label(code).native }}</span>
                 </button>
             </li>
         </ul>

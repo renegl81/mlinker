@@ -1,4 +1,45 @@
 {
+    "translations": {
+        "title": "Menu translations",
+        "subtitle": "Manage translations of '{name}' across multiple languages",
+        "breadcrumb": "Translations",
+        "menus_breadcrumb": "Menus",
+        "upgrade_title": "Business plan or higher required",
+        "upgrade_body": "Multi-language translations are available on Business and Enterprise plans.",
+        "view_plans": "See plans",
+        "auto_generated_title": "Translations auto-generated",
+        "auto_generated_body": "We pre-translated the texts of this menu. Review and edit them before saving.",
+        "original": "Original",
+        "add_language": "Add language",
+        "remove_language_confirm": "Remove all translations for \"{name}\"? This cannot be undone.",
+        "remove_language_title": "Remove {name}",
+        "progress_in": "Progress in {language}",
+        "progress_fields": "{done} / {total} fields",
+        "search_placeholder": "Search section or dish...",
+        "expand": "Expand",
+        "collapse": "Collapse",
+        "copy_originals": "Copy originals",
+        "copy_originals_confirm": "Copy all original texts as translations of this language? This overwrites anything you've written.",
+        "copy_from_source": "Copy from source",
+        "menu_label": "Menu",
+        "menu_section_title": "General info",
+        "section_label": "Section",
+        "product_label": "Dish",
+        "field_name": "Name",
+        "field_description": "Description",
+        "name_placeholder": "Translated name",
+        "description_placeholder": "Translated description",
+        "count_dishes": "{count} dish | {count} dishes",
+        "pending_fields": "{count} pending",
+        "complete": "Complete",
+        "empty_menu": "This menu has no sections yet.",
+        "no_matching_products": "No dishes match the search.",
+        "unsaved_changes": "Unsaved changes",
+        "all_saved": "All saved",
+        "save": "Save",
+        "ingredients_label": "Ingredients",
+        "ingredient_name": "Ingredient name"
+    },
     "public_menu": {
         "empty": "This menu has no dishes yet.",
         "section_empty": "Dishes coming soon to this section.",
@@ -10,7 +51,9 @@
             "vegan": "Vegan",
             "spicy": "Spicy",
             "gluten_free": "Gluten free"
-        }
+        },
+        "show_ingredients": "show ingredients",
+        "hide_ingredients": "hide ingredients"
     },
     "common": {
         "save": "Save",
@@ -91,16 +134,5 @@
         "es": "Español",
         "en": "English",
         "select": "Language"
-    },
-    "translations": {
-        "title": "Menu translations",
-        "description": "Manage translations for your menu sections and products.",
-        "upgrade_required": "Multi-language translations require a Business plan or higher.",
-        "sections": "Sections",
-        "products": "Products",
-        "original": "Original (ES)",
-        "translation": "Translation (EN)",
-        "save_all": "Save all translations",
-        "saved": "Translations saved successfully."
     }
 }

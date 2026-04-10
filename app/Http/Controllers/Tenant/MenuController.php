@@ -31,12 +31,22 @@ class MenuController extends Controller
         $showBranding = $plan?->show_branding ?? true;
         $hasMultilang = $plan?->has_multilang ?? false;
 
-        // Detect requested locale
-        $requestedLocale = request()->query('lang', 'es');
-        $locale = in_array($requestedLocale, ['es', 'en']) ? $requestedLocale : 'es';
+        $sourceLocale = config('menulinker.source_locale', 'es');
+        $supportedCodes = array_keys(config('menulinker.supported_locales', []));
 
-        // Apply translations if plan allows multilang and locale differs from default
-        if ($hasMultilang && $locale !== 'es') {
+        // Locales actually available for this menu = source + those present in menu.translations
+        $availableLocales = [$sourceLocale];
+        foreach (array_keys($menu->translations ?? []) as $code) {
+            if ($code !== $sourceLocale && in_array($code, $supportedCodes, true) && ! in_array($code, $availableLocales, true)) {
+                $availableLocales[] = $code;
+            }
+        }
+
+        // Detect requested locale, restricted to what's actually available
+        $requestedLocale = (string) request()->query('lang', $sourceLocale);
+        $locale = in_array($requestedLocale, $availableLocales, true) ? $requestedLocale : $sourceLocale;
+
+        if ($hasMultilang && $locale !== $sourceLocale) {
             $this->applyTranslations($menu, $locale);
         }
 
@@ -99,7 +109,8 @@ class MenuController extends Controller
             'shareUrl' => $shortUrl,
             'locale' => $locale,
             'hasMultilang' => $hasMultilang,
-            'availableLocales' => ['es', 'en'],
+            'availableLocales' => $availableLocales,
+            'supportedLocales' => config('menulinker.supported_locales'),
         ]);
     }
 
@@ -118,6 +129,10 @@ class MenuController extends Controller
             foreach ($section->products as $product) {
                 $product->name = $product->getTranslated('name', $locale);
                 $product->description = $product->getTranslated('description', $locale);
+
+                foreach ($product->ingredients as $ingredient) {
+                    $ingredient->name = $ingredient->getTranslated('name', $locale);
+                }
             }
         }
     }

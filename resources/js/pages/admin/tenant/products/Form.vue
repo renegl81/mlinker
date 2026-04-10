@@ -11,7 +11,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
-import { Image as ImageIcon, Plus, Save, Trash2, X } from 'lucide-vue-next';
+import { Image as ImageIcon, Plus, Save, Sparkles, Trash2, Users, X } from 'lucide-vue-next';
 import {
     SelectContent,
     SelectIcon,
@@ -38,6 +38,12 @@ export interface Ingredient {
     name: string;
 }
 
+export interface CatalogIngredient {
+    name: string;
+    has_translations: boolean;
+    popularity: number;
+}
+
 export interface Section {
     id: number;
     name: string;
@@ -62,6 +68,7 @@ interface Props {
     sections: Section[];
     allergens: Allergen[];
     ingredients: Ingredient[];
+    catalogIngredients?: CatalogIngredient[];
     cancelHref: string;
     isEdit?: boolean;
     showDeleteButton?: boolean;
@@ -70,6 +77,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
     isEdit: false,
     showDeleteButton: false,
+    catalogIngredients: () => [],
 });
 
 const emit = defineEmits<{
@@ -165,13 +173,37 @@ function toggleTag(key: string) {
     emit('update:field', 'tags', current);
 }
 
-// Ingredient suggestions from existing ingredients
-const ingredientSuggestions = computed(() => {
+// Ingredient suggestions: merge own list + catalog (cross-tenant popular).
+// Own ingredients come first, catalog entries marked with `shared: true` so
+// the UI can show a visual hint (icon / translated badge).
+interface SuggestionItem {
+    name: string;
+    shared: boolean;
+    hasTranslations: boolean;
+}
+
+const ingredientSuggestions = computed<SuggestionItem[]>(() => {
     const input = ingredientInput.value.trim().toLowerCase();
     if (!input) return [];
-    return props.ingredients
-        .filter((i) => i.name.toLowerCase().includes(input))
-        .slice(0, 5);
+
+    const alreadyAdded = new Set(props.form.ingredient_names.map((n) => n.toLowerCase()));
+
+    const own: SuggestionItem[] = props.ingredients
+        .filter((i) => i.name.toLowerCase().includes(input) && !alreadyAdded.has(i.name.toLowerCase()))
+        .map((i) => ({ name: i.name, shared: false, hasTranslations: false }));
+
+    const ownNames = new Set(own.map((o) => o.name.toLowerCase()));
+
+    const shared: SuggestionItem[] = props.catalogIngredients
+        .filter(
+            (c) =>
+                c.name.toLowerCase().includes(input) &&
+                !ownNames.has(c.name.toLowerCase()) &&
+                !alreadyAdded.has(c.name.toLowerCase()),
+        )
+        .map((c) => ({ name: c.name, shared: true, hasTranslations: c.has_translations }));
+
+    return [...own, ...shared].slice(0, 8);
 });
 
 function selectSuggestion(name: string) {
@@ -420,16 +452,29 @@ function selectSuggestion(name: string) {
                                 <!-- Suggestions -->
                                 <div
                                     v-if="ingredientSuggestions.length > 0"
-                                    class="absolute top-full z-10 mt-1 w-full rounded-md border bg-popover shadow-md"
+                                    class="absolute top-full z-10 mt-1 w-full rounded-md border bg-popover text-popover-foreground shadow-md"
                                 >
                                     <button
                                         v-for="suggestion in ingredientSuggestions"
-                                        :key="suggestion.id"
+                                        :key="`${suggestion.shared ? 'c' : 'o'}:${suggestion.name}`"
                                         type="button"
-                                        class="flex w-full items-center px-3 py-2 text-sm hover:bg-accent"
+                                        class="flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-accent"
                                         @click="selectSuggestion(suggestion.name)"
                                     >
-                                        {{ suggestion.name }}
+                                        <span class="flex-1 text-left">{{ suggestion.name }}</span>
+                                        <span
+                                            v-if="suggestion.shared"
+                                            class="flex items-center gap-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium text-primary"
+                                            title="Disponible en el catálogo compartido — se importará como copia privada"
+                                        >
+                                            <Users class="h-2.5 w-2.5" />
+                                            Catálogo
+                                        </span>
+                                        <Sparkles
+                                            v-if="suggestion.hasTranslations"
+                                            class="h-3 w-3 text-emerald-500"
+                                            title="Incluye traducciones"
+                                        />
                                     </button>
                                 </div>
                             </div>

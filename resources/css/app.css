@@ -192,6 +192,55 @@
     --sidebar: hsl(240 5.9% 10%);
 }
 
+/* ============================================================
+ * Panel form utilities
+ * Unified styling for form controls across the user panel.
+ * Apply to shadcn Input/Textarea/Select (or native inputs) to
+ * guarantee readable text + background in both light and dark
+ * modes, regardless of the forced body colors.
+ * ============================================================ */
+@utility panel-input {
+    background-color: var(--color-card);
+    color: var(--color-card-foreground);
+    border-color: var(--color-input);
+}
+@utility panel-input {
+    &::placeholder {
+        color: var(--color-muted-foreground);
+    }
+    &:focus-visible {
+        border-color: var(--color-ring);
+        box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-ring) 50%, transparent);
+    }
+}
+
+@utility panel-input-readonly {
+    background-color: color-mix(in oklch, var(--color-muted) 40%, transparent);
+    color: var(--color-card-foreground);
+    border-color: var(--color-input);
+}
+@utility panel-input-readonly {
+    &:disabled {
+        opacity: 1 !important;
+        cursor: default;
+        color: var(--color-card-foreground);
+    }
+}
+
+@utility panel-label {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 500;
+    color: var(--color-card-foreground);
+}
+
+@utility panel-label-muted {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 500;
+    color: color-mix(in oklch, var(--color-card-foreground) 70%, transparent);
+}
+
 @layer base {
     * {
         @apply border-border outline-ring/50;

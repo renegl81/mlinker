@@ -1,4 +1,45 @@
 {
+    "translations": {
+        "title": "Traducciones del menú",
+        "subtitle": "Gestiona las traducciones de '{name}' en varios idiomas",
+        "breadcrumb": "Traducciones",
+        "menus_breadcrumb": "Menús",
+        "upgrade_title": "Plan Business o superior requerido",
+        "upgrade_body": "Las traducciones multiidioma están disponibles en los planes Business y Enterprise.",
+        "view_plans": "Ver planes",
+        "auto_generated_title": "Traducciones generadas automáticamente",
+        "auto_generated_body": "Hemos pre-traducido los textos de este menú. Revísalos y edítalos si es necesario antes de guardar.",
+        "original": "Original",
+        "add_language": "Añadir idioma",
+        "remove_language_confirm": "¿Eliminar todas las traducciones de \"{name}\"? Esta acción no se puede deshacer.",
+        "remove_language_title": "Eliminar {name}",
+        "progress_in": "Progreso en {language}",
+        "progress_fields": "{done} / {total} campos",
+        "search_placeholder": "Buscar sección o plato...",
+        "expand": "Expandir",
+        "collapse": "Colapsar",
+        "copy_originals": "Copiar originales",
+        "copy_originals_confirm": "¿Copiar todos los textos originales como traducciones de este idioma? Sobrescribe lo que tengas escrito.",
+        "copy_from_source": "Copiar desde original",
+        "menu_label": "Menú",
+        "menu_section_title": "Información general",
+        "section_label": "Sección",
+        "product_label": "Plato",
+        "field_name": "Nombre",
+        "field_description": "Descripción",
+        "name_placeholder": "Traducción del nombre",
+        "description_placeholder": "Traducción de la descripción",
+        "count_dishes": "{count} plato | {count} platos",
+        "pending_fields": "{count} por traducir",
+        "complete": "Completo",
+        "empty_menu": "Este menú no tiene secciones todavía.",
+        "no_matching_products": "Ningún plato coincide con la búsqueda.",
+        "unsaved_changes": "Cambios sin guardar",
+        "all_saved": "Todo guardado",
+        "save": "Guardar",
+        "ingredients_label": "Ingredientes",
+        "ingredient_name": "Nombre del ingrediente"
+    },
     "public_menu": {
         "empty": "Este menú aún no tiene platos disponibles.",
         "section_empty": "Pronto verás platos en esta sección.",
@@ -10,7 +51,9 @@
             "vegan": "Vegano",
             "spicy": "Picante",
             "gluten_free": "Sin gluten"
-        }
+        },
+        "show_ingredients": "ver ingredientes",
+        "hide_ingredients": "ocultar ingredientes"
     },
     "common": {
         "save": "Guardar",
@@ -91,16 +134,5 @@
         "es": "Español",
         "en": "English",
         "select": "Idioma"
-    },
-    "translations": {
-        "title": "Traducciones del menú",
-        "description": "Gestiona las traducciones de las secciones y productos de tu menú.",
-        "upgrade_required": "Las traducciones multiidioma requieren un plan Business o superior.",
-        "sections": "Secciones",
-        "products": "Productos",
-        "original": "Original (ES)",
-        "translation": "Traducción (EN)",
-        "save_all": "Guardar todas las traducciones",
-        "saved": "Traducciones guardadas correctamente."
     }
 }

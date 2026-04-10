@@ -3,7 +3,7 @@ import HeadingSmall from '@/components/HeadingSmall.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem } from '@/types';
 import { Head, useForm, router } from '@inertiajs/vue3';
-import type { Allergen, Ingredient, Section } from './Form.vue';
+import type { Allergen, CatalogIngredient, Ingredient, Section } from './Form.vue';
 import ProductForm from './Form.vue';
 
 interface ProductFull {
@@ -32,6 +32,7 @@ interface Props {
     sections: Section[];
     allergens: Allergen[];
     ingredients: Ingredient[];
+    catalogIngredients?: CatalogIngredient[];
 }
 
 const props = defineProps<Props>();
@@ -88,6 +89,7 @@ function deleteProduct() {
                 :sections="sections"
                 :allergens="allergens"
                 :ingredients="ingredients"
+                :catalog-ingredients="catalogIngredients"
                 :cancel-href="`/panel/menus/${menu?.id ?? ''}`"
                 :is-edit="true"
                 :show-delete-button="true"

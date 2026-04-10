@@ -92,6 +92,8 @@ Route::middleware([
                 // Traducciones de menú
                 Route::get('menus/{menu}/translations', [TranslationController::class, 'show'])->name('menus.translations.show');
                 Route::put('menus/{menu}/translations', [TranslationController::class, 'update'])->name('menus.translations.update');
+                Route::post('menus/{menu}/translations/add-language', [TranslationController::class, 'addLanguage'])->name('menus.translations.add-language');
+                Route::delete('menus/{menu}/translations/language', [TranslationController::class, 'removeLanguage'])->name('menus.translations.remove-language');
 
                 // Billing
                 Route::prefix('billing')->as('billing.')->group(function () {

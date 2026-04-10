@@ -26,6 +26,7 @@ class Product extends Model
         'calories',
         'tags',
         'image_url',
+        'translations',
     ];
 
     protected $appends = [

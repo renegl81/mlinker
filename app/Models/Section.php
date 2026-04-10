@@ -25,6 +25,7 @@ class Section extends Model
         'menu_id',
         'sort_order',
         'image_url',
+        'translations',
     ];
 
     /**

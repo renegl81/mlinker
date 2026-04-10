@@ -39,6 +39,7 @@ class Menu extends Model
         'template_id',
         'is_active',
         'image_url',
+        'translations',
         'show_prices',
         'show_currency',
         'show_calories',

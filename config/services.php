@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    // MyMemory free translation API (https://mymemory.translated.net/doc/spec.php).
+    // No key required. Optional email raises the anonymous limit from 5k to 50k chars/day.
+    'mymemory' => [
+        'email' => env('MYMEMORY_EMAIL'),
+    ],
+
 ];

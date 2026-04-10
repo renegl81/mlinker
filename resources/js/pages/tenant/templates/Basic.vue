@@ -22,6 +22,11 @@ interface JsonLd {
     [key: string]: unknown;
 }
 
+interface LocaleMeta {
+    native: string;
+    flag: string;
+}
+
 interface Props {
     menu: Menu;
     showBranding: boolean;
@@ -32,6 +37,7 @@ interface Props {
     locale: string;
     hasMultilang: boolean;
     availableLocales: string[];
+    supportedLocales: Record<string, LocaleMeta>;
 }
 
 const props = defineProps<Props>();
@@ -49,6 +55,17 @@ const sections = computed(() => {
 });
 
 const activeAnchor = ref<string | null>(null);
+const expandedProducts = ref<Set<number>>(new Set());
+
+function toggleIngredients(productId: number) {
+    const next = new Set(expandedProducts.value);
+    if (next.has(productId)) {
+        next.delete(productId);
+    } else {
+        next.add(productId);
+    }
+    expandedProducts.value = next;
+}
 
 function scrollToSection(anchor: string) {
     const el = document.getElementById(anchor);
@@ -97,11 +114,12 @@ onMounted(() => {
             <rect width="100%" height="100%" filter="url(#menu-grain)" />
         </svg>
 
-        <!-- Top bar: language switcher (only if plan has multilang) -->
-        <div v-if="hasMultilang" class="topbar">
+        <!-- Top bar: language switcher (only if plan has multilang AND >1 locale available) -->
+        <div v-if="hasMultilang && availableLocales.length > 1" class="topbar">
             <MenuLanguageSwitcher
                 :current="locale"
                 :available="availableLocales"
+                :locales-meta="supportedLocales"
             />
         </div>
 
@@ -126,8 +144,8 @@ onMounted(() => {
             </div>
         </header>
 
-        <!-- Nav sticky de secciones -->
-        <nav v-if="sections.length > 0" class="section-nav">
+        <!-- Nav sticky de secciones (solo si hay más de una) -->
+        <nav v-if="sections.length > 1" class="section-nav">
             <div class="section-nav-inner">
                 <button
                     v-for="s in sections"
@@ -181,16 +199,50 @@ onMounted(() => {
                                         · {{ product.calories }} {{ t('public_menu.kcal') }}
                                     </span>
                                 </h3>
-                                <span class="product-dots" aria-hidden="true" />
-                                <span
-                                    v-if="menu.show_prices && product.price"
-                                    class="product-price"
-                                >{{ formatPrice(product.price) }}</span>
+                                <template v-if="menu.show_prices && product.price">
+                                    <span class="product-dots" aria-hidden="true" />
+                                    <span class="product-price">{{ formatPrice(product.price) }}</span>
+                                </template>
                             </div>
 
                             <p v-if="product.description" class="product-desc">
                                 {{ product.description }}
                             </p>
+
+                            <div
+                                v-if="product.ingredients && product.ingredients.length > 0"
+                                class="product-ingredients-wrap"
+                            >
+                                <button
+                                    type="button"
+                                    class="product-ingredients-toggle"
+                                    :aria-expanded="expandedProducts.has(product.id)"
+                                    :aria-controls="`ingredients-${product.id}`"
+                                    @click="toggleIngredients(product.id)"
+                                >
+                                    <span class="tog-line" aria-hidden="true" />
+                                    <span class="tog-label">
+                                        {{ expandedProducts.has(product.id) ? t('public_menu.hide_ingredients') : t('public_menu.show_ingredients') }}
+                                    </span>
+                                    <svg
+                                        class="tog-caret"
+                                        :class="{ 'is-open': expandedProducts.has(product.id) }"
+                                        viewBox="0 0 10 10"
+                                        width="9"
+                                        height="9"
+                                        aria-hidden="true"
+                                    >
+                                        <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </button>
+                                <p
+                                    v-show="expandedProducts.has(product.id)"
+                                    :id="`ingredients-${product.id}`"
+                                    class="product-ingredients"
+                                >
+                                    {{ product.ingredients.map((i) => i.name).join(', ') }}
+                                </p>
+                            </div>
 
                             <div
                                 v-if="tagsFor(product.tags).length > 0 || (product.allergens && product.allergens.length > 0)"
@@ -347,16 +399,6 @@ onMounted(() => {
     );
 }
 
-.hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--menu-bg);
-    z-index: 0;
-    display: var(--hero-bg-fallback, block);
-}
-
-.hero-image + .hero-inner,
 .hero-image ~ .hero-inner {
     color: oklch(0.99 0 0);
 }
@@ -433,6 +475,14 @@ onMounted(() => {
     padding-bottom: clamp(2rem, 6vw, 4rem);
 }
 
+.hero:not(:has(.hero-image)) .hero-inner {
+    color: var(--menu-ink);
+}
+
+.hero:not(:has(.hero-image)) .hero-kicker {
+    color: var(--menu-ink-soft);
+}
+
 /* ============ SECTION NAV ============ */
 .section-nav {
     position: sticky;
@@ -474,6 +524,12 @@ onMounted(() => {
 
 .section-chip:hover { color: var(--menu-ink); }
 
+.section-chip:focus-visible {
+    outline: 2px solid var(--menu-accent);
+    outline-offset: 2px;
+    color: var(--menu-ink);
+}
+
 .section-chip.is-active {
     color: var(--menu-accent);
     background: var(--menu-accent-soft);
@@ -506,9 +562,20 @@ onMounted(() => {
     display: flex;
     align-items: flex-start;
     gap: 1rem;
-    margin-bottom: 2rem;
-    padding-bottom: 1.25rem;
+    margin-bottom: 2.25rem;
+    padding-bottom: 1.5rem;
     border-bottom: 1px solid var(--menu-rule);
+    position: relative;
+}
+
+.section-head::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 48px;
+    height: 2px;
+    background: var(--menu-accent);
 }
 
 .section-numeral {
@@ -568,7 +635,8 @@ onMounted(() => {
     gap: 1rem;
     align-items: flex-start;
     animation: fade-up 600ms cubic-bezier(.2,.65,.2,1) both;
-    animation-delay: calc(var(--j, 0) * 35ms + 240ms);
+    /* Cap the stagger so long menus don't animate for seconds */
+    animation-delay: calc(min(var(--j, 0), 10) * 35ms + 240ms);
 }
 
 .product-main {
@@ -632,6 +700,80 @@ onMounted(() => {
     max-width: 56ch;
 }
 
+.product-ingredients-wrap {
+    margin-top: 0.65rem;
+    max-width: 58ch;
+}
+
+.product-ingredients-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: var(--menu-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.78rem;
+    color: var(--menu-ink-soft);
+    letter-spacing: 0.01em;
+    transition: color 200ms;
+    font-variation-settings: 'opsz' 14;
+}
+
+.product-ingredients-toggle:hover,
+.product-ingredients-toggle:focus-visible {
+    color: var(--menu-accent);
+    outline: none;
+}
+
+.product-ingredients-toggle .tog-line {
+    display: inline-block;
+    width: 16px;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.55;
+}
+
+.product-ingredients-toggle .tog-caret {
+    flex-shrink: 0;
+    opacity: 0.7;
+    transition: transform 240ms cubic-bezier(.2,.65,.2,1);
+}
+
+.product-ingredients-toggle .tog-caret.is-open {
+    transform: rotate(180deg);
+}
+
+.product-ingredients {
+    margin: 0.55rem 0 0;
+    padding: 0.65rem 0.85rem 0.7rem;
+    border-left: 2px solid var(--menu-accent);
+    background: color-mix(in oklch, var(--menu-accent) 7%, transparent);
+    border-radius: 0 6px 6px 0;
+    font-family: var(--menu-serif);
+    font-style: italic;
+    font-weight: 300;
+    font-size: 0.83rem;
+    line-height: 1.55;
+    color: var(--menu-ink);
+    font-variation-settings: 'opsz' 14;
+    animation: ingredients-reveal 320ms cubic-bezier(.2,.65,.2,1);
+}
+
+@keyframes ingredients-reveal {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .product-meta {
     display: flex;
     flex-wrap: wrap;
@@ -662,28 +804,34 @@ onMounted(() => {
 .product-allergens {
     display: flex;
     align-items: center;
-    gap: 0.15rem;
+    gap: 0.1rem;
     flex-wrap: wrap;
-    padding-left: 0.25rem;
-    margin-left: 0.25rem;
+    padding-left: 0.4rem;
+    margin-left: 0.15rem;
     border-left: 1px solid var(--menu-rule);
-    opacity: 0.85;
+    opacity: 0.78;
+    font-size: 0.78em;
 }
 
 .product-image {
     flex: none;
-    width: 76px;
-    height: 76px;
+    width: 96px;
+    height: 96px;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 10px;
     filter: saturate(0.95);
     box-shadow:
-        0 1px 2px oklch(0 0 0 / 0.06),
-        0 8px 24px -8px oklch(0 0 0 / 0.18);
+        0 1px 2px oklch(0 0 0 / 0.08),
+        0 18px 36px -14px oklch(0 0 0 / 0.28);
+    transition: transform 400ms cubic-bezier(.2,.65,.2,1);
+}
+
+.product:hover .product-image {
+    transform: translateY(-2px) scale(1.02);
 }
 
 @media (min-width: 640px) {
-    .product-image { width: 92px; height: 92px; }
+    .product-image { width: 118px; height: 118px; }
 }
 
 /* ============ FOOT ============ */
