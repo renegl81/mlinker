@@ -1,4 +1,77 @@
 {
+    "auth": {
+        "brand": {
+            "badge": "Para hostalería",
+            "headline": "A forma máis sinxela de ter a túa carta dixital e a túa web nun só lugar.",
+            "subline": "Únete a centos de bares, cafetarías e restaurantes que xa dixitalizaron a súa carta con MenuLinker."
+        },
+        "login": {
+            "title": "Inicia sesión na túa conta",
+            "description": "Introduce o correo e contrasinal para acceder",
+            "head": "Iniciar sesión",
+            "email_label": "Correo electrónico",
+            "email_placeholder": "correo{'@'}exemplo.com",
+            "password_label": "Contrasinal",
+            "password_placeholder": "Contrasinal",
+            "forgot": "Esqueciches o contrasinal?",
+            "remember": "Lémbrame",
+            "submit": "Entrar",
+            "no_account": "Aínda non tes conta?",
+            "sign_up": "Rexístrate"
+        },
+        "forgot": {
+            "title": "Esqueciches o contrasinal?",
+            "description": "Introduce o correo e enviarémosche unha ligazón para restablecelo",
+            "head": "Recuperar contrasinal",
+            "email_label": "Correo electrónico",
+            "email_placeholder": "correo{'@'}exemplo.com",
+            "submit": "Enviar ligazón",
+            "back_prefix": "Lembraches o contrasinal?",
+            "back_link": "Volver ao inicio de sesión"
+        },
+        "reset": {
+            "title": "Establece un novo contrasinal",
+            "description": "Escolle un contrasinal seguro para a túa conta",
+            "head": "Restablecer contrasinal",
+            "email_label": "Correo electrónico",
+            "password_label": "Novo contrasinal",
+            "password_placeholder": "Novo contrasinal",
+            "password_confirmation_label": "Confirmar contrasinal",
+            "password_confirmation_placeholder": "Confirmar contrasinal",
+            "submit": "Restablecer contrasinal"
+        },
+        "verify": {
+            "title": "Verifica o teu correo",
+            "description": "Enviamos unha ligazón de verificación ao teu correo. Fai clic na ligazón para activar a túa conta.",
+            "head": "Verificación de correo",
+            "sent": "Enviamos unha nova ligazón de verificación ao correo que proporcionaches durante o rexistro.",
+            "resend": "Reenviar correo de verificación",
+            "logout": "Pechar sesión"
+        },
+        "confirm": {
+            "title": "Confirma o teu contrasinal",
+            "description": "Esta é unha área segura. Confirma o teu contrasinal para continuar.",
+            "head": "Confirmar contrasinal",
+            "password_label": "Contrasinal",
+            "submit": "Confirmar contrasinal"
+        },
+        "two_factor": {
+            "head": "Autenticación en dous pasos",
+            "code_title": "Código de autenticación",
+            "code_description": "Introduce o código xerado pola túa aplicación de autenticación.",
+            "recovery_title": "Código de recuperación",
+            "recovery_description": "Confirma o acceso á túa conta introducindo un dos teus códigos de recuperación de emerxencia.",
+            "use_recovery": "usar un código de recuperación",
+            "use_code": "usar un código de autenticación",
+            "or_you_can": "ou podes",
+            "recovery_placeholder": "Introduce o código de recuperación",
+            "submit": "Continuar"
+        },
+        "activation_sent": {
+            "title": "Revisa o teu correo",
+            "description": "Enviámosche unha ligazón de activación"
+        }
+    },
     "catalog": {
         "title": "Catálogo",
         "products": {

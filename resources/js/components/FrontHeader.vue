@@ -94,11 +94,7 @@ function switchLocale(code: string) {
                     <SheetContent side="left" class="w-[280px] p-6 bg-white border-r border-slate-200">
                         <!-- Mobile logo -->
                         <Link href="/" class="flex items-center gap-2.5 mb-8">
-                            <div class="w-8 h-8 rounded-lg bg-teal-500 flex items-center justify-center flex-shrink-0">
-                                <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                                </svg>
-                            </div>
+                            <img src="/images/logo.png" alt="MenuLinker" class="h-9 w-9 object-contain flex-shrink-0" />
                             <span class="font-bold text-slate-900 text-lg">MenuLinker</span>
                         </Link>
                         <nav class="space-y-1">
@@ -152,11 +148,7 @@ function switchLocale(code: string) {
 
             <!-- Logo -->
             <Link href="/" class="flex items-center gap-2.5 group">
-                <div class="w-8 h-8 rounded-lg bg-teal-500 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                    </svg>
-                </div>
+                <img src="/images/logo.png" alt="MenuLinker" class="h-9 w-9 object-contain flex-shrink-0" />
                 <span class="font-bold text-slate-900 text-lg tracking-tight">MenuLinker</span>
             </Link>
 

@@ -1,4 +1,77 @@
 {
+    "auth": {
+        "brand": {
+            "badge": "Para hostelería",
+            "headline": "La forma más simple de tener tu carta digital y tu web en un solo lugar.",
+            "subline": "Únete a cientos de bares, cafeterías y restaurantes que ya digitalizaron su carta con MenuLinker."
+        },
+        "login": {
+            "title": "Inicia sesión en tu cuenta",
+            "description": "Introduce tu correo y contraseña para acceder",
+            "head": "Iniciar sesión",
+            "email_label": "Correo electrónico",
+            "email_placeholder": "correo{'@'}ejemplo.com",
+            "password_label": "Contraseña",
+            "password_placeholder": "Contraseña",
+            "forgot": "¿Olvidaste tu contraseña?",
+            "remember": "Recuérdame",
+            "submit": "Entrar",
+            "no_account": "¿Aún no tienes cuenta?",
+            "sign_up": "Regístrate"
+        },
+        "forgot": {
+            "title": "¿Olvidaste tu contraseña?",
+            "description": "Introduce tu correo y te enviaremos un enlace para restablecerla",
+            "head": "Recuperar contraseña",
+            "email_label": "Correo electrónico",
+            "email_placeholder": "correo{'@'}ejemplo.com",
+            "submit": "Enviar enlace",
+            "back_prefix": "¿Recordaste la contraseña?",
+            "back_link": "Volver al inicio de sesión"
+        },
+        "reset": {
+            "title": "Establece una nueva contraseña",
+            "description": "Elige una contraseña segura para tu cuenta",
+            "head": "Restablecer contraseña",
+            "email_label": "Correo electrónico",
+            "password_label": "Nueva contraseña",
+            "password_placeholder": "Nueva contraseña",
+            "password_confirmation_label": "Confirmar contraseña",
+            "password_confirmation_placeholder": "Confirmar contraseña",
+            "submit": "Restablecer contraseña"
+        },
+        "verify": {
+            "title": "Verifica tu correo",
+            "description": "Hemos enviado un enlace de verificación a tu correo. Haz clic en el enlace para activar tu cuenta.",
+            "head": "Verificación de correo",
+            "sent": "Te hemos enviado un nuevo enlace de verificación al correo proporcionado durante el registro.",
+            "resend": "Reenviar correo de verificación",
+            "logout": "Cerrar sesión"
+        },
+        "confirm": {
+            "title": "Confirma tu contraseña",
+            "description": "Esta es un área segura. Por favor, confirma tu contraseña para continuar.",
+            "head": "Confirmar contraseña",
+            "password_label": "Contraseña",
+            "submit": "Confirmar contraseña"
+        },
+        "two_factor": {
+            "head": "Autenticación en dos pasos",
+            "code_title": "Código de autenticación",
+            "code_description": "Introduce el código generado por tu aplicación de autenticación.",
+            "recovery_title": "Código de recuperación",
+            "recovery_description": "Confirma el acceso a tu cuenta introduciendo uno de tus códigos de recuperación de emergencia.",
+            "use_recovery": "usar un código de recuperación",
+            "use_code": "usar un código de autenticación",
+            "or_you_can": "o puedes",
+            "recovery_placeholder": "Introduce el código de recuperación",
+            "submit": "Continuar"
+        },
+        "activation_sent": {
+            "title": "Revisa tu correo",
+            "description": "Te hemos enviado un enlace de activación"
+        }
+    },
     "catalog": {
         "title": "Catálogo",
         "products": {

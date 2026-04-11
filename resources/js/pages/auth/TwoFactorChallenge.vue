@@ -11,6 +11,9 @@ import AuthLayout from '@/layouts/AuthLayout.vue';
 import { store } from '@/routes/two-factor/login';
 import { Form, Head } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 interface AuthConfigContent {
     title: string;
@@ -18,25 +21,23 @@ interface AuthConfigContent {
     toggleText: string;
 }
 
+const showRecoveryInput = ref<boolean>(false);
+
 const authConfigContent = computed<AuthConfigContent>(() => {
     if (showRecoveryInput.value) {
         return {
-            title: 'Recovery Code',
-            description:
-                'Please confirm access to your account by entering one of your emergency recovery codes.',
-            toggleText: 'login using an authentication code',
+            title: t('auth.two_factor.recovery_title'),
+            description: t('auth.two_factor.recovery_description'),
+            toggleText: t('auth.two_factor.use_code'),
         };
     }
 
     return {
-        title: 'Authentication Code',
-        description:
-            'Enter the authentication code provided by your authenticator application.',
-        toggleText: 'login using a recovery code',
+        title: t('auth.two_factor.code_title'),
+        description: t('auth.two_factor.code_description'),
+        toggleText: t('auth.two_factor.use_recovery'),
     };
 });
-
-const showRecoveryInput = ref<boolean>(false);
 
 const toggleRecoveryMode = (clearErrors: () => void): void => {
     showRecoveryInput.value = !showRecoveryInput.value;
@@ -53,13 +54,13 @@ const codeValue = computed<string>(() => code.value.join(''));
         :title="authConfigContent.title"
         :description="authConfigContent.description"
     >
-        <Head title="Two-Factor Authentication" />
+        <Head :title="t('auth.two_factor.head')" />
 
         <div class="space-y-6">
             <template v-if="!showRecoveryInput">
                 <Form
                     v-bind="store.form()"
-                    class="space-y-4"
+                    class="space-y-5"
                     reset-on-error
                     @error="code = []"
                     #default="{ errors, processing, clearErrors }"
@@ -89,14 +90,18 @@ const codeValue = computed<string>(() => code.value.join(''));
                         </div>
                         <InputError :message="errors.code" />
                     </div>
-                    <Button type="submit" class="w-full" :disabled="processing"
-                        >Continue</Button
+                    <Button
+                        type="submit"
+                        class="h-11 w-full rounded-full bg-teal-500 text-white shadow-md shadow-teal-500/20 hover:bg-teal-600"
+                        :disabled="processing"
                     >
-                    <div class="text-center text-sm text-muted-foreground">
-                        <span>or you can </span>
+                        {{ t('auth.two_factor.submit') }}
+                    </Button>
+                    <div class="text-center text-sm text-slate-500">
+                        <span>{{ t('auth.two_factor.or_you_can') }} </span>
                         <button
                             type="button"
-                            class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
+                            class="font-medium text-teal-600 underline-offset-4 hover:text-teal-700 hover:underline"
                             @click="() => toggleRecoveryMode(clearErrors)"
                         >
                             {{ authConfigContent.toggleText }}
@@ -108,27 +113,31 @@ const codeValue = computed<string>(() => code.value.join(''));
             <template v-else>
                 <Form
                     v-bind="store.form()"
-                    class="space-y-4"
+                    class="space-y-5"
                     reset-on-error
                     #default="{ errors, processing, clearErrors }"
                 >
                     <Input
                         name="recovery_code"
                         type="text"
-                        placeholder="Enter recovery code"
+                        :placeholder="t('auth.two_factor.recovery_placeholder')"
                         :autofocus="showRecoveryInput"
                         required
                     />
                     <InputError :message="errors.recovery_code" />
-                    <Button type="submit" class="w-full" :disabled="processing"
-                        >Continue</Button
+                    <Button
+                        type="submit"
+                        class="h-11 w-full rounded-full bg-teal-500 text-white shadow-md shadow-teal-500/20 hover:bg-teal-600"
+                        :disabled="processing"
                     >
+                        {{ t('auth.two_factor.submit') }}
+                    </Button>
 
-                    <div class="text-center text-sm text-muted-foreground">
-                        <span>or you can </span>
+                    <div class="text-center text-sm text-slate-500">
+                        <span>{{ t('auth.two_factor.or_you_can') }} </span>
                         <button
                             type="button"
-                            class="text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
+                            class="font-medium text-teal-600 underline-offset-4 hover:text-teal-700 hover:underline"
                             @click="() => toggleRecoveryMode(clearErrors)"
                         >
                             {{ authConfigContent.toggleText }}

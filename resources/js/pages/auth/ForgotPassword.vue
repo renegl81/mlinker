@@ -9,6 +9,9 @@ import AuthLayout from '@/layouts/AuthLayout.vue';
 import { login } from '@/routes';
 import { Form, Head } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 defineProps<{
     status?: string;
@@ -17,14 +20,14 @@ defineProps<{
 
 <template>
     <AuthLayout
-        title="Forgot password"
-        description="Enter your email to receive a password reset link"
+        :title="t('auth.forgot.title')"
+        :description="t('auth.forgot.description')"
     >
-        <Head title="Forgot password" />
+        <Head :title="t('auth.forgot.head')" />
 
         <div
             v-if="status"
-            class="mb-4 text-center text-sm font-medium text-green-600"
+            class="mb-4 rounded-lg border border-teal-200 bg-teal-50 px-4 py-3 text-center text-sm font-medium text-teal-700"
         >
             {{ status }}
         </div>
@@ -33,38 +36,39 @@ defineProps<{
             <Form
                 v-bind="PasswordResetLinkController.store.form()"
                 v-slot="{ errors, processing }"
+                class="flex flex-col gap-6"
             >
                 <div class="grid gap-2">
-                    <Label for="email">Email address</Label>
+                    <Label for="email">{{ t('auth.forgot.email_label') }}</Label>
                     <Input
                         id="email"
                         type="email"
                         name="email"
                         autocomplete="off"
                         autofocus
-                        placeholder="email@example.com"
+                        :placeholder="t('auth.forgot.email_placeholder')"
                     />
                     <InputError :message="errors.email" />
                 </div>
 
-                <div class="my-6 flex items-center justify-start">
-                    <Button
-                        class="w-full"
-                        :disabled="processing"
-                        data-test="email-password-reset-link-button"
-                    >
-                        <LoaderCircle
-                            v-if="processing"
-                            class="h-4 w-4 animate-spin"
-                        />
-                        Email password reset link
-                    </Button>
-                </div>
+                <Button
+                    class="mt-2 h-11 w-full rounded-full bg-teal-500 text-white shadow-md shadow-teal-500/20 hover:bg-teal-600"
+                    :disabled="processing"
+                    data-test="email-password-reset-link-button"
+                >
+                    <LoaderCircle
+                        v-if="processing"
+                        class="h-4 w-4 animate-spin"
+                    />
+                    {{ t('auth.forgot.submit') }}
+                </Button>
             </Form>
 
-            <div class="space-x-1 text-center text-sm text-muted-foreground">
-                <span>Or, return to</span>
-                <TextLink :href="login()">log in</TextLink>
+            <div class="text-center text-sm text-slate-500">
+                {{ t('auth.forgot.back_prefix') }}
+                <TextLink :href="login()" class="font-medium text-teal-600 hover:text-teal-700">
+                    {{ t('auth.forgot.back_link') }}
+                </TextLink>
             </div>
         </div>
     </AuthLayout>

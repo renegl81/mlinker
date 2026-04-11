@@ -1,4 +1,77 @@
 {
+    "auth": {
+        "brand": {
+            "badge": "For hospitality",
+            "headline": "The simplest way to have your digital menu and your website in one place.",
+            "subline": "Join hundreds of bars, cafés and restaurants that already digitized their menu with MenuLinker."
+        },
+        "login": {
+            "title": "Log in to your account",
+            "description": "Enter your email and password below to log in",
+            "head": "Log in",
+            "email_label": "Email address",
+            "email_placeholder": "email{'@'}example.com",
+            "password_label": "Password",
+            "password_placeholder": "Password",
+            "forgot": "Forgot password?",
+            "remember": "Remember me",
+            "submit": "Log in",
+            "no_account": "Don't have an account?",
+            "sign_up": "Sign up"
+        },
+        "forgot": {
+            "title": "Forgot your password?",
+            "description": "Enter your email and we'll send you a reset link",
+            "head": "Forgot password",
+            "email_label": "Email address",
+            "email_placeholder": "email{'@'}example.com",
+            "submit": "Email reset link",
+            "back_prefix": "Remembered your password?",
+            "back_link": "Back to log in"
+        },
+        "reset": {
+            "title": "Set a new password",
+            "description": "Choose a secure password for your account",
+            "head": "Reset password",
+            "email_label": "Email address",
+            "password_label": "New password",
+            "password_placeholder": "New password",
+            "password_confirmation_label": "Confirm password",
+            "password_confirmation_placeholder": "Confirm password",
+            "submit": "Reset password"
+        },
+        "verify": {
+            "title": "Verify your email",
+            "description": "We sent a verification link to your email. Click the link to activate your account.",
+            "head": "Email verification",
+            "sent": "A new verification link has been sent to the email address you provided during registration.",
+            "resend": "Resend verification email",
+            "logout": "Log out"
+        },
+        "confirm": {
+            "title": "Confirm your password",
+            "description": "This is a secure area of the application. Please confirm your password before continuing.",
+            "head": "Confirm password",
+            "password_label": "Password",
+            "submit": "Confirm password"
+        },
+        "two_factor": {
+            "head": "Two-factor authentication",
+            "code_title": "Authentication code",
+            "code_description": "Enter the authentication code provided by your authenticator application.",
+            "recovery_title": "Recovery code",
+            "recovery_description": "Please confirm access to your account by entering one of your emergency recovery codes.",
+            "use_recovery": "log in using a recovery code",
+            "use_code": "log in using an authentication code",
+            "or_you_can": "or you can",
+            "recovery_placeholder": "Enter recovery code",
+            "submit": "Continue"
+        },
+        "activation_sent": {
+            "title": "Check your inbox",
+            "description": "We've sent you an activation link"
+        }
+    },
     "catalog": {
         "title": "Catalog",
         "products": {

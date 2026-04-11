@@ -1,4 +1,77 @@
 {
+    "auth": {
+        "brand": {
+            "badge": "Ostalaritzarako",
+            "headline": "Zure karta digitala eta zure webgunea leku bakarrean izateko modurik errazena.",
+            "subline": "Bat egin ezazu MenuLinkerrekin jada karta digitalizatu duten ehunka taberna, kafetegi eta jatetxerekin."
+        },
+        "login": {
+            "title": "Hasi saioa zure kontuan",
+            "description": "Sartu zure helbide elektronikoa eta pasahitza",
+            "head": "Saioa hasi",
+            "email_label": "Helbide elektronikoa",
+            "email_placeholder": "posta{'@'}adibidea.com",
+            "password_label": "Pasahitza",
+            "password_placeholder": "Pasahitza",
+            "forgot": "Pasahitza ahaztu duzu?",
+            "remember": "Gogoratu nau",
+            "submit": "Sartu",
+            "no_account": "Ez duzu konturik?",
+            "sign_up": "Eman izena"
+        },
+        "forgot": {
+            "title": "Pasahitza ahaztu duzu?",
+            "description": "Sartu zure helbide elektronikoa eta berrezartzeko esteka bidaliko dizugu",
+            "head": "Pasahitza berreskuratu",
+            "email_label": "Helbide elektronikoa",
+            "email_placeholder": "posta{'@'}adibidea.com",
+            "submit": "Bidali esteka",
+            "back_prefix": "Pasahitza gogoratu duzu?",
+            "back_link": "Itzuli saioa hastera"
+        },
+        "reset": {
+            "title": "Ezarri pasahitz berria",
+            "description": "Aukeratu pasahitz seguru bat zure konturako",
+            "head": "Pasahitza berrezarri",
+            "email_label": "Helbide elektronikoa",
+            "password_label": "Pasahitz berria",
+            "password_placeholder": "Pasahitz berria",
+            "password_confirmation_label": "Berretsi pasahitza",
+            "password_confirmation_placeholder": "Berretsi pasahitza",
+            "submit": "Pasahitza berrezarri"
+        },
+        "verify": {
+            "title": "Egiaztatu zure posta",
+            "description": "Egiaztapen esteka bat bidali dizugu. Egin klik esteka horretan kontua aktibatzeko.",
+            "head": "Posta egiaztapena",
+            "sent": "Egiaztapen esteka berria bidali dugu izen ematean eman zenuen helbide elektronikora.",
+            "resend": "Berriz bidali egiaztapen mezua",
+            "logout": "Saioa amaitu"
+        },
+        "confirm": {
+            "title": "Berretsi zure pasahitza",
+            "description": "Hau eremu seguru bat da. Mesedez, berretsi pasahitza jarraitzeko.",
+            "head": "Pasahitza berretsi",
+            "password_label": "Pasahitza",
+            "submit": "Pasahitza berretsi"
+        },
+        "two_factor": {
+            "head": "Bi faktoreko autentifikazioa",
+            "code_title": "Autentifikazio kodea",
+            "code_description": "Sartu zure autentifikazio aplikazioak emandako kodea.",
+            "recovery_title": "Berreskurapen kodea",
+            "recovery_description": "Berretsi zure konturako sarbidea zure larrialdiko berreskurapen kodeetako bat sartuz.",
+            "use_recovery": "erabili berreskurapen kode bat",
+            "use_code": "erabili autentifikazio kode bat",
+            "or_you_can": "edo",
+            "recovery_placeholder": "Sartu berreskurapen kodea",
+            "submit": "Jarraitu"
+        },
+        "activation_sent": {
+            "title": "Begiratu zure posta",
+            "description": "Aktibazio esteka bat bidali dizugu"
+        }
+    },
     "catalog": {
         "title": "Katalogoa",
         "products": {

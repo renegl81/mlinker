@@ -177,9 +177,8 @@ const submit = () => {
                 </div>
 
                 <Button
-                    variant="outline"
                     type="submit"
-                    class="mt-2 w-full border-purple-500"
+                    class="mt-2 h-11 w-full rounded-full bg-teal-500 text-white shadow-md shadow-teal-500/20 hover:bg-teal-600"
                     :tabindex="8"
                     :disabled="processing"
                     data-test="register-user-button"

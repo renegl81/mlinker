@@ -1,4 +1,77 @@
 {
+    "auth": {
+        "brand": {
+            "badge": "Per a hostaleria",
+            "headline": "La manera més senzilla de tenir la teva carta digital i el teu web en un sol lloc.",
+            "subline": "Uneix-te a centenars de bars, cafeteries i restaurants que ja han digitalitzat la seva carta amb MenuLinker."
+        },
+        "login": {
+            "title": "Inicia la sessió al teu compte",
+            "description": "Introdueix el correu i la contrasenya per accedir",
+            "head": "Iniciar sessió",
+            "email_label": "Correu electrònic",
+            "email_placeholder": "correu{'@'}exemple.com",
+            "password_label": "Contrasenya",
+            "password_placeholder": "Contrasenya",
+            "forgot": "Has oblidat la contrasenya?",
+            "remember": "Recorda'm",
+            "submit": "Entrar",
+            "no_account": "Encara no tens compte?",
+            "sign_up": "Registra't"
+        },
+        "forgot": {
+            "title": "Has oblidat la contrasenya?",
+            "description": "Introdueix el correu i t'enviarem un enllaç per restablir-la",
+            "head": "Recuperar contrasenya",
+            "email_label": "Correu electrònic",
+            "email_placeholder": "correu{'@'}exemple.com",
+            "submit": "Enviar enllaç",
+            "back_prefix": "Has recordat la contrasenya?",
+            "back_link": "Tornar a l'inici de sessió"
+        },
+        "reset": {
+            "title": "Estableix una nova contrasenya",
+            "description": "Tria una contrasenya segura per al teu compte",
+            "head": "Restablir contrasenya",
+            "email_label": "Correu electrònic",
+            "password_label": "Nova contrasenya",
+            "password_placeholder": "Nova contrasenya",
+            "password_confirmation_label": "Confirmar contrasenya",
+            "password_confirmation_placeholder": "Confirmar contrasenya",
+            "submit": "Restablir contrasenya"
+        },
+        "verify": {
+            "title": "Verifica el teu correu",
+            "description": "Hem enviat un enllaç de verificació al teu correu. Fes clic a l'enllaç per activar el teu compte.",
+            "head": "Verificació de correu",
+            "sent": "Hem enviat un nou enllaç de verificació al correu proporcionat durant el registre.",
+            "resend": "Reenviar correu de verificació",
+            "logout": "Tancar sessió"
+        },
+        "confirm": {
+            "title": "Confirma la teva contrasenya",
+            "description": "Aquesta és una àrea segura. Confirma la teva contrasenya per continuar.",
+            "head": "Confirmar contrasenya",
+            "password_label": "Contrasenya",
+            "submit": "Confirmar contrasenya"
+        },
+        "two_factor": {
+            "head": "Autenticació en dos passos",
+            "code_title": "Codi d'autenticació",
+            "code_description": "Introdueix el codi generat per la teva aplicació d'autenticació.",
+            "recovery_title": "Codi de recuperació",
+            "recovery_description": "Confirma l'accés al teu compte introduint un dels teus codis de recuperació d'emergència.",
+            "use_recovery": "fer servir un codi de recuperació",
+            "use_code": "fer servir un codi d'autenticació",
+            "or_you_can": "o pots",
+            "recovery_placeholder": "Introdueix el codi de recuperació",
+            "submit": "Continuar"
+        },
+        "activation_sent": {
+            "title": "Revisa el teu correu",
+            "description": "T'hem enviat un enllaç d'activació"
+        }
+    },
     "catalog": {
         "title": "Catàleg",
         "products": {

@@ -1,3 +1,3 @@
 <template>
-    <img class="logo" src="/logo.png" alt="logo" />
+    <img class="logo" src="/images/logo.png" alt="MenuLinker" />
 </template>
