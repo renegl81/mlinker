@@ -65,9 +65,22 @@ function submitLocation() {
 }
 
 // ─── Step 2: Menu ─────────────────────────────────────────────────────────────
+const supportedLangs: Record<string, string> = {
+    es: '🇪🇸 Español',
+    en: '🇬🇧 English',
+    fr: '🇫🇷 Français',
+    de: '🇩🇪 Deutsch',
+    it: '🇮🇹 Italiano',
+    pt: '🇵🇹 Português',
+    ca: '🇪🇸 Català',
+    gl: '🇪🇸 Galego',
+    eu: '🇪🇸 Euskara',
+};
+
 const menuForm = useForm({
     name: props.menu?.name ?? '',
     description: props.menu?.description ?? '',
+    lang: 'es',
     location_id: props.location?.id ?? 0,
 });
 
@@ -390,6 +403,20 @@ const errorClass = 'text-xs text-red-400';
                                 :placeholder="t('panel.onboarding.menu_desc_placeholder')"
                                 :class="inputClass"
                             />
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="menu-lang" :class="labelClass">{{ t('panel.menus.language') }}</label>
+                            <select
+                                id="menu-lang"
+                                v-model="menuForm.lang"
+                                :class="inputClass"
+                            >
+                                <option v-for="(label, code) in supportedLangs" :key="code" :value="code">
+                                    {{ label }}
+                                </option>
+                            </select>
+                            <p class="text-xs text-slate-500">{{ t('panel.menus.language_hint') }}</p>
                         </div>
 
                         <button

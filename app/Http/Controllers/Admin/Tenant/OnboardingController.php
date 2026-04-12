@@ -120,6 +120,7 @@ class OnboardingController extends Controller
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
+            'lang' => ['sometimes', 'string', 'max:5'],
             'location_id' => ['required', 'integer', 'exists:locations,id'],
         ]);
 
@@ -131,7 +132,7 @@ class OnboardingController extends Controller
             'location_id' => (int) $data['location_id'],
             'template_id' => $template->id,
             'is_active' => true,
-            'lang' => config('menulinker.source_locale', 'es'),
+            'lang' => $data['lang'] ?? config('menulinker.source_locale', 'es'),
             'show_prices' => true,
             'show_currency' => false,
             'show_calories' => false,

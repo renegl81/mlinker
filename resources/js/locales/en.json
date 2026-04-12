@@ -346,7 +346,7 @@
             "edit_form_description": "Update the menu details.",
             "language": "Menu language",
             "language_locked": "Upgrade your plan to change the menu language.",
-            "language_hint": "Language in which the menu content is written."
+            "language_hint": "All menu text (dishes, sections, ingredients) is assumed to be in this language."
         },
         "billing": {
             "manage_subscription": "Manage subscription",

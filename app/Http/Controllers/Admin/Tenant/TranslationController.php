@@ -22,7 +22,7 @@ class TranslationController extends Controller
     public function show(Menu $menu, AutoGenerateMenuTranslations $autoGenerate): Response
     {
         $hasMultilang = $this->tenantHasMultilang();
-        $sourceLocale = config('menulinker.source_locale', 'es');
+        $sourceLocale = $menu->lang ?? config('menulinker.source_locale', 'es');
         $supportedLocales = $this->buildSupportedLocales();
 
         $menu->load([
@@ -120,7 +120,7 @@ class TranslationController extends Controller
             abort(403, 'Multi-language translations require a Business plan or higher.');
         }
 
-        $sourceLocale = config('menulinker.source_locale', 'es');
+        $sourceLocale = $menu->lang ?? config('menulinker.source_locale', 'es');
         $supportedCodes = array_keys(config('menulinker.supported_locales', []));
 
         $validated = $request->validate([
@@ -141,7 +141,7 @@ class TranslationController extends Controller
             abort(403, 'Multi-language translations require a Business plan or higher.');
         }
 
-        $sourceLocale = config('menulinker.source_locale', 'es');
+        $sourceLocale = $menu->lang ?? config('menulinker.source_locale', 'es');
 
         $validated = $request->validate([
             'locale' => ['required', 'string', Rule::notIn([$sourceLocale])],

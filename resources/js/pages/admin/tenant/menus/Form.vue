@@ -99,9 +99,8 @@ function removeImage() {
     if (input) input.value = '';
 }
 
-const canChangeLang = computed(() => {
-    return !!(page.props.tenant as any)?.plan_features?.multilang;
-});
+// All plans can set the menu's source language — multilang only gates translations
+const canChangeLang = true;
 
 const title = computed(() => {
     if (props.title) return props.title;
@@ -215,8 +214,7 @@ const handleFileChange = async (event: Event) => {
                             id="lang"
                             :value="form.lang"
                             @change="$emit('update:field', 'lang', ($event.target as HTMLSelectElement).value)"
-                            :disabled="!canChangeLang"
-                            class="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+                            class="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
                         >
                             <option
                                 v-for="(locale, code) in supportedLocales"
@@ -226,8 +224,8 @@ const handleFileChange = async (event: Event) => {
                                 {{ locale.flag }} {{ locale.native }}
                             </option>
                         </select>
-                        <p v-if="!canChangeLang" class="text-xs text-muted-foreground">
-                            {{ t('panel.menus.language_locked') }}
+                        <p class="text-xs text-muted-foreground">
+                            {{ t('panel.menus.language_hint') }}
                         </p>
                     </div>
 
