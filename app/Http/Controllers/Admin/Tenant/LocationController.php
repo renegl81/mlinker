@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Tenant;
 
 use App\Actions\Location\CreateLocation;
 use App\Actions\Location\DeleteLocation;
+use App\Actions\Location\DuplicateLocation;
 use App\Actions\Location\GetLocations;
 use App\Actions\Location\UpdateLocation;
 use App\Actions\Plan\CheckLimit;
@@ -98,6 +99,28 @@ class LocationController extends Controller
         return redirect()->route('tenant.locations.show', [
             'location' => $location,
         ]);
+    }
+
+    public function duplicate(Location $location, DuplicateLocation $action): RedirectResponse
+    {
+        $plan = tenant()?->subscription?->plan;
+        if (! $plan || $plan->slug === 'free') {
+            return back()->with('error', 'La duplicación de locales requiere un plan de pago.');
+        }
+
+        try {
+            $newLocation = $action->execute($location);
+
+            return redirect()->route('tenant.locations.show', $newLocation)
+                ->with('success', 'Local duplicado correctamente.');
+        } catch (Exception $e) {
+            Log::error('Location duplication failed', [
+                'location_id' => $location->id,
+                'error' => $e->getMessage(),
+            ]);
+
+            return back()->with('error', 'Error al duplicar el local.');
+        }
     }
 
     public function destroy(DeleteLocation $deleteLocation, Location $location): RedirectResponse

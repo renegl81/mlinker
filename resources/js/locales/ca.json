@@ -316,7 +316,11 @@
             "import_description": "Puja un fitxer Excel amb els productes del teu menú. Descarrega primer la plantilla per veure el format correcte.",
             "select_file": "Seleccionar fitxer (.xlsx, .xls, .csv)",
             "import_formats": "Formats: .xlsx, .xls, .csv (màx. 5MB)",
-            "importing": "Important..."
+            "importing": "Important...",
+            "clone_to_location": "Clonar a un altre local",
+            "clone_to_location_desc": "Es crearà una còpia completa d'aquest menú (amb totes les seccions, productes, al·lèrgens i ingredients) al local seleccionat.",
+            "select_location": "Seleccionar local de destinació",
+            "clone_confirm": "Clonar menú"
         },
         "customizer": {
             "title": "Personalizar menú",
@@ -451,7 +455,10 @@
             "google_maps": "Enllaç Google Maps",
             "gallery": "Galeria de fotos",
             "gallery_hint": "Puja fins a 5 fotos del teu local (màx. 3MB cadascuna).",
-            "add_image": "Afegir foto"
+            "add_image": "Afegir foto",
+            "duplicate": "Duplicar local",
+            "duplicate_success": "Local duplicat correctament",
+            "duplicate_error": "Error en duplicar el local"
         },
         "menus": {
             "create_title": "Crear Menú",

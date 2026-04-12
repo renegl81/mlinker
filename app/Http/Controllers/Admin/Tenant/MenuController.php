@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Tenant;
 
+use App\Actions\Menu\CloneMenuToLocation;
 use App\Actions\Menu\CreateMenu;
 use App\Actions\Menu\DeleteMenu;
 use App\Actions\Menu\DuplicateMenu;
@@ -116,6 +117,35 @@ class MenuController extends Controller
         }
     }
 
+    public function cloneToLocation(Request $request, Menu $menu, CloneMenuToLocation $action): RedirectResponse
+    {
+        $request->validate([
+            'location_id' => ['required', 'integer', 'exists:locations,id'],
+        ]);
+
+        $plan = tenant()?->subscription?->plan;
+        if (! $plan || $plan->slug === 'free') {
+            return back()->with('error', 'Clonar menús requiere un plan de pago.');
+        }
+
+        $targetLocation = Location::findOrFail($request->location_id);
+
+        try {
+            $newMenu = $action->execute($menu, $targetLocation);
+
+            return redirect()->route('tenant.menus.show', $newMenu)
+                ->with('success', "Menú clonado a '{$targetLocation->name}' correctamente.");
+        } catch (Exception $e) {
+            Log::error('Menu clone failed', [
+                'menu_id' => $menu->id,
+                'target_location_id' => $request->location_id,
+                'error' => $e->getMessage(),
+            ]);
+
+            return back()->with('error', 'Error al clonar el menú.');
+        }
+    }
+
     public function show(Menu $menu): Response
     {
         $menu->load([
@@ -140,6 +170,7 @@ class MenuController extends Controller
             'menu' => $menu,
             'qrCodeImageUrl' => $this->resolveQrImageUrl($menu),
             'publicMenuUrl' => $publicMenuUrl,
+            'locations' => Location::where('id', '!=', $menu->location_id)->get(['id', 'name']),
         ]);
     }
 

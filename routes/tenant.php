@@ -73,6 +73,9 @@ Route::middleware([
                 Route::resource('users', UserController::class);
                 Route::resource('locations', LocationController::class);
 
+                // Duplicar local
+                Route::post('locations/{location}/duplicate', [LocationController::class, 'duplicate'])->name('locations.duplicate');
+
                 // Location gallery images
                 Route::post('locations/{location}/images', [LocationImageController::class, 'store'])->name('locations.images.store');
                 Route::delete('location-images/{locationImage}', [LocationImageController::class, 'destroy'])->name('locations.images.destroy');
@@ -103,6 +106,9 @@ Route::middleware([
 
                 // Duplicar menú
                 Route::post('menus/{menu}/duplicate', [MenuController::class, 'duplicate'])->name('menus.duplicate');
+
+                // Clonar menú a otro local
+                Route::post('menus/{menu}/clone', [MenuController::class, 'cloneToLocation'])->name('menus.clone');
 
                 // QR del menú
                 Route::post('menus/{menu}/qr-code', [QRCodeController::class, 'generate'])->name('menus.qr-code.generate');

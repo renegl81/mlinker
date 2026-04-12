@@ -12,11 +12,12 @@ import {
 } from '@/routes/tenant/locations';
 import type { BreadcrumbItem, Location } from '@/types';
 import { Inertia } from '@inertiajs/inertia';
-import { Head, Link, usePage } from '@inertiajs/vue3';
+import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import {
     ArrowLeft,
     BadgeDollarSign,
     Clock,
+    Copy,
     ExternalLink,
     Eye,
     Globe,
@@ -67,6 +68,15 @@ function remove() {
         Inertia.delete(locationRouteDestroy(props.location.id).url);
     }
 }
+
+const duplicating = ref(false);
+
+function duplicateLocation() {
+    duplicating.value = true;
+    router.post(`/panel/locations/${props.location.id}/duplicate`, {}, {
+        onFinish: () => { duplicating.value = false; },
+    });
+}
 </script>
 
 <template>
@@ -92,6 +102,10 @@ function remove() {
                     <Button v-if="publicUrl" variant="outline" @click="showPreview = !showPreview">
                         <Eye class="mr-2 h-4 w-4" />
                         <span class="hidden sm:inline">{{ t('panel.location_show.preview') }}</span>
+                    </Button>
+                    <Button variant="outline" :disabled="duplicating" @click="duplicateLocation">
+                        <Copy class="mr-2 h-4 w-4" />
+                        <span class="hidden sm:inline">{{ t('panel.locations.duplicate') }}</span>
                     </Button>
                     <Button variant="outline" as-child>
                         <Link :href="locationRouteEdit(location.id)">

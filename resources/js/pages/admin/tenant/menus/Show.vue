@@ -36,6 +36,7 @@ import { Head, Link, usePage, router } from '@inertiajs/vue3';
 import {
     ArrowDown,
     ArrowLeft,
+    ArrowRight,
     ArrowUp,
     BookOpen,
     Copy,
@@ -104,10 +105,16 @@ const TAG_LABELS: Record<string, string> = {
     gluten_free: '🚫🌾',
 };
 
+interface LocationOption {
+    id: number;
+    name: string;
+}
+
 interface Props {
     menu: MenuWithSections;
     qrCodeImageUrl: string | null;
     publicMenuUrl: string;
+    locations: LocationOption[];
 }
 
 const props = defineProps<Props>();
@@ -159,6 +166,26 @@ function duplicateMenu() {
     duplicatingMenu.value = true;
     router.post(`/panel/menus/${props.menu.id}/duplicate`, {}, {
         onFinish: () => { duplicatingMenu.value = false; },
+    });
+}
+
+// ── Clone menu to another location ──────────────────────────────────────────
+const showCloneDialog = ref(false);
+const cloneTargetLocationId = ref<number | null>(null);
+const cloning = ref(false);
+
+const availableLocations = computed(() => props.locations ?? []);
+
+function submitClone() {
+    if (!cloneTargetLocationId.value) return;
+    cloning.value = true;
+    router.post(`/panel/menus/${props.menu.id}/clone`, {
+        location_id: cloneTargetLocationId.value,
+    }, {
+        onFinish: () => {
+            cloning.value = false;
+            showCloneDialog.value = false;
+        },
     });
 }
 
@@ -336,6 +363,14 @@ function submitImport() {
                             <DropdownMenuItem class="flex cursor-pointer items-center gap-2" @click="duplicateMenu" :disabled="duplicatingMenu">
                                 <Copy class="h-4 w-4" />
                                 {{ t('panel.menu_show.duplicate_menu') }}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                v-if="availableLocations.length > 0"
+                                class="flex cursor-pointer items-center gap-2"
+                                @click="showCloneDialog = true"
+                            >
+                                <ArrowRight class="h-4 w-4" />
+                                {{ t('panel.menu_show.clone_to_location') }}
                             </DropdownMenuItem>
                             <DropdownMenuItem class="flex cursor-pointer items-center gap-2" @click="showImportDialog = true">
                                 <Upload class="h-4 w-4" />
@@ -871,6 +906,38 @@ function submitImport() {
                 <Button :disabled="!selectedFile || importing" @click="submitImport">
                     <Upload v-if="!importing" class="mr-2 h-4 w-4" />
                     {{ importing ? t('panel.menu_show.importing') : t('panel.menu_show.import_excel') }}
+                </Button>
+            </DialogFooter>
+        </DialogContent>
+    </Dialog>
+
+    <!-- ═══ CLONE TO LOCATION DIALOG ═══ -->
+    <Dialog v-model:open="showCloneDialog">
+        <DialogContent class="sm:max-w-md">
+            <DialogHeader>
+                <DialogTitle>{{ t('panel.menu_show.clone_to_location') }}</DialogTitle>
+                <DialogDescription>{{ t('panel.menu_show.clone_to_location_desc') }}</DialogDescription>
+            </DialogHeader>
+            <div class="space-y-3">
+                <Label>{{ t('panel.menu_show.select_location') }}</Label>
+                <select
+                    v-model="cloneTargetLocationId"
+                    class="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-sm outline-none"
+                >
+                    <option :value="null" disabled>{{ t('panel.menu_show.select_location') }}</option>
+                    <option
+                        v-for="loc in availableLocations"
+                        :key="loc.id"
+                        :value="loc.id"
+                    >
+                        {{ loc.name }}
+                    </option>
+                </select>
+            </div>
+            <DialogFooter class="gap-2 sm:gap-0">
+                <Button variant="outline" @click="showCloneDialog = false">{{ t('common.cancel') }}</Button>
+                <Button :disabled="!cloneTargetLocationId || cloning" @click="submitClone">
+                    {{ cloning ? '...' : t('panel.menu_show.clone_confirm') }}
                 </Button>
             </DialogFooter>
         </DialogContent>

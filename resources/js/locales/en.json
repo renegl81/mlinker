@@ -316,7 +316,11 @@
             "import_description": "Upload an Excel file with your menu products. Download the template first to see the correct format.",
             "select_file": "Select file (.xlsx, .xls, .csv)",
             "import_formats": "Formats: .xlsx, .xls, .csv (max. 5MB)",
-            "importing": "Importing..."
+            "importing": "Importing...",
+            "clone_to_location": "Clone to another location",
+            "clone_to_location_desc": "A complete copy of this menu (with all sections, products, allergens, and ingredients) will be created in the selected location.",
+            "select_location": "Select target location",
+            "clone_confirm": "Clone menu"
         },
         "customizer": {
             "title": "Customize menu",
@@ -463,7 +467,10 @@
             "tab_general": "General",
             "tab_schedule": "Schedule",
             "tab_contact": "Contact",
-            "tab_appearance": "Appearance"
+            "tab_appearance": "Appearance",
+            "duplicate": "Duplicate location",
+            "duplicate_success": "Location duplicated successfully",
+            "duplicate_error": "Error duplicating location"
         },
         "menus": {
             "create_title": "Create Menu",

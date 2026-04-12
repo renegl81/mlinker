@@ -316,7 +316,11 @@
             "import_description": "Sube un ficheiro Excel cos produtos do teu menú. Descarga primeiro a plantilla para ver o formato correcto.",
             "select_file": "Seleccionar ficheiro (.xlsx, .xls, .csv)",
             "import_formats": "Formatos: .xlsx, .xls, .csv (máx. 5MB)",
-            "importing": "Importando..."
+            "importing": "Importando...",
+            "clone_to_location": "Clonar a outro local",
+            "clone_to_location_desc": "Crearanse unha copia completa deste menú (con todas as seccións, produtos, alérxenos e ingredientes) no local seleccionado.",
+            "select_location": "Seleccionar local de destino",
+            "clone_confirm": "Clonar menú"
         },
         "customizer": {
             "title": "Personalizar menú",
@@ -451,7 +455,10 @@
             "google_maps": "Ligazón Google Maps",
             "gallery": "Galería de fotos",
             "gallery_hint": "Sube ata 5 fotos do teu local (máx. 3MB cada unha).",
-            "add_image": "Engadir foto"
+            "add_image": "Engadir foto",
+            "duplicate": "Duplicar local",
+            "duplicate_success": "Local duplicado correctamente",
+            "duplicate_error": "Erro ao duplicar o local"
         },
         "menus": {
             "create_title": "Crear Menú",

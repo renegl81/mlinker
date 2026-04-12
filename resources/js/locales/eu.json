@@ -316,7 +316,11 @@
             "import_description": "Igo zure menuaren produktuak dituen Excel fitxategi bat. Deskargatu lehenengo txantiloia formatu egokia ikusteko.",
             "select_file": "Fitxategia hautatu (.xlsx, .xls, .csv)",
             "import_formats": "Formatuak: .xlsx, .xls, .csv (gehienez 5MB)",
-            "importing": "Inportatzen..."
+            "importing": "Inportatzen...",
+            "clone_to_location": "Beste toki batera klonatu",
+            "clone_to_location_desc": "Menu honen kopia osoa (sekzio, produktu, alergenoak eta osagaiekin) hautatutako tokian sortuko da.",
+            "select_location": "Helburuko tokia hautatu",
+            "clone_confirm": "Menua klonatu"
         },
         "customizer": {
             "title": "Personalizar menú",
@@ -451,7 +455,10 @@
             "google_maps": "Google Maps esteka",
             "gallery": "Argazki galeria",
             "gallery_hint": "Igo zure lokalaren 5 argazki gehienez (máx. 3MB bakoitza).",
-            "add_image": "Argazkia gehitu"
+            "add_image": "Argazkia gehitu",
+            "duplicate": "Tokia bikoiztu",
+            "duplicate_success": "Tokia behar bezala bikoiztu da",
+            "duplicate_error": "Errore bat gertatu da tokia bikoiztean"
         },
         "menus": {
             "create_title": "Menua sortu",

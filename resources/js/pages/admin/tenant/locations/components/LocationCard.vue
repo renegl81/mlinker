@@ -2,9 +2,12 @@
 import { Button } from '@/components/ui/button';
 import { show, edit } from '@/routes/tenant/locations';
 import type { Location } from '@/types';
-import { Link, usePage } from '@inertiajs/vue3';
-import { Building2, MapPin, Pencil, Phone, Trash2, Utensils } from 'lucide-vue-next';
-import { computed } from 'vue';
+import { router, Link, usePage } from '@inertiajs/vue3';
+import { Building2, Copy, MapPin, Pencil, Phone, Trash2, Utensils } from 'lucide-vue-next';
+import { computed, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 interface Props {
     location: Location;
@@ -14,6 +17,15 @@ const props = defineProps<Props>();
 const emit = defineEmits<{
     delete: [id: number];
 }>();
+
+const duplicating = ref(false);
+
+function handleDuplicate() {
+    duplicating.value = true;
+    router.post(`/panel/locations/${props.location.id}/duplicate`, {}, {
+        onFinish: () => { duplicating.value = false; },
+    });
+}
 
 const page = usePage();
 const messages = computed(() => page.props.messages as any);
@@ -76,6 +88,9 @@ function handleDelete() {
                 </Link>
             </Button>
             <div class="loc-action-icons">
+                <Button variant="outline" size="icon" :disabled="duplicating" :title="t('panel.locations.duplicate')" @click="handleDuplicate">
+                    <Copy class="loc-action-icon" />
+                </Button>
                 <Button variant="outline" size="icon" as-child>
                     <Link :href="edit(location.id)">
                         <Pencil class="loc-action-icon" />
