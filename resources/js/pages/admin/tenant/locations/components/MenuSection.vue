@@ -13,8 +13,9 @@ import {
 import { create } from '@/routes/tenant/locations/menus';
 import { show as menuShow } from '@/routes/tenant/menus';
 import type { Menu } from '@/types';
-import { Link, usePage } from '@inertiajs/vue3';
+import { router, Link, usePage } from '@inertiajs/vue3';
 import {
+    Copy,
     Edit,
     Image as ImageIcon,
     Palette,
@@ -35,6 +36,9 @@ const props = defineProps<Props>();
 const page = usePage();
 const messages = computed(() => page.props.messages as any);
 
+function duplicateMenu(menuId: number) {
+    router.post(`/panel/menus/${menuId}/duplicate`, {}, { preserveScroll: true });
+}
 </script>
 
 <template>
@@ -112,6 +116,14 @@ const messages = computed(() => page.props.messages as any);
                                 </Badge>
                             </TableCell>
                             <TableCell class="text-right">
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    @click="duplicateMenu(menu.id)"
+                                    :title="t('panel.menu_show.duplicate_menu')"
+                                >
+                                    <Copy class="h-4 w-4" />
+                                </Button>
                                 <Button
                                     variant="ghost"
                                     size="icon"

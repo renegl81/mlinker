@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Tenant;
 
 use App\Actions\Menu\CreateMenu;
 use App\Actions\Menu\DeleteMenu;
+use App\Actions\Menu\DuplicateMenu;
 use App\Actions\Menu\GetMenus;
 use App\Actions\Menu\UpdateMenu;
 use App\Actions\Plan\CheckLimit;
@@ -94,6 +95,25 @@ class MenuController extends Controller
         return redirect()
             ->route('tenant.locations.menus.index', ['location' => $locationId])
             ->with('success', __('messages.menus.deleted'));
+    }
+
+    public function duplicate(Menu $menu, DuplicateMenu $action): RedirectResponse
+    {
+        $plan = tenant()?->subscription?->plan;
+        if (! $plan || $plan->slug === 'free') {
+            return back()->with('error', 'La duplicación de menús requiere un plan de pago.');
+        }
+
+        try {
+            $newMenu = $action->execute($menu);
+
+            return redirect()->route('tenant.menus.show', $newMenu)
+                ->with('success', 'Menú duplicado correctamente.');
+        } catch (Exception $e) {
+            Log::error('Menu duplication failed', ['menu_id' => $menu->id, 'error' => $e->getMessage()]);
+
+            return back()->with('error', 'Error al duplicar el menú.');
+        }
     }
 
     public function show(Menu $menu): Response

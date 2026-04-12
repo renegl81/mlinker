@@ -9,9 +9,24 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { index as locationMenusRoute } from '@/routes/tenant/locations/menus';
 import { destroy as menuRouteDestroy, edit as menuRouteEdit } from '@/routes/tenant/menus';
@@ -30,6 +45,7 @@ import {
     Globe,
     Image as ImageIcon,
     Monitor,
+    MoreHorizontal,
     Palette,
     Pencil,
     Plus,
@@ -37,6 +53,7 @@ import {
     RefreshCw,
     Smartphone,
     Trash2,
+    Upload,
     X,
 } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
@@ -135,6 +152,16 @@ function remove() {
     }
 }
 
+// ── Menu duplicate ───────────────────────────────────────────────────────────
+const duplicatingMenu = ref(false);
+
+function duplicateMenu() {
+    duplicatingMenu.value = true;
+    router.post(`/panel/menus/${props.menu.id}/duplicate`, {}, {
+        onFinish: () => { duplicatingMenu.value = false; },
+    });
+}
+
 // ── Products ────────────────────────────────────────────────────────────────
 function deleteProduct(productId: number) {
     if (!confirm(t('panel.menu_show.delete_dish_confirm'))) return;
@@ -221,6 +248,38 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
         { preserveScroll: true },
     );
 }
+
+// ── Excel import ─────────────────────────────────────────────────────────────
+const showImportDialog = ref(false);
+const selectedFile = ref<File | null>(null);
+const importing = ref(false);
+const fileInput = ref<HTMLInputElement | null>(null);
+
+function handleFileSelect(event: Event) {
+    const input = event.target as HTMLInputElement;
+    selectedFile.value = input.files?.[0] ?? null;
+}
+
+function submitImport() {
+    if (!selectedFile.value) return;
+    importing.value = true;
+
+    router.post(
+        `/panel/menus/${props.menu.id}/import`,
+        { file: selectedFile.value },
+        {
+            forceFormData: true,
+            onSuccess: () => {
+                showImportDialog.value = false;
+                selectedFile.value = null;
+                if (fileInput.value) fileInput.value.value = '';
+            },
+            onFinish: () => {
+                importing.value = false;
+            },
+        },
+    );
+}
 </script>
 
 <template>
@@ -241,32 +300,60 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
                     />
                 </div>
                 <div class="flex items-center gap-2">
+                    <!-- Primary actions (always visible) -->
                     <Button variant="outline" @click="showPreview = !showPreview">
                         <Eye class="mr-2 h-4 w-4" />
                         <span class="hidden sm:inline">{{ t('panel.menu_show.preview') }}</span>
                     </Button>
-                    <Button variant="outline" as-child>
-                        <Link :href="`/panel/menus/${menu.id}/translations`">
-                            <Globe class="mr-2 h-4 w-4" />
-                            <span class="hidden sm:inline">{{ t('translations.title') }}</span>
-                        </Link>
-                    </Button>
-                    <Button variant="outline" as-child>
-                        <Link :href="`/panel/menus/${menu.id}/customize`">
-                            <Palette class="mr-2 h-4 w-4" />
-                            <span class="hidden sm:inline">{{ t('panel.menu_show.customize') }}</span>
-                        </Link>
-                    </Button>
-                    <Button variant="outline" as-child>
+                    <Button as-child>
                         <Link :href="menuRouteEdit(menu.id).url">
                             <Pencil class="mr-2 h-4 w-4" />
                             {{ messages.menus.actions.edit }}
                         </Link>
                     </Button>
-                    <Button variant="destructive" @click="remove">
-                        <Trash2 class="mr-2 h-4 w-4" />
-                        {{ messages.menus.actions.delete }}
-                    </Button>
+
+                    <!-- More actions dropdown -->
+                    <DropdownMenu>
+                        <DropdownMenuTrigger as-child>
+                            <Button variant="outline" size="icon">
+                                <MoreHorizontal class="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" class="w-56">
+                            <DropdownMenuItem as-child>
+                                <Link :href="`/panel/menus/${menu.id}/customize`" class="flex cursor-pointer items-center gap-2">
+                                    <Palette class="h-4 w-4" />
+                                    {{ t('panel.menu_show.customize') }}
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem as-child>
+                                <Link :href="`/panel/menus/${menu.id}/translations`" class="flex cursor-pointer items-center gap-2">
+                                    <Globe class="h-4 w-4" />
+                                    {{ t('translations.title') }}
+                                </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem class="flex cursor-pointer items-center gap-2" @click="duplicateMenu" :disabled="duplicatingMenu">
+                                <Copy class="h-4 w-4" />
+                                {{ t('panel.menu_show.duplicate_menu') }}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem class="flex cursor-pointer items-center gap-2" @click="showImportDialog = true">
+                                <Upload class="h-4 w-4" />
+                                {{ t('panel.menu_show.import_excel') }}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem as-child>
+                                <a :href="`/panel/menus/import/template`" download class="flex cursor-pointer items-center gap-2">
+                                    <Download class="h-4 w-4" />
+                                    {{ t('panel.menu_show.download_template') }}
+                                </a>
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem class="flex cursor-pointer items-center gap-2 text-destructive focus:text-destructive" @click="remove">
+                                <Trash2 class="h-4 w-4" />
+                                {{ messages.menus.actions.delete }}
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
             </div>
 
@@ -744,6 +831,50 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
             </div>
         </div>
     </AppLayout>
+
+    <!-- ═══ IMPORT DIALOG ═══ -->
+    <Dialog v-model:open="showImportDialog">
+        <DialogContent class="sm:max-w-md">
+            <DialogHeader>
+                <DialogTitle>{{ t('panel.menu_show.import_excel') }}</DialogTitle>
+                <DialogDescription>{{ t('panel.menu_show.import_description') }}</DialogDescription>
+            </DialogHeader>
+            <div class="space-y-4">
+                <div class="rounded-lg border border-dashed p-4 text-center">
+                    <input
+                        ref="fileInput"
+                        type="file"
+                        accept=".xlsx,.xls,.csv"
+                        class="hidden"
+                        @change="handleFileSelect"
+                    />
+                    <button
+                        type="button"
+                        class="text-sm text-primary hover:underline"
+                        @click="(fileInput as HTMLInputElement | null)?.click()"
+                    >
+                        {{ selectedFile ? selectedFile.name : t('panel.menu_show.select_file') }}
+                    </button>
+                    <p class="mt-1 text-xs text-muted-foreground">{{ t('panel.menu_show.import_formats') }}</p>
+                </div>
+                <a
+                    href="/panel/menus/import/template"
+                    download
+                    class="flex items-center gap-2 text-xs text-primary hover:underline"
+                >
+                    <Download class="h-3 w-3" />
+                    {{ t('panel.menu_show.download_template') }}
+                </a>
+            </div>
+            <DialogFooter>
+                <Button variant="outline" @click="showImportDialog = false">{{ t('common.cancel') }}</Button>
+                <Button :disabled="!selectedFile || importing" @click="submitImport">
+                    <Upload v-if="!importing" class="mr-2 h-4 w-4" />
+                    {{ importing ? t('panel.menu_show.importing') : t('panel.menu_show.import_excel') }}
+                </Button>
+            </DialogFooter>
+        </DialogContent>
+    </Dialog>
 
     <!-- ═══ PREVIEW PANEL ═══ -->
     <Teleport to="body">

@@ -307,7 +307,16 @@
             "refresh_preview": "Refrescar vista previa",
             "open_new_tab": "Abrir en nova pestana",
             "customize": "Personalizar",
-            "customized": "Personalizado"
+            "customized": "Personalizado",
+            "duplicate_menu": "Duplicar menú",
+            "duplicate_menu_success": "Menú duplicado correctamente",
+            "duplicate_menu_error": "Erro ao duplicar o menú",
+            "download_template": "Descargar plantilla",
+            "import_excel": "Importar Excel",
+            "import_description": "Sube un ficheiro Excel cos produtos do teu menú. Descarga primeiro a plantilla para ver o formato correcto.",
+            "select_file": "Seleccionar ficheiro (.xlsx, .xls, .csv)",
+            "import_formats": "Formatos: .xlsx, .xls, .csv (máx. 5MB)",
+            "importing": "Importando..."
         },
         "customizer": {
             "title": "Personalizar menú",

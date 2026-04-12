@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\Tenant\ImageUploadController;
 use App\Http\Controllers\Admin\Tenant\LocationController;
 use App\Http\Controllers\Admin\Tenant\MenuController;
 use App\Http\Controllers\Admin\Tenant\MenuCustomizationController;
+use App\Http\Controllers\Admin\Tenant\MenuImportController;
 use App\Http\Controllers\Admin\Tenant\OnboardingController;
 use App\Http\Controllers\Admin\Tenant\ProductController;
 use App\Http\Controllers\Admin\Tenant\SectionController;
@@ -77,6 +78,10 @@ Route::middleware([
                 // Subida de imágenes
                 Route::post('uploads/image', [ImageUploadController::class, 'store'])->name('uploads.image');
 
+                // Importación de menú desde Excel (ANTES de las rutas con {menu} para evitar conflictos)
+                Route::get('menus/import/template', [MenuImportController::class, 'template'])->name('menus.import.template');
+                Route::post('menus/{menu}/import', [MenuImportController::class, 'import'])->name('menus.import');
+
                 // Productos
                 Route::get('menus/{menu}/products/create', [ProductController::class, 'create'])->name('menus.products.create');
                 Route::post('menus/{menu}/products', [ProductController::class, 'store'])->name('menus.products.store');
@@ -90,6 +95,9 @@ Route::middleware([
                 Route::put('sections/{section}', [SectionController::class, 'update'])->name('sections.update');
                 Route::delete('sections/{section}', [SectionController::class, 'destroy'])->name('sections.destroy');
                 Route::post('menus/{menu}/sections/reorder', [SectionController::class, 'reorder'])->name('menus.sections.reorder');
+
+                // Duplicar menú
+                Route::post('menus/{menu}/duplicate', [MenuController::class, 'duplicate'])->name('menus.duplicate');
 
                 // QR del menú
                 Route::post('menus/{menu}/qr-code', [QRCodeController::class, 'generate'])->name('menus.qr-code.generate');

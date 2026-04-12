@@ -307,7 +307,16 @@
             "refresh_preview": "Aurrebista freskatu",
             "open_new_tab": "Fitxa berrian ireki",
             "customize": "Personalizar",
-            "customized": "Personalizado"
+            "customized": "Personalizado",
+            "duplicate_menu": "Menua bikoiztu",
+            "duplicate_menu_success": "Menua behar bezala bikoiztu da",
+            "duplicate_menu_error": "Errorea menua bikoiztean",
+            "download_template": "Txantiloia deskargatu",
+            "import_excel": "Excel inportatu",
+            "import_description": "Igo zure menuaren produktuak dituen Excel fitxategi bat. Deskargatu lehenengo txantiloia formatu egokia ikusteko.",
+            "select_file": "Fitxategia hautatu (.xlsx, .xls, .csv)",
+            "import_formats": "Formatuak: .xlsx, .xls, .csv (gehienez 5MB)",
+            "importing": "Inportatzen..."
         },
         "customizer": {
             "title": "Personalizar menú",

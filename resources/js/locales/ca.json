@@ -307,7 +307,16 @@
             "refresh_preview": "Refrescar vista prèvia",
             "open_new_tab": "Obrir en nova pestanya",
             "customize": "Personalizar",
-            "customized": "Personalizado"
+            "customized": "Personalizado",
+            "duplicate_menu": "Duplicar menú",
+            "duplicate_menu_success": "Menú duplicat correctament",
+            "duplicate_menu_error": "Error en duplicar el menú",
+            "download_template": "Descargar plantilla",
+            "import_excel": "Importar Excel",
+            "import_description": "Puja un fitxer Excel amb els productes del teu menú. Descarrega primer la plantilla per veure el format correcte.",
+            "select_file": "Seleccionar fitxer (.xlsx, .xls, .csv)",
+            "import_formats": "Formats: .xlsx, .xls, .csv (màx. 5MB)",
+            "importing": "Important..."
         },
         "customizer": {
             "title": "Personalizar menú",

@@ -307,7 +307,16 @@
             "refresh_preview": "Refresh preview",
             "open_new_tab": "Open in new tab",
             "customize": "Customize",
-            "customized": "Customized"
+            "customized": "Customized",
+            "duplicate_menu": "Duplicate menu",
+            "duplicate_menu_success": "Menu duplicated successfully",
+            "duplicate_menu_error": "Error duplicating menu",
+            "download_template": "Download template",
+            "import_excel": "Import Excel",
+            "import_description": "Upload an Excel file with your menu products. Download the template first to see the correct format.",
+            "select_file": "Select file (.xlsx, .xls, .csv)",
+            "import_formats": "Formats: .xlsx, .xls, .csv (max. 5MB)",
+            "importing": "Importing..."
         },
         "customizer": {
             "title": "Customize menu",
