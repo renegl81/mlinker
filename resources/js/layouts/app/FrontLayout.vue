@@ -24,6 +24,6 @@ withDefaults(defineProps<Props>(), {
 
 <style>
 .front-page {
-    font-family: 'Plus Jakarta Sans', 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
 }
 </style>

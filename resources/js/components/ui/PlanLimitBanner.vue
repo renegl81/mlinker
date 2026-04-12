@@ -36,7 +36,7 @@ const resourceLabel = computed(() => {
                 </span>
                 <a
                     :href="upgradeUrl"
-                    class="shrink-0 rounded-md bg-destructive px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90 transition-opacity"
+                    class="shrink-0 rounded-lg bg-destructive px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90 transition-opacity"
                 >
                     Mejorar plan
                 </a>
@@ -52,7 +52,7 @@ const resourceLabel = computed(() => {
                 </span>
                 <a
                     :href="upgradeUrl"
-                    class="shrink-0 rounded-md bg-yellow-600 px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90 transition-opacity"
+                    class="shrink-0 rounded-lg bg-yellow-600 px-3 py-1.5 text-xs font-semibold text-white hover:opacity-90 transition-opacity"
                 >
                     Mejorar plan
                 </a>

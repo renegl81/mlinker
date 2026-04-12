@@ -146,17 +146,17 @@ const progressPercent = computed(() => Math.round((props.step / (steps.value.len
 
 // ─── Shared classes ───────────────────────────────────────────────────────────
 const inputClass =
-    'flex h-11 w-full rounded-lg border border-slate-700 bg-slate-900/60 px-4 py-2 text-sm text-white placeholder:text-slate-500 transition-colors focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/30';
+    'flex h-11 w-full rounded-lg border border-slate-700 bg-slate-900/60 px-4 py-2 text-sm text-white placeholder:text-slate-500 transition-colors focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/30';
 const labelClass = 'text-sm font-medium text-slate-300';
 const errorClass = 'text-xs text-red-400';
 </script>
 
 <template>
-    <div class="min-h-svh bg-slate-950 text-slate-200 selection:bg-purple-500 selection:text-white">
+    <div class="min-h-svh bg-slate-950 text-slate-200 selection:bg-teal-500 selection:text-white">
         <div class="flex min-h-svh flex-col items-center justify-start px-4 py-10">
             <!-- Logo -->
             <div class="mb-10 flex items-center gap-2">
-                <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 shadow-lg shadow-purple-500/20">
+                <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-teal-500 to-cyan-500 shadow-lg shadow-teal-500/20">
                     <Sparkles class="h-5 w-5 text-white" />
                 </div>
                 <span class="text-lg font-bold text-white">MenuLinker</span>
@@ -174,9 +174,9 @@ const errorClass = 'text-xs text-red-400';
                             class="flex h-8 w-8 items-center justify-center rounded-full border-2 text-xs font-bold transition-all"
                             :class="
                                 i < step
-                                    ? 'border-purple-500 bg-purple-500 text-white'
+                                    ? 'border-teal-500 bg-teal-500 text-white'
                                     : i === step
-                                      ? 'border-purple-500 bg-purple-500/20 text-purple-300'
+                                      ? 'border-teal-500 bg-teal-500/20 text-teal-300'
                                       : 'border-slate-700 bg-slate-900 text-slate-500'
                             "
                         >
@@ -185,7 +185,7 @@ const errorClass = 'text-xs text-red-400';
                         </div>
                         <span
                             class="text-[11px] font-medium"
-                            :class="i <= step ? 'text-purple-300' : 'text-slate-500'"
+                            :class="i <= step ? 'text-teal-300' : 'text-slate-500'"
                         >
                             {{ s.label }}
                         </span>
@@ -193,7 +193,7 @@ const errorClass = 'text-xs text-red-400';
                 </div>
                 <div class="relative mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
                     <div
-                        class="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-500"
+                        class="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 transition-all duration-500"
                         :style="{ width: progressPercent + '%' }"
                     />
                 </div>
@@ -204,8 +204,8 @@ const errorClass = 'text-xs text-red-400';
 
                 <!-- ── Paso 0: Tu web ── -->
                 <template v-if="step === 0">
-                    <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/15">
-                        <Globe class="h-6 w-6 text-purple-400" />
+                    <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-teal-500/15">
+                        <Globe class="h-6 w-6 text-teal-400" />
                     </div>
                     <h1 class="mb-2 text-2xl font-bold text-white">{{ t('panel.onboarding.website_title') }}</h1>
                     <p class="mb-6 text-sm text-slate-400">
@@ -219,8 +219,8 @@ const errorClass = 'text-xs text-red-400';
                                 type="button"
                                 role="switch"
                                 :aria-checked="websiteForm.has_website"
-                                class="relative mt-0.5 h-6 w-11 flex-shrink-0 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-purple-500"
-                                :class="websiteForm.has_website ? 'bg-purple-600' : 'bg-slate-700'"
+                                class="relative mt-0.5 h-6 w-11 flex-shrink-0 rounded-full transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
+                                :class="websiteForm.has_website ? 'bg-teal-600' : 'bg-slate-700'"
                                 @click="websiteForm.has_website = !websiteForm.has_website"
                             >
                                 <span
@@ -255,7 +255,7 @@ const errorClass = 'text-xs text-red-400';
                                         class="flex flex-col items-center gap-1.5 rounded-xl border-2 px-3 py-3 text-sm font-medium transition-all"
                                         :class="
                                             websiteForm.business_type === bt.value
-                                                ? 'border-purple-500 bg-purple-500/15 text-white'
+                                                ? 'border-teal-500 bg-teal-500/15 text-white'
                                                 : 'border-slate-700 bg-slate-900/60 text-slate-400 hover:border-slate-600 hover:text-white'
                                         "
                                         @click="websiteForm.business_type = bt.value"
@@ -270,7 +270,7 @@ const errorClass = 'text-xs text-red-400';
                         <button
                             type="submit"
                             :disabled="websiteForm.processing"
-                            class="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-6 font-semibold text-white shadow-lg shadow-purple-500/20 transition-all hover:from-purple-500 hover:to-pink-500 disabled:cursor-not-allowed disabled:opacity-60"
+                            class="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-teal-600 to-cyan-600 px-6 font-semibold text-white shadow-lg shadow-teal-500/20 transition-all hover:from-teal-500 hover:to-cyan-500 disabled:cursor-not-allowed disabled:opacity-60"
                         >
                             <Loader2 v-if="websiteForm.processing" class="h-4 w-4 animate-spin" />
                             <span>{{ t('panel.onboarding.continue') }}</span>
@@ -281,8 +281,8 @@ const errorClass = 'text-xs text-red-400';
 
                 <!-- ── Paso 1: Tu negocio ── -->
                 <template v-else-if="step === 1">
-                    <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/15">
-                        <Store class="h-6 w-6 text-purple-400" />
+                    <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-teal-500/15">
+                        <Store class="h-6 w-6 text-teal-400" />
                     </div>
                     <h1 class="mb-2 text-2xl font-bold text-white">{{ t('panel.onboarding.business_title') }}</h1>
                     <p class="mb-6 text-sm text-slate-400">
@@ -341,7 +341,7 @@ const errorClass = 'text-xs text-red-400';
                         <button
                             type="submit"
                             :disabled="locationForm.processing"
-                            class="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-6 font-semibold text-white shadow-lg shadow-purple-500/20 transition-all hover:from-purple-500 hover:to-pink-500 disabled:cursor-not-allowed disabled:opacity-60"
+                            class="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-teal-600 to-cyan-600 px-6 font-semibold text-white shadow-lg shadow-teal-500/20 transition-all hover:from-teal-500 hover:to-cyan-500 disabled:cursor-not-allowed disabled:opacity-60"
                         >
                             <Loader2 v-if="locationForm.processing" class="h-4 w-4 animate-spin" />
                             <span>{{ t('panel.onboarding.continue') }}</span>
@@ -352,8 +352,8 @@ const errorClass = 'text-xs text-red-400';
 
                 <!-- ── Paso 2: Tu menú ── -->
                 <template v-else-if="step === 2">
-                    <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/15">
-                        <UtensilsCrossed class="h-6 w-6 text-purple-400" />
+                    <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-teal-500/15">
+                        <UtensilsCrossed class="h-6 w-6 text-teal-400" />
                     </div>
                     <h1 class="mb-2 text-2xl font-bold text-white">{{ t('panel.onboarding.menu_title') }}</h1>
                     <p class="mb-6 text-sm text-slate-400">{{ t('panel.onboarding.menu_body') }}</p>
@@ -394,7 +394,7 @@ const errorClass = 'text-xs text-red-400';
                         <button
                             type="submit"
                             :disabled="menuForm.processing"
-                            class="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-6 font-semibold text-white shadow-lg shadow-purple-500/20 transition-all hover:from-purple-500 hover:to-pink-500 disabled:cursor-not-allowed disabled:opacity-60"
+                            class="mt-2 flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-teal-600 to-cyan-600 px-6 font-semibold text-white shadow-lg shadow-teal-500/20 transition-all hover:from-teal-500 hover:to-cyan-500 disabled:cursor-not-allowed disabled:opacity-60"
                         >
                             <Loader2 v-if="menuForm.processing" class="h-4 w-4 animate-spin" />
                             <span>{{ t('panel.onboarding.continue') }}</span>
@@ -405,8 +405,8 @@ const errorClass = 'text-xs text-red-400';
 
                 <!-- ── Paso 3: Tus platos ── -->
                 <template v-else-if="step === 3">
-                    <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/15">
-                        <Zap class="h-6 w-6 text-purple-400" />
+                    <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-teal-500/15">
+                        <Zap class="h-6 w-6 text-teal-400" />
                     </div>
                     <h1 class="mb-2 text-2xl font-bold text-white">{{ t('panel.onboarding.dishes_title') }}</h1>
                     <p class="mb-6 text-sm text-slate-400">
@@ -478,7 +478,7 @@ const errorClass = 'text-xs text-red-400';
 
                     <button
                         type="button"
-                        class="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-purple-400 transition-colors hover:text-purple-300"
+                        class="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-teal-400 transition-colors hover:text-teal-300"
                         @click="addProduct"
                     >
                         <Plus class="h-4 w-4" />
@@ -490,7 +490,7 @@ const errorClass = 'text-xs text-red-400';
                     <button
                         type="button"
                         :disabled="productsProcessing"
-                        class="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-6 font-semibold text-white shadow-lg shadow-purple-500/20 transition-all hover:from-purple-500 hover:to-pink-500 disabled:cursor-not-allowed disabled:opacity-60"
+                        class="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-teal-600 to-cyan-600 px-6 font-semibold text-white shadow-lg shadow-teal-500/20 transition-all hover:from-teal-500 hover:to-cyan-500 disabled:cursor-not-allowed disabled:opacity-60"
                         @click="submitProducts"
                     >
                         <Loader2 v-if="productsProcessing" class="h-4 w-4 animate-spin" />
@@ -502,7 +502,7 @@ const errorClass = 'text-xs text-red-400';
                 <!-- ── Paso 4: ¡Listo! ── -->
                 <template v-else-if="step === 4">
                     <div class="mb-4 flex items-center justify-center">
-                        <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-pink-500 text-4xl shadow-lg shadow-purple-500/30">
+                        <div class="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 text-4xl shadow-lg shadow-teal-500/30">
                             🎉
                         </div>
                     </div>
@@ -515,15 +515,15 @@ const errorClass = 'text-xs text-red-400';
                         <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-500">{{ t('panel.onboarding.summary') }}</p>
                         <ul class="space-y-2 text-sm">
                             <li v-if="location" class="flex items-start gap-2">
-                                <Check class="mt-0.5 h-4 w-4 shrink-0 text-purple-400" />
+                                <Check class="mt-0.5 h-4 w-4 shrink-0 text-teal-400" />
                                 <span class="text-slate-400">{{ t('panel.onboarding.summary_location') }}: <span class="font-medium text-white">{{ location.name }}</span></span>
                             </li>
                             <li v-if="menu" class="flex items-start gap-2">
-                                <Check class="mt-0.5 h-4 w-4 shrink-0 text-purple-400" />
+                                <Check class="mt-0.5 h-4 w-4 shrink-0 text-teal-400" />
                                 <span class="text-slate-400">{{ t('panel.onboarding.summary_menu') }}: <span class="font-medium text-white">{{ menu.name }}</span></span>
                             </li>
                             <li v-if="products?.length" class="flex items-start gap-2">
-                                <Check class="mt-0.5 h-4 w-4 shrink-0 text-purple-400" />
+                                <Check class="mt-0.5 h-4 w-4 shrink-0 text-teal-400" />
                                 <span class="text-slate-400">
                                     <span class="font-medium text-white">{{ products.length }}</span> {{ t('panel.onboarding.products_added', products.length) }}
                                 </span>
@@ -534,7 +534,7 @@ const errorClass = 'text-xs text-red-400';
                     <button
                         type="button"
                         :disabled="completeProcessing"
-                        class="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-6 font-semibold text-white shadow-lg shadow-purple-500/20 transition-all hover:from-purple-500 hover:to-pink-500 disabled:cursor-not-allowed disabled:opacity-60"
+                        class="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-teal-600 to-cyan-600 px-6 font-semibold text-white shadow-lg shadow-teal-500/20 transition-all hover:from-teal-500 hover:to-cyan-500 disabled:cursor-not-allowed disabled:opacity-60"
                         @click="submitComplete"
                     >
                         <Loader2 v-if="completeProcessing" class="h-4 w-4 animate-spin" />

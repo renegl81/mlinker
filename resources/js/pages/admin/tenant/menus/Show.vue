@@ -478,7 +478,7 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
                                             <div class="shrink-0">
                                                 <div
                                                     v-if="!product.image_path"
-                                                    class="flex h-10 w-10 items-center justify-center rounded-md bg-gradient-to-br from-purple-500 to-pink-500 text-base font-bold text-white"
+                                                    class="flex h-10 w-10 items-center justify-center rounded-md bg-gradient-to-br from-teal-500 to-cyan-500 text-base font-bold text-white"
                                                 >
                                                     {{ product.name.charAt(0).toUpperCase() }}
                                                 </div>
