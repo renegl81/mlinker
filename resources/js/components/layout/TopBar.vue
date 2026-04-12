@@ -118,16 +118,10 @@ function isActive(href: string): boolean {
         class="fixed inset-x-0 top-0 z-40 h-[52px] border-b border-border bg-card/80 backdrop-blur-md md:h-14"
     >
         <div class="mx-auto flex h-full max-w-7xl items-center gap-4 px-4">
-            <!-- Logo + app name -->
-            <Link :href="homeHref" class="flex shrink-0 items-center gap-2">
-                <div
-                    class="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground"
-                >
-                    <AppLogoIcon class="size-5" />
-                </div>
-                <span class="hidden text-sm font-semibold tracking-tight sm:block">
-                    {{ appName }}
-                </span>
+            <!-- Logo -->
+            <Link :href="homeHref" class="flex shrink-0 items-center">
+                <img src="/images/logo-name.png" :alt="appName" class="hidden sm:block h-8 object-contain" />
+                <img src="/images/logo.png" :alt="appName" class="block sm:hidden h-8 w-8 object-contain" />
             </Link>
 
             <!-- Desktop: primary nav inline -->

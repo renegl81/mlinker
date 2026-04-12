@@ -86,6 +86,23 @@ export interface Country {
     code: string;
 }
 
+export interface LocationImage {
+    id: number;
+    location_id: number;
+    path: string;
+    alt: string | null;
+    sort_order: number;
+}
+
+export interface OpeningHour {
+    id: number;
+    location_id: number;
+    weekday: number;
+    opens_at: string | null;
+    closes_at: string | null;
+    is_closed: boolean;
+}
+
 export interface Location {
     id: number;
     name: string;
@@ -118,6 +135,18 @@ export interface Location {
     order_email: string | null;
     order_whatsapp: string | null;
     image_path?: string | null;
+    is_pet_friendly?: boolean;
+    has_wifi?: boolean;
+    has_terrace?: boolean;
+    has_parking?: boolean;
+    is_accessible?: boolean;
+    reservation_url?: string | null;
+    reservation_phone?: string | null;
+    instagram?: string | null;
+    facebook?: string | null;
+    google_maps_url?: string | null;
+    images?: LocationImage[];
+    opening_hours?: OpeningHour[];
 }
 
 export interface Template{

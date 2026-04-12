@@ -14,6 +14,9 @@
                 :submit-text="messages.actions.save"
                 :is-edit="true"
                 :countries="props.countries"
+                :location-id="props.location.id"
+                :images="props.location.images"
+                :existing-opening-hours="props.location.opening_hours"
                 @submit="submit"
                 @update:field="updateField"
             />
@@ -72,6 +75,17 @@ const form = useForm({
     secondary_color: props.location.secondary_color ?? null,
     order_email: props.location.order_email ?? null,
     order_whatsapp: props.location.order_whatsapp ?? null,
+    is_pet_friendly: props.location.is_pet_friendly ?? false,
+    has_wifi: props.location.has_wifi ?? false,
+    has_terrace: props.location.has_terrace ?? false,
+    has_parking: props.location.has_parking ?? false,
+    is_accessible: props.location.is_accessible ?? false,
+    reservation_url: props.location.reservation_url ?? null,
+    reservation_phone: props.location.reservation_phone ?? null,
+    instagram: props.location.instagram ?? null,
+    facebook: props.location.facebook ?? null,
+    google_maps_url: props.location.google_maps_url ?? null,
+    opening_hours: null as any,
 });
 
 function submit() {

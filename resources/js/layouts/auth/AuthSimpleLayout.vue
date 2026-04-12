@@ -41,14 +41,13 @@ defineProps<{
             <!-- brand -->
             <Link
                 :href="home()"
-                class="relative z-10 flex items-center gap-3 group"
+                class="relative z-10 flex items-center group"
             >
                 <img
-                    src="/images/logo.png"
+                    src="/images/logo-name.png"
                     :alt="appName"
-                    class="h-10 w-10 object-contain transition-transform group-hover:scale-105"
+                    class="h-12 object-contain brightness-0 invert transition-transform group-hover:scale-105"
                 />
-                <span class="text-xl font-bold tracking-tight">{{ appName }}</span>
             </Link>
 
             <!-- quote/tagline -->
@@ -81,16 +80,13 @@ defineProps<{
             <!-- mobile brand -->
             <Link
                 :href="home()"
-                class="mb-10 flex items-center gap-2.5 lg:hidden"
+                class="mb-10 flex items-center lg:hidden"
             >
                 <img
-                    src="/images/logo.png"
+                    src="/images/logo-name.png"
                     :alt="appName"
-                    class="h-9 w-9 object-contain"
+                    class="h-10 object-contain"
                 />
-                <span class="text-lg font-bold tracking-tight text-slate-900"
-                    >{{ appName }}</span
-                >
             </Link>
 
             <div class="w-full max-w-sm">

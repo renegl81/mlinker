@@ -44,49 +44,39 @@ interface Props {
     countries: Array<Country>;
 }
 const props = defineProps<Props>();
-interface FormState {
-    name?: string | null;
-    description?: string | null;
-    address?: string | null;
-    phone?: string | null;
-    postal_code?: string | null;
-    latitude?: string | null;
-    longitude?: string | null;
-    city?: string | null;
-    province?: string | null;
-    country_id?: number | null;
-    currency?: string | null;
-    time_zone?: string | null;
-    lang?: string | null;
-    languages?: Array<string>;
-    image_url?: string | null;
-    primary_color?: string | null;
-    secondary_color?: string | null;
-    order_email?: string | null;
-    order_whatsapp?: string | null;
-}
 
-const form = useForm<FormState>({
-    name: null,
-    description: null,
-    address: null,
-    phone: null,
-    postal_code: null,
-    latitude: null,
-    longitude: null,
-    city: null,
-    province: null,
-    country_id: null,
-    currency: null,
-    time_zone: null,
-    lang: null,
+const form = useForm({
+    name: null as string | null,
+    description: null as string | null,
+    address: null as string | null,
+    phone: null as string | null,
+    postal_code: null as string | null,
+    latitude: null as string | null,
+    longitude: null as string | null,
+    city: null as string | null,
+    province: null as string | null,
+    country_id: null as number | null,
+    currency: null as string | null,
+    time_zone: null as string | null,
+    lang: null as string | null,
     languages: null as any,
-    image_url: null,
-    primary_color: null,
-    secondary_color: null,
-    order_email: null,
-    order_whatsapp: null,
+    image_url: null as string | null,
+    primary_color: null as string | null,
+    secondary_color: null as string | null,
+    order_email: null as string | null,
+    order_whatsapp: null as string | null,
+    is_pet_friendly: false,
+    has_wifi: false,
+    has_terrace: false,
+    has_parking: false,
+    is_accessible: false,
+    reservation_url: null as string | null,
+    reservation_phone: null as string | null,
+    instagram: null as string | null,
+    facebook: null as string | null,
+    google_maps_url: null as string | null,
 });
+
 function updateField(field: string, value: any) {
     form[field] = value;
 }

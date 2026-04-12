@@ -370,6 +370,168 @@
                             {{ form.errors.order_whatsapp }}
                         </p>
                     </div>
+
+                    <!-- Opening Hours -->
+                    <div class="space-y-2 md:col-span-2">
+                        <h3 class="text-sm font-semibold text-foreground">{{ t('panel.locations.opening_hours') }}</h3>
+                        <p class="text-xs text-muted-foreground">{{ t('panel.locations.opening_hours_hint') }}</p>
+                    </div>
+
+                    <div class="space-y-2 md:col-span-2">
+                        <div
+                            v-for="(day, idx) in weekdays"
+                            :key="idx"
+                            class="flex items-center gap-3 rounded-lg border border-input px-3 py-2"
+                        >
+                            <span class="w-20 text-sm font-medium shrink-0">{{ day.label }}</span>
+                            <template v-if="!openingHours[idx].is_closed">
+                                <Input
+                                    type="time"
+                                    :model-value="openingHours[idx].opens_at"
+                                    @update:model-value="openingHours[idx].opens_at = $event as string"
+                                    class="h-8 w-28 text-xs"
+                                />
+                                <span class="text-xs text-muted-foreground">—</span>
+                                <Input
+                                    type="time"
+                                    :model-value="openingHours[idx].closes_at"
+                                    @update:model-value="openingHours[idx].closes_at = $event as string"
+                                    class="h-8 w-28 text-xs"
+                                />
+                            </template>
+                            <span v-else class="text-xs text-muted-foreground italic flex-1">{{ t('panel.locations.closed') }}</span>
+                            <button
+                                type="button"
+                                class="relative ml-auto h-5 w-9 rounded-full transition-colors shrink-0"
+                                :class="openingHours[idx].is_closed ? 'bg-input' : 'bg-primary'"
+                                @click="openingHours[idx].is_closed = !openingHours[idx].is_closed"
+                                :title="openingHours[idx].is_closed ? t('panel.locations.mark_open') : t('panel.locations.mark_closed')"
+                            >
+                                <span
+                                    class="absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform"
+                                    :class="openingHours[idx].is_closed ? 'translate-x-0' : 'translate-x-4'"
+                                />
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Amenities -->
+                    <div class="space-y-2 md:col-span-2">
+                        <h3 class="text-sm font-semibold text-foreground">{{ t('panel.locations.amenities') }}</h3>
+                        <p class="text-xs text-muted-foreground">{{ t('panel.locations.amenities_hint') }}</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:col-span-2">
+                        <label
+                            v-for="amenity in amenities"
+                            :key="amenity.key"
+                            class="flex items-center gap-2.5 rounded-lg border border-input px-3 py-2.5 cursor-pointer transition-colors"
+                            :class="form[amenity.key] ? 'border-primary/50 bg-primary/5' : ''"
+                        >
+                            <input
+                                type="checkbox"
+                                :checked="!!form[amenity.key]"
+                                @change="$emit('update:field', amenity.key, ($event.target as HTMLInputElement).checked)"
+                                class="sr-only"
+                            />
+                            <span class="text-lg">{{ amenity.icon }}</span>
+                            <span class="text-xs font-medium">{{ amenity.label }}</span>
+                            <span v-if="form[amenity.key]" class="ml-auto text-primary text-sm font-bold">✓</span>
+                        </label>
+                    </div>
+
+                    <!-- Reservations -->
+                    <div class="space-y-2 md:col-span-2">
+                        <h3 class="text-sm font-semibold text-foreground">{{ t('panel.locations.reservations') }}</h3>
+                    </div>
+
+                    <div class="space-y-2">
+                        <Label for="reservation_phone">{{ t('panel.locations.reservation_phone') }}</Label>
+                        <Input
+                            id="reservation_phone"
+                            :model-value="form.reservation_phone"
+                            @update:model-value="$emit('update:field', 'reservation_phone', $event)"
+                            type="tel"
+                            placeholder="+34 612 345 678"
+                        />
+                    </div>
+                    <div class="space-y-2">
+                        <Label for="reservation_url">{{ t('panel.locations.reservation_url') }}</Label>
+                        <Input
+                            id="reservation_url"
+                            :model-value="form.reservation_url"
+                            @update:model-value="$emit('update:field', 'reservation_url', $event)"
+                            type="url"
+                            placeholder="https://reservas.ejemplo.com"
+                        />
+                    </div>
+
+                    <!-- Social media -->
+                    <div class="space-y-2 md:col-span-2">
+                        <h3 class="text-sm font-semibold text-foreground">{{ t('panel.locations.social_media') }}</h3>
+                    </div>
+
+                    <div class="space-y-2">
+                        <Label for="instagram">Instagram</Label>
+                        <Input
+                            id="instagram"
+                            :model-value="form.instagram"
+                            @update:model-value="$emit('update:field', 'instagram', $event)"
+                            placeholder="@mirestaurante"
+                        />
+                    </div>
+                    <div class="space-y-2">
+                        <Label for="facebook">Facebook</Label>
+                        <Input
+                            id="facebook"
+                            :model-value="form.facebook"
+                            @update:model-value="$emit('update:field', 'facebook', $event)"
+                            placeholder="https://facebook.com/mirestaurante"
+                        />
+                    </div>
+                    <div class="space-y-2 md:col-span-2">
+                        <Label for="google_maps_url">{{ t('panel.locations.google_maps') }}</Label>
+                        <Input
+                            id="google_maps_url"
+                            :model-value="form.google_maps_url"
+                            @update:model-value="$emit('update:field', 'google_maps_url', $event)"
+                            type="url"
+                            placeholder="https://maps.google.com/..."
+                        />
+                    </div>
+
+                    <!-- Gallery (only available when editing an existing location) -->
+                    <template v-if="isEdit && locationId">
+                        <div class="space-y-2 md:col-span-2">
+                            <h3 class="text-sm font-semibold text-foreground">{{ t('panel.locations.gallery') }}</h3>
+                            <p class="text-xs text-muted-foreground">{{ t('panel.locations.gallery_hint') }}</p>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5 md:col-span-2">
+                            <div
+                                v-for="img in galleryImages"
+                                :key="img.id"
+                                class="group relative aspect-square overflow-hidden rounded-lg border"
+                            >
+                                <img :src="`/storage/${img.path}`" :alt="img.alt || ''" class="h-full w-full object-cover" />
+                                <button
+                                    type="button"
+                                    class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity"
+                                    @click="deleteGalleryImage(img.id)"
+                                >
+                                    <span class="text-white text-xs font-medium">{{ t('common.delete') }}</span>
+                                </button>
+                            </div>
+                            <label
+                                v-if="galleryImages.length < 5"
+                                class="flex aspect-square cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-input hover:border-primary/50 transition-colors"
+                            >
+                                <input type="file" accept="image/*" class="hidden" @change="uploadGalleryImage" />
+                                <span class="text-2xl text-muted-foreground">+</span>
+                                <span class="text-[10px] text-muted-foreground mt-1">{{ t('panel.locations.add_image') }}</span>
+                            </label>
+                        </div>
+                    </template>
                 </div>
             </CardContent>
 
@@ -390,8 +552,8 @@
 </template>
 
 <script setup lang="ts">
-import { Link, usePage } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { Link, router, usePage } from '@inertiajs/vue3';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -407,9 +569,9 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card';
-import { Check, ChevronDown, ImageIcon, Save, X } from 'lucide-vue-next';
+import { Check, ChevronDown, Save, X } from 'lucide-vue-next';
 import { index as locationsRoute } from '@/routes/tenant/locations';
-import { Country } from '@/types';
+import type { Country, LocationImage, OpeningHour } from '@/types';
 import { cn } from '@/lib/utils';
 import {
     SelectContent,
@@ -423,6 +585,13 @@ import {
     SelectValue,
     SelectViewport,
 } from 'reka-ui';
+
+interface OpeningHourEntry {
+    weekday: number;
+    opens_at: string;
+    closes_at: string;
+    is_closed: boolean;
+}
 
 interface Props {
     form: {
@@ -443,6 +612,18 @@ interface Props {
         secondary_color?: string | null;
         order_email?: string | null;
         order_whatsapp?: string | null;
+        is_pet_friendly?: boolean;
+        has_wifi?: boolean;
+        has_terrace?: boolean;
+        has_parking?: boolean;
+        is_accessible?: boolean;
+        reservation_url?: string | null;
+        reservation_phone?: string | null;
+        instagram?: string | null;
+        facebook?: string | null;
+        google_maps_url?: string | null;
+        opening_hours?: OpeningHourEntry[];
+        [key: string]: any;
         errors: Record<string, string>;
         processing: boolean;
     };
@@ -452,6 +633,9 @@ interface Props {
     processingText?: string;
     isEdit?: boolean;
     countries: Country[];
+    locationId?: number;
+    images?: LocationImage[];
+    existingOpeningHours?: OpeningHour[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -489,6 +673,96 @@ function removeImage() {
     emit('update:field', 'image_url', null);
     const input = document.getElementById('location_image') as HTMLInputElement | null;
     if (input) input.value = '';
+}
+
+// Opening hours
+const DEFAULT_OPENS_AT = '09:00';
+const DEFAULT_CLOSES_AT = '22:00';
+
+function buildDefaultHours(): OpeningHourEntry[] {
+    return Array.from({ length: 7 }, (_, idx) => ({
+        weekday: idx,
+        opens_at: DEFAULT_OPENS_AT,
+        closes_at: DEFAULT_CLOSES_AT,
+        is_closed: false,
+    }));
+}
+
+function initOpeningHours(): OpeningHourEntry[] {
+    const defaults = buildDefaultHours();
+    const existing = props.existingOpeningHours ?? [];
+    if (existing.length === 0) return defaults;
+    return defaults.map((def) => {
+        const found = existing.find((h) => h.weekday === def.weekday);
+        if (!found) return def;
+        return {
+            weekday: found.weekday,
+            opens_at: found.opens_at ?? DEFAULT_OPENS_AT,
+            closes_at: found.closes_at ?? DEFAULT_CLOSES_AT,
+            is_closed: found.is_closed,
+        };
+    });
+}
+
+const openingHours = ref<OpeningHourEntry[]>(initOpeningHours());
+
+// Sync opening_hours into form whenever they change
+watch(
+    openingHours,
+    (val) => {
+        emit('update:field', 'opening_hours', val);
+    },
+    { deep: true },
+);
+
+const weekdayLabels = computed(() => [
+    t('panel.locations.monday'),
+    t('panel.locations.tuesday'),
+    t('panel.locations.wednesday'),
+    t('panel.locations.thursday'),
+    t('panel.locations.friday'),
+    t('panel.locations.saturday'),
+    t('panel.locations.sunday'),
+]);
+
+const weekdays = computed(() =>
+    weekdayLabels.value.map((label, idx) => ({ label, idx })),
+);
+
+// Amenities
+const amenities = computed(() => [
+    { key: 'is_pet_friendly', icon: '🐾', label: t('panel.locations.pet_friendly') },
+    { key: 'has_wifi', icon: '📶', label: t('panel.locations.wifi') },
+    { key: 'has_terrace', icon: '☀️', label: t('panel.locations.terrace') },
+    { key: 'has_parking', icon: '🅿️', label: t('panel.locations.parking') },
+    { key: 'is_accessible', icon: '♿', label: t('panel.locations.accessible') },
+]);
+
+// Gallery
+const galleryImages = ref<LocationImage[]>(props.images ?? []);
+
+watch(
+    () => props.images,
+    (val) => {
+        galleryImages.value = val ?? [];
+    },
+);
+
+function uploadGalleryImage(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    router.post(
+        `/panel/locations/${props.locationId}/images`,
+        { image: file },
+        {
+            forceFormData: true,
+            preserveScroll: true,
+        },
+    );
+}
+
+function deleteGalleryImage(imageId: number) {
+    router.delete(`/panel/location-images/${imageId}`, { preserveScroll: true });
 }
 
 const title = computed(() => {

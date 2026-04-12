@@ -68,6 +68,16 @@ class Location extends Model
         'secondary_color',
         'order_email',
         'order_whatsapp',
+        'is_pet_friendly',
+        'has_wifi',
+        'has_terrace',
+        'has_parking',
+        'is_accessible',
+        'reservation_url',
+        'reservation_phone',
+        'instagram',
+        'facebook',
+        'google_maps_url',
     ];
 
     public static function getFilterableFields(): array
@@ -95,6 +105,11 @@ class Location extends Model
             'country_id' => 'integer',
             'languages' => 'array',
             'social_medias' => 'array',
+            'is_pet_friendly' => 'boolean',
+            'has_wifi' => 'boolean',
+            'has_terrace' => 'boolean',
+            'has_parking' => 'boolean',
+            'is_accessible' => 'boolean',
         ];
     }
 
@@ -116,6 +131,11 @@ class Location extends Model
     public function openingHours(): HasMany
     {
         return $this->hasMany(OpeningHour::class)->orderBy('weekday');
+    }
+
+    public function images(): HasMany
+    {
+        return $this->hasMany(LocationImage::class)->orderBy('sort_order');
     }
 
     public function categories(): BelongsToMany

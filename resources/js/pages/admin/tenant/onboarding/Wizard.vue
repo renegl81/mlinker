@@ -170,11 +170,8 @@ const errorClass = 'text-xs text-red-400';
     <div class="min-h-svh bg-slate-950 text-slate-200 selection:bg-teal-500 selection:text-white">
         <div class="flex min-h-svh flex-col items-center justify-start px-4 py-10">
             <!-- Logo -->
-            <div class="mb-10 flex items-center gap-2">
-                <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-teal-500 to-cyan-500 shadow-lg shadow-teal-500/20">
-                    <Sparkles class="h-5 w-5 text-white" />
-                </div>
-                <span class="text-lg font-bold text-white">{{ appName }}</span>
+            <div class="mb-10 flex items-center">
+                <img src="/images/logo-name.png" :alt="appName" class="h-10 object-contain brightness-0 invert" />
             </div>
 
             <!-- Progress indicator -->

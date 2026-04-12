@@ -63,7 +63,7 @@ class LocationController extends Controller
     public function edit(Location $location)
     {
         return Inertia::render('admin/tenant/locations/Edit', [
-            'location' => $location,
+            'location' => $location->load(['openingHours', 'images']),
             'countries' => Country::all(['id', 'name']),
         ]);
     }
@@ -79,7 +79,7 @@ class LocationController extends Controller
         $publicUrl = $domain ? "{$scheme}://{$domain}{$portSuffix}/" : null;
 
         return Inertia::render('admin/tenant/locations/Show', [
-            'location' => $location->load(['country', 'menus']),
+            'location' => $location->load(['country', 'menus', 'openingHours', 'images']),
             'publicUrl' => $publicUrl,
         ]);
     }

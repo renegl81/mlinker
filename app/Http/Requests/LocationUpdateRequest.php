@@ -42,6 +42,21 @@ class LocationUpdateRequest extends FormRequest
             'secondary_color' => ['nullable', 'string', 'max:7', 'regex:/^#[0-9A-Fa-f]{6}$/'],
             'order_email' => ['nullable', 'email', 'max:255'],
             'order_whatsapp' => ['nullable', 'string', 'max:20'],
+            'is_pet_friendly' => ['nullable', 'boolean'],
+            'has_wifi' => ['nullable', 'boolean'],
+            'has_terrace' => ['nullable', 'boolean'],
+            'has_parking' => ['nullable', 'boolean'],
+            'is_accessible' => ['nullable', 'boolean'],
+            'reservation_url' => ['nullable', 'url', 'max:500'],
+            'reservation_phone' => ['nullable', 'string', 'max:20'],
+            'instagram' => ['nullable', 'string', 'max:255'],
+            'facebook' => ['nullable', 'string', 'max:255'],
+            'google_maps_url' => ['nullable', 'url', 'max:500'],
+            'opening_hours' => ['nullable', 'array'],
+            'opening_hours.*.weekday' => ['required', 'integer', 'between:0,6'],
+            'opening_hours.*.opens_at' => ['nullable', 'string'],
+            'opening_hours.*.closes_at' => ['nullable', 'string'],
+            'opening_hours.*.is_closed' => ['nullable', 'boolean'],
         ];
     }
 }

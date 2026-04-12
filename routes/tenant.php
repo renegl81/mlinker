@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\Tenant\CatalogProductController;
 use App\Http\Controllers\Admin\Tenant\DocsController;
 use App\Http\Controllers\Admin\Tenant\ImageUploadController;
 use App\Http\Controllers\Admin\Tenant\LocationController;
+use App\Http\Controllers\Admin\Tenant\LocationImageController;
 use App\Http\Controllers\Admin\Tenant\MenuController;
 use App\Http\Controllers\Admin\Tenant\MenuCustomizationController;
 use App\Http\Controllers\Admin\Tenant\MenuImportController;
@@ -71,6 +72,10 @@ Route::middleware([
 
                 Route::resource('users', UserController::class);
                 Route::resource('locations', LocationController::class);
+
+                // Location gallery images
+                Route::post('locations/{location}/images', [LocationImageController::class, 'store'])->name('locations.images.store');
+                Route::delete('location-images/{locationImage}', [LocationImageController::class, 'destroy'])->name('locations.images.destroy');
 
                 // Solo rutas anidadas para menús
                 Route::resource('locations.menus', MenuController::class)->shallow();

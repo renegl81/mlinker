@@ -95,9 +95,8 @@ function switchLocale(code: string) {
                     </SheetTrigger>
                     <SheetContent side="left" class="w-[280px] p-6 bg-white border-r border-slate-200">
                         <!-- Mobile logo -->
-                        <Link href="/" class="flex items-center gap-2.5 mb-8">
-                            <img src="/images/logo.png" :alt="appName" class="h-9 w-9 object-contain flex-shrink-0" />
-                            <span class="font-bold text-slate-900 text-lg">{{ appName }}</span>
+                        <Link href="/" class="flex items-center mb-8">
+                            <img src="/images/logo-name.png" :alt="appName" class="h-10 object-contain" />
                         </Link>
                         <nav class="space-y-1">
                             <Link
@@ -149,9 +148,9 @@ function switchLocale(code: string) {
             </div>
 
             <!-- Logo -->
-            <Link href="/" class="flex items-center gap-2.5 group">
-                <img src="/images/logo.png" :alt="appName" class="h-9 w-9 object-contain flex-shrink-0" />
-                <span class="font-bold text-slate-900 text-lg tracking-tight">{{ appName }}</span>
+            <Link href="/" class="flex items-center group">
+                <img src="/images/logo-name.png" :alt="appName" class="hidden sm:block h-10 object-contain" />
+                <img src="/images/logo.png" :alt="appName" class="block sm:hidden h-9 w-9 object-contain" />
             </Link>
 
             <!-- Desktop nav -->
