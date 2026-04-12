@@ -16,6 +16,7 @@ import { Link, usePage } from '@inertiajs/vue3';
 import {
     BookOpen,
     Building2,
+    CreditCard,
     LayoutGrid,
     Leaf,
     MoreHorizontal,
@@ -88,6 +89,15 @@ const secondaryItems = computed((): SecondaryNavItem[] => [
                   title: t('nav.users'),
                   href: toUrl(tenantUsers()),
                   icon: Users,
+              },
+          ]
+        : []),
+    ...(isOwner.value
+        ? [
+              {
+                  title: t('nav.billing'),
+                  href: '/panel/billing/plans',
+                  icon: CreditCard,
               },
           ]
         : []),
