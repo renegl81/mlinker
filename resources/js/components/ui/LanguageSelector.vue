@@ -5,6 +5,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import LocaleFlag from '@/components/ui/LocaleFlag.vue';
 import { Globe } from 'lucide-vue-next';
 import { useI18n } from 'vue-i18n';
 
@@ -13,12 +14,12 @@ const { locale, t } = useI18n();
 const SUPPORTED_LOCALES = ['es', 'en', 'ca', 'gl', 'eu'] as const;
 type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
 
-const locales: { code: SupportedLocale; label: string; flag: string }[] = [
-    { code: 'es', label: 'Español', flag: '🇪🇸' },
-    { code: 'en', label: 'English', flag: '🇬🇧' },
-    { code: 'ca', label: 'Català / Valencià', flag: '🏳️' },
-    { code: 'gl', label: 'Galego', flag: '🏳️' },
-    { code: 'eu', label: 'Euskara', flag: '🏳️' },
+const locales: { code: SupportedLocale; label: string }[] = [
+    { code: 'es', label: 'Español' },
+    { code: 'en', label: 'English' },
+    { code: 'ca', label: 'Català / Valencià' },
+    { code: 'gl', label: 'Galego' },
+    { code: 'eu', label: 'Euskara' },
 ];
 
 function changeLocale(code: SupportedLocale) {
@@ -48,7 +49,7 @@ const currentLocaleEntry = () => locales.find((l) => l.code === (locale.value as
                 :class="{ 'font-semibold text-primary': loc.code === locale.value }"
                 @click="changeLocale(loc.code)"
             >
-                <span>{{ loc.flag }}</span>
+                <LocaleFlag :code="loc.code" />
                 <span>{{ loc.label }}</span>
             </DropdownMenuItem>
         </DropdownMenuContent>

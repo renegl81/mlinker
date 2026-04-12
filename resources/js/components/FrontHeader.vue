@@ -15,6 +15,7 @@ import {
 import UserMenuContent from '@/components/UserMenuContent.vue';
 import { getInitials } from '@/composables/useInitials';
 import { Link, router, usePage } from '@inertiajs/vue3';
+import LocaleFlag from '@/components/ui/LocaleFlag.vue';
 import { Globe, Menu } from 'lucide-vue-next';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -46,11 +47,11 @@ const links = computed<NavLink[]>(() => [
 ]);
 
 const UI_LOCALES = [
-    { code: 'es', label: 'Español', flag: '🇪🇸' },
-    { code: 'en', label: 'English', flag: '🇬🇧' },
-    { code: 'ca', label: 'Català', flag: '🏳️' },
-    { code: 'gl', label: 'Galego', flag: '🏳️' },
-    { code: 'eu', label: 'Euskara', flag: '🏳️' },
+    { code: 'es', label: 'Español' },
+    { code: 'en', label: 'English' },
+    { code: 'ca', label: 'Català' },
+    { code: 'gl', label: 'Galego' },
+    { code: 'eu', label: 'Euskara' },
 ];
 
 const currentLocaleLabel = computed(() => {
@@ -137,7 +138,7 @@ function switchLocale(code: string) {
                                             : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'"
                                         @click="switchLocale(loc.code)"
                                     >
-                                        <span>{{ loc.flag }}</span>
+                                        <LocaleFlag :code="loc.code" />
                                         <span>{{ loc.label }}</span>
                                     </button>
                                 </div>
@@ -187,7 +188,7 @@ function switchLocale(code: string) {
                             :class="i18nLocale === loc.code ? 'font-semibold text-teal-700 bg-teal-50' : ''"
                             @click="switchLocale(loc.code)"
                         >
-                            <span>{{ loc.flag }}</span>
+                            <LocaleFlag :code="loc.code" />
                             <span>{{ loc.label }}</span>
                         </DropdownMenuItem>
                     </DropdownMenuContent>

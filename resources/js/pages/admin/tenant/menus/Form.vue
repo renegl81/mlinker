@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button';
+import LocaleFlag from '@/components/ui/LocaleFlag.vue';
 import {
     Card,
     CardContent,
@@ -210,20 +211,23 @@ const handleFileChange = async (event: Event) => {
 
                     <div class="space-y-2">
                         <Label for="lang">{{ t('panel.menus.language') }}</Label>
-                        <select
-                            id="lang"
-                            :value="form.lang"
-                            @change="$emit('update:field', 'lang', ($event.target as HTMLSelectElement).value)"
-                            class="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
-                        >
-                            <option
-                                v-for="(locale, code) in supportedLocales"
-                                :key="code"
-                                :value="code"
+                        <div class="flex items-center gap-2">
+                            <LocaleFlag :code="form.lang" class="inline-block h-5 w-7 rounded-sm object-cover flex-shrink-0" />
+                            <select
+                                id="lang"
+                                :value="form.lang"
+                                @change="$emit('update:field', 'lang', ($event.target as HTMLSelectElement).value)"
+                                class="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
                             >
-                                {{ locale.flag }} {{ locale.native }}
-                            </option>
-                        </select>
+                                <option
+                                    v-for="(locale, code) in supportedLocales"
+                                    :key="code"
+                                    :value="code"
+                                >
+                                    {{ locale.native }}
+                                </option>
+                            </select>
+                        </div>
                         <p class="text-xs text-muted-foreground">
                             {{ t('panel.menus.language_hint') }}
                         </p>

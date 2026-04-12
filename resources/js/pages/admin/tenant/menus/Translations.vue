@@ -2,6 +2,7 @@
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import LocaleFlag from '@/components/ui/LocaleFlag.vue';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -449,7 +450,7 @@ watch(targetLocales, (locales) => {
                     <div class="flex items-center gap-2 overflow-x-auto border-b px-3 py-2">
                         <!-- Source locale (non-clickable reference) -->
                         <div class="flex items-center gap-2 rounded-lg border border-dashed bg-muted/30 px-3 py-2 text-xs text-foreground">
-                            <span class="text-base leading-none">{{ labelFor(sourceLocale).flag }}</span>
+                            <LocaleFlag :code="sourceLocale" class="inline-block h-4 w-5.5 rounded-sm object-cover" />
                             <span class="font-medium">{{ labelFor(sourceLocale).native }}</span>
                             <span class="rounded bg-foreground/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider">{{ t('translations.original') }}</span>
                         </div>
@@ -467,7 +468,7 @@ watch(targetLocales, (locales) => {
                             ]"
                             @click="activeLocale = code"
                         >
-                            <span class="text-base leading-none">{{ labelFor(code).flag }}</span>
+                            <LocaleFlag :code="code" class="inline-block h-4 w-5.5 rounded-sm object-cover" />
                             <span class="font-medium">{{ labelFor(code).native }}</span>
                             <span
                                 class="rounded-full px-1.5 py-0.5 text-[10px] font-semibold tabular-nums"
@@ -511,7 +512,7 @@ watch(targetLocales, (locales) => {
                                     class="flex cursor-pointer items-center gap-2"
                                     @click="addLanguage(meta.code)"
                                 >
-                                    <span>{{ meta.flag }}</span>
+                                    <LocaleFlag :code="meta.code" />
                                     <span>{{ meta.native }}</span>
                                     <Sparkles class="ml-auto h-3 w-3 text-emerald-500" />
                                 </DropdownMenuItem>
@@ -582,13 +583,13 @@ watch(targetLocales, (locales) => {
                     </div>
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div class="space-y-1.5">
-                            <Label class="panel-label-muted">{{ t('translations.field_name') }} · {{ labelFor(sourceLocale).flag }} {{ sourceLocale.toUpperCase() }}</Label>
+                            <Label class="panel-label-muted flex items-center gap-1">{{ t('translations.field_name') }} · <LocaleFlag :code="sourceLocale" class="inline-block h-3 w-4 rounded-sm" /> {{ sourceLocale.toUpperCase() }}</Label>
                             <Input :model-value="menu.name" disabled class="panel-input-readonly" />
                         </div>
                         <div class="space-y-1.5">
                             <div class="flex items-center justify-between">
                                 <Label class="panel-label">
-                                    {{ t('translations.field_name') }} · {{ labelFor(activeLocale).flag }} {{ activeLocale.toUpperCase() }}
+                                    <span class="flex items-center gap-1">{{ t('translations.field_name') }} · <LocaleFlag :code="activeLocale" class="inline-block h-3 w-4 rounded-sm" /> {{ activeLocale.toUpperCase() }}</span>
                                 </Label>
                                 <button
                                     type="button"

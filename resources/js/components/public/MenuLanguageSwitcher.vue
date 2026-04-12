@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import LocaleFlag from '@/components/ui/LocaleFlag.vue';
 import { router } from '@inertiajs/vue3';
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -83,7 +84,7 @@ onBeforeUnmount(() => {
             aria-haspopup="listbox"
             @click="toggle"
         >
-            <span class="lang-flag" aria-hidden="true">{{ label(current).flag }}</span>
+            <span class="lang-flag" aria-hidden="true"><LocaleFlag :code="current" class="inline-block h-3.5 w-5 rounded-sm object-cover" /></span>
             <span class="lang-code">{{ current }}</span>
             <svg
                 class="lang-caret"
@@ -114,7 +115,7 @@ onBeforeUnmount(() => {
                     :class="{ 'is-active': code === current }"
                     @click="choose(code)"
                 >
-                    <span class="lang-flag" aria-hidden="true">{{ label(code).flag }}</span>
+                    <span class="lang-flag" aria-hidden="true"><LocaleFlag :code="code" class="inline-block h-3.5 w-5 rounded-sm object-cover" /></span>
                     <span class="lang-native">{{ label(code).native }}</span>
                 </button>
             </li>

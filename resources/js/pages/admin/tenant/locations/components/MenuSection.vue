@@ -16,13 +16,11 @@ import type { Menu } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
 import {
     Edit,
-    ExternalLink,
     Image as ImageIcon,
     Plus,
     Utensils,
 } from 'lucide-vue-next';
-import { computed, ref } from 'vue';
-import ProductsDialog from './ProductsDialog.vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -36,18 +34,6 @@ const props = defineProps<Props>();
 const page = usePage();
 const messages = computed(() => page.props.messages as any);
 
-const selectedMenu = ref<Menu | null>(null);
-const isProductsDialogOpen = ref(false);
-
-const openProductsDialog = (menu: Menu) => {
-    selectedMenu.value = menu;
-    isProductsDialogOpen.value = true;
-};
-
-const closeProductsDialog = () => {
-    isProductsDialogOpen.value = false;
-    selectedMenu.value = null;
-};
 </script>
 
 <template>
@@ -120,31 +106,15 @@ const closeProductsDialog = () => {
                                 </Badge>
                             </TableCell>
                             <TableCell class="text-right">
-                                <div
-                                    class="flex items-center justify-end gap-2"
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    as-child
                                 >
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        @click="openProductsDialog(menu)"
-                                    >
+                                    <Link :href="menuShow(menu.id).url">
                                         <Edit class="h-4 w-4" />
-                                    </Button>
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        as-child
-                                    >
-                                        <Link
-                                            :href="
-                                                menuShow(menu.id)
-                                                    .url
-                                            "
-                                        >
-                                            <ExternalLink class="h-4 w-4" />
-                                        </Link>
-                                    </Button>
-                                </div>
+                                    </Link>
+                                </Button>
                             </TableCell>
                         </TableRow>
                     </TableBody>
@@ -164,12 +134,5 @@ const closeProductsDialog = () => {
             </div>
         </CardContent>
 
-        <ProductsDialog
-            v-if="selectedMenu"
-            :open="isProductsDialogOpen"
-            :menu="selectedMenu"
-            :location-id="locationId"
-            @close="closeProductsDialog"
-        />
     </Card>
 </template>

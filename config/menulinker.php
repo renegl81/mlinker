@@ -20,9 +20,9 @@ return [
         'de' => ['native' => 'Deutsch', 'flag' => '🇩🇪'],
         'it' => ['native' => 'Italiano', 'flag' => '🇮🇹'],
         'pt' => ['native' => 'Português', 'flag' => '🇵🇹'],
-        'ca' => ['native' => 'Català / Valencià', 'flag' => '🏳️'],
-        'gl' => ['native' => 'Galego', 'flag' => '🏳️'],
-        'eu' => ['native' => 'Euskara', 'flag' => '🏳️'],
+        'ca' => ['native' => 'Català / Valencià', 'flag' => 'ca'],
+        'gl' => ['native' => 'Galego', 'flag' => 'gl'],
+        'eu' => ['native' => 'Euskara', 'flag' => 'eu'],
     ],
 
     /*

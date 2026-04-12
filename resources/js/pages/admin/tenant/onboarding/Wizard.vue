@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import LocaleFlag from '@/components/ui/LocaleFlag.vue';
 import { router, useForm, usePage } from '@inertiajs/vue3';
 import { Check, Globe, Loader2, Plus, Sparkles, Store, UtensilsCrossed, X, Zap } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
@@ -66,15 +67,15 @@ function submitLocation() {
 
 // ─── Step 2: Menu ─────────────────────────────────────────────────────────────
 const supportedLangs: Record<string, string> = {
-    es: '🇪🇸 Español',
-    en: '🇬🇧 English',
-    fr: '🇫🇷 Français',
-    de: '🇩🇪 Deutsch',
-    it: '🇮🇹 Italiano',
-    pt: '🇵🇹 Português',
-    ca: '🇪🇸 Català',
-    gl: '🇪🇸 Galego',
-    eu: '🇪🇸 Euskara',
+    es: 'Español',
+    en: 'English',
+    fr: 'Français',
+    de: 'Deutsch',
+    it: 'Italiano',
+    pt: 'Português',
+    ca: 'Català',
+    gl: 'Galego',
+    eu: 'Euskara',
 };
 
 const menuForm = useForm({
@@ -407,15 +408,19 @@ const errorClass = 'text-xs text-red-400';
 
                         <div class="space-y-2">
                             <label for="menu-lang" :class="labelClass">{{ t('panel.menus.language') }}</label>
-                            <select
-                                id="menu-lang"
-                                v-model="menuForm.lang"
-                                :class="inputClass"
-                            >
-                                <option v-for="(label, code) in supportedLangs" :key="code" :value="code">
-                                    {{ label }}
-                                </option>
-                            </select>
+                            <div class="flex items-center gap-2">
+                                <LocaleFlag :code="menuForm.lang" class="inline-block h-5 w-7 rounded-sm object-cover flex-shrink-0" />
+                                <select
+                                    id="menu-lang"
+                                    v-model="menuForm.lang"
+                                    :class="inputClass"
+                                    class="flex-1"
+                                >
+                                    <option v-for="(label, code) in supportedLangs" :key="code" :value="code">
+                                        {{ label }}
+                                    </option>
+                                </select>
+                            </div>
                             <p class="text-xs text-slate-500">{{ t('panel.menus.language_hint') }}</p>
                         </div>
 
