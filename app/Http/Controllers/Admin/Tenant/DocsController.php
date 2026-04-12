@@ -42,6 +42,18 @@ class DocsController extends Controller
                 ],
             ],
             [
+                'slug' => 'location-settings',
+                'icon' => 'Settings',
+                'sections' => [
+                    ['heading' => 'docs.location_settings.hours_title', 'body' => 'docs.location_settings.hours_body'],
+                    ['heading' => 'docs.location_settings.amenities_title', 'body' => 'docs.location_settings.amenities_body'],
+                    ['heading' => 'docs.location_settings.reservations_title', 'body' => 'docs.location_settings.reservations_body'],
+                    ['heading' => 'docs.location_settings.social_title', 'body' => 'docs.location_settings.social_body'],
+                    ['heading' => 'docs.location_settings.gallery_title', 'body' => 'docs.location_settings.gallery_body'],
+                    ['heading' => 'docs.location_settings.orders_title', 'body' => 'docs.location_settings.orders_body'],
+                ],
+            ],
+            [
                 'slug' => 'menus',
                 'icon' => 'BookOpen',
                 'sections' => [
@@ -68,6 +80,19 @@ class DocsController extends Controller
                 ],
             ],
             [
+                'slug' => 'cart',
+                'icon' => 'ShoppingBag',
+                'sections' => [
+                    ['heading' => 'docs.cart.what_title', 'body' => 'docs.cart.what_body'],
+                    ['heading' => 'docs.cart.how_title', 'body' => 'docs.cart.how_body'],
+                    ['heading' => 'docs.cart.name_title', 'body' => 'docs.cart.name_body'],
+                    ['heading' => 'docs.cart.send_title', 'body' => 'docs.cart.send_body'],
+                    ['heading' => 'docs.cart.config_title', 'body' => 'docs.cart.config_body'],
+                    ['heading' => 'docs.cart.plan_title', 'body' => 'docs.cart.plan_body'],
+                    ['heading' => '', 'body' => '', 'tip' => 'docs.cart.tip'],
+                ],
+            ],
+            [
                 'slug' => 'products',
                 'icon' => 'Utensils',
                 'sections' => [
@@ -79,6 +104,18 @@ class DocsController extends Controller
                     ['heading' => 'docs.products.catalog_title', 'body' => 'docs.products.catalog_body'],
                     ['heading' => 'docs.products.merge_title', 'body' => 'docs.products.merge_body'],
                     ['heading' => '', 'body' => '', 'tip' => 'docs.products.tip'],
+                ],
+            ],
+            [
+                'slug' => 'import-export',
+                'icon' => 'FileSpreadsheet',
+                'sections' => [
+                    ['heading' => 'docs.import_export.what_title', 'body' => 'docs.import_export.what_body'],
+                    ['heading' => 'docs.import_export.template_title', 'body' => 'docs.import_export.template_body'],
+                    ['heading' => 'docs.import_export.import_title', 'body' => 'docs.import_export.import_body'],
+                    ['heading' => 'docs.import_export.duplicate_title', 'body' => 'docs.import_export.duplicate_body'],
+                    ['heading' => 'docs.import_export.clone_title', 'body' => 'docs.import_export.clone_body'],
+                    ['heading' => '', 'body' => '', 'tip' => 'docs.import_export.tip'],
                 ],
             ],
             [

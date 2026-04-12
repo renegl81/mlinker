@@ -795,6 +795,18 @@
             "website": {
                 "title": "El teu lloc web",
                 "description": "Activa i personalitza el teu lloc web públic de negoci."
+            },
+            "cart": {
+                "title": "Cistella de comandes",
+                "description": "Com funciona la cistella de comandes per als teus clients."
+            },
+            "import-export": {
+                "title": "Importar i duplicar",
+                "description": "Importa productes des d'Excel i duplica menús o locals."
+            },
+            "location-settings": {
+                "title": "Configuració del local",
+                "description": "Horaris, serveis, reserves, xarxes socials i galeria."
             }
         },
         "getting_started": {
@@ -942,6 +954,48 @@
             "reset_title": "Restablecer valores",
             "reset_body": "Puedes volver a los valores por defecto de la plantilla en cualquier momento pulsando \"Restablecer\" al final del panel de personalización. Esta acción elimina todas las personalizaciones guardadas.",
             "tip": "Los cambios se guardan automáticamente mientras editas. La vista previa se actualiza tras cada guardado para que veas el resultado en tiempo real."
+        },
+        "cart": {
+            "what_title": "¿Qué es el carrito?",
+            "what_body": "El carrito permite a tus clientes seleccionar platos mientras consultan tu carta digital. No es un sistema de pago: es una lista de pedido que el cliente muestra al personal cuando llega a su mesa.",
+            "how_title": "¿Cómo funciona?",
+            "how_body": "Al abrir tu menú digital, el cliente verá un botón + junto a cada plato con precio. Al tocarlo, el plato se añade al carrito. Un icono flotante en la esquina inferior muestra cuántos platos lleva. Al tocar ese icono se abre la lista completa con cantidades y total.",
+            "name_title": "Nombre del pedido",
+            "name_body": "El cliente puede escribir un nombre o referencia (por ejemplo 'Mesa 5 — María') para identificar su pedido. Este nombre aparecerá en la lista y en los mensajes enviados.",
+            "send_title": "Enviar el pedido",
+            "send_body": "Si has configurado un email o WhatsApp de pedidos en tu local, el cliente podrá enviar su lista directamente desde el carrito. El mensaje incluye el nombre, los platos con cantidades y el total.",
+            "config_title": "Configurar canales de envío",
+            "config_body": "Ve a la edición de tu local, pestaña 'Contacto'. Introduce el email y/o WhatsApp donde quieres recibir los pedidos. Si no configuras ninguno, el carrito seguirá funcionando como lista para mostrar al personal.",
+            "plan_title": "¿Qué plan necesito?",
+            "plan_body": "El carrito está disponible en los planes Pro, Business y Enterprise. Los menús del plan gratuito no muestran los botones del carrito.",
+            "tip": "La primera vez que un cliente abre un menú con carrito, verá un mensaje explicativo. El carrito se guarda en el navegador del cliente y se mantiene mientras no cierre la pestaña."
+        },
+        "import_export": {
+            "what_title": "Importar y duplicar",
+            "what_body": "Ahorra tiempo importando productos desde un archivo Excel o duplicando menús y locales existentes. Estas funciones están disponibles en los planes de pago.",
+            "template_title": "Descargar la plantilla",
+            "template_body": "Desde la vista de detalle de cualquier menú, pulsa el botón ⋯ y selecciona 'Descargar plantilla'. Obtendrás un archivo Excel con las columnas correctas y filas de ejemplo: Sección, Producto, Descripción, Precio, Alérgenos, Ingredientes y Calorías.",
+            "import_title": "Importar productos",
+            "import_body": "Rellena la plantilla con tus productos y súbela desde el botón ⋯ → 'Importar Excel'. Se crearán las secciones y productos automáticamente. Los alérgenos se asocian por código (gluten, dairy, eggs...) y los ingredientes se crean si no existen.",
+            "duplicate_title": "Duplicar menús y locales",
+            "duplicate_body": "Puedes duplicar un menú completo (con secciones, productos, alérgenos e ingredientes) desde el botón ⋯ → 'Duplicar menú'. También puedes duplicar un local completo desde su vista de detalle. La copia incluye toda la información y horarios pero no los menús.",
+            "clone_title": "Clonar menú a otro local",
+            "clone_body": "Si tienes varios locales, puedes clonar un menú de un local a otro desde el botón ⋯ → 'Clonar a otro local'. Se creará una copia completa en el local de destino que podrás editar de forma independiente.",
+            "tip": "Al importar, las cabeceras del Excel pueden estar en español o en inglés. Los alérgenos deben usar los códigos estándar: gluten, dairy, eggs, fish, shellfish, peanuts, tree_nuts, soy, celery, mustard, sesame, sulfites, lupin, mollusks."
+        },
+        "location_settings": {
+            "hours_title": "Horarios de apertura",
+            "hours_body": "En la pestaña 'Horarios' de la edición del local puedes definir los horarios de cada día de la semana. Usa el interruptor para marcar los días que estás cerrado. Los horarios se muestran en la web pública de tu negocio.",
+            "amenities_title": "Servicios y comodidades",
+            "amenities_body": "Indica qué servicios ofrece tu local: Pet friendly, WiFi gratis, Terraza, Parking y Accesibilidad. Estos iconos se mostrarán en tu web pública para que tus clientes sepan qué esperar.",
+            "reservations_title": "Reservas",
+            "reservations_body": "Añade un teléfono de reservas y/o un enlace a tu sistema de reservas online (TheFork, Resy, etc.). El botón de reservas aparecerá en la web pública de tu local.",
+            "social_title": "Redes sociales",
+            "social_body": "Conecta tu Instagram, Facebook y Google Maps. Los iconos con enlaces aparecerán en el pie de página de tu web pública.",
+            "gallery_title": "Galería de fotos",
+            "gallery_body": "Sube hasta 5 fotos de tu local (máximo 3MB cada una). Las fotos se muestran como un carrusel en tu web pública. Solo disponible al editar un local existente, no al crear uno nuevo.",
+            "orders_title": "Canales de pedido",
+            "orders_body": "En la pestaña 'Contacto' puedes configurar un email y/o WhatsApp para recibir pedidos del carrito. Cuando un cliente envía su lista desde el menú digital, el mensaje llegará al canal configurado."
         }
     },
     "home": {

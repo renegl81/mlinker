@@ -7,11 +7,14 @@ import {
     Building2,
     ChevronRight,
     CreditCard,
+    FileSpreadsheet,
     Globe,
     Languages,
     Palette,
     QrCode,
     Rocket,
+    Settings,
+    ShoppingBag,
     Users,
     Utensils,
 } from 'lucide-vue-next';
@@ -50,6 +53,9 @@ const iconMap: Record<string, Component> = {
     Globe,
     Palette,
     BarChart2,
+    ShoppingBag,
+    FileSpreadsheet,
+    Settings,
 };
 
 const topicIcon = computed(() => iconMap[props.topic.icon] ?? BookOpen);

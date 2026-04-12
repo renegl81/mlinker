@@ -808,6 +808,18 @@
             "website": {
                 "title": "Your website",
                 "description": "Activate and customise your public business website."
+            },
+            "cart": {
+                "title": "Order cart",
+                "description": "How the order cart works for your customers."
+            },
+            "import-export": {
+                "title": "Import & duplicate",
+                "description": "Import products from Excel and duplicate menus or locations."
+            },
+            "location-settings": {
+                "title": "Location settings",
+                "description": "Hours, amenities, reservations, social media, and gallery."
             }
         },
         "getting_started": {
@@ -955,6 +967,48 @@
             "reset_title": "Reset to defaults",
             "reset_body": "You can reset to the template defaults at any time by clicking \"Reset\" at the bottom of the customization panel. This removes all saved customizations.",
             "tip": "Changes are saved automatically as you edit. The preview refreshes after each save so you can see the result in real time."
+        },
+        "cart": {
+            "what_title": "What is the cart?",
+            "what_body": "The cart lets your customers select dishes while browsing your digital menu. It's not a payment system — it's an order list that the customer shows to staff when they arrive at their table.",
+            "how_title": "How does it work?",
+            "how_body": "When opening your digital menu, the customer will see a + button next to each priced dish. Tapping it adds the dish to the cart. A floating icon in the bottom corner shows how many items they have. Tapping it opens the full list with quantities and total.",
+            "name_title": "Order name",
+            "name_body": "The customer can type a name or reference (e.g. 'Table 5 — Maria') to identify their order. This name will appear in the list and in any messages sent.",
+            "send_title": "Send the order",
+            "send_body": "If you've configured an order email or WhatsApp for your location, the customer can send their list directly from the cart. The message includes the name, dishes with quantities, and the total.",
+            "config_title": "Configure send channels",
+            "config_body": "Go to your location settings, 'Contact' tab. Enter the email and/or WhatsApp where you want to receive orders. If you don't configure any, the cart still works as a list to show staff.",
+            "plan_title": "Which plan do I need?",
+            "plan_body": "The cart is available on Pro, Business, and Enterprise plans. Free plan menus don't show cart buttons.",
+            "tip": "The first time a customer opens a menu with a cart, they'll see an explanatory message. The cart is saved in the customer's browser and persists as long as the tab is open."
+        },
+        "import_export": {
+            "what_title": "Import & duplicate",
+            "what_body": "Save time by importing products from an Excel file or duplicating existing menus and locations. These features are available on paid plans.",
+            "template_title": "Download the template",
+            "template_body": "From any menu detail view, click the ⋯ button and select 'Download template'. You'll get an Excel file with the correct columns and example rows: Section, Product, Description, Price, Allergens, Ingredients, and Calories.",
+            "import_title": "Import products",
+            "import_body": "Fill in the template with your products and upload it via ⋯ → 'Import Excel'. Sections and products will be created automatically. Allergens are matched by code (gluten, dairy, eggs...) and ingredients are created if they don't exist.",
+            "duplicate_title": "Duplicate menus and locations",
+            "duplicate_body": "You can duplicate a complete menu (with sections, products, allergens, and ingredients) via ⋯ → 'Duplicate menu'. You can also duplicate a location from its detail view. The copy includes all information and hours but not menus.",
+            "clone_title": "Clone menu to another location",
+            "clone_body": "If you have multiple locations, you can clone a menu from one to another via ⋯ → 'Clone to another location'. A complete copy will be created in the target location that you can edit independently.",
+            "tip": "When importing, Excel headers can be in Spanish or English. Allergens must use standard codes: gluten, dairy, eggs, fish, shellfish, peanuts, tree_nuts, soy, celery, mustard, sesame, sulfites, lupin, mollusks."
+        },
+        "location_settings": {
+            "hours_title": "Opening hours",
+            "hours_body": "In the 'Schedule' tab of the location editor, you can set hours for each day of the week. Use the toggle to mark days when you're closed. Hours are displayed on your public website.",
+            "amenities_title": "Amenities",
+            "amenities_body": "Indicate which amenities your venue offers: Pet friendly, Free WiFi, Terrace, Parking, and Accessibility. These icons will be shown on your public website so customers know what to expect.",
+            "reservations_title": "Reservations",
+            "reservations_body": "Add a reservation phone number and/or a link to your online booking system (TheFork, Resy, etc.). The reservation button will appear on your public website.",
+            "social_title": "Social media",
+            "social_body": "Connect your Instagram, Facebook, and Google Maps. Icons with links will appear in your public website footer.",
+            "gallery_title": "Photo gallery",
+            "gallery_body": "Upload up to 5 photos of your venue (max 3MB each). Photos are displayed as a carousel on your public website. Only available when editing an existing location, not when creating a new one.",
+            "orders_title": "Order channels",
+            "orders_body": "In the 'Contact' tab, you can configure an email and/or WhatsApp to receive cart orders. When a customer sends their list from the digital menu, the message will arrive at the configured channel."
         }
     },
     "home": {

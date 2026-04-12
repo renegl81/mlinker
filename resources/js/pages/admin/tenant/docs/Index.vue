@@ -5,15 +5,18 @@ import {
     BarChart2,
     BookOpen,
     Building2,
+    ChevronRight,
     CreditCard,
+    FileSpreadsheet,
     Globe,
     Languages,
     Palette,
     QrCode,
     Rocket,
+    Settings,
+    ShoppingBag,
     Users,
     Utensils,
-    ChevronRight,
 } from 'lucide-vue-next';
 import type { Component } from 'vue';
 import { computed } from 'vue';
@@ -43,6 +46,9 @@ const iconMap: Record<string, Component> = {
     Globe,
     Palette,
     BarChart2,
+    ShoppingBag,
+    FileSpreadsheet,
+    Settings,
 };
 
 const topicCards = computed(() =>
