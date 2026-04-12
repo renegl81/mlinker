@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Menu;
 use App\Actions\QrCode\GenerateQrCode;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\QRCodeStoreRequest;
+use App\Jobs\TrackPageView;
 use App\Models\Menu;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
@@ -32,6 +33,14 @@ class QRCodeController extends Controller
         $qr = $menu->qrCode()->firstOrFail();
 
         abort_unless($qr->image_url && Storage::disk('public')->exists($qr->image_url), 404);
+
+        $tenantId = tenant()?->id;
+        if ($tenantId) {
+            TrackPageView::dispatch(
+                $tenantId, 'menu', $menu->id, 'qr_download',
+                request()->ip(), request()->userAgent(), request()->header('referer'),
+            );
+        }
 
         $filename = "menu-{$menu->id}-qr.png";
 

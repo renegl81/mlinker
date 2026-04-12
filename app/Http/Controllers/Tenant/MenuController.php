@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Tenant;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\TrackMenuView;
+use App\Jobs\TrackPageView;
 use App\Models\Menu;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -97,6 +98,11 @@ class MenuController extends Controller
                 request()->ip(),
                 request()->userAgent(),
                 request()->header('referer'),
+            );
+
+            TrackPageView::dispatch(
+                $tenantSlug, 'menu', $menu->id, 'view',
+                request()->ip(), request()->userAgent(), request()->header('referer'),
             );
         }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Tenant;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\TrackPageView;
 use App\Models\Location;
 use App\Models\Menu;
 use Illuminate\Http\RedirectResponse;
@@ -41,16 +42,21 @@ class HomeController extends Controller
         $primaryLocation = $locations->first();
         $template = $tenant->home_template ?? 'HomeClassic';
 
+        TrackPageView::dispatch(
+            $tenant->id, 'home', null, 'view',
+            request()->ip(), request()->userAgent(), request()->header('referer'),
+        );
+
         return Inertia::render("tenant/home/{$template}", [
             'tenant' => [
-                'id'           => $tenant->id,
-                'name'         => $tenant->id,
+                'id' => $tenant->id,
+                'name' => $tenant->id,
                 'businessType' => $tenant->business_type ?? 'restaurant',
             ],
-            'locations'       => $locations,
+            'locations' => $locations,
             'primaryLocation' => $primaryLocation,
             'isMultiLocation' => $isMultiLocation,
-            'seo'             => $this->buildSeo($tenant, $primaryLocation),
+            'seo' => $this->buildSeo($tenant, $primaryLocation),
         ]);
     }
 
@@ -74,15 +80,15 @@ class HomeController extends Controller
 
         $jsonLd = [
             '@context' => 'https://schema.org',
-            '@type'    => 'Restaurant',
-            'name'     => $siteName,
-            'url'      => $url,
+            '@type' => 'Restaurant',
+            'name' => $siteName,
+            'url' => $url,
         ];
 
         if ($primaryLocation) {
             $jsonLd['address'] = [
-                '@type'           => 'PostalAddress',
-                'streetAddress'   => $primaryLocation->address ?? '',
+                '@type' => 'PostalAddress',
+                'streetAddress' => $primaryLocation->address ?? '',
                 'addressLocality' => $primaryLocation->city ?? '',
             ];
 
@@ -101,10 +107,10 @@ class HomeController extends Controller
                 foreach ($primaryLocation->openingHours as $oh) {
                     if (! $oh->is_closed) {
                         $hoursSpec[] = [
-                            '@type'     => 'OpeningHoursSpecification',
+                            '@type' => 'OpeningHoursSpecification',
                             'dayOfWeek' => "https://schema.org/{$days[$oh->weekday]}",
-                            'opens'     => $oh->opens_at,
-                            'closes'    => $oh->closes_at,
+                            'opens' => $oh->opens_at,
+                            'closes' => $oh->closes_at,
                         ];
                     }
                 }

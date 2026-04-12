@@ -514,7 +514,16 @@
             "unlock_analytics": "Desbloquea Analytics co plan Pro",
             "unlock_description": "Visualiza o detalle de visitas, menús populares e fontes de tráfico.",
             "source_social": "Redes sociais",
-            "source_direct": "Directo"
+            "source_direct": "Directo",
+            "home_visits": "Visitas á web",
+            "qr_downloads": "Descargas QR",
+            "peak_hours": "Horas punta",
+            "devices": "Dispositivos",
+            "device_mobile": "Móbil",
+            "device_tablet": "Tableta",
+            "device_desktop": "Escritorio",
+            "weekly_change": "vs semana anterior",
+            "hour_suffix": "h"
         }
     },
     "settings": {
@@ -637,6 +646,10 @@
                 "title": "Xestión do equipo",
                 "description": "Invita colaboradores e controla os seus permisos por local."
             },
+            "analytics": {
+                "title": "Analíticas",
+                "description": "Consulta visitas, horas punta, fontes de tráfico e dispositivos dos teus clientes."
+            },
             "billing": {
                 "title": "Facturación e plans",
                 "description": "Entende os plans dispoñibles e xestiona a túa subscrición."
@@ -749,6 +762,21 @@
             "cancel_body": "Podes cancelar a túa subscrición en calquera momento desde a sección de facturación.",
             "stripe_title": "Facturación e pagos con Stripe",
             "stripe_body": "Os pagos procésanse de forma segura a través de Stripe. Recibirás facturas automáticas por email."
+        },
+        "analytics": {
+            "what_title": "Que rexistran as analíticas?",
+            "what_body": "MenuLinker rexistra automaticamente tres tipos de interaccións: os escaneados de menú (cando un cliente abre a túa carta mediante QR ou ligazón directa), as visitas á páxina web pública do teu negocio (home), e as descargas do código QR desde o panel. Todos os datos recóllense de forma anónima e sen cookies de rastrexo.",
+            "metrics_title": "Métricas dispoñibles",
+            "metrics_body": "O panel de analíticas mostra: o total de visitas ao menú nos últimos 30 días, as visitas diarias nun gráfico de barras, o top 5 de menús máis visitados, as fontes de tráfico clasificadas (QR, WhatsApp, Google, redes sociais, acceso directo), as visitas á web pública, as descargas de QR, a distribución por hora do día e o desglose por tipo de dispositivo. Tamén inclúe unha comparativa semana actual vs semana anterior.",
+            "sources_title": "Clasificación de fontes de tráfico",
+            "sources_body": "Cada visita clasifícase segundo a súa referencia de orixe: se non hai referencia (acceso directo desde o QR escaneado), contabilízase como 'QR'. Se o referente inclúe 'wa.me' ou 'whatsapp', clasifícase como 'WhatsApp'. Os accesos desde Google agrúpanse en 'Google', e os procedentes de Facebook, Twitter ou Instagram en 'Redes sociais'. O resto clasifícase como 'Directo'.",
+            "hours_title": "Horas punta",
+            "hours_body": "O gráfico de horas punta mostra a distribución de visitas ao longo das 24 horas do día, agrupadas a partir dos datos do período seleccionado. As tres horas con maior afluencia resáltanse en cor primaria para identificalas de un vistazo. Esta información é útil para planificar actualizacións do menú ou campañas de comunicación nos momentos de maior tráfico.",
+            "devices_title": "Detección de dispositivos",
+            "devices_body": "MenuLinker clasifica cada visita en tres categorías de dispositivo: móbil, tableta ou escritorio. A detección baséase no axente de usuario do navegador. Cadeas como 'mobile', 'android' ou 'iphone' indican móbil; 'tablet' ou 'ipad' indican tableta; o resto clasifícase como escritorio. Na maioría dos establecementos máis do 80% das visitas proceden de dispositivos móbiles.",
+            "plan_title": "En que plan está dispoñible?",
+            "plan_body": "As analíticas completas están dispoñibles nos plans Pro e superiores. Co plan gratuíto podes ver o reconto total de visitas ao menú, pero o desglose detallado (gráficos, fontes, dispositivos, horas punta e comparativa semanal) require un plan de pago. Podes ver os plans dispoñibles na sección de facturación.",
+            "tip": "Consello: Os datos actualízanse en tempo real. Para evitar inflar as estatísticas, existe unha ventá de deduplicación de 30 minutos: se a mesma IP visita o mesmo menú máis dunha vez nese intervalo, só se conta a primeira visita."
         },
         "website": {
             "what_title": "A túa propia páxina web de negocio",

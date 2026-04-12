@@ -514,7 +514,16 @@
             "unlock_analytics": "Desblokeatu Analytics Pro planarekin",
             "unlock_description": "Ikusi bisiten xehetasuna, menu ezagunenak eta trafiko iturriak.",
             "source_social": "Sare sozialak",
-            "source_direct": "Zuzenean"
+            "source_direct": "Zuzenean",
+            "home_visits": "Webguneko bisitак",
+            "qr_downloads": "QR deskargak",
+            "peak_hours": "Ordu puntak",
+            "devices": "Gailuak",
+            "device_mobile": "Mugikorra",
+            "device_tablet": "Tableta",
+            "device_desktop": "Mahaigaina",
+            "weekly_change": "vs aurreko astea",
+            "hour_suffix": "h"
         }
     },
     "settings": {
@@ -637,6 +646,10 @@
                 "title": "Taldea kudeatu",
                 "description": "Laguntzaileak gonbidatu eta haien baimenak toki bakoitzeko kontrolatu."
             },
+            "analytics": {
+                "title": "Analitikak",
+                "description": "Kontsultatu bisitак, ordu puntak, trafiko iturriak eta zure bezeroen gailuak."
+            },
             "billing": {
                 "title": "Fakturaketa eta planak",
                 "description": "Eskuragarri dauden planak ulertu eta zure harpidetza kudeatu."
@@ -749,6 +762,21 @@
             "cancel_body": "Zure harpidetza edozein unetan bertan behera utzi dezakezu fakturazio ataletik.",
             "stripe_title": "Fakturaketa eta ordainketak Stripe bidez",
             "stripe_body": "Ordainketak Stripe bidez modu seguruan prozesatzen dira. Automatikoki jasoko dituzu fakturak emailez."
+        },
+        "analytics": {
+            "what_title": "Zer erregistratzen dute analitikek?",
+            "what_body": "MenuLinker-ek automatikoki hiru interakzio mota erregistratzen ditu: menuaren eskaneatzeak (bezero batek QR edo esteka zuzenaren bidez zure menura sartzen denean), zure negozioaren webgune publikoaren bisitак (hasiera-orria), eta QR kodearen deskargak paneletik. Datu guztiak modu anonimoan eta jarraipenerako cookierik gabe biltzen dira.",
+            "metrics_title": "Eskuragarri dauden metrikak",
+            "metrics_body": "Analitiken panelak erakusten du: menuaren bisita kopuru osoa azken 30 egunetan, eguneroko bisitак barra-grafiko batean, bisitatuenen top 5 menuak, sailkatutako trafiko iturriak (QR, WhatsApp, Google, sare sozialak, sarbide zuzena), webguneko bisitак, QR deskargak, eguneko orduen banaketa eta gailu motaren arabera banaketa. Aste honetako eta aurreko asteko konparaketa ere badu.",
+            "sources_title": "Trafiko iturrien sailkapena",
+            "sources_body": "Bisita bakoitza bere jatorrizko erreferentziaren arabera sailkatzen da: erreferentziarik ez badago (eskaneatu den QR-tik zuzeneko sarbidea), 'QR' gisa zenbatzen da. Erreferenteak 'wa.me' edo 'whatsapp' badu, 'WhatsApp' gisa sailkatzen da. Google-ko sarbideak 'Google' azpian biltzen dira, eta Facebook, Twitter edo Instagram-ekoak 'Sare sozialak' azpian. Gainerakoak 'Zuzenean' gisa sailkatzen dira.",
+            "hours_title": "Ordu puntak",
+            "hours_body": "Ordu punten grafikoak eguneko 24 ordutan zehar bisiten banaketa erakusten du, hautatutako aldiko datuetan oinarrituta. Gehien bisitatutako hiru orduak kolore nagusian nabarmentzen dira, begirada batean identifikatzeko. Informazio hau erabilgarria da menuaren eguneraketak edo komunikazio-kanpainak trafiko handiena dagoen momentuetan planifikatzeko.",
+            "devices_title": "Gailuen detekzioa",
+            "devices_body": "MenuLinker-ek bisita bakoitza hiru gailu-kategoriak sailkatzen ditu: mugikorra, tableta edo mahaigaina. Detekzioa nabigatzailearen erabiltzaile-agenteetan oinarritzen da. 'mobile', 'android' edo 'iphone' bezalako kateak mugikorra adierazten dute; 'tablet' edo 'ipad' tableta adierazten dute; gainerakoak mahaigain gisa sailkatzen dira. Establezimendu gehienetan bisiten %80 baino gehiago mugikorreko gailuetatik datoz.",
+            "plan_title": "Zein planetan dago eskuragarri?",
+            "plan_body": "Analitika osoak Pro eta gorago planetan daude eskuragarri. Doako planarekin menuaren bisita kopuru osoa ikus dezakezu, baina xehetasun osoa (grafikoak, iturriak, gailuak, ordu puntak eta aste konparaketa) ordaindutako plan bat eskatzen du. Eskuragarri dauden planak fakturaketa atalean ikus ditzakezu.",
+            "tip": "Aholkua: Datuak denbora errealean eguneratzen dira. Estatistikak puztu ez daitezen, 30 minutuko deduplicazio-leihoa dago: IP berak menu bera tarte horretan behin baino gehiagotan bisitatzen badu, lehen bisita bakarrik zenbatzen da."
         },
         "website": {
             "what_title": "Zure negozioaren webgunea",

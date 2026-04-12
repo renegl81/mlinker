@@ -54,6 +54,11 @@ class DashboardController extends Controller
                 'end' => Carbon::now()->toDateString(),
                 'days' => 30,
             ],
+            'home_views' => 0,
+            'qr_downloads' => 0,
+            'views_by_hour' => [],
+            'views_by_device' => ['mobile' => 0, 'tablet' => 0, 'desktop' => 0],
+            'weekly_comparison' => ['current_week' => 0, 'previous_week' => 0, 'change_percent' => 0],
         ]);
     }
 }

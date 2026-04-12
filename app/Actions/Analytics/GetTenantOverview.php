@@ -3,6 +3,7 @@
 namespace App\Actions\Analytics;
 
 use App\Models\MenuView;
+use App\Models\PageView;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -15,6 +16,11 @@ class GetTenantOverview
      *   top_menus: array<int, array{menu_id: int, name: string, count: int}>,
      *   views_by_source: array<string, int>,
      *   current_period: array{start: string, end: string, days: int},
+     *   home_views: int,
+     *   qr_downloads: int,
+     *   views_by_hour: array<int, array{hour: int, count: int}>,
+     *   views_by_device: array{mobile: int, tablet: int, desktop: int},
+     *   weekly_comparison: array{current_week: int, previous_week: int, change_percent: float},
      * }
      */
     public function execute(string $tenantId, int $days = 30): array
@@ -35,6 +41,16 @@ class GetTenantOverview
 
         $viewsBySource = $this->buildViewsBySource((clone $baseQuery));
 
+        $homeViews = $this->buildHomeViews($tenantId, $start, $end);
+
+        $qrDownloads = $this->buildQrDownloads($tenantId, $start, $end);
+
+        $viewsByHour = $this->buildViewsByHour($tenantId, $start, $end);
+
+        $viewsByDevice = $this->buildViewsByDevice($tenantId, $start, $end);
+
+        $weeklyComparison = $this->buildWeeklyComparison($tenantId);
+
         return [
             'total_views' => $totalViews,
             'views_by_day' => $viewsByDay,
@@ -45,6 +61,11 @@ class GetTenantOverview
                 'end' => $end->toDateString(),
                 'days' => $days,
             ],
+            'home_views' => $homeViews,
+            'qr_downloads' => $qrDownloads,
+            'views_by_hour' => $viewsByHour,
+            'views_by_device' => $viewsByDevice,
+            'weekly_comparison' => $weeklyComparison,
         ];
     }
 
@@ -147,5 +168,114 @@ class GetTenantOverview
         }
 
         return 'Directo';
+    }
+
+    private function buildHomeViews(string $tenantId, Carbon $start, Carbon $end): int
+    {
+        return PageView::withoutGlobalScopes()
+            ->where('tenant_id', $tenantId)
+            ->where('page_type', 'home')
+            ->where('viewed_at', '>=', $start)
+            ->where('viewed_at', '<=', $end)
+            ->count();
+    }
+
+    private function buildQrDownloads(string $tenantId, Carbon $start, Carbon $end): int
+    {
+        return PageView::withoutGlobalScopes()
+            ->where('tenant_id', $tenantId)
+            ->where('event', 'qr_download')
+            ->where('viewed_at', '>=', $start)
+            ->where('viewed_at', '<=', $end)
+            ->count();
+    }
+
+    /**
+     * @return array<int, array{hour: int, count: int}>
+     */
+    private function buildViewsByHour(string $tenantId, Carbon $start, Carbon $end): array
+    {
+        $rows = MenuView::withoutGlobalScopes()
+            ->where('tenant_id', $tenantId)
+            ->where('viewed_at', '>=', $start)
+            ->where('viewed_at', '<=', $end)
+            ->select(DB::raw('EXTRACT(HOUR FROM viewed_at)::int as hour'), DB::raw('COUNT(*) as count'))
+            ->groupBy(DB::raw('EXTRACT(HOUR FROM viewed_at)'))
+            ->orderBy('hour')
+            ->get()
+            ->keyBy('hour');
+
+        $result = [];
+        for ($h = 0; $h < 24; $h++) {
+            $result[] = [
+                'hour' => $h,
+                'count' => (int) ($rows[$h]?->count ?? 0),
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return array{mobile: int, tablet: int, desktop: int}
+     */
+    private function buildViewsByDevice(string $tenantId, Carbon $start, Carbon $end): array
+    {
+        $devices = ['mobile' => 0, 'tablet' => 0, 'desktop' => 0];
+
+        $rows = PageView::withoutGlobalScopes()
+            ->where('tenant_id', $tenantId)
+            ->where('viewed_at', '>=', $start)
+            ->where('viewed_at', '<=', $end)
+            ->select('device_type', DB::raw('COUNT(*) as count'))
+            ->groupBy('device_type')
+            ->get();
+
+        foreach ($rows as $row) {
+            $type = (string) ($row->device_type ?? 'desktop');
+            if (array_key_exists($type, $devices)) {
+                $devices[$type] = (int) $row->count;
+            } else {
+                $devices['desktop'] += (int) $row->count;
+            }
+        }
+
+        return $devices;
+    }
+
+    /**
+     * @return array{current_week: int, previous_week: int, change_percent: float}
+     */
+    private function buildWeeklyComparison(string $tenantId): array
+    {
+        $currentStart = Carbon::now()->startOfWeek();
+        $currentEnd = Carbon::now()->endOfDay();
+        $previousStart = Carbon::now()->subWeek()->startOfWeek();
+        $previousEnd = Carbon::now()->subWeek()->endOfWeek();
+
+        $currentWeek = MenuView::withoutGlobalScopes()
+            ->where('tenant_id', $tenantId)
+            ->where('viewed_at', '>=', $currentStart)
+            ->where('viewed_at', '<=', $currentEnd)
+            ->count();
+
+        $previousWeek = MenuView::withoutGlobalScopes()
+            ->where('tenant_id', $tenantId)
+            ->where('viewed_at', '>=', $previousStart)
+            ->where('viewed_at', '<=', $previousEnd)
+            ->count();
+
+        $changePercent = 0.0;
+        if ($previousWeek > 0) {
+            $changePercent = round((($currentWeek - $previousWeek) / $previousWeek) * 100, 1);
+        } elseif ($currentWeek > 0) {
+            $changePercent = 100.0;
+        }
+
+        return [
+            'current_week' => $currentWeek,
+            'previous_week' => $previousWeek,
+            'change_percent' => $changePercent,
+        ];
     }
 }

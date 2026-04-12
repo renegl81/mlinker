@@ -514,7 +514,16 @@
             "unlock_analytics": "Desbloquea Analytics con el plan Pro",
             "unlock_description": "Visualiza el detalle de visitas, menús populares y fuentes de tráfico.",
             "source_social": "Redes sociales",
-            "source_direct": "Directo"
+            "source_direct": "Directo",
+            "home_visits": "Visitas a la web",
+            "qr_downloads": "Descargas QR",
+            "peak_hours": "Horas punta",
+            "devices": "Dispositivos",
+            "device_mobile": "Móvil",
+            "device_tablet": "Tablet",
+            "device_desktop": "Escritorio",
+            "weekly_change": "vs semana anterior",
+            "hour_suffix": "h"
         }
     },
     "settings": {
@@ -637,6 +646,10 @@
                 "title": "Gestión de equipo",
                 "description": "Invita a colaboradores y controla sus permisos por local."
             },
+            "analytics": {
+                "title": "Analíticas",
+                "description": "Consulta visitas, horarios punta, fuentes de tráfico y dispositivos de tus clientes."
+            },
             "billing": {
                 "title": "Facturación y planes",
                 "description": "Entiende los planes disponibles y gestiona tu suscripción."
@@ -749,6 +762,21 @@
             "cancel_body": "Puedes cancelar tu suscripción en cualquier momento desde la sección de facturación. Al cancelar, mantienes el acceso a las funciones de pago hasta el final del período facturado. No hay penalizaciones ni permanencias.",
             "stripe_title": "Facturación y pagos con Stripe",
             "stripe_body": "Los pagos se procesan de forma segura a través de Stripe, uno de los procesadores de pago más utilizados del mundo. Recibirás facturas automáticas por email cada vez que se renueve tu suscripción. Puedes consultar el historial de pagos desde el portal de facturación."
+        },
+        "analytics": {
+            "what_title": "¿Qué registran las analíticas?",
+            "what_body": "MenuLinker registra automáticamente tres tipos de interacciones: los escaneos de menú (cuando un cliente abre tu carta mediante QR o enlace directo), las visitas a la página web pública de tu negocio (home), y las descargas del código QR desde el panel. Todos los datos se recogen de forma anónima y sin cookies de rastreo.",
+            "metrics_title": "Métricas disponibles",
+            "metrics_body": "El dashboard de analíticas muestra: el total de visitas al menú en los últimos 30 días, las visitas diarias en un gráfico de barras, el top 5 de menús más visitados, las fuentes de tráfico clasificadas (QR, WhatsApp, Google, redes sociales, acceso directo), las visitas a la web pública, las descargas de QR, la distribución por hora del día y el desglose por tipo de dispositivo. También incluye una comparativa semana actual vs semana anterior.",
+            "sources_title": "Clasificación de fuentes de tráfico",
+            "sources_body": "Cada visita se clasifica según su referencia de origen: si no hay referencia (acceso directo desde el QR escaneado), se cuenta como 'QR'. Si el referente incluye 'wa.me' o 'whatsapp', se clasifica como 'WhatsApp'. Los accesos desde Google se agrupan en 'Google', y los provenientes de Facebook, Twitter o Instagram en 'Redes sociales'. El resto se clasifica como 'Directo'.",
+            "hours_title": "Horas punta",
+            "hours_body": "El gráfico de horas punta muestra la distribución de visitas a lo largo de las 24 horas del día, agrupadas a partir de los datos del período seleccionado. Las tres horas con mayor afluencia se resaltan en color primario para identificarlas de un vistazo. Esta información es útil para planificar actualizaciones del menú o campañas de comunicación en los momentos de mayor tráfico.",
+            "devices_title": "Detección de dispositivos",
+            "devices_body": "MenuLinker clasifica cada visita en tres categorías de dispositivo: móvil, tablet o escritorio. La detección se basa en el agente de usuario del navegador. Strings como 'mobile', 'android' o 'iphone' indican móvil; 'tablet' o 'ipad' indican tablet; el resto se clasifica como escritorio. En la mayoría de establecimientos más del 80% de las visitas proceden de dispositivos móviles.",
+            "plan_title": "¿En qué plan está disponible?",
+            "plan_body": "Las analíticas completas están disponibles en los planes Pro y superiores. Con el plan gratuito puedes ver el recuento total de visitas al menú, pero el desglose detallado (gráficos, fuentes, dispositivos, horas punta y comparativa semanal) requiere un plan de pago. Puedes ver los planes disponibles en la sección de facturación.",
+            "tip": "Consejo: Los datos se actualizan en tiempo real. Para evitar inflar las estadísticas, existe una ventana de deduplicación de 30 minutos: si la misma IP visita el mismo menú más de una vez en ese intervalo, solo se cuenta la primera visita."
         },
         "website": {
             "what_title": "Tu propia página web de negocio",

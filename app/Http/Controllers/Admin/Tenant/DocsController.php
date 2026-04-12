@@ -103,6 +103,19 @@ class DocsController extends Controller
                 ],
             ],
             [
+                'slug' => 'analytics',
+                'icon' => 'BarChart2',
+                'sections' => [
+                    ['heading' => 'docs.analytics.what_title', 'body' => 'docs.analytics.what_body'],
+                    ['heading' => 'docs.analytics.metrics_title', 'body' => 'docs.analytics.metrics_body'],
+                    ['heading' => 'docs.analytics.sources_title', 'body' => 'docs.analytics.sources_body'],
+                    ['heading' => 'docs.analytics.hours_title', 'body' => 'docs.analytics.hours_body'],
+                    ['heading' => 'docs.analytics.devices_title', 'body' => 'docs.analytics.devices_body'],
+                    ['heading' => 'docs.analytics.plan_title', 'body' => 'docs.analytics.plan_body'],
+                    ['heading' => '', 'body' => '', 'tip' => 'docs.analytics.tip'],
+                ],
+            ],
+            [
                 'slug' => 'billing',
                 'icon' => 'CreditCard',
                 'sections' => [

@@ -4,7 +4,7 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes/tenant';
 import type { BreadcrumbItem } from '@/types';
 import { Head, Link } from '@inertiajs/vue3';
-import { BarChart2, Eye, Star, TrendingUp, Lock } from 'lucide-vue-next';
+import { BarChart2, Clock, Eye, Home, Lock, Monitor, QrCode, Smartphone, Star, Tablet, TrendingDown, TrendingUp } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -35,6 +35,23 @@ interface CurrentPeriod {
     days: number;
 }
 
+interface HourView {
+    hour: number;
+    count: number;
+}
+
+interface ViewsByDevice {
+    mobile: number;
+    tablet: number;
+    desktop: number;
+}
+
+interface WeeklyComparison {
+    current_week: number;
+    previous_week: number;
+    change_percent: number;
+}
+
 const props = defineProps<{
     hasAnalytics: boolean;
     currentPlan: string;
@@ -43,6 +60,11 @@ const props = defineProps<{
     top_menus: TopMenu[];
     views_by_source: ViewsBySource;
     current_period: CurrentPeriod;
+    home_views: number;
+    qr_downloads: number;
+    views_by_hour: HourView[];
+    views_by_device: ViewsByDevice;
+    weekly_comparison: WeeklyComparison;
 }>();
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -89,6 +111,30 @@ const sourceLabels = computed<Record<string, string>>(() => ({
     Social: t('panel.dashboard.source_social'),
     Directo: t('panel.dashboard.source_direct'),
 }));
+
+const hourChartMax = computed(() => {
+    const counts = props.views_by_hour?.map((h) => h.count) ?? [];
+    return Math.max(...counts, 1);
+});
+
+const topThreeHours = computed(() => {
+    if (!props.views_by_hour?.length) return new Set<number>();
+    const sorted = [...props.views_by_hour].sort((a, b) => b.count - a.count);
+    return new Set(sorted.slice(0, 3).map((h) => h.hour));
+});
+
+const deviceTotal = computed(() => {
+    const d = props.views_by_device;
+    return (d?.mobile ?? 0) + (d?.tablet ?? 0) + (d?.desktop ?? 0);
+});
+
+const devicePercent = (count: number) => {
+    if (!deviceTotal.value) return 0;
+    return Math.round((count / deviceTotal.value) * 100);
+};
+
+const weeklyChangePositive = computed(() => props.weekly_comparison?.change_percent >= 0);
+const weeklyChangeAbs = computed(() => Math.abs(props.weekly_comparison?.change_percent ?? 0));
 </script>
 
 <template>
@@ -119,8 +165,9 @@ const sourceLabels = computed<Record<string, string>>(() => ({
             <!-- ======================== PRO VIEW ======================== -->
             <template v-if="hasAnalytics">
 
-                <!-- Cards de métricas -->
-                <div class="grid gap-4 md:grid-cols-3">
+                <!-- Cards de métricas — 5 columnas -->
+                <div class="grid gap-4 md:grid-cols-3 xl:grid-cols-5">
+                    <!-- Total visitas -->
                     <Card>
                         <CardHeader class="flex flex-row items-center justify-between pb-2">
                             <CardTitle class="text-sm font-medium text-muted-foreground">
@@ -131,9 +178,22 @@ const sourceLabels = computed<Record<string, string>>(() => ({
                         <CardContent>
                             <div class="text-4xl font-bold">{{ total_views.toLocaleString() }}</div>
                             <p class="mt-1 text-xs text-muted-foreground">{{ t('panel.dashboard.scans') }}</p>
+                            <!-- Weekly comparison badge -->
+                            <div v-if="weekly_comparison" class="mt-2 flex items-center gap-1">
+                                <span
+                                    class="inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-xs font-semibold"
+                                    :class="weeklyChangePositive ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'"
+                                >
+                                    <TrendingUp v-if="weeklyChangePositive" class="h-3 w-3" />
+                                    <TrendingDown v-else class="h-3 w-3" />
+                                    {{ weeklyChangePositive ? '+' : '-' }}{{ weeklyChangeAbs }}%
+                                </span>
+                                <span class="text-xs text-muted-foreground">{{ t('panel.dashboard.weekly_change') }}</span>
+                            </div>
                         </CardContent>
                     </Card>
 
+                    <!-- Menú más popular -->
                     <Card>
                         <CardHeader class="flex flex-row items-center justify-between pb-2">
                             <CardTitle class="text-sm font-medium text-muted-foreground">
@@ -151,6 +211,7 @@ const sourceLabels = computed<Record<string, string>>(() => ({
                         </CardContent>
                     </Card>
 
+                    <!-- Fuente principal -->
                     <Card>
                         <CardHeader class="flex flex-row items-center justify-between pb-2">
                             <CardTitle class="text-sm font-medium text-muted-foreground">
@@ -161,6 +222,34 @@ const sourceLabels = computed<Record<string, string>>(() => ({
                         <CardContent>
                             <div class="text-2xl font-bold">{{ mainSource }}</div>
                             <p class="mt-1 text-xs text-muted-foreground">{{ t('panel.dashboard.top_traffic') }}</p>
+                        </CardContent>
+                    </Card>
+
+                    <!-- Visitas a la web (home) -->
+                    <Card>
+                        <CardHeader class="flex flex-row items-center justify-between pb-2">
+                            <CardTitle class="text-sm font-medium text-muted-foreground">
+                                {{ t('panel.dashboard.home_visits') }}
+                            </CardTitle>
+                            <Home class="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div class="text-4xl font-bold">{{ home_views.toLocaleString() }}</div>
+                            <p class="mt-1 text-xs text-muted-foreground">{{ t('panel.dashboard.scans') }}</p>
+                        </CardContent>
+                    </Card>
+
+                    <!-- Descargas QR -->
+                    <Card>
+                        <CardHeader class="flex flex-row items-center justify-between pb-2">
+                            <CardTitle class="text-sm font-medium text-muted-foreground">
+                                {{ t('panel.dashboard.qr_downloads') }}
+                            </CardTitle>
+                            <QrCode class="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div class="text-4xl font-bold">{{ qr_downloads.toLocaleString() }}</div>
+                            <p class="mt-1 text-xs text-muted-foreground">{{ t('panel.dashboard.scans') }}</p>
                         </CardContent>
                     </Card>
                 </div>
@@ -259,13 +348,107 @@ const sourceLabels = computed<Record<string, string>>(() => ({
                     </Card>
                 </div>
 
+                <!-- Horas punta + Dispositivos -->
+                <div class="grid gap-4 md:grid-cols-2">
+                    <!-- Peak hours -->
+                    <Card>
+                        <CardHeader>
+                            <CardTitle class="flex items-center gap-2 text-base font-semibold">
+                                <Clock class="h-4 w-4" />
+                                {{ t('panel.dashboard.peak_hours') }}
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div v-if="!views_by_hour?.length" class="text-sm text-muted-foreground">
+                                {{ t('panel.dashboard.no_visits') }}
+                            </div>
+                            <div v-else class="flex h-28 items-end gap-0.5">
+                                <div
+                                    v-for="item in views_by_hour"
+                                    :key="item.hour"
+                                    class="group relative flex flex-1 flex-col items-center justify-end"
+                                >
+                                    <div
+                                        class="w-full rounded-t transition-all"
+                                        :class="topThreeHours.has(item.hour) ? 'bg-primary' : 'bg-primary/30'"
+                                        :style="{ height: `${(item.count / hourChartMax) * 100}%`, minHeight: item.count > 0 ? '2px' : '0' }"
+                                    />
+                                    <div
+                                        class="absolute bottom-full mb-1 hidden rounded bg-popover px-2 py-1 text-xs text-popover-foreground shadow group-hover:block whitespace-nowrap z-10"
+                                    >
+                                        {{ item.hour }}{{ t('panel.dashboard.hour_suffix') }}: {{ item.count }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-2 flex justify-between text-xs text-muted-foreground">
+                                <span>0{{ t('panel.dashboard.hour_suffix') }}</span>
+                                <span>12{{ t('panel.dashboard.hour_suffix') }}</span>
+                                <span>23{{ t('panel.dashboard.hour_suffix') }}</span>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    <!-- Dispositivos -->
+                    <Card>
+                        <CardHeader>
+                            <CardTitle class="flex items-center gap-2 text-base font-semibold">
+                                <Smartphone class="h-4 w-4" />
+                                {{ t('panel.dashboard.devices') }}
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div v-if="!deviceTotal" class="text-sm text-muted-foreground">
+                                {{ t('panel.dashboard.no_visits') }}
+                            </div>
+                            <div v-else class="space-y-4">
+                                <!-- Mobile -->
+                                <div class="flex items-center gap-3">
+                                    <Smartphone class="h-4 w-4 shrink-0 text-muted-foreground" />
+                                    <span class="w-20 text-sm text-muted-foreground">{{ t('panel.dashboard.device_mobile') }}</span>
+                                    <div class="flex-1 overflow-hidden rounded-full bg-muted">
+                                        <div
+                                            class="h-2 rounded-full bg-primary transition-all"
+                                            :style="{ width: `${devicePercent(views_by_device.mobile)}%` }"
+                                        />
+                                    </div>
+                                    <span class="w-10 text-right text-sm font-semibold">{{ devicePercent(views_by_device.mobile) }}%</span>
+                                </div>
+                                <!-- Tablet -->
+                                <div class="flex items-center gap-3">
+                                    <Tablet class="h-4 w-4 shrink-0 text-muted-foreground" />
+                                    <span class="w-20 text-sm text-muted-foreground">{{ t('panel.dashboard.device_tablet') }}</span>
+                                    <div class="flex-1 overflow-hidden rounded-full bg-muted">
+                                        <div
+                                            class="h-2 rounded-full bg-primary/70 transition-all"
+                                            :style="{ width: `${devicePercent(views_by_device.tablet)}%` }"
+                                        />
+                                    </div>
+                                    <span class="w-10 text-right text-sm font-semibold">{{ devicePercent(views_by_device.tablet) }}%</span>
+                                </div>
+                                <!-- Desktop -->
+                                <div class="flex items-center gap-3">
+                                    <Monitor class="h-4 w-4 shrink-0 text-muted-foreground" />
+                                    <span class="w-20 text-sm text-muted-foreground">{{ t('panel.dashboard.device_desktop') }}</span>
+                                    <div class="flex-1 overflow-hidden rounded-full bg-muted">
+                                        <div
+                                            class="h-2 rounded-full bg-primary/40 transition-all"
+                                            :style="{ width: `${devicePercent(views_by_device.desktop)}%` }"
+                                        />
+                                    </div>
+                                    <span class="w-10 text-right text-sm font-semibold">{{ devicePercent(views_by_device.desktop) }}%</span>
+                                </div>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+
             </template>
 
             <!-- ======================== FREE VIEW ======================== -->
             <template v-else>
 
                 <!-- Card visitas reales (teaser) -->
-                <div class="grid gap-4 md:grid-cols-3">
+                <div class="grid gap-4 md:grid-cols-3 xl:grid-cols-5">
                     <Card>
                         <CardHeader class="flex flex-row items-center justify-between pb-2">
                             <CardTitle class="text-sm font-medium text-muted-foreground">
@@ -307,6 +490,40 @@ const sourceLabels = computed<Record<string, string>>(() => ({
                         <CardContent>
                             <div class="text-2xl font-bold blur-sm select-none">QR</div>
                             <p class="mt-1 text-xs text-muted-foreground blur-sm select-none">70% del tráfico</p>
+                        </CardContent>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center bg-background/70 backdrop-blur-[2px]">
+                            <Lock class="mb-1 h-5 w-5 text-muted-foreground" />
+                        </div>
+                    </Card>
+
+                    <!-- Card bloqueada: visitas web -->
+                    <Card class="relative overflow-hidden">
+                        <CardHeader class="flex flex-row items-center justify-between pb-2">
+                            <CardTitle class="text-sm font-medium text-muted-foreground">
+                                {{ t('panel.dashboard.home_visits') }}
+                            </CardTitle>
+                            <Home class="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div class="text-4xl font-bold blur-sm select-none">124</div>
+                            <p class="mt-1 text-xs text-muted-foreground blur-sm select-none">visitas</p>
+                        </CardContent>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center bg-background/70 backdrop-blur-[2px]">
+                            <Lock class="mb-1 h-5 w-5 text-muted-foreground" />
+                        </div>
+                    </Card>
+
+                    <!-- Card bloqueada: descargas QR -->
+                    <Card class="relative overflow-hidden">
+                        <CardHeader class="flex flex-row items-center justify-between pb-2">
+                            <CardTitle class="text-sm font-medium text-muted-foreground">
+                                {{ t('panel.dashboard.qr_downloads') }}
+                            </CardTitle>
+                            <QrCode class="h-4 w-4 text-muted-foreground" />
+                        </CardHeader>
+                        <CardContent>
+                            <div class="text-4xl font-bold blur-sm select-none">37</div>
+                            <p class="mt-1 text-xs text-muted-foreground blur-sm select-none">descargas</p>
                         </CardContent>
                         <div class="absolute inset-0 flex flex-col items-center justify-center bg-background/70 backdrop-blur-[2px]">
                             <Lock class="mb-1 h-5 w-5 text-muted-foreground" />

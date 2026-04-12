@@ -514,7 +514,16 @@
             "unlock_analytics": "Desbloqueja Analytics amb el pla Pro",
             "unlock_description": "Visualitza el detall de visites, menús populars i fonts de tràfic.",
             "source_social": "Xarxes socials",
-            "source_direct": "Directe"
+            "source_direct": "Directe",
+            "home_visits": "Visites a la web",
+            "qr_downloads": "Descàrregues QR",
+            "peak_hours": "Hores punta",
+            "devices": "Dispositius",
+            "device_mobile": "Mòbil",
+            "device_tablet": "Tauleta",
+            "device_desktop": "Escriptori",
+            "weekly_change": "vs setmana anterior",
+            "hour_suffix": "h"
         }
     },
     "settings": {
@@ -637,6 +646,10 @@
                 "title": "Gestió d'equip",
                 "description": "Convida col·laboradors i controla els seus permisos per local."
             },
+            "analytics": {
+                "title": "Analítiques",
+                "description": "Consulta visites, hores punta, fonts de tràfic i dispositius dels teus clients."
+            },
             "billing": {
                 "title": "Facturació i plans",
                 "description": "Entén els plans disponibles i gestiona la teva subscripció."
@@ -749,6 +762,21 @@
             "cancel_body": "Pots cancel·lar la teva subscripció en qualsevol moment des de la secció de facturació. En cancel·lar, mantens l'accés a les funcions de pagament fins al final del període facturat. No hi ha penalitzacions ni permanències.",
             "stripe_title": "Facturació i pagaments amb Stripe",
             "stripe_body": "Els pagaments es processen de forma segura a través de Stripe, un dels processadors de pagament més utilitzats del món. Rebràs factures automàtiques per email cada vegada que es renovi la teva subscripció. Pots consultar l'historial de pagaments des del portal de facturació."
+        },
+        "analytics": {
+            "what_title": "Què registren les analítiques?",
+            "what_body": "MenuLinker registra automàticament tres tipus d'interaccions: els escanejos de menú (quan un client obre la teva carta mitjançant QR o enllaç directe), les visites a la pàgina web pública del teu negoci (home), i les descàrregues del codi QR des del panell. Totes les dades es recullen de forma anònima i sense galetes de rastreig.",
+            "metrics_title": "Mètriques disponibles",
+            "metrics_body": "El tauler d'analítiques mostra: el total de visites al menú els últims 30 dies, les visites diàries en un gràfic de barres, el top 5 de menús més visitats, les fonts de tràfic classificades (QR, WhatsApp, Google, xarxes socials, accés directe), les visites a la web pública, les descàrregues de QR, la distribució per hora del dia i el desglossament per tipus de dispositiu. També inclou una comparativa setmana actual vs setmana anterior.",
+            "sources_title": "Classificació de fonts de tràfic",
+            "sources_body": "Cada visita es classifica segons la seva referència d'origen: si no hi ha referència (accés directe des del QR escanejat), es compta com a 'QR'. Si el referent inclou 'wa.me' o 'whatsapp', es classifica com a 'WhatsApp'. Els accessos des de Google s'agrupen a 'Google', i els provinents de Facebook, Twitter o Instagram a 'Xarxes socials'. La resta es classifica com a 'Directe'.",
+            "hours_title": "Hores punta",
+            "hours_body": "El gràfic d'hores punta mostra la distribució de visites al llarg de les 24 hores del dia, agrupades a partir de les dades del període seleccionat. Les tres hores amb major afluència es ressalten en color primari per identificar-les d'un cop d'ull. Aquesta informació és útil per planificar actualitzacions del menú o campanyes de comunicació en els moments de major tràfic.",
+            "devices_title": "Detecció de dispositius",
+            "devices_body": "MenuLinker classifica cada visita en tres categories de dispositiu: mòbil, tauleta o escriptori. La detecció es basa en l'agent d'usuari del navegador. Cadenes com 'mobile', 'android' o 'iphone' indiquen mòbil; 'tablet' o 'ipad' indiquen tauleta; la resta es classifica com a escriptori. A la majoria d'establiments més del 80% de les visites provenen de dispositius mòbils.",
+            "plan_title": "En quin pla està disponible?",
+            "plan_body": "Les analítiques completes estan disponibles als plans Pro i superiors. Amb el pla gratuït pots veure el recompte total de visites al menú, però el desglossament detallat (gràfics, fonts, dispositius, hores punta i comparativa setmanal) requereix un pla de pagament. Pots veure els plans disponibles a la secció de facturació.",
+            "tip": "Consell: Les dades s'actualitzen en temps real. Per evitar inflar les estadístiques, existeix una finestra de deduplicació de 30 minuts: si la mateixa IP visita el mateix menú més d'una vegada en aquest interval, només es compta la primera visita."
         },
         "website": {
             "what_title": "El teu propi lloc web de negoci",

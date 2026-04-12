@@ -514,7 +514,16 @@
             "unlock_analytics": "Unlock Analytics with the Pro plan",
             "unlock_description": "View visit details, popular menus and traffic sources.",
             "source_social": "Social media",
-            "source_direct": "Direct"
+            "source_direct": "Direct",
+            "home_visits": "Website visits",
+            "qr_downloads": "QR downloads",
+            "peak_hours": "Peak hours",
+            "devices": "Devices",
+            "device_mobile": "Mobile",
+            "device_tablet": "Tablet",
+            "device_desktop": "Desktop",
+            "weekly_change": "vs previous week",
+            "hour_suffix": "h"
         }
     },
     "settings": {
@@ -637,6 +646,10 @@
                 "title": "Team management",
                 "description": "Invite collaborators and control their permissions per location."
             },
+            "analytics": {
+                "title": "Analytics",
+                "description": "Check visits, peak hours, traffic sources and your customers' devices."
+            },
             "billing": {
                 "title": "Billing & plans",
                 "description": "Understand the available plans and manage your subscription."
@@ -749,6 +762,21 @@
             "cancel_body": "You can cancel your subscription at any time from the billing section. Upon cancellation, you retain access to the paid features until the end of the billed period. There are no penalties or minimum terms.",
             "stripe_title": "Billing and payments with Stripe",
             "stripe_body": "Payments are processed securely through Stripe, one of the most widely used payment processors in the world. You will receive automatic invoices by email each time your subscription renews. You can view the payment history from the billing portal."
+        },
+        "analytics": {
+            "what_title": "What does analytics track?",
+            "what_body": "MenuLinker automatically records three types of interactions: menu scans (when a customer opens your menu via QR or direct link), visits to your business public website (home), and QR code downloads from the panel. All data is collected anonymously without tracking cookies.",
+            "metrics_title": "Available metrics",
+            "metrics_body": "The analytics dashboard shows: total menu visits in the last 30 days, daily visits in a bar chart, the top 5 most visited menus, classified traffic sources (QR, WhatsApp, Google, social media, direct access), website visits, QR downloads, hourly distribution and device type breakdown. It also includes a current week vs previous week comparison.",
+            "sources_title": "Traffic source classification",
+            "sources_body": "Each visit is classified by its referral source: if there is no referrer (direct access from a scanned QR), it is counted as 'QR'. If the referrer includes 'wa.me' or 'whatsapp', it is classified as 'WhatsApp'. Google accesses are grouped under 'Google', and those from Facebook, Twitter or Instagram under 'Social media'. Everything else is classified as 'Direct'.",
+            "hours_title": "Peak hours",
+            "hours_body": "The peak hours chart shows the distribution of visits across all 24 hours of the day, aggregated from the selected period data. The three hours with the highest traffic are highlighted in the primary colour for easy identification. This information is useful for scheduling menu updates or communication campaigns at peak traffic times.",
+            "devices_title": "Device detection",
+            "devices_body": "MenuLinker classifies each visit into three device categories: mobile, tablet or desktop. Detection is based on the browser user agent. Strings such as 'mobile', 'android' or 'iphone' indicate mobile; 'tablet' or 'ipad' indicate tablet; everything else is classified as desktop. In most establishments, over 80% of visits come from mobile devices.",
+            "plan_title": "Which plan includes analytics?",
+            "plan_body": "Full analytics are available on Pro and higher plans. With the free plan you can see the total visit count for your menu, but the detailed breakdown (charts, sources, devices, peak hours and weekly comparison) requires a paid plan. You can view available plans in the billing section.",
+            "tip": "Tip: Data updates in real time. To avoid inflating statistics, there is a 30-minute deduplication window: if the same IP visits the same menu more than once within that interval, only the first visit is counted."
         },
         "website": {
             "what_title": "Your own business website",
