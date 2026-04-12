@@ -30,6 +30,7 @@ import {
     Globe,
     Image as ImageIcon,
     Monitor,
+    Palette,
     Pencil,
     Plus,
     QrCode as QrCodeIcon,
@@ -248,6 +249,12 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
                         <Link :href="`/panel/menus/${menu.id}/translations`">
                             <Globe class="mr-2 h-4 w-4" />
                             <span class="hidden sm:inline">{{ t('translations.title') }}</span>
+                        </Link>
+                    </Button>
+                    <Button variant="outline" as-child>
+                        <Link :href="`/panel/menus/${menu.id}/customize`">
+                            <Palette class="mr-2 h-4 w-4" />
+                            <span class="hidden sm:inline">{{ t('panel.menu_show.customize') }}</span>
                         </Link>
                     </Button>
                     <Button variant="outline" as-child>

@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\Tenant\DocsController;
 use App\Http\Controllers\Admin\Tenant\ImageUploadController;
 use App\Http\Controllers\Admin\Tenant\LocationController;
 use App\Http\Controllers\Admin\Tenant\MenuController;
+use App\Http\Controllers\Admin\Tenant\MenuCustomizationController;
 use App\Http\Controllers\Admin\Tenant\OnboardingController;
 use App\Http\Controllers\Admin\Tenant\ProductController;
 use App\Http\Controllers\Admin\Tenant\SectionController;
@@ -94,6 +95,11 @@ Route::middleware([
                 Route::post('menus/{menu}/qr-code', [QRCodeController::class, 'generate'])->name('menus.qr-code.generate');
                 Route::get('menus/{menu}/qr-code/download', [QRCodeController::class, 'download'])->name('menus.qr-code.download');
                 Route::delete('menus/{menu}/qr-code', [QRCodeController::class, 'destroy'])->name('menus.qr-code.destroy');
+
+                // Personalización de menú
+                Route::get('menus/{menu}/customize', [MenuCustomizationController::class, 'show'])->name('menus.customize');
+                Route::patch('menus/{menu}/customization', [MenuCustomizationController::class, 'update'])->name('menus.customization.update');
+                Route::delete('menus/{menu}/customization', [MenuCustomizationController::class, 'reset'])->name('menus.customization.reset');
 
                 // Traducciones de menú
                 Route::get('menus/{menu}/translations', [TranslationController::class, 'show'])->name('menus.translations.show');

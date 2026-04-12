@@ -117,6 +117,7 @@ class MenuController extends Controller
             'hasMultilang' => $hasMultilang,
             'availableLocales' => $availableLocales,
             'supportedLocales' => config('menulinker.supported_locales'),
+            'customization' => $menu->customization,
         ]);
     }
 
