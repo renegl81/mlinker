@@ -5,6 +5,7 @@ import MenuLanguageSwitcher from '@/components/public/MenuLanguageSwitcher.vue';
 import ShareMenu from '@/components/public/ShareMenu.vue';
 import AllergenIcon from '@/components/ui/AllergenIcon.vue';
 import { useMenuFormatter } from '@/composables/useMenuFormatter';
+import { useMenuCustomization } from '@/composables/useMenuCustomization';
 import type { Menu } from '@/types';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -24,10 +25,12 @@ interface Props {
     hasMultilang: boolean;
     availableLocales: string[];
     supportedLocales: Record<string, LocaleMeta>;
+    customization?: Record<string, any> | null;
 }
 
 const props = defineProps<Props>();
 const { formatPrice, tagsFor, toRoman } = useMenuFormatter(props.menu);
+const { cssVars, fontLinks, layout } = useMenuCustomization(props.customization ?? null);
 const { t } = useI18n();
 
 const sections = computed(() => {
@@ -59,9 +62,10 @@ function toggleIngredients(productId: number) {
             href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap"
             rel="stylesheet"
         />
+        <link v-for="url in fontLinks" :key="url" rel="stylesheet" :href="url" />
     </Head>
 
-    <div class="menu-chapter">
+    <div class="menu-chapter" :style="cssVars">
         <div
             v-if="hasMultilang && availableLocales.length > 1"
             class="topbar"
@@ -99,7 +103,7 @@ function toggleIngredients(productId: number) {
                         <span class="chapter-num">{{ section.numeral }}</span>
                     </div>
                     <h2 class="chapter-title">{{ section.name }}</h2>
-                    <p v-if="section.description" class="chapter-desc">{{ section.description }}</p>
+                    <p v-if="layout.showSectionDescriptions && section.description" class="chapter-desc">{{ section.description }}</p>
                 </header>
 
                 <ol v-if="section.products.length > 0" class="dishes">
@@ -118,7 +122,7 @@ function toggleIngredients(productId: number) {
                             </p>
 
                             <div
-                                v-if="product.ingredients && product.ingredients.length > 0"
+                                v-if="layout.showIngredients && product.ingredients && product.ingredients.length > 0"
                                 class="dish-ing"
                             >
                                 <button
@@ -134,7 +138,7 @@ function toggleIngredients(productId: number) {
                                 </p>
                             </div>
 
-                            <div v-if="tagsFor(product.tags).length || product.allergens?.length" class="dish-meta">
+                            <div v-if="tagsFor(product.tags).length || (layout.showAllergens && product.allergens?.length)" class="dish-meta">
                                 <span
                                     v-if="menu.show_calories && product.calories"
                                     class="dish-kcal"
@@ -145,7 +149,7 @@ function toggleIngredients(productId: number) {
                                     class="dish-tag"
                                     :title="t(`public_menu.tags.${tag.code}`)"
                                 >{{ tag.glyph }}</span>
-                                <div v-if="product.allergens && product.allergens.length > 0" class="dish-allergens">
+                                <div v-if="layout.showAllergens && product.allergens && product.allergens.length > 0" class="dish-allergens">
                                     <AllergenIcon
                                         v-for="allergen in product.allergens"
                                         :key="allergen.id"
@@ -191,20 +195,31 @@ function toggleIngredients(productId: number) {
 
 <style scoped>
 .menu-chapter {
-    --bg: oklch(0.962 0.012 85);
-    --ink: oklch(0.16 0.01 40);
-    --ink-soft: oklch(0.42 0.012 40);
+    /* Canonical ML variables (overridable by customization) */
+    --ml-bg: oklch(0.962 0.012 85);
+    --ml-ink: oklch(0.16 0.01 40);
+    --ml-ink-soft: oklch(0.42 0.012 40);
+    --ml-accent: oklch(0.62 0.12 75);
+    --ml-rule: oklch(0.82 0.01 60);
+    --ml-font-display: 'Bodoni Moda', 'Playfair Display', Georgia, serif;
+    --ml-font-body: 'Lora', Georgia, serif;
+    --ml-spacing: 1;
+
+    /* Template internal variables now read from ML canonical */
+    --bg: var(--ml-bg);
+    --ink: var(--ml-ink);
+    --ink-soft: var(--ml-ink-soft);
     --ink-faint: oklch(0.58 0.01 40);
-    --rule: oklch(0.82 0.01 60);
-    --gold: oklch(0.62 0.12 75);
+    --rule: var(--ml-rule);
+    --gold: var(--ml-accent);
     --gold-dark: oklch(0.48 0.11 75);
     --menu-paper: var(--bg);
     --menu-ink: var(--ink);
     --menu-rule: var(--rule);
     --menu-accent: var(--gold);
 
-    --font-display: 'Bodoni Moda', 'Playfair Display', Georgia, serif;
-    --font-body: 'Lora', Georgia, serif;
+    --font-display: var(--ml-font-display);
+    --font-body: var(--ml-font-body);
 
     position: relative;
     min-height: 100vh;

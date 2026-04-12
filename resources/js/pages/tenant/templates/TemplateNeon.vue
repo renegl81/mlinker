@@ -5,6 +5,7 @@ import MenuLanguageSwitcher from '@/components/public/MenuLanguageSwitcher.vue';
 import ShareMenu from '@/components/public/ShareMenu.vue';
 import AllergenIcon from '@/components/ui/AllergenIcon.vue';
 import { useMenuFormatter } from '@/composables/useMenuFormatter';
+import { useMenuCustomization } from '@/composables/useMenuCustomization';
 import type { Menu } from '@/types';
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -24,10 +25,12 @@ interface Props {
     hasMultilang: boolean;
     availableLocales: string[];
     supportedLocales: Record<string, LocaleMeta>;
+    customization?: Record<string, any> | null;
 }
 
 const props = defineProps<Props>();
 const { formatPrice, tagsFor, productImage } = useMenuFormatter(props.menu);
+const { cssVars, fontLinks, layout } = useMenuCustomization(props.customization ?? null);
 const { t } = useI18n();
 
 const sections = computed(() => {
@@ -81,9 +84,10 @@ onMounted(() => {
             href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=JetBrains+Mono:wght@400;500;700&family=Manrope:wght@300;400;500;600&display=swap"
             rel="stylesheet"
         />
+        <link v-for="url in fontLinks" :key="url" rel="stylesheet" :href="url" />
     </Head>
 
-    <div class="menu-neon">
+    <div class="menu-neon" :style="cssVars">
         <div class="scanlines" aria-hidden="true" />
 
         <div class="topbar">
@@ -157,7 +161,7 @@ onMounted(() => {
                         <span class="section-bar" />
                     </div>
                     <h2 class="section-title">{{ section.name }}</h2>
-                    <p v-if="section.description" class="section-desc">{{ section.description }}</p>
+                    <p v-if="layout.showSectionDescriptions && section.description" class="section-desc">{{ section.description }}</p>
                 </header>
 
                 <ul v-if="section.products.length > 0" class="dishes">
@@ -167,7 +171,7 @@ onMounted(() => {
                         class="dish"
                         :style="{ '--j': pIdx } as Record<string, number>"
                     >
-                        <div v-if="productImage(product)" class="dish-image">
+                        <div v-if="layout.showProductImages && productImage(product)" class="dish-image">
                             <img :src="productImage(product)!" :alt="product.name" loading="lazy" />
                             <div class="dish-scanlines" aria-hidden="true" />
                         </div>
@@ -199,7 +203,7 @@ onMounted(() => {
                             </p>
 
                             <div
-                                v-if="product.ingredients && product.ingredients.length > 0"
+                                v-if="layout.showIngredients && product.ingredients && product.ingredients.length > 0"
                                 class="dish-ingredients"
                             >
                                 <button
@@ -216,7 +220,7 @@ onMounted(() => {
                             </div>
 
                             <div
-                                v-if="product.allergens && product.allergens.length > 0"
+                                v-if="layout.showAllergens && product.allergens && product.allergens.length > 0"
                                 class="dish-allergens"
                             >
                                 <AllergenIcon
@@ -253,13 +257,24 @@ onMounted(() => {
 
 <style scoped>
 .menu-neon {
-    --bg: oklch(0.10 0.012 300);
+    /* Canonical ML variables (overridable by customization) */
+    --ml-bg: oklch(0.10 0.012 300);
+    --ml-ink: oklch(0.97 0.005 300);
+    --ml-ink-soft: oklch(0.75 0.012 300);
+    --ml-accent: oklch(0.70 0.32 0);
+    --ml-rule: oklch(0.25 0.02 300);
+    --ml-font-display: 'Big Shoulders Display', 'Impact', sans-serif;
+    --ml-font-body: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+    --ml-spacing: 1;
+
+    /* Template internal variables now read from ML canonical */
+    --bg: var(--ml-bg);
     --panel: oklch(0.15 0.015 300);
-    --ink: oklch(0.97 0.005 300);
-    --ink-soft: oklch(0.75 0.012 300);
+    --ink: var(--ml-ink);
+    --ink-soft: var(--ml-ink-soft);
     --ink-faint: oklch(0.50 0.015 300);
-    --rule: oklch(0.25 0.02 300);
-    --neon: oklch(0.70 0.32 0);
+    --rule: var(--ml-rule);
+    --neon: var(--ml-accent);
     --neon-glow: oklch(0.70 0.32 0 / 0.55);
     --neon-cyan: oklch(0.82 0.17 200);
     --menu-paper: var(--panel);
@@ -267,8 +282,8 @@ onMounted(() => {
     --menu-rule: var(--rule);
     --menu-accent: var(--neon);
 
-    --font-display: 'Big Shoulders Display', 'Impact', sans-serif;
-    --font-body: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+    --font-display: var(--ml-font-display);
+    --font-body: var(--ml-font-body);
     --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
     min-height: 100vh;

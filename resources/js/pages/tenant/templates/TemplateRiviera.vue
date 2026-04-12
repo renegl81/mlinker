@@ -5,6 +5,7 @@ import MenuLanguageSwitcher from '@/components/public/MenuLanguageSwitcher.vue';
 import ShareMenu from '@/components/public/ShareMenu.vue';
 import AllergenIcon from '@/components/ui/AllergenIcon.vue';
 import { useMenuFormatter } from '@/composables/useMenuFormatter';
+import { useMenuCustomization } from '@/composables/useMenuCustomization';
 import type { Menu } from '@/types';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -24,10 +25,12 @@ interface Props {
     hasMultilang: boolean;
     availableLocales: string[];
     supportedLocales: Record<string, LocaleMeta>;
+    customization?: Record<string, any> | null;
 }
 
 const props = defineProps<Props>();
 const { formatPrice, tagsFor, productImage } = useMenuFormatter(props.menu);
+const { cssVars, fontLinks, layout } = useMenuCustomization(props.customization ?? null);
 const { t } = useI18n();
 
 const sections = computed(() => {
@@ -57,9 +60,10 @@ function toggleIngredients(productId: number) {
             href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=DM+Sans:wght@300;400;500;600&display=swap"
             rel="stylesheet"
         />
+        <link v-for="url in fontLinks" :key="url" rel="stylesheet" :href="url" />
     </Head>
 
-    <div class="menu-riviera">
+    <div class="menu-riviera" :style="cssVars">
         <!-- Wave SVG decoration -->
         <svg class="wave-top" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
             <path d="M0 60 Q 150 20 300 60 T 600 60 T 900 60 T 1200 60 L 1200 120 L 0 120 Z" fill="currentColor" />
@@ -121,7 +125,7 @@ function toggleIngredients(productId: number) {
                         <path d="M0 10 Q 15 0 30 10 T 60 10 T 90 10 T 120 10" stroke="currentColor" stroke-width="1.5" fill="none" />
                     </svg>
                     <h2 class="section-title">{{ section.name }}</h2>
-                    <p v-if="section.description" class="section-desc">{{ section.description }}</p>
+                    <p v-if="layout.showSectionDescriptions && section.description" class="section-desc">{{ section.description }}</p>
                 </header>
 
                 <ul v-if="section.products.length > 0" class="dishes">
@@ -144,7 +148,7 @@ function toggleIngredients(productId: number) {
                                 {{ product.description }}
                             </p>
 
-                            <div class="dish-meta" v-if="menu.show_calories && product.calories || tagsFor(product.tags).length || product.allergens?.length">
+                            <div class="dish-meta" v-if="menu.show_calories && product.calories || tagsFor(product.tags).length || (layout.showAllergens && product.allergens?.length)">
                                 <span
                                     v-if="menu.show_calories && product.calories"
                                     class="dish-kcal"
@@ -155,7 +159,7 @@ function toggleIngredients(productId: number) {
                                     class="dish-tag"
                                     :title="t(`public_menu.tags.${tag.code}`)"
                                 >{{ tag.glyph }}</span>
-                                <div v-if="product.allergens && product.allergens.length > 0" class="dish-allergens">
+                                <div v-if="layout.showAllergens && product.allergens && product.allergens.length > 0" class="dish-allergens">
                                     <AllergenIcon
                                         v-for="allergen in product.allergens"
                                         :key="allergen.id"
@@ -167,7 +171,7 @@ function toggleIngredients(productId: number) {
                             </div>
 
                             <div
-                                v-if="product.ingredients && product.ingredients.length > 0"
+                                v-if="layout.showIngredients && product.ingredients && product.ingredients.length > 0"
                                 class="dish-ing"
                             >
                                 <button
@@ -184,7 +188,7 @@ function toggleIngredients(productId: number) {
                         </div>
 
                         <img
-                            v-if="productImage(product)"
+                            v-if="layout.showProductImages && productImage(product)"
                             :src="productImage(product)!"
                             :alt="product.name"
                             class="dish-image"
@@ -217,23 +221,34 @@ function toggleIngredients(productId: number) {
 
 <style scoped>
 .menu-riviera {
-    --bg: oklch(0.985 0.015 220);
+    /* Canonical ML variables (overridable by customization) */
+    --ml-bg: oklch(0.985 0.015 220);
+    --ml-ink: oklch(0.22 0.04 240);
+    --ml-ink-soft: oklch(0.45 0.035 240);
+    --ml-accent: oklch(0.76 0.14 80);
+    --ml-rule: oklch(0.84 0.02 220);
+    --ml-font-display: 'Yeseva One', Georgia, serif;
+    --ml-font-body: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+    --ml-spacing: 1;
+
+    /* Template internal variables now read from ML canonical */
+    --bg: var(--ml-bg);
     --panel: oklch(0.995 0.008 70);
-    --ink: oklch(0.22 0.04 240);
-    --ink-soft: oklch(0.45 0.035 240);
+    --ink: var(--ml-ink);
+    --ink-soft: var(--ml-ink-soft);
     --ink-faint: oklch(0.62 0.03 240);
-    --rule: oklch(0.84 0.02 220);
+    --rule: var(--ml-rule);
     --sea: oklch(0.48 0.12 230);
     --sea-deep: oklch(0.34 0.11 240);
-    --gold: oklch(0.76 0.14 80);
+    --gold: var(--ml-accent);
     --gold-dark: oklch(0.60 0.14 70);
     --menu-paper: var(--panel);
     --menu-ink: var(--ink);
     --menu-rule: var(--rule);
     --menu-accent: var(--gold);
 
-    --font-display: 'Yeseva One', Georgia, serif;
-    --font-body: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-display: var(--ml-font-display);
+    --font-body: var(--ml-font-body);
 
     position: relative;
     min-height: 100vh;

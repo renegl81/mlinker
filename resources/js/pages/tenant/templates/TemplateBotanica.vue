@@ -5,6 +5,7 @@ import MenuLanguageSwitcher from '@/components/public/MenuLanguageSwitcher.vue';
 import ShareMenu from '@/components/public/ShareMenu.vue';
 import AllergenIcon from '@/components/ui/AllergenIcon.vue';
 import { useMenuFormatter } from '@/composables/useMenuFormatter';
+import { useMenuCustomization } from '@/composables/useMenuCustomization';
 import type { Menu } from '@/types';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -24,10 +25,12 @@ interface Props {
     hasMultilang: boolean;
     availableLocales: string[];
     supportedLocales: Record<string, LocaleMeta>;
+    customization?: Record<string, any> | null;
 }
 
 const props = defineProps<Props>();
 const { formatPrice, tagsFor, productImage } = useMenuFormatter(props.menu);
+const { cssVars, fontLinks, layout } = useMenuCustomization(props.customization ?? null);
 const { t } = useI18n();
 
 const sections = computed(() => {
@@ -57,9 +60,10 @@ function toggleIngredients(productId: number) {
             href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Nunito:wght@300;400;500;600&display=swap"
             rel="stylesheet"
         />
+        <link v-for="url in fontLinks" :key="url" rel="stylesheet" :href="url" />
     </Head>
 
-    <div class="menu-botanica">
+    <div class="menu-botanica" :style="cssVars">
         <!-- Decorative leaves -->
         <svg class="leaf leaf-tl" viewBox="0 0 100 100" aria-hidden="true">
             <path d="M50 5 C70 20 90 40 95 60 C80 55 60 50 45 40 C35 30 40 15 50 5 Z" fill="currentColor" opacity="0.12" />
@@ -110,7 +114,7 @@ function toggleIngredients(productId: number) {
                 <header class="section-head">
                     <span class="section-glyph" aria-hidden="true">❊</span>
                     <h2 class="section-title">{{ section.name }}</h2>
-                    <p v-if="section.description" class="section-desc">{{ section.description }}</p>
+                    <p v-if="layout.showSectionDescriptions && section.description" class="section-desc">{{ section.description }}</p>
                 </header>
 
                 <ul v-if="section.products.length > 0" class="dishes">
@@ -121,7 +125,7 @@ function toggleIngredients(productId: number) {
                         :style="{ '--j': pIdx } as Record<string, number>"
                     >
                         <img
-                            v-if="productImage(product)"
+                            v-if="layout.showProductImages && productImage(product)"
                             :src="productImage(product)!"
                             :alt="product.name"
                             class="dish-image"
@@ -142,7 +146,7 @@ function toggleIngredients(productId: number) {
                             </p>
 
                             <div
-                                v-if="product.ingredients && product.ingredients.length > 0"
+                                v-if="layout.showIngredients && product.ingredients && product.ingredients.length > 0"
                                 class="dish-ingredients-inline"
                             >
                                 <span class="ing-label">de la huerta:</span>
@@ -173,7 +177,7 @@ function toggleIngredients(productId: number) {
                                     class="dish-tag"
                                     :title="t(`public_menu.tags.${tag.code}`)"
                                 >{{ tag.glyph }}</span>
-                                <div v-if="product.allergens && product.allergens.length > 0" class="dish-allergens">
+                                <div v-if="layout.showAllergens && product.allergens && product.allergens.length > 0" class="dish-allergens">
                                     <AllergenIcon
                                         v-for="allergen in product.allergens"
                                         :key="allergen.id"
@@ -209,13 +213,24 @@ function toggleIngredients(productId: number) {
 
 <style scoped>
 .menu-botanica {
-    --bg: oklch(0.955 0.022 88);
+    /* Canonical ML variables (overridable by customization) */
+    --ml-bg: oklch(0.955 0.022 88);
+    --ml-ink: oklch(0.22 0.015 120);
+    --ml-ink-soft: oklch(0.44 0.015 120);
+    --ml-accent: oklch(0.56 0.07 140);
+    --ml-rule: oklch(0.82 0.03 120);
+    --ml-font-display: 'Lora', Georgia, serif;
+    --ml-font-body: 'Nunito', ui-sans-serif, system-ui, sans-serif;
+    --ml-spacing: 1;
+
+    /* Template internal variables now read from ML canonical */
+    --bg: var(--ml-bg);
     --panel: oklch(0.98 0.015 88);
-    --ink: oklch(0.22 0.015 120);
-    --ink-soft: oklch(0.44 0.015 120);
+    --ink: var(--ml-ink);
+    --ink-soft: var(--ml-ink-soft);
     --ink-faint: oklch(0.60 0.015 120);
-    --rule: oklch(0.82 0.03 120);
-    --sage: oklch(0.56 0.07 140);
+    --rule: var(--ml-rule);
+    --sage: var(--ml-accent);
     --sage-dark: oklch(0.42 0.07 140);
     --terracotta: oklch(0.62 0.13 45);
     --menu-paper: var(--panel);
@@ -223,8 +238,8 @@ function toggleIngredients(productId: number) {
     --menu-rule: var(--rule);
     --menu-accent: var(--sage);
 
-    --font-display: 'Lora', Georgia, serif;
-    --font-body: 'Nunito', ui-sans-serif, system-ui, sans-serif;
+    --font-display: var(--ml-font-display);
+    --font-body: var(--ml-font-body);
 
     position: relative;
     min-height: 100vh;

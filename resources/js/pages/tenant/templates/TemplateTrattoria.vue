@@ -5,6 +5,7 @@ import MenuLanguageSwitcher from '@/components/public/MenuLanguageSwitcher.vue';
 import ShareMenu from '@/components/public/ShareMenu.vue';
 import AllergenIcon from '@/components/ui/AllergenIcon.vue';
 import { useMenuFormatter } from '@/composables/useMenuFormatter';
+import { useMenuCustomization } from '@/composables/useMenuCustomization';
 import type { Menu } from '@/types';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -24,10 +25,12 @@ interface Props {
     hasMultilang: boolean;
     availableLocales: string[];
     supportedLocales: Record<string, LocaleMeta>;
+    customization?: Record<string, any> | null;
 }
 
 const props = defineProps<Props>();
 const { formatPrice, tagsFor, productImage } = useMenuFormatter(props.menu);
+const { cssVars, fontLinks, layout } = useMenuCustomization(props.customization ?? null);
 const { t } = useI18n();
 
 const sections = computed(() => {
@@ -58,9 +61,10 @@ function toggleIngredients(productId: number) {
             href="https://fonts.googleapis.com/css2?family=Libre+Bodoni:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;1,400;1,500&display=swap"
             rel="stylesheet"
         />
+        <link v-for="url in fontLinks" :key="url" rel="stylesheet" :href="url" />
     </Head>
 
-    <div class="menu-trattoria">
+    <div class="menu-trattoria" :style="cssVars">
         <div class="paper-grain" aria-hidden="true" />
 
         <div
@@ -119,7 +123,7 @@ function toggleIngredients(productId: number) {
                 <header class="section-head">
                     <p class="section-kicker">— {{ String(section.index).padStart(2, '0') }} —</p>
                     <h2 class="section-title">{{ section.name }}</h2>
-                    <p v-if="section.description" class="section-desc">{{ section.description }}</p>
+                    <p v-if="layout.showSectionDescriptions && section.description" class="section-desc">{{ section.description }}</p>
                     <div class="section-ornament" aria-hidden="true">
                         <span class="wheat">✦ ✦ ✦</span>
                     </div>
@@ -153,7 +157,7 @@ function toggleIngredients(productId: number) {
                             </p>
 
                             <div
-                                v-if="product.ingredients && product.ingredients.length > 0"
+                                v-if="layout.showIngredients && product.ingredients && product.ingredients.length > 0"
                                 class="dish-ingredients"
                             >
                                 <button
@@ -169,14 +173,14 @@ function toggleIngredients(productId: number) {
                                 </p>
                             </div>
 
-                            <div class="dish-meta" v-if="tagsFor(product.tags).length > 0 || (product.allergens && product.allergens.length > 0)">
+                            <div class="dish-meta" v-if="tagsFor(product.tags).length > 0 || (layout.showAllergens && product.allergens && product.allergens.length > 0)">
                                 <span
                                     v-for="tag in tagsFor(product.tags)"
                                     :key="tag.code"
                                     class="dish-tag"
                                     :title="t(`public_menu.tags.${tag.code}`)"
                                 >{{ tag.glyph }}</span>
-                                <div v-if="product.allergens && product.allergens.length > 0" class="dish-allergens">
+                                <div v-if="layout.showAllergens && product.allergens && product.allergens.length > 0" class="dish-allergens">
                                     <AllergenIcon
                                         v-for="allergen in product.allergens"
                                         :key="allergen.id"
@@ -189,7 +193,7 @@ function toggleIngredients(productId: number) {
                         </div>
 
                         <img
-                            v-if="productImage(product)"
+                            v-if="layout.showProductImages && productImage(product)"
                             :src="productImage(product)!"
                             :alt="product.name"
                             class="dish-image"
@@ -222,13 +226,24 @@ function toggleIngredients(productId: number) {
 
 <style scoped>
 .menu-trattoria {
-    --bg: oklch(0.955 0.022 75);
+    /* Canonical ML variables (overridable by customization) */
+    --ml-bg: oklch(0.955 0.022 75);
+    --ml-ink: oklch(0.20 0.02 30);
+    --ml-ink-soft: oklch(0.42 0.018 30);
+    --ml-accent: oklch(0.38 0.12 22);
+    --ml-rule: oklch(0.78 0.02 50);
+    --ml-font-display: 'Libre Bodoni', 'Playfair Display', Georgia, serif;
+    --ml-font-body: 'Lora', Georgia, serif;
+    --ml-spacing: 1;
+
+    /* Template internal variables now read from ML canonical */
+    --bg: var(--ml-bg);
     --paper: oklch(0.97 0.018 75);
-    --ink: oklch(0.20 0.02 30);
-    --ink-soft: oklch(0.42 0.018 30);
+    --ink: var(--ml-ink);
+    --ink-soft: var(--ml-ink-soft);
     --ink-faint: oklch(0.58 0.016 30);
-    --rule: oklch(0.78 0.02 50);
-    --wine: oklch(0.38 0.12 22);
+    --rule: var(--ml-rule);
+    --wine: var(--ml-accent);
     --wine-dark: oklch(0.28 0.09 22);
     --olive: oklch(0.52 0.06 120);
     --menu-paper: var(--paper);
@@ -236,8 +251,8 @@ function toggleIngredients(productId: number) {
     --menu-rule: var(--rule);
     --menu-accent: var(--wine);
 
-    --font-display: 'Libre Bodoni', 'Playfair Display', Georgia, serif;
-    --font-body: 'Lora', Georgia, serif;
+    --font-display: var(--ml-font-display);
+    --font-body: var(--ml-font-body);
 
     position: relative;
     min-height: 100vh;

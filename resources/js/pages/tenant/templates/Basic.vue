@@ -5,6 +5,7 @@ import MenuLanguageSwitcher from '@/components/public/MenuLanguageSwitcher.vue';
 import ShareMenu from '@/components/public/ShareMenu.vue';
 import AllergenIcon from '@/components/ui/AllergenIcon.vue';
 import { useMenuFormatter } from '@/composables/useMenuFormatter';
+import { useMenuCustomization } from '@/composables/useMenuCustomization';
 import type { Menu } from '@/types';
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -38,10 +39,12 @@ interface Props {
     hasMultilang: boolean;
     availableLocales: string[];
     supportedLocales: Record<string, LocaleMeta>;
+    customization?: Record<string, any> | null;
 }
 
 const props = defineProps<Props>();
 const { formatPrice, tagsFor, toRoman, productImage } = useMenuFormatter(props.menu);
+const { cssVars, fontLinks, layout } = useMenuCustomization(props.customization ?? null);
 const { t } = useI18n();
 
 const sections = computed(() => {
@@ -102,9 +105,10 @@ onMounted(() => {
             href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300;1,9..144,500&display=swap"
             rel="stylesheet"
         />
+        <link v-for="url in fontLinks" :key="url" rel="stylesheet" :href="url" />
     </Head>
 
-    <div class="menu-editorial">
+    <div class="menu-editorial" :style="cssVars">
         <!-- Grain texture overlay -->
         <svg class="grain" aria-hidden="true">
             <filter id="menu-grain">
@@ -177,7 +181,7 @@ onMounted(() => {
                     <span class="section-numeral" aria-hidden="true">{{ section.numeral }}</span>
                     <div class="section-title-wrap">
                         <h2 class="section-title">{{ section.name }}</h2>
-                        <p v-if="section.description" class="section-desc">{{ section.description }}</p>
+                        <p v-if="layout.showSectionDescriptions && section.description" class="section-desc">{{ section.description }}</p>
                     </div>
                 </div>
 
@@ -210,7 +214,7 @@ onMounted(() => {
                             </p>
 
                             <div
-                                v-if="product.ingredients && product.ingredients.length > 0"
+                                v-if="layout.showIngredients && product.ingredients && product.ingredients.length > 0"
                                 class="product-ingredients-wrap"
                             >
                                 <button
@@ -245,7 +249,7 @@ onMounted(() => {
                             </div>
 
                             <div
-                                v-if="tagsFor(product.tags).length > 0 || (product.allergens && product.allergens.length > 0)"
+                                v-if="tagsFor(product.tags).length > 0 || (layout.showAllergens && product.allergens && product.allergens.length > 0)"
                                 class="product-meta"
                             >
                                 <span
@@ -254,7 +258,7 @@ onMounted(() => {
                                     class="product-tag"
                                     :title="t(`public_menu.tags.${tag.code}`)"
                                 >{{ tag.glyph }}</span>
-                                <div v-if="product.allergens && product.allergens.length > 0" class="product-allergens">
+                                <div v-if="layout.showAllergens && product.allergens && product.allergens.length > 0" class="product-allergens">
                                     <AllergenIcon
                                         v-for="allergen in product.allergens"
                                         :key="allergen.id"
@@ -267,7 +271,7 @@ onMounted(() => {
                         </div>
 
                         <img
-                            v-if="productImage(product)"
+                            v-if="layout.showProductImages && productImage(product)"
                             :src="productImage(product)!"
                             :alt="product.name"
                             class="product-image"
@@ -310,16 +314,27 @@ onMounted(() => {
 
 <style scoped>
 .menu-editorial {
-    --menu-bg: oklch(0.972 0.015 82);
+    /* Canonical ML variables (overridable by customization) */
+    --ml-bg: oklch(0.972 0.015 82);
+    --ml-ink: oklch(0.22 0.025 40);
+    --ml-ink-soft: oklch(0.46 0.02 40);
+    --ml-accent: oklch(0.56 0.15 35);
+    --ml-rule: oklch(0.85 0.02 40);
+    --ml-font-display: 'Fraunces', 'Instrument Serif', Georgia, serif;
+    --ml-font-body: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+    --ml-spacing: 1;
+
+    /* Template internal variables now read from ML canonical */
+    --menu-bg: var(--ml-bg);
     --menu-paper: oklch(0.99 0.008 82);
-    --menu-ink: oklch(0.22 0.025 40);
-    --menu-ink-soft: oklch(0.46 0.02 40);
+    --menu-ink: var(--ml-ink);
+    --menu-ink-soft: var(--ml-ink-soft);
     --menu-ink-faint: oklch(0.66 0.015 40);
-    --menu-accent: oklch(0.56 0.15 35);
+    --menu-accent: var(--ml-accent);
     --menu-accent-soft: oklch(0.56 0.15 35 / 0.12);
-    --menu-rule: oklch(0.85 0.02 40);
-    --menu-serif: 'Fraunces', 'Instrument Serif', Georgia, serif;
-    --menu-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+    --menu-rule: var(--ml-rule);
+    --menu-serif: var(--ml-font-display);
+    --menu-sans: var(--ml-font-body);
 
     position: relative;
     min-height: 100vh;

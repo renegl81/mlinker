@@ -5,6 +5,7 @@ import MenuLanguageSwitcher from '@/components/public/MenuLanguageSwitcher.vue';
 import ShareMenu from '@/components/public/ShareMenu.vue';
 import AllergenIcon from '@/components/ui/AllergenIcon.vue';
 import { useMenuFormatter } from '@/composables/useMenuFormatter';
+import { useMenuCustomization } from '@/composables/useMenuCustomization';
 import type { Menu } from '@/types';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -38,10 +39,12 @@ interface Props {
     hasMultilang: boolean;
     availableLocales: string[];
     supportedLocales: Record<string, LocaleMeta>;
+    customization?: Record<string, any> | null;
 }
 
 const props = defineProps<Props>();
 const { formatPrice, tagsFor, toRoman } = useMenuFormatter(props.menu);
+const { cssVars, fontLinks, layout } = useMenuCustomization(props.customization ?? null);
 const { t } = useI18n();
 
 const sections = computed(() => {
@@ -72,9 +75,10 @@ function toggleIngredients(productId: number) {
             href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap"
             rel="stylesheet"
         />
+        <link v-for="url in fontLinks" :key="url" rel="stylesheet" :href="url" />
     </Head>
 
-    <div class="menu-minimal">
+    <div class="menu-minimal" :style="cssVars">
         <!-- Language switcher discreto -->
         <div
             v-if="hasMultilang && availableLocales.length > 1"
@@ -115,7 +119,7 @@ function toggleIngredients(productId: number) {
                     <div class="section-divider" aria-hidden="true" />
                 </header>
 
-                <p v-if="section.description" class="section-desc">
+                <p v-if="layout.showSectionDescriptions && section.description" class="section-desc">
                     {{ section.description }}
                 </p>
 
@@ -153,7 +157,7 @@ function toggleIngredients(productId: number) {
                         </p>
 
                         <div
-                            v-if="product.ingredients && product.ingredients.length > 0"
+                            v-if="layout.showIngredients && product.ingredients && product.ingredients.length > 0"
                             class="ingredients-wrap"
                         >
                             <button
@@ -173,7 +177,7 @@ function toggleIngredients(productId: number) {
                         </div>
 
                         <div
-                            v-if="product.allergens && product.allergens.length > 0"
+                            v-if="layout.showAllergens && product.allergens && product.allergens.length > 0"
                             class="product-allergens"
                         >
                             <AllergenIcon
@@ -216,17 +220,28 @@ function toggleIngredients(productId: number) {
 
 <style scoped>
 .menu-minimal {
-    --bg: oklch(0.985 0 0);
-    --ink: oklch(0.14 0.003 260);
-    --ink-soft: oklch(0.42 0.004 260);
+    /* Canonical ML variables (overridable by customization) */
+    --ml-bg: oklch(0.985 0 0);
+    --ml-ink: oklch(0.14 0.003 260);
+    --ml-ink-soft: oklch(0.42 0.004 260);
+    --ml-accent: oklch(0.14 0.003 260);
+    --ml-rule: oklch(0.84 0.002 260);
+    --ml-font-display: 'Cormorant Garamond', 'Garamond', 'Times New Roman', serif;
+    --ml-font-body: 'Cormorant Garamond', 'Garamond', 'Times New Roman', serif;
+    --ml-spacing: 1;
+
+    /* Template internal variables now read from ML canonical */
+    --bg: var(--ml-bg);
+    --ink: var(--ml-ink);
+    --ink-soft: var(--ml-ink-soft);
     --ink-faint: oklch(0.62 0.004 260);
-    --rule: oklch(0.84 0.002 260);
+    --rule: var(--ml-rule);
     --menu-paper: var(--bg);
     --menu-ink: var(--ink);
     --menu-rule: var(--rule);
-    --menu-accent: var(--ink);
+    --menu-accent: var(--ml-accent);
 
-    --font-serif: 'Cormorant Garamond', 'Garamond', 'Times New Roman', serif;
+    --font-serif: var(--ml-font-display);
 
     min-height: 100vh;
     background: var(--bg);

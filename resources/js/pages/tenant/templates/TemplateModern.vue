@@ -5,6 +5,7 @@ import MenuLanguageSwitcher from '@/components/public/MenuLanguageSwitcher.vue';
 import ShareMenu from '@/components/public/ShareMenu.vue';
 import AllergenIcon from '@/components/ui/AllergenIcon.vue';
 import { useMenuFormatter } from '@/composables/useMenuFormatter';
+import { useMenuCustomization } from '@/composables/useMenuCustomization';
 import type { Menu } from '@/types';
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -38,10 +39,12 @@ interface Props {
     hasMultilang: boolean;
     availableLocales: string[];
     supportedLocales: Record<string, LocaleMeta>;
+    customization?: Record<string, any> | null;
 }
 
 const props = defineProps<Props>();
 const { formatPrice, tagsFor, productImage } = useMenuFormatter(props.menu);
+const { cssVars, fontLinks, layout } = useMenuCustomization(props.customization ?? null);
 const { t } = useI18n();
 
 const sections = computed(() => {
@@ -97,9 +100,10 @@ onMounted(() => {
             href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Syne:wght@500;700;800&display=swap"
             rel="stylesheet"
         />
+        <link v-for="url in fontLinks" :key="url" rel="stylesheet" :href="url" />
     </Head>
 
-    <div class="menu-modern">
+    <div class="menu-modern" :style="cssVars">
         <!-- Top bar -->
         <div class="topbar">
             <div class="topbar-brand">
@@ -166,7 +170,7 @@ onMounted(() => {
                     <span class="section-num">{{ section.number }}</span>
                     <div class="section-meta">
                         <h2 class="section-title">{{ section.name }}</h2>
-                        <p v-if="section.description" class="section-desc">{{ section.description }}</p>
+                        <p v-if="layout.showSectionDescriptions && section.description" class="section-desc">{{ section.description }}</p>
                     </div>
                 </div>
 
@@ -177,10 +181,10 @@ onMounted(() => {
                         class="card"
                         :style="{ '--j': pIdx } as Record<string, number>"
                     >
-                        <div v-if="productImage(product)" class="card-image">
+                        <div v-if="layout.showProductImages && productImage(product)" class="card-image">
                             <img :src="productImage(product)!" :alt="product.name" loading="lazy" />
                         </div>
-                        <div v-else class="card-image card-image-fallback">
+                        <div v-else-if="layout.showProductImages && !productImage(product)" class="card-image card-image-fallback">
                             <span>{{ product.name.charAt(0).toUpperCase() }}</span>
                         </div>
 
@@ -211,7 +215,7 @@ onMounted(() => {
                             </p>
 
                             <div
-                                v-if="product.ingredients && product.ingredients.length > 0"
+                                v-if="layout.showIngredients && product.ingredients && product.ingredients.length > 0"
                                 class="ingredients-wrap"
                             >
                                 <button
@@ -239,7 +243,7 @@ onMounted(() => {
                             </div>
 
                             <div
-                                v-if="product.allergens && product.allergens.length > 0"
+                                v-if="layout.showAllergens && product.allergens && product.allergens.length > 0"
                                 class="card-allergens"
                             >
                                 <AllergenIcon
@@ -285,22 +289,33 @@ onMounted(() => {
 
 <style scoped>
 .menu-modern {
-    --bg: oklch(0.135 0.012 270);
+    /* Canonical ML variables (overridable by customization) */
+    --ml-bg: oklch(0.135 0.012 270);
+    --ml-ink: oklch(0.97 0.004 270);
+    --ml-ink-soft: oklch(0.72 0.008 270);
+    --ml-accent: oklch(0.89 0.18 100);
+    --ml-rule: oklch(0.28 0.014 270);
+    --ml-font-display: 'Syne', ui-sans-serif, system-ui, sans-serif;
+    --ml-font-body: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+    --ml-spacing: 1;
+
+    /* Template internal variables now read from ML canonical */
+    --bg: var(--ml-bg);
     --panel: oklch(0.175 0.014 270);
     --panel-2: oklch(0.22 0.016 270);
-    --ink: oklch(0.97 0.004 270);
-    --ink-soft: oklch(0.72 0.008 270);
+    --ink: var(--ml-ink);
+    --ink-soft: var(--ml-ink-soft);
     --ink-faint: oklch(0.52 0.01 270);
-    --rule: oklch(0.28 0.014 270);
-    --accent: oklch(0.89 0.18 100);
+    --rule: var(--ml-rule);
+    --accent: var(--ml-accent);
     --accent-glow: oklch(0.89 0.18 100 / 0.3);
     --menu-paper: var(--panel);
     --menu-ink: var(--ink);
     --menu-rule: var(--rule);
     --menu-accent: var(--accent);
 
-    --font-display: 'Syne', ui-sans-serif, system-ui, sans-serif;
-    --font-body: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+    --font-display: var(--ml-font-display);
+    --font-body: var(--ml-font-body);
 
     min-height: 100vh;
     background: var(--bg);
