@@ -14,6 +14,7 @@ import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/vue3';
+import { useConfirmDialog } from '@/composables/useConfirmDialog';
 import {
     Check,
     GitMerge,
@@ -29,6 +30,7 @@ import { computed, reactive, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
+const { confirm: confirmDialog } = useConfirmDialog();
 
 interface LocaleMeta {
     native: string;
@@ -130,8 +132,13 @@ function saveEdit(id: number) {
 }
 
 // --- Delete ---
-function deleteIngredient(ingredient: Ingredient) {
-    if (!confirm(t('catalog.ingredients.confirm_delete'))) return;
+async function deleteIngredient(ingredient: Ingredient) {
+    const ok = await confirmDialog({
+        description: t('catalog.ingredients.confirm_delete'),
+        confirmLabel: t('common.delete'),
+        variant: 'destructive',
+    });
+    if (!ok) return;
     router.delete(`/panel/catalog/ingredients/${ingredient.id}`, { preserveScroll: true });
 }
 

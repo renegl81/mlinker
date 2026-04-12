@@ -20,6 +20,7 @@ import {
 import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem } from '@/types';
 import { Head, Link, router } from '@inertiajs/vue3';
+import { useConfirmDialog } from '@/composables/useConfirmDialog';
 import {
     CopyPlus,
     Filter,
@@ -35,6 +36,7 @@ import { computed, reactive, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
+const { confirm: confirmDialog } = useConfirmDialog();
 
 interface Product {
     id: number;
@@ -150,8 +152,13 @@ const allSelected = computed(() =>
 // --- Bulk actions ---
 const processing = ref(false);
 
-function bulkDelete() {
-    if (!confirm(t('catalog.products.confirm_delete'))) return;
+async function bulkDelete() {
+    const ok = await confirmDialog({
+        description: t('catalog.products.confirm_delete'),
+        confirmLabel: t('common.delete'),
+        variant: 'destructive',
+    });
+    if (!ok) return;
     processing.value = true;
     router.post(
         '/panel/catalog/products/bulk-delete',

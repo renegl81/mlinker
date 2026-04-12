@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { Head, Link, usePage } from '@inertiajs/vue3'
-import { Inertia } from '@inertiajs/inertia'
+import { Head, Link, usePage, router } from '@inertiajs/vue3'
 import { ref } from 'vue'
+import { useConfirmDialog } from '@/composables/useConfirmDialog'
 import AppLayout from '@/layouts/AppLayout.vue'
 import HeadingSmall from '@/components/HeadingSmall.vue'
 import { Button } from '@/components/ui/button'
@@ -16,6 +16,7 @@ import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/comp
 
 const page = usePage()
 const messages = page.props.messages as any
+const { confirm: confirmDialog } = useConfirmDialog()
 
 interface Menu {
     id: number
@@ -54,24 +55,28 @@ function applyFilters(appliedFilters: MenuFiltersType) {
         Object.entries(appliedFilters).filter(([, value]) => value && value.length > 0)
     )
 
-    Inertia.get(locationMenusRoute(props.location.id).url, cleanFilters, {
+    router.get(locationMenusRoute(props.location.id).url, cleanFilters, {
         preserveState: true,
         replace: true
     })
 }
 
 function go(url: string) {
-    Inertia.visit(url)
+    router.visit(url)
 }
 
 function goToShow(id: number) {
-    Inertia.visit(menuRouteShow(id).url)
+    router.visit(menuRouteShow(id).url)
 }
 
-function remove(id: number) {
-    if (confirm(messages?.menus.actions.confirm_delete)) {
-        Inertia.delete(menuRouteDestroy(id).url)
-    }
+async function remove(id: number) {
+    const ok = await confirmDialog({
+        description: messages?.menus.actions.confirm_delete,
+        confirmLabel: messages?.actions?.delete ?? 'Eliminar',
+        variant: 'destructive',
+    })
+    if (!ok) return
+    router.delete(menuRouteDestroy(id).url)
 }
 
 /**
@@ -86,7 +91,7 @@ function handleRowClick(menuId: number, event: MouseEvent) {
 
 function clearFilters() {
     filters.value = {}
-    Inertia.get(locationMenusRoute(props.location.id).url, {}, {
+    router.get(locationMenusRoute(props.location.id).url, {}, {
         preserveState: true,
         replace: true
     })

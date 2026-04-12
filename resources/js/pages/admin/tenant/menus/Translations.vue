@@ -15,6 +15,7 @@ import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem, Menu } from '@/types';
 import { Head, Link, router } from '@inertiajs/vue3';
+import { useConfirmDialog } from '@/composables/useConfirmDialog';
 import { ExclamationTriangleIcon } from '@heroicons/vue/24/solid';
 import {
     ArrowLeft,
@@ -31,6 +32,7 @@ import { computed, reactive, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
+const { confirm: confirmDialog } = useConfirmDialog();
 
 interface LocaleMeta {
     native: string;
@@ -280,9 +282,12 @@ function copyFromSource(target: 'menu' | 'section' | 'product' | 'ingredient', i
     }
 }
 
-function copyAllFromSource() {
+async function copyAllFromSource() {
     if (!activeLocale.value || !form[activeLocale.value]) return;
-    if (!confirm(t('translations.copy_originals_confirm'))) return;
+    const ok = await confirmDialog({
+        description: t('translations.copy_originals_confirm'),
+    });
+    if (!ok) return;
     const bucket = form[activeLocale.value];
     bucket.menu.name = props.menu.name ?? '';
     bucket.menu.description = props.menu.description ?? '';
@@ -369,8 +374,13 @@ function addLanguage(code: string) {
     );
 }
 
-function removeLanguage(code: string) {
-    if (!confirm(t('translations.remove_language_confirm', { name: labelFor(code).native }))) return;
+async function removeLanguage(code: string) {
+    const ok = await confirmDialog({
+        description: t('translations.remove_language_confirm', { name: labelFor(code).native }),
+        confirmLabel: t('common.delete'),
+        variant: 'destructive',
+    });
+    if (!ok) return;
     removingLocale.value = code;
     router.delete(`/panel/menus/${props.menu.id}/translations/language`, {
         data: { locale: code } as never,

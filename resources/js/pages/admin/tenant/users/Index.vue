@@ -2,8 +2,10 @@
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useConfirmDialog } from '@/composables/useConfirmDialog';
 
 const { t } = useI18n();
+const { confirm: confirmDialog } = useConfirmDialog();
 import AppLayout from '@/layouts/AppLayout.vue';
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -86,8 +88,13 @@ function clearFilters() {
     router.get('/panel/users', {}, { preserveState: true, replace: true });
 }
 
-function remove(id: number) {
-    if (!confirm(messages.users.actions.confirm_delete)) return;
+async function remove(id: number) {
+    const ok = await confirmDialog({
+        description: messages.users.actions.confirm_delete,
+        confirmLabel: t('common.delete'),
+        variant: 'destructive',
+    });
+    if (!ok) return;
     router.delete(`/panel/users/${id}`);
 }
 

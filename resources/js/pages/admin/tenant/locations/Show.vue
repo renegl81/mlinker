@@ -11,8 +11,8 @@ import {
     index as locationsRoute,
 } from '@/routes/tenant/locations';
 import type { BreadcrumbItem, Location } from '@/types';
-import { Inertia } from '@inertiajs/inertia';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
+import { useConfirmDialog } from '@/composables/useConfirmDialog';
 import {
     ArrowLeft,
     BadgeDollarSign,
@@ -34,6 +34,7 @@ import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
+const { confirm: confirmDialog } = useConfirmDialog();
 
 interface Props {
     location: Location;
@@ -63,10 +64,18 @@ const breadcrumbItems: BreadcrumbItem[] = [
     },
 ];
 
-function remove() {
-    if (confirm(messages.value.locations.actions.confirm_delete)) {
-        Inertia.delete(locationRouteDestroy(props.location.id).url);
-    }
+async function remove() {
+    const ok = await confirmDialog({
+        description: messages.value.locations.actions.confirm_delete,
+        confirmLabel: t('common.delete'),
+        variant: 'destructive',
+    });
+    if (!ok) return;
+    router.delete(locationRouteDestroy(props.location.id).url, {
+        onSuccess: () => {
+            router.visit(locationsRoute().url);
+        },
+    });
 }
 
 const duplicating = ref(false);

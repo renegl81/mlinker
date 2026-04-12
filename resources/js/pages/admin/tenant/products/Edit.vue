@@ -4,8 +4,10 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem } from '@/types';
 import { Head, useForm, router } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
+import { useConfirmDialog } from '@/composables/useConfirmDialog';
 
 const { t } = useI18n();
+const { confirm: confirmDialog } = useConfirmDialog();
 import type { Allergen, CatalogIngredient, Ingredient, Section } from './Form.vue';
 import ProductForm from './Form.vue';
 
@@ -71,8 +73,13 @@ function submit() {
     });
 }
 
-function deleteProduct() {
-    if (!confirm(t('panel.product_edit.delete_confirm'))) return;
+async function deleteProduct() {
+    const ok = await confirmDialog({
+        description: t('panel.product_edit.delete_confirm'),
+        confirmLabel: t('common.delete'),
+        variant: 'destructive',
+    });
+    if (!ok) return;
     router.delete(`/panel/products/${props.product.id}`);
 }
 </script>

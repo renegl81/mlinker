@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { Head, Link, usePage } from '@inertiajs/vue3'
-import { Inertia } from '@inertiajs/inertia'
+import { Head, Link, usePage, router } from '@inertiajs/vue3'
 import { ref } from 'vue'
+import { useConfirmDialog } from '@/composables/useConfirmDialog'
 import AppLayout from '@/layouts/AppLayout.vue'
 import HeadingSmall from '@/components/HeadingSmall.vue'
 import { Button } from '@/components/ui/button'
@@ -14,6 +14,7 @@ import UserFilters, { type UserFilters as UserFiltersType } from './Filters.vue'
 import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 const page = usePage()
+const { confirm: confirmDialog } = useConfirmDialog()
 interface User {
     id: number
     name: string
@@ -47,25 +48,29 @@ function applyFilters(appliedFilters: UserFiltersType) {
         Object.entries(appliedFilters).filter(([, value]) => value && value.length > 0)
     )
 
-    Inertia.get(usersRoute().url, cleanFilters, {
+    router.get(usersRoute().url, cleanFilters, {
         preserveState: true,
         replace: true
     })
 }
 
 function go(url: string) {
-    Inertia.visit(url)
+    router.visit(url)
 }
 
-function remove(id: number) {
-    if (confirm(page.props.messages?.users.actions.confirm_delete)) {
-        Inertia.delete(userRouteDestroy(id).url)
-    }
+async function remove(id: number) {
+    const ok = await confirmDialog({
+        description: page.props.messages?.users.actions.confirm_delete,
+        confirmLabel: page.props.messages?.actions?.delete ?? 'Eliminar',
+        variant: 'destructive',
+    })
+    if (!ok) return
+    router.delete(userRouteDestroy(id).url)
 }
 
 function clearFilters() {
     filters.value = {}
-    Inertia.get(usersRoute().url, {}, {
+    router.get(usersRoute().url, {}, {
         preserveState: true,
         replace: true
     })

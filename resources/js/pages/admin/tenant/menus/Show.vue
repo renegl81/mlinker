@@ -31,8 +31,8 @@ import AppLayout from '@/layouts/AppLayout.vue';
 import { index as locationMenusRoute } from '@/routes/tenant/locations/menus';
 import { destroy as menuRouteDestroy, edit as menuRouteEdit } from '@/routes/tenant/menus';
 import type { BreadcrumbItem, Menu } from '@/types';
-import { Inertia } from '@inertiajs/inertia';
 import { Head, Link, usePage, router } from '@inertiajs/vue3';
+import { useConfirmDialog } from '@/composables/useConfirmDialog';
 import {
     ArrowDown,
     ArrowLeft,
@@ -61,6 +61,7 @@ import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
+const { confirm: confirmDialog } = useConfirmDialog();
 
 interface Allergen {
     id: number;
@@ -147,16 +148,29 @@ function generateQr() {
 function downloadQr() {
     window.location.href = `/panel/menus/${props.menu.id}/qr-code/download`;
 }
-function deleteQr() {
-    if (!confirm(t('panel.menu_show.delete_qr_confirm'))) return;
+async function deleteQr() {
+    const ok = await confirmDialog({
+        description: t('panel.menu_show.delete_qr_confirm'),
+        confirmLabel: t('common.delete'),
+        variant: 'destructive',
+    });
+    if (!ok) return;
     router.delete(`/panel/menus/${props.menu.id}/qr-code`, { preserveScroll: true });
 }
 
 // ── Menu delete ─────────────────────────────────────────────────────────────
-function remove() {
-    if (confirm(messages.value.menus.actions.confirm_delete)) {
-        Inertia.delete(menuRouteDestroy(props.menu.id).url);
-    }
+async function remove() {
+    const ok = await confirmDialog({
+        description: messages.value.menus.actions.confirm_delete,
+        confirmLabel: t('common.delete'),
+        variant: 'destructive',
+    });
+    if (!ok) return;
+    router.delete(menuRouteDestroy(props.menu.id).url, {
+        onSuccess: () => {
+            router.visit(locationMenusRoute(props.menu.location_id).url);
+        },
+    });
 }
 
 // ── Menu duplicate ───────────────────────────────────────────────────────────
@@ -190,8 +204,13 @@ function submitClone() {
 }
 
 // ── Products ────────────────────────────────────────────────────────────────
-function deleteProduct(productId: number) {
-    if (!confirm(t('panel.menu_show.delete_dish_confirm'))) return;
+async function deleteProduct(productId: number) {
+    const ok = await confirmDialog({
+        description: t('panel.menu_show.delete_dish_confirm'),
+        confirmLabel: t('common.delete'),
+        variant: 'destructive',
+    });
+    if (!ok) return;
     router.delete(`/panel/products/${productId}`, { preserveScroll: true });
 }
 
@@ -255,8 +274,13 @@ function submitEditSection(section: Section) {
     );
 }
 
-function deleteSection(sectionId: number) {
-    if (!confirm(t('panel.menu_show.delete_section_confirm'))) return;
+async function deleteSection(sectionId: number) {
+    const ok = await confirmDialog({
+        description: t('panel.menu_show.delete_section_confirm'),
+        confirmLabel: t('common.delete'),
+        variant: 'destructive',
+    });
+    if (!ok) return;
     router.delete(`/panel/sections/${sectionId}`, { preserveScroll: true });
 }
 

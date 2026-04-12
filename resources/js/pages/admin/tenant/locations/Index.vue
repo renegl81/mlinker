@@ -9,8 +9,8 @@ import {
     index as locationsRoute,
 } from '@/routes/tenant/locations';
 import type { BreadcrumbItem, Location } from '@/types';
-import { Inertia } from '@inertiajs/inertia';
-import { Head, Link, usePage } from '@inertiajs/vue3';
+import { Head, Link, usePage, router } from '@inertiajs/vue3';
+import { useConfirmDialog } from '@/composables/useConfirmDialog';
 import { ChevronLeft, ChevronRight, MapPin, Plus } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import UserFilters, {
@@ -19,6 +19,7 @@ import UserFilters, {
 
 const page = usePage();
 const messages = computed(() => page.props.messages as any);
+const { confirm: confirmDialog } = useConfirmDialog();
 
 interface PaginatedLocations {
     data: Location[];
@@ -49,25 +50,29 @@ function applyFilters(appliedFilters: UserFiltersType) {
         ),
     );
 
-    Inertia.get(locationsRoute().url, cleanFilters, {
+    router.get(locationsRoute().url, cleanFilters, {
         preserveState: true,
         replace: true,
     });
 }
 
 function go(url: string) {
-    Inertia.visit(url);
+    router.visit(url);
 }
 
-function remove(id: number) {
-    if (confirm(messages.value.locations.actions.confirm_delete)) {
-        Inertia.delete(locationRouteDestroy(id).url);
-    }
+async function remove(id: number) {
+    const ok = await confirmDialog({
+        description: messages.value.locations.actions.confirm_delete,
+        confirmLabel: messages.value.locations.actions.delete,
+        variant: 'destructive',
+    });
+    if (!ok) return;
+    router.delete(locationRouteDestroy(id).url);
 }
 
 function clearFilters() {
     filters.value = {};
-    Inertia.get(
+    router.get(
         locationsRoute().url,
         {},
         {
