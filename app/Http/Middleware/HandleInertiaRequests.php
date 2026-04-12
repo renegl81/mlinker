@@ -2,6 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Plan;
+use App\Models\Subscription;
+use App\Models\User;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -73,12 +76,12 @@ class HandleInertiaRequests extends Middleware
             return null;
         }
 
-        $subscription = \App\Models\Subscription::where('tenant_id', tenant()->id)
+        $subscription = Subscription::where('tenant_id', tenant()->id)
             ->latest()
             ->with('plan')
             ->first();
 
-        $plan = $subscription?->plan ?? \App\Models\Plan::free();
+        $plan = $subscription?->plan ?? Plan::free();
 
         $user = auth()->user();
 
@@ -90,9 +93,13 @@ class HandleInertiaRequests extends Middleware
                 'team' => (bool) ($plan?->has_team ?? false),
                 'analytics' => (bool) ($plan?->has_analytics ?? false),
                 'custom_qr' => (bool) ($plan?->has_custom_qr ?? false),
+                'menu_colors' => (bool) ($plan?->has_menu_colors ?? false),
+                'menu_fonts' => (bool) ($plan?->has_menu_fonts ?? false),
+                'menu_layout' => (bool) ($plan?->has_menu_layout ?? false),
+                'menu_advanced_style' => (bool) ($plan?->has_menu_advanced_style ?? false),
                 'api_access' => (bool) ($plan?->has_api_access ?? false),
             ],
-            'user_role' => $user instanceof \App\Models\User ? $user->currentTenantRole() : null,
+            'user_role' => $user instanceof User ? $user->currentTenantRole() : null,
         ];
     }
 }

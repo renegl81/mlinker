@@ -44,6 +44,7 @@ class Menu extends Model
         'show_prices',
         'show_currency',
         'show_calories',
+        'customization',
     ];
 
     /**
@@ -69,6 +70,7 @@ class Menu extends Model
             'show_currency' => 'boolean',
             'show_calories' => 'boolean',
             'translations' => 'array',
+            'customization' => 'array',
         ];
     }
 

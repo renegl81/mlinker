@@ -1,6 +1,42 @@
 import { InertiaLinkProps } from '@inertiajs/vue3';
 import type { LucideIcon } from 'lucide-vue-next';
 
+export interface MenuCustomization {
+    colors?: {
+        accent?: string;
+        bg?: string;
+        ink?: string;
+        ink_soft?: string;
+        rule?: string;
+    };
+    fonts?: {
+        display?: string;
+        body?: string;
+    };
+    layout?: {
+        show_allergens?: boolean;
+        show_ingredients?: boolean;
+        show_product_images?: boolean;
+        show_section_descriptions?: boolean;
+        image_position?: 'left' | 'right' | 'top' | 'hidden';
+        price_alignment?: 'right' | 'inline';
+    };
+    spacing?: {
+        density?: 'compact' | 'comfortable' | 'spacious';
+    };
+    header?: {
+        logo_url?: string | null;
+        show_restaurant_name?: boolean;
+        tagline?: string | null;
+        name_display_style?: 'default' | 'uppercase' | 'italic';
+    };
+    sections?: {
+        divider_style?: 'line' | 'ornament' | 'none';
+        title_alignment?: 'left' | 'center';
+        numbering?: 'none' | 'roman' | 'arabic';
+    };
+}
+
 export interface Auth {
     user: User;
 }
@@ -127,6 +163,7 @@ export interface Menu {
     show_prices: boolean;
     show_currency: boolean;
     show_calories: boolean;
+    customization?: MenuCustomization | null;
     is_active: boolean;
     created_at: string;
     updated_at: string;
