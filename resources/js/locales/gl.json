@@ -336,7 +336,10 @@
             "create_description": "Engade un novo menú ao sistema",
             "edit_description": "Modifica a información do menú",
             "create_form_description": "Completa os datos do novo menú.",
-            "edit_form_description": "Actualiza os datos do menú."
+            "edit_form_description": "Actualiza os datos do menú.",
+            "language": "Idioma do menú",
+            "language_locked": "Mellora o teu plan para cambiar o idioma do menú.",
+            "language_hint": "Idioma no que está escrito o contido do menú."
         },
         "billing": {
             "manage_subscription": "Xestionar subscrición",

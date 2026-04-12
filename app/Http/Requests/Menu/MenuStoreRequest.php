@@ -23,6 +23,7 @@ class MenuStoreRequest extends FormRequest
             'show_currency' => ['boolean'],
             'show_prices' => ['boolean'],
             'show_calories' => ['boolean'],
+            'lang' => ['sometimes', 'string', 'max:5'],
             'image_url' => ['nullable', 'string', 'regex:/^data:image\/(jpeg|jpg|png|gif);base64,/'],
         ];
     }

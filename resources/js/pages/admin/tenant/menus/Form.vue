@@ -31,10 +31,16 @@ import {
 } from 'reka-ui';
 import { computed } from 'vue';
 
+interface SupportedLocale {
+    native: string;
+    flag: string;
+}
+
 interface Props {
     form: {
         name: string;
         description: string;
+        lang: string;
         is_active: boolean;
         show_currency: boolean;
         show_prices: boolean;
@@ -46,6 +52,7 @@ interface Props {
     };
     location: Location;
     templates: Template[];
+    supportedLocales: Record<string, SupportedLocale>;
     title?: string;
     description?: string;
     submitText?: string;
@@ -91,6 +98,10 @@ function removeImage() {
     const input = document.getElementById('image_url') as HTMLInputElement | null;
     if (input) input.value = '';
 }
+
+const canChangeLang = computed(() => {
+    return !!(page.props.tenant as any)?.plan_features?.multilang;
+});
 
 const title = computed(() => {
     if (props.title) return props.title;
@@ -195,6 +206,28 @@ const handleFileChange = async (event: Event) => {
                             class="text-sm text-destructive"
                         >
                             {{ form.errors.description }}
+                        </p>
+                    </div>
+
+                    <div class="space-y-2">
+                        <Label for="lang">{{ t('panel.menus.language') }}</Label>
+                        <select
+                            id="lang"
+                            :value="form.lang"
+                            @change="$emit('update:field', 'lang', ($event.target as HTMLSelectElement).value)"
+                            :disabled="!canChangeLang"
+                            class="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+                        >
+                            <option
+                                v-for="(locale, code) in supportedLocales"
+                                :key="code"
+                                :value="code"
+                            >
+                                {{ locale.flag }} {{ locale.native }}
+                            </option>
+                        </select>
+                        <p v-if="!canChangeLang" class="text-xs text-muted-foreground">
+                            {{ t('panel.menus.language_locked') }}
                         </p>
                     </div>
 

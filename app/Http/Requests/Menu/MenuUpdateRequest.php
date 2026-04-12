@@ -21,6 +21,7 @@ class MenuUpdateRequest extends FormRequest
             'show_prices' => ['boolean'],
             'show_currency' => ['boolean'],
             'show_calories' => ['boolean'],
+            'lang' => ['sometimes', 'string', 'max:5'],
             'image_url' => ['nullable', 'string'],
         ];
     }

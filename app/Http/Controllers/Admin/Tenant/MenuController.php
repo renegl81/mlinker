@@ -39,6 +39,7 @@ class MenuController extends Controller
         return Inertia::render('admin/tenant/menus/Create', [
             'location' => $location,
             'templates' => Template::all(),
+            'supportedLocales' => config('menulinker.supported_locales'),
         ]);
     }
 
@@ -72,6 +73,7 @@ class MenuController extends Controller
             'menu' => $menu,
             'location' => $menu->location,
             'templates' => Template::where('is_active', true)->get(),
+            'supportedLocales' => config('menulinker.supported_locales'),
         ]);
     }
 

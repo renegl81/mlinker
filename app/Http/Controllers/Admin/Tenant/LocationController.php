@@ -70,8 +70,17 @@ class LocationController extends Controller
 
     public function show(Location $location)
     {
+        $tenant = tenant();
+        $domain = $tenant?->domains()->first()?->domain;
+        $appUrl = config('app.url');
+        $scheme = parse_url($appUrl, PHP_URL_SCHEME) ?: 'http';
+        $port = parse_url($appUrl, PHP_URL_PORT);
+        $portSuffix = $port ? ":{$port}" : '';
+        $publicUrl = $domain ? "{$scheme}://{$domain}{$portSuffix}/" : null;
+
         return Inertia::render('admin/tenant/locations/Show', [
             'location' => $location->load(['country', 'menus']),
+            'publicUrl' => $publicUrl,
         ]);
     }
 

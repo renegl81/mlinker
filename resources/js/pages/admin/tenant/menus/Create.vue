@@ -14,6 +14,7 @@
                 :submit-text="t('panel.menus.create_title')"
                 :location="props.location"
                 :templates="props.templates"
+                :supported-locales="props.supportedLocales"
                 @submit="submit"
                 @update:field="updateField"
             />
@@ -32,9 +33,15 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 
+interface SupportedLocale {
+    native: string;
+    flag: string;
+}
+
 const props = defineProps<{
     location: Location;
     templates: Template[];
+    supportedLocales: Record<string, SupportedLocale>;
 }>();
 
 const page = usePage();
@@ -53,6 +60,7 @@ const breadcrumbItems: BreadcrumbItem[] = [
 interface FormState {
     name: string;
     description: string;
+    lang: string;
     is_active: boolean;
     location_id: number;
     template_id?: number | null;
@@ -65,6 +73,7 @@ interface FormState {
 const form = useForm<FormState>({
     name: '',
     description: '',
+    lang: 'es',
     is_active: true,
     location_id: props.location.id,
     template_id: null,

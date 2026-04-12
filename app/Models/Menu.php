@@ -38,6 +38,7 @@ class Menu extends Model
         'location_id',
         'template_id',
         'is_active',
+        'lang',
         'image_url',
         'translations',
         'show_prices',

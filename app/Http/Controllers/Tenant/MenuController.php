@@ -32,7 +32,7 @@ class MenuController extends Controller
         $showBranding = $plan?->show_branding ?? true;
         $hasMultilang = $plan?->has_multilang ?? false;
 
-        $sourceLocale = config('menulinker.source_locale', 'es');
+        $sourceLocale = $menu->lang ?? config('menulinker.source_locale', 'es');
         $supportedCodes = array_keys(config('menulinker.supported_locales', []));
 
         // Locales actually available for this menu = source + those present in menu.translations

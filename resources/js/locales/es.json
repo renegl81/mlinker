@@ -289,6 +289,13 @@
             "refresh_preview": "Refrescar vista previa",
             "open_new_tab": "Abrir en nueva pestaña"
         },
+        "location_show": {
+            "preview": "Vista previa web",
+            "preview_mobile": "Vista móvil",
+            "preview_desktop": "Vista escritorio",
+            "refresh": "Refrescar",
+            "open_new_tab": "Abrir en nueva pestaña"
+        },
         "product_edit": {
             "head_title": "Editar: {name}",
             "description": "Modifica la información del plato",
@@ -336,7 +343,10 @@
             "create_description": "Agrega un nuevo menú al sistema",
             "edit_description": "Modifica la información del menú",
             "create_form_description": "Completa los datos del nuevo menú.",
-            "edit_form_description": "Actualiza los datos del menú."
+            "edit_form_description": "Actualiza los datos del menú.",
+            "language": "Idioma del menú",
+            "language_locked": "Mejora tu plan para cambiar el idioma del menú.",
+            "language_hint": "Idioma en el que está escrito el contenido del menú."
         },
         "billing": {
             "manage_subscription": "Gestionar suscripción",

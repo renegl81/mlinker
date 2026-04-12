@@ -15,6 +15,7 @@
                 :is-edit="true"
                 :location="props.location"
                 :templates="props.templates"
+                :supported-locales="props.supportedLocales"
                 @submit="submit"
                 @update:field="updateField"
             />
@@ -34,11 +35,17 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
+interface SupportedLocale {
+    native: string
+    flag: string
+}
+
 interface Menu {
     id: number
     location_id: number
     name: string
     description: string | null
+    lang: string
     is_active: boolean
     template_id: number | null
     show_currency: boolean
@@ -52,6 +59,7 @@ interface Props {
     menu: Menu
     location: Location
     templates: Template[]
+    supportedLocales: Record<string, SupportedLocale>
 }
 
 const props = defineProps<Props>()
@@ -70,6 +78,7 @@ const breadcrumbItems: BreadcrumbItem[] = [
 interface FormState {
     name: string
     description: string
+    lang: string
     is_active: boolean
     template_id: number | null
     show_currency: boolean
@@ -81,6 +90,7 @@ interface FormState {
 const form = useForm<FormState>({
     name: props.menu.name,
     description: props.menu.description ?? '',
+    lang: props.menu.lang ?? 'es',
     is_active: props.menu.is_active,
     template_id: props.menu.template_id ?? null,
     show_currency: props.menu.show_currency,

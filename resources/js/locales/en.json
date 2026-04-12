@@ -289,6 +289,13 @@
             "refresh_preview": "Refresh preview",
             "open_new_tab": "Open in new tab"
         },
+        "location_show": {
+            "preview": "Website preview",
+            "preview_mobile": "Mobile view",
+            "preview_desktop": "Desktop view",
+            "refresh": "Refresh",
+            "open_new_tab": "Open in new tab"
+        },
         "product_edit": {
             "head_title": "Edit: {name}",
             "description": "Edit the dish information",
@@ -336,7 +343,10 @@
             "create_description": "Add a new menu to the system",
             "edit_description": "Edit the menu information",
             "create_form_description": "Fill in the details for the new menu.",
-            "edit_form_description": "Update the menu details."
+            "edit_form_description": "Update the menu details.",
+            "language": "Menu language",
+            "language_locked": "Upgrade your plan to change the menu language.",
+            "language_hint": "Language in which the menu content is written."
         },
         "billing": {
             "manage_subscription": "Manage subscription",

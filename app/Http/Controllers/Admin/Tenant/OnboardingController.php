@@ -46,17 +46,17 @@ class OnboardingController extends Controller
     public function storeWebsite(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'has_website'   => ['required', 'boolean'],
+            'has_website' => ['required', 'boolean'],
             'business_type' => ['nullable', 'string', 'in:restaurant,cafe,bar,fastfood,finedining'],
         ]);
 
         $tenant = tenant();
-        $tenant->has_website   = (bool) $data['has_website'];
+        $tenant->has_website = (bool) $data['has_website'];
 
         if ($data['has_website']) {
             $businessType = $data['business_type'] ?? 'restaurant';
-            $tenant->business_type  = $businessType;
-            $tenant->home_template  = config("menulinker.default_home_template.{$businessType}", 'HomeClassic');
+            $tenant->business_type = $businessType;
+            $tenant->home_template = config("menulinker.default_home_template.{$businessType}", 'HomeClassic');
         }
 
         $tenant->onboarding_step = 1;
@@ -131,6 +131,7 @@ class OnboardingController extends Controller
             'location_id' => (int) $data['location_id'],
             'template_id' => $template->id,
             'is_active' => true,
+            'lang' => config('menulinker.source_locale', 'es'),
             'show_prices' => true,
             'show_currency' => false,
             'show_calories' => false,

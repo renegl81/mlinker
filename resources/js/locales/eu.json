@@ -336,7 +336,10 @@
             "create_description": "Menu berri bat gehitu sistemara",
             "edit_description": "Menuaren informazioa aldatu",
             "create_form_description": "Bete menu berriaren datuak.",
-            "edit_form_description": "Eguneratu menuaren datuak."
+            "edit_form_description": "Eguneratu menuaren datuak.",
+            "language": "Menuaren hizkuntza",
+            "language_locked": "Eguneratu zure plana menuaren hizkuntza aldatzeko.",
+            "language_hint": "Menuaren edukia idatzita dagoen hizkuntza."
         },
         "billing": {
             "manage_subscription": "Harpidetza kudeatu",
