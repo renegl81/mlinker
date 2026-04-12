@@ -181,7 +181,9 @@
             "your_name": "Zure izena",
             "name_placeholder": "Ad. 5. mahaia — Maria",
             "send_whatsapp": "WhatsApp bidez bidali",
-            "send_email": "Email bidez bidali"
+            "send_email": "Email bidez bidali",
+            "onboarding_title": "Prestatu zure eskaera!",
+            "onboarding_body": "Sakatu + gustatzen zaizkizun plateretan zerrendara gehitzeko. Gure langilea datorrenean, mugikorra erakutsi besterik ez duzu egin behar. Hain erraza!"
         }
     },
     "common": {

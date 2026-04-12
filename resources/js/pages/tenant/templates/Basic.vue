@@ -6,6 +6,7 @@ import ShareMenu from '@/components/public/ShareMenu.vue';
 import AllergenIcon from '@/components/ui/AllergenIcon.vue';
 import AddToCartButton from '@/components/public/AddToCartButton.vue';
 import CartFab from '@/components/public/CartFab.vue';
+import CartOnboarding from '@/components/public/CartOnboarding.vue';
 import CartDrawer from '@/components/public/CartDrawer.vue';
 import { useMenuFormatter } from '@/composables/useMenuFormatter';
 import { useMenuCustomization } from '@/composables/useMenuCustomization';
@@ -354,6 +355,7 @@ function sendViaEmail() {
             :menu-name="menu.name"
             :location-name="menu.location?.name ?? ''"
         />
+        <CartOnboarding v-if="hasCart && menu.show_prices" :menu-id="menu.id" />
         <CartFab
             v-if="hasCart && menu.show_prices"
             :item-count="cart?.totalItems.value ?? 0"

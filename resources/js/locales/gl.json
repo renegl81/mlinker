@@ -181,7 +181,9 @@
             "your_name": "O teu nome",
             "name_placeholder": "Ex. Mesa 5 — María",
             "send_whatsapp": "Enviar por WhatsApp",
-            "send_email": "Enviar por email"
+            "send_email": "Enviar por email",
+            "onboarding_title": "Monta o teu pedido!",
+            "onboarding_body": "Toca + nos pratos que che apetezan para engadilos á túa lista. Cando veña o noso persoal, só tes que ensinarlle o móbil. Así de sinxelo!"
         }
     },
     "common": {

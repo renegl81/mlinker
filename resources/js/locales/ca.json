@@ -181,7 +181,9 @@
             "your_name": "El teu nom",
             "name_placeholder": "Ex. Taula 5 — Maria",
             "send_whatsapp": "Enviar per WhatsApp",
-            "send_email": "Enviar per email"
+            "send_email": "Enviar per email",
+            "onboarding_title": "Munta la teva comanda!",
+            "onboarding_body": "Toca + als plats que et vinguin de gust per afegir-los a la teva llista. Quan vingui el nostre personal, només has d'ensenyar-li el mòbil. Així de fàcil!"
         }
     },
     "common": {

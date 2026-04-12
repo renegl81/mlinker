@@ -181,7 +181,9 @@
             "your_name": "Your name",
             "name_placeholder": "E.g. Table 5 — Maria",
             "send_whatsapp": "Send via WhatsApp",
-            "send_email": "Send via email"
+            "send_email": "Send via email",
+            "onboarding_title": "Build your order!",
+            "onboarding_body": "Tap + on the dishes you fancy to add them to your list. When our staff comes by, just show them your phone. Easy!"
         }
     },
     "common": {
