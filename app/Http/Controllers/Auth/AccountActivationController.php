@@ -27,7 +27,7 @@ class AccountActivationController extends Controller
      *
      * @throws Throwable
      */
-    public function activate(Request $request, User $user): RedirectResponse
+    public function activate(Request $request, User $user): RedirectResponse|\Symfony\Component\HttpFoundation\Response
     {
         if (! $request->hasValidSignature()) {
             abort(403, __('auth.register.activation.invalid_link'));
@@ -61,8 +61,7 @@ class AccountActivationController extends Controller
             $port = parse_url($appUrl, PHP_URL_PORT);
             $portSuffix = $port ? ':'.$port : '';
 
-            return redirect()->to("{$scheme}://{$tenantDomain}{$portSuffix}/panel")
-                ->with('success', __('auth.register.activation.success'));
+            return Inertia::location("{$scheme}://{$tenantDomain}{$portSuffix}/panel");
         }
 
         return redirect()->route('login')

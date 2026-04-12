@@ -1,33 +1,37 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+const appName = usePage().props.name as string;
 
 const columns = [
     {
-        title: 'Producto',
+        titleKey: 'home.footer.columns.product.title',
         links: [
-            { label: 'Funcionalidades', href: '/#features' },
-            { label: 'Precios', href: '/#pricing' },
-            { label: 'Plantillas', href: '/#features' },
+            { labelKey: 'home.footer.columns.product.links.features', href: '/#features' },
+            { labelKey: 'home.footer.columns.product.links.pricing', href: '/#pricing' },
+            { labelKey: 'home.footer.columns.product.links.templates', href: '/#features' },
         ],
     },
     {
-        title: 'Empresa',
+        titleKey: 'home.footer.columns.company.title',
         links: [
-            { label: 'Contacto', href: '/contact' },
+            { labelKey: 'home.footer.columns.company.links.contact', href: '/contact' },
         ],
     },
     {
-        title: 'Legal',
+        titleKey: 'home.footer.columns.legal.title',
         links: [
-            { label: 'Política de privacidad', href: '/privacy' },
-            { label: 'Términos y condiciones', href: '/terms' },
-            { label: 'Política de cookies', href: '/cookies' },
+            { labelKey: 'home.footer.columns.legal.links.privacy', href: '/privacy' },
+            { labelKey: 'home.footer.columns.legal.links.terms', href: '/terms' },
+            { labelKey: 'home.footer.columns.legal.links.cookies', href: '/cookies' },
         ],
     },
     {
-        title: 'Soporte',
+        titleKey: 'home.footer.columns.support.title',
         links: [
-            { label: 'Preguntas frecuentes', href: '/faq' },
+            { labelKey: 'home.footer.columns.support.links.faq', href: '/faq' },
         ],
     },
 ];
@@ -45,10 +49,10 @@ const columns = [
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                             </svg>
                         </div>
-                        <span class="text-white font-bold text-lg tracking-tight">MenuLinker</span>
+                        <span class="text-white font-bold text-lg tracking-tight">{{ appName }}</span>
                     </Link>
                     <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        Menús digitales con QR para hostelería. Diseñado para restaurantes que quieren destacar.
+                        {{ t('home.footer.brand_description') }}
                     </p>
                     <!-- Social icons -->
                     <div class="flex items-center gap-3">
@@ -56,7 +60,7 @@ const columns = [
                             href="https://instagram.com/menulinker"
                             target="_blank"
                             rel="noopener noreferrer"
-                            aria-label="Instagram de MenuLinker"
+                            :aria-label="t('home.footer.social.instagram')"
                             class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-teal-500/20 hover:text-teal-400 flex items-center justify-center transition-colors"
                         >
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -67,7 +71,7 @@ const columns = [
                             href="https://twitter.com/menulinker"
                             target="_blank"
                             rel="noopener noreferrer"
-                            aria-label="Twitter / X de MenuLinker"
+                            :aria-label="t('home.footer.social.twitter')"
                             class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-teal-500/20 hover:text-teal-400 flex items-center justify-center transition-colors"
                         >
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -78,7 +82,7 @@ const columns = [
                             href="https://linkedin.com/company/menulinker"
                             target="_blank"
                             rel="noopener noreferrer"
-                            aria-label="LinkedIn de MenuLinker"
+                            :aria-label="t('home.footer.social.linkedin')"
                             class="w-9 h-9 rounded-lg bg-slate-800 hover:bg-teal-500/20 hover:text-teal-400 flex items-center justify-center transition-colors"
                         >
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -91,17 +95,17 @@ const columns = [
                 <!-- Nav columns -->
                 <div
                     v-for="col in columns"
-                    :key="col.title"
+                    :key="col.titleKey"
                     class="col-span-1"
                 >
-                    <h3 class="text-white font-semibold text-sm mb-4 uppercase tracking-wider">{{ col.title }}</h3>
+                    <h3 class="text-white font-semibold text-sm mb-4 uppercase tracking-wider">{{ t(col.titleKey) }}</h3>
                     <ul class="space-y-2.5">
-                        <li v-for="link in col.links" :key="link.label">
+                        <li v-for="link in col.links" :key="link.labelKey">
                             <Link
                                 :href="link.href"
                                 class="text-slate-400 hover:text-teal-400 text-sm transition-colors"
                             >
-                                {{ link.label }}
+                                {{ t(link.labelKey) }}
                             </Link>
                         </li>
                     </ul>
@@ -111,12 +115,12 @@ const columns = [
             <!-- Bottom bar -->
             <div class="border-t border-slate-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <p class="text-slate-500 text-sm">
-                    &copy; {{ new Date().getFullYear() }} MenuLinker. Todos los derechos reservados.
+                    &copy; {{ new Date().getFullYear() }} {{ appName }}. {{ t('home.footer.rights') }}
                 </p>
                 <div class="flex items-center gap-4">
-                    <Link href="/privacy" class="text-slate-500 hover:text-slate-300 text-xs transition-colors">Privacidad</Link>
-                    <Link href="/terms" class="text-slate-500 hover:text-slate-300 text-xs transition-colors">Términos</Link>
-                    <Link href="/cookies" class="text-slate-500 hover:text-slate-300 text-xs transition-colors">Cookies</Link>
+                    <Link href="/privacy" class="text-slate-500 hover:text-slate-300 text-xs transition-colors">{{ t('home.footer.bottom.privacy') }}</Link>
+                    <Link href="/terms" class="text-slate-500 hover:text-slate-300 text-xs transition-colors">{{ t('home.footer.bottom.terms') }}</Link>
+                    <Link href="/cookies" class="text-slate-500 hover:text-slate-300 text-xs transition-colors">{{ t('home.footer.bottom.cookies') }}</Link>
                 </div>
             </div>
         </div>

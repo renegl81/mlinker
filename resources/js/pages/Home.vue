@@ -5,7 +5,7 @@ import HeroSection from '@/components/home/HeroSection.vue';
 import PricingSection from '@/components/home/PricingSection.vue';
 import TestimonialsSection from '@/components/home/TestimonialsSection.vue';
 import FrontLayout from '@/layouts/app/FrontLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, usePage } from '@inertiajs/vue3';
 import { computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -46,6 +46,7 @@ interface Props {
 const props = defineProps<Props>();
 
 const { locale: i18nLocale } = useI18n();
+const appName = usePage().props.name as string;
 
 onMounted(() => {
     if (props.locale && i18nLocale.value !== props.locale) {
@@ -58,7 +59,7 @@ const baseUrl = computed(() => props.seo.url.replace(/\/$/, ''));
 const jsonLdOrganization = computed(() => JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'MenuLinker',
+    name: appName,
     url: props.seo.url,
     logo: `${props.seo.url}/favicon.svg`,
     description: props.seo.description,
@@ -68,7 +69,7 @@ const jsonLdOrganization = computed(() => JSON.stringify({
 const jsonLdWebSite = computed(() => JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'MenuLinker',
+    name: appName,
     url: props.seo.url,
     description: props.seo.description,
     potentialAction: {
@@ -138,7 +139,7 @@ const jsonLdFaq = computed(() => JSON.stringify({
         <meta property="og:description" :content="seo.description" />
         <meta property="og:url" :content="seo.url" />
         <meta property="og:image" :content="seo.image" />
-        <meta property="og:site_name" content="MenuLinker" />
+        <meta property="og:site_name" :content="appName" />
         <meta property="og:locale" content="es_ES" />
 
         <!-- Twitter Card -->

@@ -762,5 +762,187 @@
             "branding_title": "Colores de marca personalizados",
             "branding_body": "Desde los ajustes del local puedes configurar los colores primario y secundario de tu marca. Estos colores se aplican a tu página web pública y a los elementos de tu menú digital, dando una imagen coherente y profesional."
         }
+    },
+    "home": {
+        "header": {
+            "open_menu": "Abrir menú de navegación",
+            "language": "Idioma",
+            "login": "Iniciar sesión",
+            "get_started": "Empezar gratis",
+            "nav": {
+                "features": "Funcionalidades",
+                "pricing": "Precios",
+                "faq": "FAQ",
+                "contact": "Contacto"
+            }
+        },
+        "hero": {
+            "badge": "Nuevo: 8 plantillas · Multi-idioma automático",
+            "title_line1": "La carta digital",
+            "title_line2": "que tus clientes",
+            "title_line3": "quieren ver",
+            "subtitle": "Crea menús digitales con QR personalizado, gestiona alérgenos, traduce a 7 idiomas y actualiza precios en tiempo real. Sin código. Sin complicaciones.",
+            "cta_primary": "Crear mi carta gratis",
+            "cta_secondary": "Ver cómo funciona",
+            "trust_free": "Gratis para siempre",
+            "trust_no_card": "Sin tarjeta de crédito",
+            "trust_ready": "Listo en 5 minutos"
+        },
+        "features": {
+            "badge": "Funcionalidades",
+            "title": "Todo lo que tu restaurante",
+            "title2": "necesita",
+            "subtitle": "Herramientas diseñadas para hostelería, no para ingenieros. Sin curva de aprendizaje.",
+            "items": {
+                "qr": {
+                    "title": "QR Personalizados",
+                    "description": "Genera códigos únicos con los colores de tu marca. Imprímelos en mesas, cartelería o compártelos en redes."
+                },
+                "templates": {
+                    "title": "8 Plantillas de diseño",
+                    "description": "Desde carta editorial hasta menú degustación. Elige la que mejor represente tu restaurante y cámbiala cuando quieras."
+                },
+                "analytics": {
+                    "title": "Analytics en Tiempo Real",
+                    "description": "Descubre qué platos miran más, en qué horarios y desde qué dispositivos. Toma decisiones basadas en datos reales."
+                },
+                "allergens": {
+                    "title": "Alérgenos e Ingredientes",
+                    "description": "Información clara para tus clientes. Cumple la normativa europea de alérgenos (Reglamento UE 1169/2011) sin esfuerzo."
+                },
+                "realtime": {
+                    "title": "Actualización Instantánea",
+                    "description": "Cambia precios, añade platos del día o desactiva productos agotados. Los cambios se reflejan al instante en el QR."
+                },
+                "multilang": {
+                    "title": "Multi-idioma Automático",
+                    "description": "Traduce tu carta a 7 idiomas con un clic: inglés, francés, alemán, italiano, portugués, catalán y más."
+                }
+            },
+            "highlight": {
+                "badge": "Vista pública del menú",
+                "title": "Tu carta, hermosa en cualquier dispositivo",
+                "description": "Los clientes escanean el QR y ven una carta digital optimizada para móvil. Sin apps, sin instalaciones. Solo escanear y disfrutar.",
+                "point1": "Responsive mobile-first",
+                "point2": "Carga en < 1 segundo",
+                "point3": "Sin cuenta necesaria"
+            }
+        },
+        "pricing": {
+            "badge": "Precios",
+            "title": "Planes simples y transparentes",
+            "subtitle": "Sin contratos anuales obligatorios. Cancela cuando quieras.",
+            "popular": "Más popular",
+            "price_free": "Gratis",
+            "price_custom": "A medida",
+            "bottom_note": "Todos los planes incluyen hosting, actualizaciones y soporte por email.",
+            "faq_link": "Ver preguntas frecuentes",
+            "cta": {
+                "free": "Empezar gratis",
+                "enterprise": "Hablar con ventas",
+                "trial": "Empezar prueba gratis",
+                "subscribe": "Suscribirse"
+            },
+            "features": {
+                "unlimited_locations": "Locales ilimitados",
+                "location_singular": "local",
+                "location_plural": "locales",
+                "unlimited_menus": "Menús ilimitados",
+                "menu_singular": "menú",
+                "menu_plural": "menús",
+                "per_location": "por local",
+                "unlimited_products": "Productos ilimitados",
+                "products": "productos",
+                "custom_qr": "QR personalizado con tu marca",
+                "basic_qr": "QR básico",
+                "analytics": "Analytics y estadísticas",
+                "multilang": "Multi-idioma automático (7 idiomas)",
+                "catalog": "Catálogo centralizado",
+                "team": "Gestión de equipo",
+                "custom_domain": "Dominio personalizado",
+                "api_access": "Acceso API completo",
+                "branding_visible": "Branding MenuLinker visible",
+                "trial_days": "días de prueba gratuita"
+            }
+        },
+        "testimonials": {
+            "badge": "Testimonios",
+            "title": "Lo que dicen nuestros clientes",
+            "subtitle": "Restaurantes reales. Resultados reales.",
+            "items": {
+                "maria": {
+                    "role": "Propietaria",
+                    "content": "Antes imprimíamos la carta cada semana por los cambios de precios. Ahora lo actualizamos desde el móvil en 30 segundos. El ahorro es brutal."
+                },
+                "carlos": {
+                    "role": "Gerente",
+                    "content": "Los clientes extranjeros nos agradecen mucho poder ver la carta en inglés o francés automáticamente. La función multi-idioma es un diferencial claro."
+                },
+                "ana": {
+                    "role": "Chef y propietaria",
+                    "content": "Los analytics me sorprendieron. Descubrí que mis croquetas son lo que más mira la gente pero no lo que más vendo. Con esos datos cambié la presentación y mejoró."
+                }
+            },
+            "stats": {
+                "restaurants": "Restaurantes activos",
+                "rating": "Valoración media",
+                "languages": "Idiomas disponibles",
+                "setup": "Para crear tu primera carta"
+            }
+        },
+        "cta": {
+            "title": "¿Listo para digitalizar",
+            "title2": "tu carta?",
+            "subtitle": "Crea tu carta digital en minutos. Sin compromisos, sin tarjeta de crédito. Únete a más de 500 restaurantes que ya confían en MenuLinker.",
+            "cta_primary": "Crear mi cuenta gratis",
+            "cta_secondary": "Hablar con el equipo",
+            "trust_free": "Plan gratuito para siempre",
+            "trust_no_card": "Sin tarjeta de crédito",
+            "trust_no_contract": "Sin permanencia"
+        },
+        "footer": {
+            "brand_description": "Menús digitales con QR para hostelería. Diseñado para restaurantes que quieren destacar.",
+            "rights": "Todos los derechos reservados.",
+            "social": {
+                "instagram": "Instagram de MenuLinker",
+                "twitter": "Twitter / X de MenuLinker",
+                "linkedin": "LinkedIn de MenuLinker"
+            },
+            "columns": {
+                "product": {
+                    "title": "Producto",
+                    "links": {
+                        "features": "Funcionalidades",
+                        "pricing": "Precios",
+                        "templates": "Plantillas"
+                    }
+                },
+                "company": {
+                    "title": "Empresa",
+                    "links": {
+                        "contact": "Contacto"
+                    }
+                },
+                "legal": {
+                    "title": "Legal",
+                    "links": {
+                        "privacy": "Política de privacidad",
+                        "terms": "Términos y condiciones",
+                        "cookies": "Política de cookies"
+                    }
+                },
+                "support": {
+                    "title": "Soporte",
+                    "links": {
+                        "faq": "Preguntas frecuentes"
+                    }
+                }
+            },
+            "bottom": {
+                "privacy": "Privacidad",
+                "terms": "Términos",
+                "cookies": "Cookies"
+            }
+        }
     }
 }

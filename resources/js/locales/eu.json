@@ -762,5 +762,187 @@
             "branding_title": "Pertsonalizatutako marka koloreak",
             "branding_body": "Tokiaren ezarpenetatik zure markaren kolore primarioa eta sekundarioa konfiguratu ditzakezu."
         }
+    },
+    "home": {
+        "header": {
+            "open_menu": "Nabigazio-menua ireki",
+            "language": "Hizkuntza",
+            "login": "Saioa hasi",
+            "get_started": "Hasi doan",
+            "nav": {
+                "features": "Ezaugarriak",
+                "pricing": "Prezioak",
+                "faq": "FAQ",
+                "contact": "Kontaktua"
+            }
+        },
+        "hero": {
+            "badge": "Berria: 8 txantiloi · Hizkuntza anitz automatikoa",
+            "title_line1": "Zure bezeroekin",
+            "title_line2": "nahi duten menu",
+            "title_line3": "digitala",
+            "subtitle": "Sortu menu digitalak QR pertsonalizatuekin, kudeatu alergenoak, itzuli 7 hizkuntzara eta eguneratu prezioak denbora errealean. Koderik gabe. Konplikaziorik gabe.",
+            "cta_primary": "Sortu nire menua doan",
+            "cta_secondary": "Ikusi nola funtzionatzen duen",
+            "trust_free": "Beti doan",
+            "trust_no_card": "Kreditu-txartelik gabe",
+            "trust_ready": "5 minututan prest"
+        },
+        "features": {
+            "badge": "Ezaugarriak",
+            "title": "Zure jatetxeak behar duen",
+            "title2": "guztia",
+            "subtitle": "Ostalaritzarako diseinatutako tresnak, ez ingeniarientzat. Ikasteko kurbarik gabe.",
+            "items": {
+                "qr": {
+                    "title": "QR Pertsonalizatuak",
+                    "description": "Sortu kode bakarrak zure markaren koloreekin. Inprimatu mahaietan, kartelerian edo partekatu sare sozialetan."
+                },
+                "templates": {
+                    "title": "8 Diseinu Txantiloi",
+                    "description": "Menu editorialetatik dastaketa menuetara. Aukeratu zure jatetxea hoberen irudikatzen duena eta aldatu nahi duzunean."
+                },
+                "analytics": {
+                    "title": "Denbora Errealeko Analytics",
+                    "description": "Ezagutu zein plater ikusten diren gehien, zein orduetan eta zein gailuetatik. Hartu erabakiak datu errealetan oinarrituta."
+                },
+                "allergens": {
+                    "title": "Alergenoak eta Osagaiak",
+                    "description": "Informazio argia zure bezeroei. Bete Europako alergenoen araudia (UE 1169/2011 Erregelamendua) ahaleginik gabe."
+                },
+                "realtime": {
+                    "title": "Berehalako Eguneratzea",
+                    "description": "Aldatu prezioak, gehitu eguneko platerak edo desaktibatu agortutako produktuak. Aldaketak berehalakoan islatzen dira QRan."
+                },
+                "multilang": {
+                    "title": "Hizkuntza Anitz Automatikoa",
+                    "description": "Itzuli zure menua 7 hizkuntzara klik batez: ingelesa, frantsesa, alemana, italiera, portugesa, katalana eta gehiago."
+                }
+            },
+            "highlight": {
+                "badge": "Menuaren ikuspegi publikoa",
+                "title": "Zure menua, ederra edozein gailutan",
+                "description": "Bezeroek QR eskaneatzen dute eta mugikorrean optimizatutako menu digital bat ikusten dute. Aplikaziorik gabe, instalaketarik gabe. Eskaneatu eta gozatu besterik ez.",
+                "point1": "Responsive mobile-first",
+                "point2": "Kargatu < 1 segundoan",
+                "point3": "Konturik beharrik ez"
+            }
+        },
+        "pricing": {
+            "badge": "Prezioak",
+            "title": "Plan sinpleak eta gardenak",
+            "subtitle": "Urteko kontratu derrigorrik gabe. Utzi nahi duzunean.",
+            "popular": "Ezagunena",
+            "price_free": "Doan",
+            "price_custom": "Neurrira",
+            "bottom_note": "Plan guztiek hosting, eguneraketak eta posta elektronikoko laguntza barne dituzte.",
+            "faq_link": "Ikusi maiz egiten diren galderak",
+            "cta": {
+                "free": "Hasi doan",
+                "enterprise": "Hitz egin salmentarekin",
+                "trial": "Hasi proba doan",
+                "subscribe": "Harpidetu"
+            },
+            "features": {
+                "unlimited_locations": "Toki mugagabeak",
+                "location_singular": "toki",
+                "location_plural": "toki",
+                "unlimited_menus": "Menu mugagabeak",
+                "menu_singular": "menu",
+                "menu_plural": "menu",
+                "per_location": "toki bakoitzeko",
+                "unlimited_products": "Produktu mugagabeak",
+                "products": "produktu",
+                "custom_qr": "QR pertsonalizatua zure markarekin",
+                "basic_qr": "QR oinarrizkoa",
+                "analytics": "Analytics eta estatistikak",
+                "multilang": "Hizkuntza anitz automatikoa (7 hizkuntza)",
+                "catalog": "Katalogo zentralizatua",
+                "team": "Taldeen kudeaketa",
+                "custom_domain": "Domeinu pertsonalizatua",
+                "api_access": "API sarbide osoa",
+                "branding_visible": "MenuLinker marka ikusgarria",
+                "trial_days": "proba egun doan"
+            }
+        },
+        "testimonials": {
+            "badge": "Testigantzak",
+            "title": "Gure bezeroek esaten dutena",
+            "subtitle": "Benetako jatetxeak. Benetako emaitzak.",
+            "items": {
+                "maria": {
+                    "role": "Jabea",
+                    "content": "Lehen astero inprimatzen genuen menua prezio aldaketen ondorioz. Orain mugikorrean eguneratzen dugu 30 segundotan. Aurrezkia izugarria da."
+                },
+                "carlos": {
+                    "role": "Kudeatzailea",
+                    "content": "Atzerriko bezeroek asko eskertzen digute menua ingelesez edo frantsesez automatikoki ikustea. Hizkuntza anitzeko funtzioa diferentziatzaile argia da."
+                },
+                "ana": {
+                    "role": "Sukaldaria eta jabea",
+                    "content": "Analytics-ek harritu ninduten. Aurkitu nuen nire kroketak jendeak gehien begiratzen dituena direla baina ez saltzen dudana gehien. Datu horiekin aurkezpena aldatu nuen eta hobetu egin zen."
+                }
+            },
+            "stats": {
+                "restaurants": "Jatetxe aktiboak",
+                "rating": "Batez besteko balorazioa",
+                "languages": "Hizkuntza erabilgarriak",
+                "setup": "Zure lehen menua sortzeko"
+            }
+        },
+        "cta": {
+            "title": "Prest zure menua",
+            "title2": "digitalizatzeko?",
+            "subtitle": "Sortu zure menu digitala minutuetan. Konpromisorik gabe, kreditu-txartelik gabe. Batu MenuLinker-en fidatzen den 500 jatetxe baino gehiagori.",
+            "cta_primary": "Sortu nire kontua doan",
+            "cta_secondary": "Hitz egin taldearekin",
+            "trust_free": "Plan doana beti",
+            "trust_no_card": "Kreditu-txartelik gabe",
+            "trust_no_contract": "Iraunkortasunik gabe"
+        },
+        "footer": {
+            "brand_description": "Menu digitalak QR-rekin ostalaritzarako. Nabarmendu nahi duten jatetxeentzat diseinatua.",
+            "rights": "Eskubide guztiak erreserbatuta.",
+            "social": {
+                "instagram": "MenuLinker Instagram-en",
+                "twitter": "MenuLinker Twitter / X-en",
+                "linkedin": "MenuLinker LinkedIn-en"
+            },
+            "columns": {
+                "product": {
+                    "title": "Produktua",
+                    "links": {
+                        "features": "Ezaugarriak",
+                        "pricing": "Prezioak",
+                        "templates": "Txantiloiak"
+                    }
+                },
+                "company": {
+                    "title": "Enpresa",
+                    "links": {
+                        "contact": "Kontaktua"
+                    }
+                },
+                "legal": {
+                    "title": "Legala",
+                    "links": {
+                        "privacy": "Pribatutasun politika",
+                        "terms": "Baldintza eta kondizioak",
+                        "cookies": "Cookie politika"
+                    }
+                },
+                "support": {
+                    "title": "Laguntza",
+                    "links": {
+                        "faq": "Maiz egiten diren galderak"
+                    }
+                }
+            },
+            "bottom": {
+                "privacy": "Pribatutasuna",
+                "terms": "Baldintzak",
+                "cookies": "Cookies"
+            }
+        }
     }
 }

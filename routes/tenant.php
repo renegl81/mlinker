@@ -21,6 +21,7 @@ use App\Http\Controllers\Tenant\HomeController;
 use App\Http\Middleware\EnsurePlanLimits;
 use App\Http\Middleware\InitializeTenancyByDomainOptional;
 use App\Http\Middleware\RedirectToOnboarding;
+use App\Http\Middleware\SetLocaleFromUrl;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
@@ -49,7 +50,7 @@ Route::middleware([
 ])->as('tenant.')->group(function () {
 
     // Rutas protegidas con autenticación
-    Route::middleware(['auth', 'verified'])->group(function () {
+    Route::middleware(['auth', 'verified', SetLocaleFromUrl::class])->group(function () {
 
         // Rutas de onboarding (FUERA del RedirectToOnboarding para evitar bucles)
         Route::prefix('panel/onboarding')->as('onboarding.')->group(function () {

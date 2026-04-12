@@ -27,6 +27,7 @@ import { useI18n } from 'vue-i18n';
 import MoreSheet from '@/components/layout/MoreSheet.vue';
 
 const { t } = useI18n();
+const appName = usePage().props.name as string;
 const page = usePage();
 
 const user = computed(() => page.props.auth?.user);
@@ -115,7 +116,7 @@ function isActive(href: string): boolean {
                     <AppLogoIcon class="size-5" />
                 </div>
                 <span class="hidden text-sm font-semibold tracking-tight sm:block">
-                    MenuLinker
+                    {{ appName }}
                 </span>
             </Link>
 

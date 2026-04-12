@@ -24,12 +24,14 @@ class AccountActivationNotification extends Notification
             ['user' => $this->user->id]
         );
 
+        $locale = $this->user->locale ?? config('app.locale', 'es');
+
         return (new MailMessage)
-            ->subject(__('auth.register.activation.subject'))
-            ->greeting(__('auth.register.activation.greeting', ['name' => $this->user->name]))
-            ->line(__('auth.register.activation.line1'))
-            ->action(__('auth.register.activation.action'), $activationUrl)
-            ->line(__('auth.register.activation.line2'))
-            ->line(__('auth.register.activation.line3'));
+            ->subject(__('auth.register.activation.subject', [], $locale))
+            ->greeting(__('auth.register.activation.greeting', ['name' => $this->user->name], $locale))
+            ->line(__('auth.register.activation.line1', [], $locale))
+            ->action(__('auth.register.activation.action', [], $locale), $activationUrl)
+            ->line(__('auth.register.activation.line2', [], $locale))
+            ->line(__('auth.register.activation.line3', [], $locale));
     }
 }

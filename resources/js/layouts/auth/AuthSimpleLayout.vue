@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { tenant_home as home } from '@/routes/tenant_public/index';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
+const appName = usePage().props.name as string;
 
 defineProps<{
     title?: string;
@@ -44,10 +45,10 @@ defineProps<{
             >
                 <img
                     src="/images/logo.png"
-                    alt="MenuLinker"
+                    :alt="appName"
                     class="h-10 w-10 object-contain transition-transform group-hover:scale-105"
                 />
-                <span class="text-xl font-bold tracking-tight">MenuLinker</span>
+                <span class="text-xl font-bold tracking-tight">{{ appName }}</span>
             </Link>
 
             <!-- quote/tagline -->
@@ -69,7 +70,7 @@ defineProps<{
 
             <!-- footer -->
             <p class="relative z-10 text-xs text-slate-500">
-                © {{ new Date().getFullYear() }} MenuLinker
+                © {{ new Date().getFullYear() }} {{ appName }}
             </p>
         </aside>
 
@@ -84,11 +85,11 @@ defineProps<{
             >
                 <img
                     src="/images/logo.png"
-                    alt="MenuLinker"
+                    :alt="appName"
                     class="h-9 w-9 object-contain"
                 />
                 <span class="text-lg font-bold tracking-tight text-slate-900"
-                    >MenuLinker</span
+                    >{{ appName }}</span
                 >
             </Link>
 

@@ -37,6 +37,7 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmailContr
         'postal_code',
         'country_id',
         'is_active',
+        'locale',
     ];
 
     /**

@@ -23,7 +23,8 @@ const page = usePage();
 const auth = computed(() => page.props.auth);
 const scrolled = ref(false);
 
-const { locale: i18nLocale } = useI18n();
+const { t, locale: i18nLocale } = useI18n();
+const appName = page.props.name as string;
 
 function onScroll() {
     scrolled.value = window.scrollY > 12;
@@ -37,12 +38,12 @@ interface NavLink {
     href: string;
 }
 
-const links: NavLink[] = [
-    { label: 'Funcionalidades', href: '/#features' },
-    { label: 'Precios', href: '/#pricing' },
-    { label: 'FAQ', href: '/faq' },
-    { label: 'Contacto', href: '/contact' },
-];
+const links = computed<NavLink[]>(() => [
+    { label: t('home.header.nav.features'), href: '/#features' },
+    { label: t('home.header.nav.pricing'), href: '/#pricing' },
+    { label: t('home.header.nav.faq'), href: '/faq' },
+    { label: t('home.header.nav.contact'), href: '/contact' },
+]);
 
 const UI_LOCALES = [
     { code: 'es', label: 'Español', flag: '🇪🇸' },
@@ -86,7 +87,7 @@ function switchLocale(code: string) {
                             variant="ghost"
                             size="icon"
                             class="mr-2 h-9 w-9 text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-                            aria-label="Abrir menú de navegación"
+                            :aria-label="t('home.header.open_menu')"
                         >
                             <Menu class="h-5 w-5" />
                         </Button>
@@ -94,8 +95,8 @@ function switchLocale(code: string) {
                     <SheetContent side="left" class="w-[280px] p-6 bg-white border-r border-slate-200">
                         <!-- Mobile logo -->
                         <Link href="/" class="flex items-center gap-2.5 mb-8">
-                            <img src="/images/logo.png" alt="MenuLinker" class="h-9 w-9 object-contain flex-shrink-0" />
-                            <span class="font-bold text-slate-900 text-lg">MenuLinker</span>
+                            <img src="/images/logo.png" :alt="appName" class="h-9 w-9 object-contain flex-shrink-0" />
+                            <span class="font-bold text-slate-900 text-lg">{{ appName }}</span>
                         </Link>
                         <nav class="space-y-1">
                             <Link
@@ -112,20 +113,20 @@ function switchLocale(code: string) {
                                         href="/login"
                                         class="flex items-center justify-center px-4 py-2.5 rounded-lg border border-slate-200 text-slate-700 hover:border-teal-300 hover:text-teal-600 font-medium transition-colors text-sm"
                                     >
-                                        Iniciar sesión
+                                        {{ t('home.header.login') }}
                                     </Link>
                                     <Link
                                         href="/register"
                                         class="flex items-center justify-center px-4 py-2.5 rounded-full bg-teal-500 hover:bg-teal-600 text-white font-bold transition-colors text-sm"
                                     >
-                                        Empezar gratis
+                                        {{ t('home.header.get_started') }}
                                     </Link>
                                 </div>
                             </template>
 
                             <!-- Selector de idioma en mobile -->
                             <div class="pt-5 mt-5 border-t border-slate-100">
-                                <p class="px-3 text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Idioma</p>
+                                <p class="px-3 text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">{{ t('home.header.language') }}</p>
                                 <div class="space-y-0.5">
                                     <button
                                         v-for="loc in UI_LOCALES"
@@ -148,8 +149,8 @@ function switchLocale(code: string) {
 
             <!-- Logo -->
             <Link href="/" class="flex items-center gap-2.5 group">
-                <img src="/images/logo.png" alt="MenuLinker" class="h-9 w-9 object-contain flex-shrink-0" />
-                <span class="font-bold text-slate-900 text-lg tracking-tight">MenuLinker</span>
+                <img src="/images/logo.png" :alt="appName" class="h-9 w-9 object-contain flex-shrink-0" />
+                <span class="font-bold text-slate-900 text-lg tracking-tight">{{ appName }}</span>
             </Link>
 
             <!-- Desktop nav -->
@@ -197,13 +198,13 @@ function switchLocale(code: string) {
                         href="/login"
                         class="hidden lg:inline-flex items-center px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
                     >
-                        Iniciar sesión
+                        {{ t('home.header.login') }}
                     </Link>
                     <Link
                         href="/register"
                         class="inline-flex items-center px-5 py-2 rounded-full bg-teal-500 hover:bg-teal-600 text-white text-sm font-bold transition-colors shadow-sm"
                     >
-                        Empezar gratis
+                        {{ t('home.header.get_started') }}
                     </Link>
                 </template>
 

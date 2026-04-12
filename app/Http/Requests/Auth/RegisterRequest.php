@@ -31,6 +31,7 @@ class RegisterRequest extends FormRequest
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'tenant_name' => ['required', 'string', 'max:255'],
             'tenant_domain' => ['required', 'string', 'lowercase', 'max:255', 'regex:/^[a-z0-9-]+$/', 'unique:domains,domain'],
+            'locale' => ['sometimes', 'string', 'max:5'],
         ];
     }
 

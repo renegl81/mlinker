@@ -23,8 +23,10 @@ class WelcomeMail extends Mailable
 
     public function envelope(): Envelope
     {
+        $locale = $this->user->locale ?? 'es';
+
         return new Envelope(
-            subject: '¡Tu menú digital está listo!',
+            subject: __('mail.welcome.subject', [], $locale),
         );
     }
 

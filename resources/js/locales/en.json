@@ -762,5 +762,187 @@
             "branding_title": "Custom brand colours",
             "branding_body": "From the location settings you can configure your brand's primary and secondary colours. These colours are applied to your public website and to the elements of your digital menu, giving a consistent and professional image."
         }
+    },
+    "home": {
+        "header": {
+            "open_menu": "Open navigation menu",
+            "language": "Language",
+            "login": "Log in",
+            "get_started": "Get started free",
+            "nav": {
+                "features": "Features",
+                "pricing": "Pricing",
+                "faq": "FAQ",
+                "contact": "Contact"
+            }
+        },
+        "hero": {
+            "badge": "New: 8 templates · Automatic multi-language",
+            "title_line1": "The digital menu",
+            "title_line2": "your customers",
+            "title_line3": "want to see",
+            "subtitle": "Create digital menus with custom QR codes, manage allergens, translate into 7 languages and update prices in real time. No code. No fuss.",
+            "cta_primary": "Create my menu for free",
+            "cta_secondary": "See how it works",
+            "trust_free": "Free forever",
+            "trust_no_card": "No credit card required",
+            "trust_ready": "Ready in 5 minutes"
+        },
+        "features": {
+            "badge": "Features",
+            "title": "Everything your restaurant",
+            "title2": "needs",
+            "subtitle": "Tools designed for hospitality, not engineers. No learning curve.",
+            "items": {
+                "qr": {
+                    "title": "Custom QR Codes",
+                    "description": "Generate unique codes with your brand colours. Print them on tables, signage or share them on social media."
+                },
+                "templates": {
+                    "title": "8 Design Templates",
+                    "description": "From editorial menus to tasting menus. Pick the one that best represents your restaurant and change it whenever you like."
+                },
+                "analytics": {
+                    "title": "Real-Time Analytics",
+                    "description": "Discover which dishes get the most views, at what times and from which devices. Make decisions based on real data."
+                },
+                "allergens": {
+                    "title": "Allergens & Ingredients",
+                    "description": "Clear information for your customers. Comply with the European allergen regulation (EU 1169/2011) effortlessly."
+                },
+                "realtime": {
+                    "title": "Instant Updates",
+                    "description": "Change prices, add daily specials or deactivate out-of-stock products. Changes appear instantly on the QR."
+                },
+                "multilang": {
+                    "title": "Automatic Multi-Language",
+                    "description": "Translate your menu into 7 languages with one click: English, French, German, Italian, Portuguese, Catalan and more."
+                }
+            },
+            "highlight": {
+                "badge": "Public menu view",
+                "title": "Your menu, beautiful on any device",
+                "description": "Customers scan the QR and see a mobile-optimised digital menu. No apps, no installs. Just scan and enjoy.",
+                "point1": "Responsive mobile-first",
+                "point2": "Loads in < 1 second",
+                "point3": "No account needed"
+            }
+        },
+        "pricing": {
+            "badge": "Pricing",
+            "title": "Simple, transparent plans",
+            "subtitle": "No mandatory annual contracts. Cancel whenever you want.",
+            "popular": "Most popular",
+            "price_free": "Free",
+            "price_custom": "Custom",
+            "bottom_note": "All plans include hosting, updates and email support.",
+            "faq_link": "View frequently asked questions",
+            "cta": {
+                "free": "Start for free",
+                "enterprise": "Talk to sales",
+                "trial": "Start free trial",
+                "subscribe": "Subscribe"
+            },
+            "features": {
+                "unlimited_locations": "Unlimited locations",
+                "location_singular": "location",
+                "location_plural": "locations",
+                "unlimited_menus": "Unlimited menus",
+                "menu_singular": "menu",
+                "menu_plural": "menus",
+                "per_location": "per location",
+                "unlimited_products": "Unlimited products",
+                "products": "products",
+                "custom_qr": "Custom branded QR code",
+                "basic_qr": "Basic QR code",
+                "analytics": "Analytics and statistics",
+                "multilang": "Automatic multi-language (7 languages)",
+                "catalog": "Centralised catalogue",
+                "team": "Team management",
+                "custom_domain": "Custom domain",
+                "api_access": "Full API access",
+                "branding_visible": "MenuLinker branding visible",
+                "trial_days": "days free trial"
+            }
+        },
+        "testimonials": {
+            "badge": "Testimonials",
+            "title": "What our customers say",
+            "subtitle": "Real restaurants. Real results.",
+            "items": {
+                "maria": {
+                    "role": "Owner",
+                    "content": "We used to print the menu every week because of price changes. Now we update it from our phone in 30 seconds. The savings are incredible."
+                },
+                "carlos": {
+                    "role": "Manager",
+                    "content": "Foreign customers really appreciate being able to see the menu in English or French automatically. The multi-language feature is a clear differentiator."
+                },
+                "ana": {
+                    "role": "Chef and owner",
+                    "content": "The analytics surprised me. I discovered that my croquettes are what people look at most but not what I sell the most. With that data I changed the presentation and it improved."
+                }
+            },
+            "stats": {
+                "restaurants": "Active restaurants",
+                "rating": "Average rating",
+                "languages": "Languages available",
+                "setup": "To create your first menu"
+            }
+        },
+        "cta": {
+            "title": "Ready to digitise",
+            "title2": "your menu?",
+            "subtitle": "Create your digital menu in minutes. No commitments, no credit card. Join more than 500 restaurants that already trust MenuLinker.",
+            "cta_primary": "Create my free account",
+            "cta_secondary": "Talk to the team",
+            "trust_free": "Free plan forever",
+            "trust_no_card": "No credit card",
+            "trust_no_contract": "No lock-in"
+        },
+        "footer": {
+            "brand_description": "Digital menus with QR for hospitality. Designed for restaurants that want to stand out.",
+            "rights": "All rights reserved.",
+            "social": {
+                "instagram": "MenuLinker on Instagram",
+                "twitter": "MenuLinker on Twitter / X",
+                "linkedin": "MenuLinker on LinkedIn"
+            },
+            "columns": {
+                "product": {
+                    "title": "Product",
+                    "links": {
+                        "features": "Features",
+                        "pricing": "Pricing",
+                        "templates": "Templates"
+                    }
+                },
+                "company": {
+                    "title": "Company",
+                    "links": {
+                        "contact": "Contact"
+                    }
+                },
+                "legal": {
+                    "title": "Legal",
+                    "links": {
+                        "privacy": "Privacy policy",
+                        "terms": "Terms and conditions",
+                        "cookies": "Cookie policy"
+                    }
+                },
+                "support": {
+                    "title": "Support",
+                    "links": {
+                        "faq": "Frequently asked questions"
+                    }
+                }
+            },
+            "bottom": {
+                "privacy": "Privacy",
+                "terms": "Terms",
+                "cookies": "Cookies"
+            }
+        }
     }
 }

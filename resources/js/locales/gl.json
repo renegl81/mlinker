@@ -762,5 +762,187 @@
             "branding_title": "Cores de marca personalizados",
             "branding_body": "Desde os axustes do local podes configurar os cores primario e secundario da túa marca."
         }
+    },
+    "home": {
+        "header": {
+            "open_menu": "Abrir menú de navegación",
+            "language": "Idioma",
+            "login": "Iniciar sesión",
+            "get_started": "Comezar gratis",
+            "nav": {
+                "features": "Funcionalidades",
+                "pricing": "Prezos",
+                "faq": "FAQ",
+                "contact": "Contacto"
+            }
+        },
+        "hero": {
+            "badge": "Novo: 8 modelos · Multi-idioma automático",
+            "title_line1": "A carta dixital",
+            "title_line2": "que os teus clientes",
+            "title_line3": "queren ver",
+            "subtitle": "Crea menús dixitais con QR personalizado, xestiona alérxenos, traduce a 7 idiomas e actualiza prezos en tempo real. Sen código. Sen complicacións.",
+            "cta_primary": "Crear a miña carta gratis",
+            "cta_secondary": "Ver como funciona",
+            "trust_free": "Gratis para sempre",
+            "trust_no_card": "Sen tarxeta de crédito",
+            "trust_ready": "Listo en 5 minutos"
+        },
+        "features": {
+            "badge": "Funcionalidades",
+            "title": "Todo o que o teu restaurante",
+            "title2": "necesita",
+            "subtitle": "Ferramentas deseñadas para hostalería, non para enxeñeiros. Sen curva de aprendizaxe.",
+            "items": {
+                "qr": {
+                    "title": "QR Personalizados",
+                    "description": "Xera códigos únicos cos cores da túa marca. Imprime nos mesas, cartelería ou compárteos nas redes."
+                },
+                "templates": {
+                    "title": "8 Modelos de deseño",
+                    "description": "Desde carta editorial ata menú degustación. Escolle o que mellor represente o teu restaurante e cámbialo cando queiras."
+                },
+                "analytics": {
+                    "title": "Analytics en Tempo Real",
+                    "description": "Descobre que pratos miran máis, en que horarios e desde que dispositivos. Toma decisións baseadas en datos reais."
+                },
+                "allergens": {
+                    "title": "Alérxenos e Ingredientes",
+                    "description": "Información clara para os teus clientes. Cumpre a normativa europea de alérxenos (Regulamento UE 1169/2011) sen esforzo."
+                },
+                "realtime": {
+                    "title": "Actualización Instantánea",
+                    "description": "Cambia prezos, engade pratos do día ou desactiva produtos esgotados. Os cambios reflíctense ao instante no QR."
+                },
+                "multilang": {
+                    "title": "Multi-idioma Automático",
+                    "description": "Traduce a túa carta a 7 idiomas cun clic: inglés, francés, alemán, italiano, portugués, catalán e máis."
+                }
+            },
+            "highlight": {
+                "badge": "Vista pública do menú",
+                "title": "A túa carta, fermosa en calquera dispositivo",
+                "description": "Os clientes escanean o QR e ven unha carta dixital optimizada para móbil. Sen apps, sen instalacións. Só escanear e gozar.",
+                "point1": "Responsive mobile-first",
+                "point2": "Carga en < 1 segundo",
+                "point3": "Sen conta necesaria"
+            }
+        },
+        "pricing": {
+            "badge": "Prezos",
+            "title": "Plans simples e transparentes",
+            "subtitle": "Sen contratos anuais obrigatorios. Cancela cando queiras.",
+            "popular": "Máis popular",
+            "price_free": "Gratis",
+            "price_custom": "A medida",
+            "bottom_note": "Todos os plans inclúen hosting, actualizacións e soporte por correo.",
+            "faq_link": "Ver preguntas frecuentes",
+            "cta": {
+                "free": "Comezar gratis",
+                "enterprise": "Falar con vendas",
+                "trial": "Comezar proba gratis",
+                "subscribe": "Subscribirse"
+            },
+            "features": {
+                "unlimited_locations": "Locais ilimitados",
+                "location_singular": "local",
+                "location_plural": "locais",
+                "unlimited_menus": "Menús ilimitados",
+                "menu_singular": "menú",
+                "menu_plural": "menús",
+                "per_location": "por local",
+                "unlimited_products": "Produtos ilimitados",
+                "products": "produtos",
+                "custom_qr": "QR personalizado coa túa marca",
+                "basic_qr": "QR básico",
+                "analytics": "Analytics e estatísticas",
+                "multilang": "Multi-idioma automático (7 idiomas)",
+                "catalog": "Catálogo centralizado",
+                "team": "Xestión de equipo",
+                "custom_domain": "Dominio personalizado",
+                "api_access": "Acceso API completo",
+                "branding_visible": "Branding MenuLinker visible",
+                "trial_days": "días de proba gratuíta"
+            }
+        },
+        "testimonials": {
+            "badge": "Testemuños",
+            "title": "O que din os nosos clientes",
+            "subtitle": "Restaurantes reais. Resultados reais.",
+            "items": {
+                "maria": {
+                    "role": "Propietaria",
+                    "content": "Antes imprimíamos a carta cada semana polos cambios de prezos. Agora actualizámola desde o móbil en 30 segundos. O aforro é brutal."
+                },
+                "carlos": {
+                    "role": "Xerente",
+                    "content": "Os clientes estranxeiros agradécenos moito poder ver a carta en inglés ou francés automaticamente. A función multi-idioma é un diferencial claro."
+                },
+                "ana": {
+                    "role": "Chef e propietaria",
+                    "content": "Os analytics sorprendéronme. Descubrín que as miñas croquetas son o que máis mira a xente pero non o que máis vendo. Con eses datos cambiei a presentación e mellorou."
+                }
+            },
+            "stats": {
+                "restaurants": "Restaurantes activos",
+                "rating": "Valoración media",
+                "languages": "Idiomas dispoñibles",
+                "setup": "Para crear a túa primeira carta"
+            }
+        },
+        "cta": {
+            "title": "Listo para dixitalizar",
+            "title2": "a túa carta?",
+            "subtitle": "Crea a túa carta dixital en minutos. Sen compromisos, sen tarxeta de crédito. Únete a máis de 500 restaurantes que xa confían en MenuLinker.",
+            "cta_primary": "Crear a miña conta gratis",
+            "cta_secondary": "Falar co equipo",
+            "trust_free": "Plan gratuíto para sempre",
+            "trust_no_card": "Sen tarxeta de crédito",
+            "trust_no_contract": "Sen permanencia"
+        },
+        "footer": {
+            "brand_description": "Menús dixitais con QR para hostalería. Deseñado para restaurantes que queren destacar.",
+            "rights": "Todos os dereitos reservados.",
+            "social": {
+                "instagram": "Instagram de MenuLinker",
+                "twitter": "Twitter / X de MenuLinker",
+                "linkedin": "LinkedIn de MenuLinker"
+            },
+            "columns": {
+                "product": {
+                    "title": "Produto",
+                    "links": {
+                        "features": "Funcionalidades",
+                        "pricing": "Prezos",
+                        "templates": "Modelos"
+                    }
+                },
+                "company": {
+                    "title": "Empresa",
+                    "links": {
+                        "contact": "Contacto"
+                    }
+                },
+                "legal": {
+                    "title": "Legal",
+                    "links": {
+                        "privacy": "Política de privacidade",
+                        "terms": "Termos e condicións",
+                        "cookies": "Política de cookies"
+                    }
+                },
+                "support": {
+                    "title": "Soporte",
+                    "links": {
+                        "faq": "Preguntas frecuentes"
+                    }
+                }
+            },
+            "bottom": {
+                "privacy": "Privacidade",
+                "terms": "Termos",
+                "cookies": "Cookies"
+            }
+        }
     }
 }

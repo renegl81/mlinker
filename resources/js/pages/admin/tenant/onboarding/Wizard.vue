@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { router, useForm } from '@inertiajs/vue3';
+import { router, useForm, usePage } from '@inertiajs/vue3';
 import { Check, Globe, Loader2, Plus, Sparkles, Store, UtensilsCrossed, X, Zap } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
+const appName = usePage().props.name as string;
 
 interface Location {
     id: number;
@@ -159,7 +160,7 @@ const errorClass = 'text-xs text-red-400';
                 <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-teal-500 to-cyan-500 shadow-lg shadow-teal-500/20">
                     <Sparkles class="h-5 w-5 text-white" />
                 </div>
-                <span class="text-lg font-bold text-white">MenuLinker</span>
+                <span class="text-lg font-bold text-white">{{ appName }}</span>
             </div>
 
             <!-- Progress indicator -->

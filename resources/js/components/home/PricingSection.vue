@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
 import { CheckIcon } from '@heroicons/vue/24/solid';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 interface Plan {
     name: string;
@@ -31,26 +34,26 @@ defineProps<Props>();
 function features(plan: Plan): string[] {
     const f: string[] = [];
 
-    if (plan.max_locations === 0) f.push('Locales ilimitados');
-    else f.push(`${plan.max_locations} ${plan.max_locations === 1 ? 'local' : 'locales'}`);
+    if (plan.max_locations === 0) f.push(t('home.pricing.features.unlimited_locations'));
+    else f.push(`${plan.max_locations} ${plan.max_locations === 1 ? t('home.pricing.features.location_singular') : t('home.pricing.features.location_plural')}`);
 
-    if (plan.max_menus_per_location === 0) f.push('Menús ilimitados');
-    else f.push(`${plan.max_menus_per_location} ${plan.max_menus_per_location === 1 ? 'menú' : 'menús'} por local`);
+    if (plan.max_menus_per_location === 0) f.push(t('home.pricing.features.unlimited_menus'));
+    else f.push(`${plan.max_menus_per_location} ${plan.max_menus_per_location === 1 ? t('home.pricing.features.menu_singular') : t('home.pricing.features.menu_plural')} ${t('home.pricing.features.per_location')}`);
 
-    if (plan.max_products === 0 && plan.slug !== 'free') f.push('Productos ilimitados');
-    else if (plan.max_products > 0) f.push(`${plan.max_products} productos`);
+    if (plan.max_products === 0 && plan.slug !== 'free') f.push(t('home.pricing.features.unlimited_products'));
+    else if (plan.max_products > 0) f.push(`${plan.max_products} ${t('home.pricing.features.products')}`);
 
-    if (plan.has_custom_qr) f.push('QR personalizado con tu marca');
-    else f.push('QR básico');
+    if (plan.has_custom_qr) f.push(t('home.pricing.features.custom_qr'));
+    else f.push(t('home.pricing.features.basic_qr'));
 
-    if (plan.has_analytics) f.push('Analytics y estadísticas');
-    if (plan.has_multilang) f.push('Multi-idioma automático (7 idiomas)');
-    if (plan.has_catalog) f.push('Catálogo centralizado');
-    if (plan.has_team) f.push('Gestión de equipo');
-    if (plan.has_custom_domain) f.push('Dominio personalizado');
-    if (plan.has_api_access) f.push('Acceso API completo');
-    if (plan.show_branding) f.push('Branding MenuLinker visible');
-    if (plan.trial_days > 0) f.push(`${plan.trial_days} días de prueba gratuita`);
+    if (plan.has_analytics) f.push(t('home.pricing.features.analytics'));
+    if (plan.has_multilang) f.push(t('home.pricing.features.multilang'));
+    if (plan.has_catalog) f.push(t('home.pricing.features.catalog'));
+    if (plan.has_team) f.push(t('home.pricing.features.team'));
+    if (plan.has_custom_domain) f.push(t('home.pricing.features.custom_domain'));
+    if (plan.has_api_access) f.push(t('home.pricing.features.api_access'));
+    if (plan.show_branding) f.push(t('home.pricing.features.branding_visible'));
+    if (plan.trial_days > 0) f.push(`${plan.trial_days} ${t('home.pricing.features.trial_days')}`);
 
     return f;
 }
@@ -60,10 +63,10 @@ function isHighlighted(plan: Plan): boolean {
 }
 
 function ctaText(plan: Plan): string {
-    if (plan.slug === 'free') return 'Empezar gratis';
-    if (plan.slug === 'enterprise') return 'Hablar con ventas';
-    if (plan.trial_days > 0) return 'Empezar prueba gratis';
-    return 'Suscribirse';
+    if (plan.slug === 'free') return t('home.pricing.cta.free');
+    if (plan.slug === 'enterprise') return t('home.pricing.cta.enterprise');
+    if (plan.trial_days > 0) return t('home.pricing.cta.trial');
+    return t('home.pricing.cta.subscribe');
 }
 
 function ctaHref(plan: Plan): string {
@@ -78,9 +81,9 @@ function ctaHref(plan: Plan): string {
         <div class="container mx-auto px-4 max-w-7xl">
             <!-- Header -->
             <div class="text-center mb-14">
-                <span class="inline-block px-3 py-1 rounded-full bg-teal-50 text-teal-600 text-xs font-bold uppercase tracking-wider mb-4">Precios</span>
-                <h2 class="text-3xl md:text-5xl font-bold text-slate-900 mb-4">Planes simples y transparentes</h2>
-                <p class="text-lg text-slate-500">Sin contratos anuales obligatorios. Cancela cuando quieras.</p>
+                <span class="inline-block px-3 py-1 rounded-full bg-teal-50 text-teal-600 text-xs font-bold uppercase tracking-wider mb-4">{{ t('home.pricing.badge') }}</span>
+                <h2 class="text-3xl md:text-5xl font-bold text-slate-900 mb-4">{{ t('home.pricing.title') }}</h2>
+                <p class="text-lg text-slate-500">{{ t('home.pricing.subtitle') }}</p>
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5 max-w-7xl mx-auto items-start">
@@ -99,7 +102,7 @@ function ctaHref(plan: Plan): string {
                         v-if="isHighlighted(plan)"
                         class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-teal-500 text-white text-[11px] font-bold px-4 py-1 rounded-full whitespace-nowrap uppercase tracking-wide"
                     >
-                        Más popular
+                        {{ t('home.pricing.popular') }}
                     </div>
 
                     <!-- Plan name + desc -->
@@ -124,12 +127,12 @@ function ctaHref(plan: Plan): string {
                         </template>
                         <template v-else-if="plan.slug === 'enterprise'">
                             <span :class="['text-2xl font-bold', isHighlighted(plan) ? 'text-white' : 'text-slate-900']">
-                                A medida
+                                {{ t('home.pricing.price_custom') }}
                             </span>
                         </template>
                         <template v-else>
                             <span :class="['text-4xl font-bold leading-none', isHighlighted(plan) ? 'text-white' : 'text-slate-900']">
-                                Gratis
+                                {{ t('home.pricing.price_free') }}
                             </span>
                         </template>
                     </div>
@@ -165,9 +168,9 @@ function ctaHref(plan: Plan): string {
 
             <!-- Bottom note -->
             <p class="text-center text-slate-400 text-sm mt-10">
-                Todos los planes incluyen hosting, actualizaciones y soporte por email.
+                {{ t('home.pricing.bottom_note') }}
                 <Link href="/faq" class="text-teal-600 hover:text-teal-700 underline underline-offset-2 ml-1">
-                    Ver preguntas frecuentes
+                    {{ t('home.pricing.faq_link') }}
                 </Link>
             </p>
         </div>

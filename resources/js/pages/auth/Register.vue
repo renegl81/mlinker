@@ -9,7 +9,9 @@ import { login } from '@/routes';
 import { Head, router, usePage } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 
+const { locale: i18nLocale } = useI18n();
 const page = usePage();
 const messages = computed(() => page.props.messages as any);
 const t = (key: string) => messages.value.auth.register[key] || key;
@@ -22,6 +24,7 @@ const form = ref({
     tenant_domain: '',
     password: '',
     password_confirmation: '',
+    locale: i18nLocale.value,
 });
 
 const processing = ref(false);

@@ -32,6 +32,9 @@ class RegisteredUserController extends Controller
     {
         $validated = $request->validated();
 
+        $locale = $validated['locale'] ?? config('app.locale', 'es');
+        app()->setLocale($locale);
+
         $domainName = $validated['tenant_domain'].'.'.config('app.domain');
         // Crear Tenant (sin base de datos)
         DB::table('tenants')->insert([
@@ -48,8 +51,8 @@ class RegisteredUserController extends Controller
                 'last_name' => $validated['last_name'],
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
-                'role' => 'owner',
                 'is_active' => false,
+                'locale' => $locale,
             ]);
             $role = Role::where('name', 'Owner')->first();
             if ($role) {
@@ -67,9 +70,8 @@ class RegisteredUserController extends Controller
                 ]
             );
             DB::table('tenant_user')->updateOrInsert(
+                ['user_id' => $user->id, 'tenant_id' => $tenant->id],
                 [
-                    'user_id' => $user->id,
-                    'tenant_id' => $tenant->id,
                     'role' => 'owner',
                     'is_active' => false,
                     'created_at' => now(),
