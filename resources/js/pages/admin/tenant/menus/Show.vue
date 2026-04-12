@@ -683,6 +683,38 @@ function moveSection(sections: Section[], sectionId: number, direction: 'up' | '
                         </CardContent>
                     </Card>
 
+                    <!-- Personalización activa -->
+                    <Card v-if="menu.customization">
+                        <CardHeader class="pb-2">
+                            <CardTitle class="flex items-center gap-2 text-sm font-medium">
+                                <Palette class="h-4 w-4 text-primary" />
+                                {{ t('panel.menu_show.customized') }}
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div class="flex flex-wrap gap-1.5">
+                                <Badge v-if="menu.customization?.colors" variant="secondary" class="text-[10px]">
+                                    {{ t('panel.customizer.colors') }}
+                                </Badge>
+                                <Badge v-if="menu.customization?.fonts" variant="secondary" class="text-[10px]">
+                                    {{ t('panel.customizer.fonts') }}
+                                </Badge>
+                                <Badge v-if="menu.customization?.layout" variant="secondary" class="text-[10px]">
+                                    {{ t('panel.customizer.layout') }}
+                                </Badge>
+                                <Badge v-if="menu.customization?.spacing" variant="secondary" class="text-[10px]">
+                                    {{ t('panel.customizer.spacing') }}
+                                </Badge>
+                                <Badge v-if="menu.customization?.header" variant="secondary" class="text-[10px]">
+                                    {{ t('panel.customizer.header_section') }}
+                                </Badge>
+                                <Badge v-if="menu.customization?.sections" variant="secondary" class="text-[10px]">
+                                    {{ t('panel.customizer.sections_style') }}
+                                </Badge>
+                            </div>
+                        </CardContent>
+                    </Card>
+
                     <!-- Estado del menú -->
                     <Card
                         :class="

@@ -2,12 +2,14 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import {
+    BarChart2,
     BookOpen,
     Building2,
     ChevronRight,
     CreditCard,
     Globe,
     Languages,
+    Palette,
     QrCode,
     Rocket,
     Users,
@@ -46,6 +48,8 @@ const iconMap: Record<string, Component> = {
     Users,
     CreditCard,
     Globe,
+    Palette,
+    BarChart2,
 };
 
 const topicIcon = computed(() => iconMap[props.topic.icon] ?? BookOpen);

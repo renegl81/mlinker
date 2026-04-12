@@ -55,6 +55,19 @@ class DocsController extends Controller
                 ],
             ],
             [
+                'slug' => 'customization',
+                'icon' => 'Palette',
+                'sections' => [
+                    ['heading' => 'docs.customization.what_title', 'body' => 'docs.customization.what_body'],
+                    ['heading' => 'docs.customization.colors_title', 'body' => 'docs.customization.colors_body'],
+                    ['heading' => 'docs.customization.fonts_title', 'body' => 'docs.customization.fonts_body'],
+                    ['heading' => 'docs.customization.layout_title', 'body' => 'docs.customization.layout_body'],
+                    ['heading' => 'docs.customization.advanced_title', 'body' => 'docs.customization.advanced_body'],
+                    ['heading' => 'docs.customization.reset_title', 'body' => 'docs.customization.reset_body'],
+                    ['heading' => '', 'body' => '', 'tip' => 'docs.customization.tip'],
+                ],
+            ],
+            [
                 'slug' => 'products',
                 'icon' => 'Utensils',
                 'sections' => [

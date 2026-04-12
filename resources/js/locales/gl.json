@@ -288,7 +288,8 @@
             "preview_desktop": "Vista escritorio",
             "refresh_preview": "Refrescar vista previa",
             "open_new_tab": "Abrir en nova pestana",
-            "customize": "Personalizar"
+            "customize": "Personalizar",
+            "customized": "Personalizado"
         },
         "customizer": {
             "title": "Personalizar menú",
@@ -697,6 +698,10 @@
                 "title": "Menús e cartas",
                 "description": "Organiza as túas cartas en seccións e escolle a plantilla perfecta."
             },
+            "customization": {
+                "title": "Personalización",
+                "description": "Ajusta colores, tipografía y disposición de tu carta digital con el editor visual."
+            },
             "products": {
                 "title": "Produtos e ingredientes",
                 "description": "Engade pratos con alérxenos, ingredientes, prezos e etiquetas."
@@ -856,6 +861,21 @@
             "content_body": "A túa páxina web pública mostra automaticamente: os horarios de apertura, a túa carta activa, os datos de contacto e un mapa de localización.",
             "branding_title": "Cores de marca personalizados",
             "branding_body": "Desde os axustes do local podes configurar os cores primario e secundario da túa marca."
+        },
+        "customization": {
+            "what_title": "Personalización de menús",
+            "what_body": "Desde la vista de detalle de cada menú, pulsa \"Personalizar\" para abrir el editor visual. Todos los cambios se aplican sobre la plantilla seleccionada y se guardan automáticamente.",
+            "colors_title": "Colores",
+            "colors_body": "Define el color de acento, fondo, texto principal, texto secundario y separadores. Usa los selectores de color o introduce valores hexadecimales. Los colores se aplican al instante en la vista previa.",
+            "fonts_title": "Tipografía",
+            "fonts_body": "Elige entre 10 parejas tipográficas profesionales optimizadas para cartas de restaurante. Cada pareja incluye una fuente para títulos y otra para cuerpo de texto. Las fuentes se cargan desde Google Fonts.",
+            "layout_title": "Disposición",
+            "layout_body": "Controla qué elementos se muestran en tu carta: alérgenos, ingredientes, imágenes de producto y descripciones de sección. También puedes elegir la posición de las imágenes (izquierda, derecha, arriba) y la alineación de precios.",
+            "advanced_title": "Opciones avanzadas (Business)",
+            "advanced_body": "Con el plan Business puedes ajustar la densidad visual (compacto, normal o espacioso), personalizar la cabecera (nombre, eslogan, estilo) y definir el estilo de las secciones (tipo de separador, alineación de títulos, numeración).",
+            "reset_title": "Restablecer valores",
+            "reset_body": "Puedes volver a los valores por defecto de la plantilla en cualquier momento pulsando \"Restablecer\" al final del panel de personalización. Esta acción elimina todas las personalizaciones guardadas.",
+            "tip": "Los cambios se guardan automáticamente mientras editas. La vista previa se actualiza tras cada guardado para que veas el resultado en tiempo real."
         }
     },
     "home": {

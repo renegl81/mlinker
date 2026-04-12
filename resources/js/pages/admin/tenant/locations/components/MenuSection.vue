@@ -17,6 +17,7 @@ import { Link, usePage } from '@inertiajs/vue3';
 import {
     Edit,
     Image as ImageIcon,
+    Palette,
     Plus,
     Utensils,
 } from 'lucide-vue-next';
@@ -88,7 +89,12 @@ const messages = computed(() => page.props.messages as any);
                                 </div>
                             </TableCell>
                             <TableCell class="font-medium">
-                                {{ menu.name }}
+                                <div class="flex items-center gap-1.5">
+                                    {{ menu.name }}
+                                    <Badge v-if="menu.customization" variant="outline" class="ml-1 gap-1 text-[10px]">
+                                        <Palette class="h-2.5 w-2.5" />
+                                    </Badge>
+                                </div>
                                 <p
                                     v-if="menu.description"
                                     class="line-clamp-1 text-xs font-normal text-muted-foreground"

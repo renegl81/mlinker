@@ -288,7 +288,8 @@
             "preview_desktop": "Desktop view",
             "refresh_preview": "Refresh preview",
             "open_new_tab": "Open in new tab",
-            "customize": "Customize"
+            "customize": "Customize",
+            "customized": "Customized"
         },
         "customizer": {
             "title": "Customize menu",
@@ -705,6 +706,10 @@
                 "title": "Menus & cards",
                 "description": "Organise your menus into sections and choose the perfect template."
             },
+            "customization": {
+                "title": "Customization",
+                "description": "Adjust colors, typography and layout of your digital menu with the visual editor."
+            },
             "products": {
                 "title": "Products & ingredients",
                 "description": "Add dishes with allergens, ingredients, prices and tags."
@@ -864,6 +869,21 @@
             "content_body": "Your public website automatically shows: your location's opening hours, your active menu with the option to view the digital menu, contact details (phone, address) and a location map.",
             "branding_title": "Custom brand colours",
             "branding_body": "From the location settings you can configure your brand's primary and secondary colours. These colours are applied to your public website and to the elements of your digital menu, giving a consistent and professional image."
+        },
+        "customization": {
+            "what_title": "Menu customization",
+            "what_body": "From the menu detail view, click \"Customize\" to open the visual editor. All changes are applied on top of the selected template and saved automatically.",
+            "colors_title": "Colors",
+            "colors_body": "Set the accent, background, primary text, secondary text, and divider colors. Use the color pickers or enter hex values. Colors are applied instantly in the preview.",
+            "fonts_title": "Typography",
+            "fonts_body": "Choose from 10 professional font pairings optimized for restaurant menus. Each pairing includes a heading font and a body font. Fonts are loaded from Google Fonts.",
+            "layout_title": "Layout",
+            "layout_body": "Control which elements are shown on your menu: allergens, ingredients, product images, and section descriptions. You can also choose image position (left, right, top) and price alignment.",
+            "advanced_title": "Advanced options (Business)",
+            "advanced_body": "With the Business plan you can adjust visual density (compact, comfortable, spacious), customize the header (name, tagline, style), and define section styling (divider type, title alignment, numbering).",
+            "reset_title": "Reset to defaults",
+            "reset_body": "You can reset to the template defaults at any time by clicking \"Reset\" at the bottom of the customization panel. This removes all saved customizations.",
+            "tip": "Changes are saved automatically as you edit. The preview refreshes after each save so you can see the result in real time."
         }
     },
     "home": {
