@@ -44,6 +44,25 @@ class Tenant extends BaseTenant
         return $this->subscription && $this->subscription->isActive();
     }
 
+    /**
+     * Email for Stripe customer — uses the owner's email.
+     */
+    public function stripeEmail(): ?string
+    {
+        return $this->users()
+            ->wherePivot('role', 'owner')
+            ->first()
+            ?->email;
+    }
+
+    /**
+     * Name for Stripe customer — uses the tenant id (business name).
+     */
+    public function stripeName(): string
+    {
+        return ucfirst($this->id);
+    }
+
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(

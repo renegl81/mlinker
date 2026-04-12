@@ -33,7 +33,7 @@ class BillingController extends Controller
         ]);
     }
 
-    public function checkout(Request $request, StartCheckout $action): RedirectResponse
+    public function checkout(Request $request, StartCheckout $action): RedirectResponse|\Symfony\Component\HttpFoundation\Response
     {
         $request->validate([
             'plan_slug' => ['required', 'string', 'exists:plans,slug'],
@@ -53,7 +53,7 @@ class BillingController extends Controller
 
             $checkoutUrl = $action->execute($tenant, $plan, $successUrl, $cancelUrl);
 
-            return redirect()->away($checkoutUrl);
+            return Inertia::location($checkoutUrl);
         } catch (RuntimeException $e) {
             return back()->with('error', $e->getMessage());
         } catch (\Exception $e) {

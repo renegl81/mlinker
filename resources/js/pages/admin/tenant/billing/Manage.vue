@@ -3,12 +3,20 @@ import HeadingSmall from '@/components/HeadingSmall.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem } from '@/types';
 import { router, usePage } from '@inertiajs/vue3';
 import { AlertTriangle, CheckCircle, Clock, CreditCard, XCircle } from 'lucide-vue-next';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -86,8 +94,14 @@ function getStatusVariant(): 'default' | 'secondary' | 'destructive' | 'outline'
     return 'outline';
 }
 
+const showCancelDialog = ref(false);
+
 function cancel() {
-    if (!confirm(t('panel.billing.cancel_confirm'))) return;
+    showCancelDialog.value = true;
+}
+
+function confirmCancel() {
+    showCancelDialog.value = false;
     router.post('/panel/billing/cancel');
 }
 
@@ -206,5 +220,31 @@ function resume() {
                 </Card>
             </div>
         </div>
+
+        <!-- Cancel confirmation dialog -->
+        <Dialog v-model:open="showCancelDialog">
+            <DialogContent class="sm:max-w-md">
+                <DialogHeader>
+                    <DialogTitle class="flex items-center gap-2">
+                        <AlertTriangle class="h-5 w-5 text-destructive" />
+                        {{ t('panel.billing.cancel_subscription') }}
+                    </DialogTitle>
+                    <DialogDescription>
+                        {{ t('panel.billing.cancel_confirm') }}
+                    </DialogDescription>
+                </DialogHeader>
+                <div class="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-700">
+                    {{ t('panel.billing.cancel_notice') }}
+                </div>
+                <DialogFooter class="gap-2 sm:gap-0">
+                    <Button variant="outline" @click="showCancelDialog = false">
+                        {{ t('common.cancel') }}
+                    </Button>
+                    <Button variant="destructive" @click="confirmCancel">
+                        {{ t('panel.billing.cancel_subscription') }}
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     </AppLayout>
 </template>

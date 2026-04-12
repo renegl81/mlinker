@@ -28,6 +28,11 @@ class StartCheckout
             throw new RuntimeException("Ya estás suscrito al plan '{$plan->name}'.");
         }
 
+        // Remove the free placeholder subscription so Cashier can create a fresh one
+        if ($currentSub && $currentSub->isFree()) {
+            $currentSub->delete();
+        }
+
         $checkout = $tenant->newSubscription('default', $plan->stripe_price_id)
             ->trialDays($plan->trial_days ?? 0)
             ->checkout([

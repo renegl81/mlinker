@@ -97,8 +97,13 @@ function isEnterprise(plan: Plan): boolean {
     return plan.slug === 'enterprise';
 }
 
+const isDowngrade = (plan: Plan): boolean => {
+    return plan.slug === 'free' && !isFreePlan.value;
+};
+
 function getCtaLabel(plan: Plan): string {
     if (isCurrentPlan(plan)) return t('billing.plan_current');
+    if (isDowngrade(plan)) return t('panel.billing.downgrade_free');
     if (isEnterprise(plan)) return t('panel.billing.contact');
     if (isFreePlan.value) {
         return plan.trial_days > 0 ? t('panel.billing.start_trial', { days: plan.trial_days }) : t('billing.upgrade');
@@ -108,12 +113,12 @@ function getCtaLabel(plan: Plan): string {
 
 function selectPlan(plan: Plan) {
     if (isCurrentPlan(plan)) return;
-    if (isEnterprise(plan)) {
-        window.location.href = 'mailto:hola@menulinker.com?subject=Plan Enterprise';
+    if (isDowngrade(plan)) {
+        window.location.href = '/panel/billing/manage';
         return;
     }
-    if (!plan.stripe_price_id) {
-        alert(t('panel.billing.plan_unavailable'));
+    if (isEnterprise(plan)) {
+        window.location.href = 'mailto:hola@menulinker.com?subject=Plan Enterprise';
         return;
     }
     router.post('/panel/billing/checkout', { plan_slug: plan.slug });
@@ -189,7 +194,7 @@ function selectPlan(plan: Plan) {
                     <CardFooter class="pt-4">
                         <Button
                             class="w-full"
-                            :variant="isCurrentPlan(plan) ? 'outline' : (plan.slug === 'pro' ? 'default' : 'outline')"
+                            :variant="isCurrentPlan(plan) ? 'outline' : isDowngrade(plan) ? 'ghost' : (plan.slug === 'pro' ? 'default' : 'outline')"
                             :disabled="isCurrentPlan(plan)"
                             @click="selectPlan(plan)"
                         >

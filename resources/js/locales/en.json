@@ -365,6 +365,7 @@
             "popular": "Popular",
             "contact": "Contact",
             "switch_plan": "Switch to this plan",
+            "downgrade_free": "Switch to free plan",
             "start_trial": "Start {days}-day trial",
             "trial_days_free": "{days} days free trial",
             "unlimited": "Unlimited {label}",

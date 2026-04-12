@@ -14,6 +14,62 @@ use Symfony\Component\HttpFoundation\Response;
 class StripeWebhookController extends WebhookController
 {
     /**
+     * Handle a Stripe subscription created event.
+     * Syncs plan_id and cleans up the old free subscription.
+     */
+    public function handleCustomerSubscriptionCreated(array $payload): Response
+    {
+        $response = parent::handleCustomerSubscriptionCreated($payload);
+
+        try {
+            $stripeSubscription = $payload['data']['object'];
+            $customerId = $stripeSubscription['customer'] ?? null;
+            $stripeSubscriptionId = $stripeSubscription['id'];
+            $items = $stripeSubscription['items']['data'] ?? [];
+            $stripePriceId = $items[0]['price']['id'] ?? null;
+
+            if (! $customerId || ! $stripePriceId) {
+                return $response;
+            }
+
+            $tenant = Tenant::where('stripe_id', $customerId)->first();
+            if (! $tenant) {
+                return $response;
+            }
+
+            $plan = Plan::where('stripe_price_id', $stripePriceId)->first();
+            if (! $plan) {
+                Log::warning('StripeWebhook: no plan found for stripe_price_id', [
+                    'stripe_price_id' => $stripePriceId,
+                ]);
+
+                return $response;
+            }
+
+            // Delete the old free subscription (has stripe_id = null)
+            Subscription::where('tenant_id', $tenant->id)
+                ->whereNull('stripe_id')
+                ->delete();
+
+            // Set plan_id on the new Cashier-created subscription
+            Subscription::where('stripe_id', $stripeSubscriptionId)
+                ->update(['plan_id' => $plan->id]);
+
+            Log::info('StripeWebhook: subscription created, plan synced', [
+                'tenant_id' => $tenant->id,
+                'stripe_subscription_id' => $stripeSubscriptionId,
+                'plan_slug' => $plan->slug,
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('StripeWebhook: error in handleCustomerSubscriptionCreated', [
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        return $response;
+    }
+
+    /**
      * Handle a Stripe subscription updated event.
      * Syncs the local plan_id based on the active Stripe price.
      */
