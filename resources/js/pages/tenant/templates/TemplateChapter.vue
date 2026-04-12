@@ -403,7 +403,7 @@ function toggleIngredients(productId: number) {
     letter-spacing: -0.005em;
     margin: 0 0 0.4rem;
     color: var(--ink);
-    font-variation-settings: 'opsz' 20';
+    font-variation-settings: 'opsz' 20;
 }
 
 .dish-desc {

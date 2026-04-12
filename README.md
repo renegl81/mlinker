@@ -6,7 +6,7 @@ La aplicación pública (Carta Digital) se encuentra en el repositorio del clien
 
 ## 🚀 Stack Tecnológico
 
-* **Framework:** Laravel 12
+* **Framework:** Laravel 13
 * **Base de Datos:** PostgreSQL 14+
 * **Admin Frontend:** Vue 3 + Inertia.js + Tailwind CSS (Shadcn UI)
 * **Arquitectura:** Monolito Modular con Multi-tenancy (Single Database)
@@ -68,3 +68,16 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 # Formatear archivos/carpetas específicas
 ./vendor/bin/pint app/Models
 ./vendor/bin/pint app/Http/Controllers/Admin
+
+# Para pruebas de Stripe
+  ┌─────────────────────┬──────────────────────────────┐                                                                                                                                                                      
+  │       Tarjeta       │          Escenario           │                                                                                                                                                                        
+  ├─────────────────────┼──────────────────────────────┤    
+  │ 4242 4242 4242 4242 │ Pago exitoso                 │                                                                                                                                                                        
+  ├─────────────────────┼──────────────────────────────┤                                                                                                                                                                      
+  │ 4000 0000 0000 3220 │ Requiere 3D Secure           │                                                                                                                                                                        
+  ├─────────────────────┼──────────────────────────────┤
+  │ 4000 0000 0000 9995 │ Pago rechazado               │                                                                                                                                                                        
+  ├─────────────────────┼──────────────────────────────┤                                                                                                                                                                      
+  │ 4000 0000 0000 0341 │ Falla al adjuntar a customer │                                                                                                                                                                        
+  └─────────────────────┴──────────────────────────────┘ 

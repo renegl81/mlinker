@@ -27,6 +27,8 @@ class UserSeeder extends Seeder
                 'last_name' => 'FlowSuite',
                 'email' => 'admin@flowsuite.com',
                 'password' => bcrypt('password'),
+                'email_verified_at' => now(),
+                'is_active' => true,
             ],
         ];
         foreach ($admins as $admin) {
