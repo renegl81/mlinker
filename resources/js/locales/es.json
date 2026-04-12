@@ -458,7 +458,12 @@
             "google_maps": "Enlace Google Maps",
             "gallery": "Galería de fotos",
             "gallery_hint": "Sube hasta 5 fotos de tu local (máx. 3MB cada una).",
-            "add_image": "Añadir foto"
+            "add_image": "Añadir foto",
+            "gallery_save_first": "Guarda el local primero para poder subir fotos a la galería.",
+            "tab_general": "General",
+            "tab_schedule": "Horarios",
+            "tab_contact": "Contacto",
+            "tab_appearance": "Apariencia"
         },
         "menus": {
             "create_title": "Crear Menú",

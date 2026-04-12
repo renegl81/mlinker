@@ -27,8 +27,9 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->brandName('MenuLinker · Administración')
-            ->brandLogo(asset('images/logo.png'))
+            ->brandName(config('app.name', 'MenuLinker'))
+            ->brandLogo(asset('images/logo-name.png'))
+            ->darkModeBrandLogo(asset('images/logo-light.png'))
             ->brandLogoHeight('2.5rem')
             ->colors([
                 'primary' => Color::Teal,

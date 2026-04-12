@@ -458,7 +458,12 @@
             "google_maps": "Google Maps link",
             "gallery": "Photo gallery",
             "gallery_hint": "Upload up to 5 photos of your venue (max. 3MB each).",
-            "add_image": "Add photo"
+            "add_image": "Add photo",
+            "gallery_save_first": "Save the location first to upload gallery photos.",
+            "tab_general": "General",
+            "tab_schedule": "Schedule",
+            "tab_contact": "Contact",
+            "tab_appearance": "Appearance"
         },
         "menus": {
             "create_title": "Create Menu",

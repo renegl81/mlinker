@@ -26,7 +26,7 @@ class LocationImageController extends Controller
         LocationImage::create([
             'location_id' => $location->id,
             'tenant_id' => tenant()->id,
-            'path' => $path,
+            'path' => Storage::disk('public')->url($path),
             'sort_order' => $currentCount,
         ]);
 
