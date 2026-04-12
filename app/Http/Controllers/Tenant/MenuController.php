@@ -31,6 +31,7 @@ class MenuController extends Controller
         $plan = tenant()?->subscription?->plan;
         $showBranding = $plan?->show_branding ?? true;
         $hasMultilang = $plan?->has_multilang ?? false;
+        $hasCart = (bool) ($plan?->has_cart ?? false);
 
         $sourceLocale = $menu->lang ?? config('menulinker.source_locale', 'es');
         $supportedCodes = array_keys(config('menulinker.supported_locales', []));
@@ -115,6 +116,7 @@ class MenuController extends Controller
             'shareUrl' => $shortUrl,
             'locale' => $locale,
             'hasMultilang' => $hasMultilang,
+            'hasCart' => $hasCart,
             'availableLocales' => $availableLocales,
             'supportedLocales' => config('menulinker.supported_locales'),
             'customization' => $menu->customization,

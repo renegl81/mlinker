@@ -4,8 +4,12 @@ import MenuSeoHead from '@/components/public/MenuSeoHead.vue';
 import MenuLanguageSwitcher from '@/components/public/MenuLanguageSwitcher.vue';
 import ShareMenu from '@/components/public/ShareMenu.vue';
 import AllergenIcon from '@/components/ui/AllergenIcon.vue';
+import AddToCartButton from '@/components/public/AddToCartButton.vue';
+import CartFab from '@/components/public/CartFab.vue';
+import CartDrawer from '@/components/public/CartDrawer.vue';
 import { useMenuFormatter } from '@/composables/useMenuFormatter';
 import { useMenuCustomization } from '@/composables/useMenuCustomization';
+import { useCart } from '@/composables/useCart';
 import type { Menu } from '@/types';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -23,6 +27,7 @@ interface Props {
     shareUrl: string;
     locale: string;
     hasMultilang: boolean;
+    hasCart: boolean;
     availableLocales: string[];
     supportedLocales: Record<string, LocaleMeta>;
     customization?: Record<string, any> | null;
@@ -32,6 +37,9 @@ const props = defineProps<Props>();
 const { formatPrice, tagsFor, productImage } = useMenuFormatter(props.menu);
 const { cssVars, fontLinks, layout } = useMenuCustomization(props.customization ?? null);
 const { t } = useI18n();
+
+const cart = props.hasCart ? useCart(props.menu.id) : null;
+const cartOpen = ref(false);
 
 const sections = computed(() => {
     if (!props.menu.sections) return [];
@@ -49,6 +57,37 @@ function toggleIngredients(productId: number) {
     if (next.has(productId)) next.delete(productId);
     else next.add(productId);
     expandedProducts.value = next;
+}
+
+function buildOrderText(): string {
+    if (!cart) return '';
+    const name = cart.customerName.value;
+    const lines: string[] = [];
+    if (name) lines.push(`📋 ${name}`);
+    lines.push(`🍽️ ${props.menu.name}`);
+    lines.push('');
+    for (const item of cart.items.value) {
+        lines.push(`${item.quantity}x ${item.name} — ${item.priceDisplay}`);
+    }
+    lines.push('');
+    lines.push(`💰 Total: ${formatPrice(cart.totalPrice.value)}`);
+    return lines.join('\n');
+}
+
+function sendViaWhatsApp() {
+    const phone = props.menu.location?.order_whatsapp;
+    if (!phone) return;
+    const cleanPhone = phone.replace(/[^0-9+]/g, '');
+    const text = encodeURIComponent(buildOrderText());
+    window.open(`https://wa.me/${cleanPhone}?text=${text}`, '_blank');
+}
+
+function sendViaEmail() {
+    const email = props.menu.location?.order_email;
+    if (!email) return;
+    const subject = encodeURIComponent(`${cart?.customerName.value ? cart.customerName.value + ' — ' : ''}${props.menu.name}`);
+    const body = encodeURIComponent(buildOrderText());
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
 }
 </script>
 
@@ -150,6 +189,12 @@ function toggleIngredients(productId: number) {
                                     v-if="menu.show_prices && product.price"
                                     class="dish-price"
                                 >{{ formatPrice(product.price) }}</span>
+                                <AddToCartButton
+                                    v-if="hasCart && menu.show_prices && product.price"
+                                    :quantity="cart?.getQuantity(product.id) ?? 0"
+                                    @add="cart?.addItem(product, formatPrice(product.price))"
+                                    @remove="cart?.removeItem(product.id)"
+                                />
                             </div>
 
                             <p v-if="product.description" class="dish-desc">
@@ -221,6 +266,29 @@ function toggleIngredients(productId: number) {
         </footer>
 
         <ShareMenu :url="shareUrl" :menu-name="menu.name" :location-name="menu.location?.name ?? ''" />
+        <CartFab
+            v-if="hasCart && menu.show_prices"
+            :item-count="cart?.totalItems.value ?? 0"
+            @click="cartOpen = true"
+        />
+        <CartDrawer
+            v-if="hasCart && menu.show_prices"
+            :open="cartOpen"
+            :items="cart?.items.value ?? []"
+            :total-price="cart?.totalPrice.value ?? 0"
+            :format-price="(n) => formatPrice(n)"
+            :customer-name="cart?.customerName.value ?? ''"
+            :order-email="menu.location?.order_email ?? null"
+            :order-whatsapp="menu.location?.order_whatsapp ?? null"
+            @close="cartOpen = false"
+            @increment="(id) => cart?.incrementItem(id)"
+            @decrement="(id) => cart?.removeItem(id)"
+            @delete="(id) => cart?.deleteItem(id)"
+            @clear="cart?.clearCart()"
+            @update:customer-name="(name) => { if (cart) cart.customerName.value = name; }"
+            @send-whatsapp="sendViaWhatsApp"
+            @send-email="sendViaEmail"
+        />
     </div>
 </template>
 

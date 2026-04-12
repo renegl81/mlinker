@@ -166,7 +166,23 @@
             "gluten_free": "Sense gluten"
         },
         "show_ingredients": "veure ingredients",
-        "hide_ingredients": "amagar ingredients"
+        "hide_ingredients": "amagar ingredients",
+        "cart": {
+            "title": "La teva comanda",
+            "add": "Afegir",
+            "empty": "La teva llista està buida",
+            "empty_hint": "Toca + a qualsevol plat per començar",
+            "total": "Total",
+            "clear": "Buidar tot",
+            "clear_confirm": "Eliminar tots els plats?",
+            "item_singular": "plat",
+            "item_plural": "plats",
+            "show_to_waiter": "Mostra aquesta llista al cambrer",
+            "your_name": "El teu nom",
+            "name_placeholder": "Ex. Taula 5 — Maria",
+            "send_whatsapp": "Enviar per WhatsApp",
+            "send_email": "Enviar per email"
+        }
     },
     "common": {
         "save": "Desar",
@@ -392,7 +408,12 @@
             "brand_colors": "Colors de marca",
             "brand_colors_hint": "S'usaran a la pàgina pública del teu negoci per personalitzar l'aparença.",
             "color_primary": "Primari",
-            "color_secondary": "Secundari"
+            "color_secondary": "Secundari",
+            "order_channels": "Canals de comanda",
+            "order_channels_hint": "Configura com els clients poden enviar la seva comanda des de la carta digital.",
+            "order_email": "Email de comandes",
+            "order_whatsapp": "WhatsApp de comandes",
+            "order_whatsapp_hint": "Número amb codi de país, ex. +34612345678"
         },
         "menus": {
             "create_title": "Crear Menú",

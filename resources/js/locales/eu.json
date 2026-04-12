@@ -166,7 +166,23 @@
             "gluten_free": "Gluten gabe"
         },
         "show_ingredients": "osagaiak ikusi",
-        "hide_ingredients": "osagaiak ezkutatu"
+        "hide_ingredients": "osagaiak ezkutatu",
+        "cart": {
+            "title": "Zure eskaera",
+            "add": "Gehitu",
+            "empty": "Zure zerrenda hutsik dago",
+            "empty_hint": "Sakatu + edozein plateran hasteko",
+            "total": "Guztira",
+            "clear": "Hustu dena",
+            "clear_confirm": "Plater guztiak ezabatu?",
+            "item_singular": "plater",
+            "item_plural": "plater",
+            "show_to_waiter": "Erakutsi zerrenda hau zerbitzariari",
+            "your_name": "Zure izena",
+            "name_placeholder": "Ad. 5. mahaia — Maria",
+            "send_whatsapp": "WhatsApp bidez bidali",
+            "send_email": "Email bidez bidali"
+        }
     },
     "common": {
         "save": "Gorde",
@@ -392,7 +408,12 @@
             "brand_colors": "Marka koloreak",
             "brand_colors_hint": "Zure negozioaren orri publikoan itxura pertsonalizatzeko erabiliko dira.",
             "color_primary": "Nagusia",
-            "color_secondary": "Bigarrena"
+            "color_secondary": "Bigarrena",
+            "order_channels": "Eskaera kanalak",
+            "order_channels_hint": "Konfiguratu nola bidali dezaketen bezeroek eskaera menu digitaletik.",
+            "order_email": "Eskaeretako emaila",
+            "order_whatsapp": "Eskaeretako WhatsApp",
+            "order_whatsapp_hint": "Herrialdeko kodea duen zenbakia, ad. +34612345678"
         },
         "menus": {
             "create_title": "Menua sortu",

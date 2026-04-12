@@ -39,6 +39,8 @@ class LocationStoreRequest extends FormRequest
             'longitude' => 'nullable|numeric',
             'primary_color' => 'nullable|string|max:7|regex:/^#[0-9A-Fa-f]{6}$/',
             'secondary_color' => 'nullable|string|max:7|regex:/^#[0-9A-Fa-f]{6}$/',
+            'order_email' => ['nullable', 'email', 'max:255'],
+            'order_whatsapp' => ['nullable', 'string', 'max:20'],
         ];
     }
 }

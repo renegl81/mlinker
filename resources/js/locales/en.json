@@ -166,7 +166,23 @@
             "gluten_free": "Gluten free"
         },
         "show_ingredients": "show ingredients",
-        "hide_ingredients": "hide ingredients"
+        "hide_ingredients": "hide ingredients",
+        "cart": {
+            "title": "Your order",
+            "add": "Add",
+            "empty": "Your order list is empty",
+            "empty_hint": "Tap + on any dish to start",
+            "total": "Total",
+            "clear": "Clear all",
+            "clear_confirm": "Remove all items?",
+            "item_singular": "item",
+            "item_plural": "items",
+            "show_to_waiter": "Show this list to your waiter",
+            "your_name": "Your name",
+            "name_placeholder": "E.g. Table 5 — Maria",
+            "send_whatsapp": "Send via WhatsApp",
+            "send_email": "Send via email"
+        }
     },
     "common": {
         "save": "Save",
@@ -399,7 +415,12 @@
             "brand_colors": "Brand colours",
             "brand_colors_hint": "Used on your public business page to customise the appearance.",
             "color_primary": "Primary",
-            "color_secondary": "Secondary"
+            "color_secondary": "Secondary",
+            "order_channels": "Order channels",
+            "order_channels_hint": "Configure how customers can submit their order from the digital menu.",
+            "order_email": "Order email",
+            "order_whatsapp": "Order WhatsApp",
+            "order_whatsapp_hint": "Number with country code, e.g. +34612345678"
         },
         "menus": {
             "create_title": "Create Menu",

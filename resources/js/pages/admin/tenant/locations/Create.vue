@@ -60,6 +60,10 @@ interface FormState {
     lang?: string | null;
     languages?: Array<string>;
     image_url?: string | null;
+    primary_color?: string | null;
+    secondary_color?: string | null;
+    order_email?: string | null;
+    order_whatsapp?: string | null;
 }
 
 const form = useForm<FormState>({
@@ -80,6 +84,8 @@ const form = useForm<FormState>({
     image_url: null,
     primary_color: null,
     secondary_color: null,
+    order_email: null,
+    order_whatsapp: null,
 });
 function updateField(field: string, value: any) {
     form[field] = value;

@@ -70,6 +70,8 @@ const form = useForm({
     image_url: props.location.image_path ?? props.location.image_url ?? null,
     primary_color: props.location.primary_color ?? null,
     secondary_color: props.location.secondary_color ?? null,
+    order_email: props.location.order_email ?? null,
+    order_whatsapp: props.location.order_whatsapp ?? null,
 });
 
 function submit() {

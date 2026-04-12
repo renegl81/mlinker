@@ -166,7 +166,23 @@
             "gluten_free": "Sen glute"
         },
         "show_ingredients": "ver ingredientes",
-        "hide_ingredients": "ocultar ingredientes"
+        "hide_ingredients": "ocultar ingredientes",
+        "cart": {
+            "title": "O teu pedido",
+            "add": "Engadir",
+            "empty": "A túa lista está baleira",
+            "empty_hint": "Toca + en calquera prato para comezar",
+            "total": "Total",
+            "clear": "Baleirar todo",
+            "clear_confirm": "Eliminar todos os pratos?",
+            "item_singular": "prato",
+            "item_plural": "pratos",
+            "show_to_waiter": "Mostra esta lista ao camareiro",
+            "your_name": "O teu nome",
+            "name_placeholder": "Ex. Mesa 5 — María",
+            "send_whatsapp": "Enviar por WhatsApp",
+            "send_email": "Enviar por email"
+        }
     },
     "common": {
         "save": "Gardar",
@@ -392,7 +408,12 @@
             "brand_colors": "Cores de marca",
             "brand_colors_hint": "Usaranse na páxina pública do teu negocio para personalizar a aparencia.",
             "color_primary": "Primario",
-            "color_secondary": "Secundario"
+            "color_secondary": "Secundario",
+            "order_channels": "Canles de pedido",
+            "order_channels_hint": "Configura como os clientes poden enviar o seu pedido desde a carta dixital.",
+            "order_email": "Email de pedidos",
+            "order_whatsapp": "WhatsApp de pedidos",
+            "order_whatsapp_hint": "Número con código de país, ex. +34612345678"
         },
         "menus": {
             "create_title": "Crear Menú",

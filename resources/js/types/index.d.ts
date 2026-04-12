@@ -113,6 +113,11 @@ export interface Location {
     latitude: string;
     longitude: string;
     lang: string;
+    primary_color: string | null;
+    secondary_color: string | null;
+    order_email: string | null;
+    order_whatsapp: string | null;
+    image_path?: string | null;
 }
 
 export interface Template{

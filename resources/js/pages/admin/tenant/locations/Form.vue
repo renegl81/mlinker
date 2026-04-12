@@ -334,6 +334,42 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Order channels -->
+                    <div class="space-y-2 md:col-span-2">
+                        <h3 class="text-sm font-semibold text-foreground">{{ t('panel.locations.order_channels') }}</h3>
+                        <p class="text-xs text-muted-foreground">{{ t('panel.locations.order_channels_hint') }}</p>
+                    </div>
+
+                    <div class="space-y-2">
+                        <Label for="order_email">{{ t('panel.locations.order_email') }}</Label>
+                        <Input
+                            id="order_email"
+                            :model-value="form.order_email"
+                            @update:model-value="$emit('update:field', 'order_email', $event)"
+                            type="email"
+                            placeholder="pedidos@mirestaurante.com"
+                            :class="{ 'border-destructive': form.errors.order_email }"
+                        />
+                        <p v-if="form.errors.order_email" class="text-sm text-destructive">
+                            {{ form.errors.order_email }}
+                        </p>
+                    </div>
+                    <div class="space-y-2">
+                        <Label for="order_whatsapp">{{ t('panel.locations.order_whatsapp') }}</Label>
+                        <Input
+                            id="order_whatsapp"
+                            :model-value="form.order_whatsapp"
+                            @update:model-value="$emit('update:field', 'order_whatsapp', $event)"
+                            type="tel"
+                            placeholder="+34 612 345 678"
+                            :class="{ 'border-destructive': form.errors.order_whatsapp }"
+                        />
+                        <p class="text-xs text-muted-foreground">{{ t('panel.locations.order_whatsapp_hint') }}</p>
+                        <p v-if="form.errors.order_whatsapp" class="text-sm text-destructive">
+                            {{ form.errors.order_whatsapp }}
+                        </p>
+                    </div>
                 </div>
             </CardContent>
 
@@ -403,6 +439,10 @@ interface Props {
         latitude?: string;
         longitude?: string;
         image_url?: string | null;
+        primary_color?: string | null;
+        secondary_color?: string | null;
+        order_email?: string | null;
+        order_whatsapp?: string | null;
         errors: Record<string, string>;
         processing: boolean;
     };

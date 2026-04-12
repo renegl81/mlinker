@@ -4,8 +4,12 @@ import MenuSeoHead from '@/components/public/MenuSeoHead.vue';
 import MenuLanguageSwitcher from '@/components/public/MenuLanguageSwitcher.vue';
 import ShareMenu from '@/components/public/ShareMenu.vue';
 import AllergenIcon from '@/components/ui/AllergenIcon.vue';
+import AddToCartButton from '@/components/public/AddToCartButton.vue';
+import CartFab from '@/components/public/CartFab.vue';
+import CartDrawer from '@/components/public/CartDrawer.vue';
 import { useMenuFormatter } from '@/composables/useMenuFormatter';
 import { useMenuCustomization } from '@/composables/useMenuCustomization';
+import { useCart } from '@/composables/useCart';
 import type { Menu } from '@/types';
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -37,6 +41,7 @@ interface Props {
     shareUrl: string;
     locale: string;
     hasMultilang: boolean;
+    hasCart: boolean;
     availableLocales: string[];
     supportedLocales: Record<string, LocaleMeta>;
     customization?: Record<string, any> | null;
@@ -46,6 +51,9 @@ const props = defineProps<Props>();
 const { formatPrice, tagsFor, toRoman, productImage } = useMenuFormatter(props.menu);
 const { cssVars, fontLinks, layout } = useMenuCustomization(props.customization ?? null);
 const { t } = useI18n();
+
+const cart = props.hasCart ? useCart(props.menu.id) : null;
+const cartOpen = ref(false);
 
 const sections = computed(() => {
     if (!props.menu.sections) return [];
@@ -94,6 +102,37 @@ onMounted(() => {
         if (el) observer.observe(el);
     });
 });
+
+function buildOrderText(): string {
+    if (!cart) return '';
+    const name = cart.customerName.value;
+    const lines: string[] = [];
+    if (name) lines.push(`📋 ${name}`);
+    lines.push(`🍽️ ${props.menu.name}`);
+    lines.push('');
+    for (const item of cart.items.value) {
+        lines.push(`${item.quantity}x ${item.name} — ${item.priceDisplay}`);
+    }
+    lines.push('');
+    lines.push(`💰 Total: ${formatPrice(cart.totalPrice.value)}`);
+    return lines.join('\n');
+}
+
+function sendViaWhatsApp() {
+    const phone = props.menu.location?.order_whatsapp;
+    if (!phone) return;
+    const cleanPhone = phone.replace(/[^0-9+]/g, '');
+    const text = encodeURIComponent(buildOrderText());
+    window.open(`https://wa.me/${cleanPhone}?text=${text}`, '_blank');
+}
+
+function sendViaEmail() {
+    const email = props.menu.location?.order_email;
+    if (!email) return;
+    const subject = encodeURIComponent(`${cart?.customerName.value ? cart.customerName.value + ' — ' : ''}${props.menu.name}`);
+    const body = encodeURIComponent(buildOrderText());
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+}
 </script>
 
 <template>
@@ -206,6 +245,12 @@ onMounted(() => {
                                 <template v-if="menu.show_prices && product.price">
                                     <span class="product-dots" aria-hidden="true" />
                                     <span class="product-price">{{ formatPrice(product.price) }}</span>
+                                    <AddToCartButton
+                                        v-if="hasCart"
+                                        :quantity="cart?.getQuantity(product.id) ?? 0"
+                                        @add="cart?.addItem(product, formatPrice(product.price))"
+                                        @remove="cart?.removeItem(product.id)"
+                                    />
                                 </template>
                             </div>
 
@@ -309,6 +354,29 @@ onMounted(() => {
             :menu-name="menu.name"
             :location-name="menu.location?.name ?? ''"
         />
+        <CartFab
+            v-if="hasCart && menu.show_prices"
+            :item-count="cart?.totalItems.value ?? 0"
+            @click="cartOpen = true"
+        />
+        <CartDrawer
+            v-if="hasCart && menu.show_prices"
+            :open="cartOpen"
+            :items="cart?.items.value ?? []"
+            :total-price="cart?.totalPrice.value ?? 0"
+            :format-price="(n) => formatPrice(n)"
+            :customer-name="cart?.customerName.value ?? ''"
+            :order-email="menu.location?.order_email ?? null"
+            :order-whatsapp="menu.location?.order_whatsapp ?? null"
+            @close="cartOpen = false"
+            @increment="(id) => cart?.incrementItem(id)"
+            @decrement="(id) => cart?.removeItem(id)"
+            @delete="(id) => cart?.deleteItem(id)"
+            @clear="cart?.clearCart()"
+            @update:customer-name="(name) => { if (cart) cart.customerName.value = name; }"
+            @send-whatsapp="sendViaWhatsApp"
+            @send-email="sendViaEmail"
+        />
     </div>
 </template>
 
@@ -346,19 +414,6 @@ onMounted(() => {
     overflow-x: hidden;
 }
 
-@media (prefers-color-scheme: dark) {
-    .menu-editorial {
-        --menu-bg: oklch(0.19 0.018 40);
-        --menu-paper: oklch(0.23 0.02 40);
-        --menu-ink: oklch(0.95 0.012 82);
-        --menu-ink-soft: oklch(0.72 0.015 82);
-        --menu-ink-faint: oklch(0.58 0.015 82);
-        --menu-accent: oklch(0.73 0.14 38);
-        --menu-accent-soft: oklch(0.73 0.14 38 / 0.14);
-        --menu-rule: oklch(0.38 0.02 40);
-    }
-}
-
 .grain {
     position: fixed;
     inset: 0;
@@ -368,10 +423,6 @@ onMounted(() => {
     opacity: 0.11;
     mix-blend-mode: multiply;
     z-index: 1;
-}
-
-@media (prefers-color-scheme: dark) {
-    .grain { opacity: 0.18; mix-blend-mode: overlay; }
 }
 
 /* ============ TOP BAR ============ */

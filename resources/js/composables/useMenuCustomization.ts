@@ -42,17 +42,51 @@ export function useMenuCustomization(customization: Ref<MenuCustomization | null
         if (!c) return {};
         const vars: Record<string, string> = {};
 
-        if (c.colors?.accent) vars['--ml-accent'] = c.colors.accent;
-        if (c.colors?.bg) vars['--ml-bg'] = c.colors.bg;
-        if (c.colors?.ink) vars['--ml-ink'] = c.colors.ink;
-        if (c.colors?.ink_soft) vars['--ml-ink-soft'] = c.colors.ink_soft;
-        if (c.colors?.rule) vars['--ml-rule'] = c.colors.rule;
+        // Set canonical --ml-* AND common template aliases so the override
+        // works regardless of how the template references the variable.
+        if (c.colors?.accent) {
+            vars['--ml-accent'] = c.colors.accent;
+            // Template aliases that map to accent
+            vars['--menu-accent'] = c.colors.accent;
+            vars['--wine'] = c.colors.accent;
+            vars['--gold'] = c.colors.accent;
+            vars['--neon'] = c.colors.accent;
+            vars['--sage'] = c.colors.accent;
+        }
+        if (c.colors?.bg) {
+            vars['--ml-bg'] = c.colors.bg;
+            vars['--bg'] = c.colors.bg;
+            vars['--menu-bg'] = c.colors.bg;
+            vars['--menu-paper'] = c.colors.bg;
+        }
+        if (c.colors?.ink) {
+            vars['--ml-ink'] = c.colors.ink;
+            vars['--ink'] = c.colors.ink;
+            vars['--menu-ink'] = c.colors.ink;
+        }
+        if (c.colors?.ink_soft) {
+            vars['--ml-ink-soft'] = c.colors.ink_soft;
+            vars['--ink-soft'] = c.colors.ink_soft;
+            vars['--menu-ink-soft'] = c.colors.ink_soft;
+        }
+        if (c.colors?.rule) {
+            vars['--ml-rule'] = c.colors.rule;
+            vars['--rule'] = c.colors.rule;
+            vars['--menu-rule'] = c.colors.rule;
+        }
 
         if (c.fonts?.display) {
-            vars['--ml-font-display'] = `'${c.fonts.display}', Georgia, serif`;
+            const val = `'${c.fonts.display}', Georgia, serif`;
+            vars['--ml-font-display'] = val;
+            vars['--font-display'] = val;
+            vars['--menu-serif'] = val;
+            vars['--font-serif'] = val;
         }
         if (c.fonts?.body) {
-            vars['--ml-font-body'] = `'${c.fonts.body}', system-ui, sans-serif`;
+            const val = `'${c.fonts.body}', system-ui, sans-serif`;
+            vars['--ml-font-body'] = val;
+            vars['--font-body'] = val;
+            vars['--menu-sans'] = val;
         }
 
         if (c.spacing?.density) {

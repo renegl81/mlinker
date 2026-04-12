@@ -4,8 +4,12 @@ import MenuSeoHead from '@/components/public/MenuSeoHead.vue';
 import MenuLanguageSwitcher from '@/components/public/MenuLanguageSwitcher.vue';
 import ShareMenu from '@/components/public/ShareMenu.vue';
 import AllergenIcon from '@/components/ui/AllergenIcon.vue';
+import AddToCartButton from '@/components/public/AddToCartButton.vue';
+import CartFab from '@/components/public/CartFab.vue';
+import CartDrawer from '@/components/public/CartDrawer.vue';
 import { useMenuFormatter } from '@/composables/useMenuFormatter';
 import { useMenuCustomization } from '@/composables/useMenuCustomization';
+import { useCart } from '@/composables/useCart';
 import type { Menu } from '@/types';
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -37,6 +41,7 @@ interface Props {
     shareUrl: string;
     locale: string;
     hasMultilang: boolean;
+    hasCart: boolean;
     availableLocales: string[];
     supportedLocales: Record<string, LocaleMeta>;
     customization?: Record<string, any> | null;
@@ -46,6 +51,9 @@ const props = defineProps<Props>();
 const { formatPrice, tagsFor, productImage } = useMenuFormatter(props.menu);
 const { cssVars, fontLinks, layout } = useMenuCustomization(props.customization ?? null);
 const { t } = useI18n();
+
+const cart = props.hasCart ? useCart(props.menu.id) : null;
+const cartOpen = ref(false);
 
 const sections = computed(() => {
     if (!props.menu.sections) return [];
@@ -89,6 +97,37 @@ onMounted(() => {
         if (el) observer.observe(el);
     });
 });
+
+function buildOrderText(): string {
+    if (!cart) return '';
+    const name = cart.customerName.value;
+    const lines: string[] = [];
+    if (name) lines.push(`📋 ${name}`);
+    lines.push(`🍽️ ${props.menu.name}`);
+    lines.push('');
+    for (const item of cart.items.value) {
+        lines.push(`${item.quantity}x ${item.name} — ${item.priceDisplay}`);
+    }
+    lines.push('');
+    lines.push(`💰 Total: ${formatPrice(cart.totalPrice.value)}`);
+    return lines.join('\n');
+}
+
+function sendViaWhatsApp() {
+    const phone = props.menu.location?.order_whatsapp;
+    if (!phone) return;
+    const cleanPhone = phone.replace(/[^0-9+]/g, '');
+    const text = encodeURIComponent(buildOrderText());
+    window.open(`https://wa.me/${cleanPhone}?text=${text}`, '_blank');
+}
+
+function sendViaEmail() {
+    const email = props.menu.location?.order_email;
+    if (!email) return;
+    const subject = encodeURIComponent(`${cart?.customerName.value ? cart.customerName.value + ' — ' : ''}${props.menu.name}`);
+    const body = encodeURIComponent(buildOrderText());
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+}
 </script>
 
 <template>
@@ -195,6 +234,12 @@ onMounted(() => {
                                     v-if="menu.show_prices && product.price"
                                     class="card-price"
                                 >{{ formatPrice(product.price) }}</span>
+                                <AddToCartButton
+                                    v-if="hasCart && menu.show_prices && product.price"
+                                    :quantity="cart?.getQuantity(product.id) ?? 0"
+                                    @add="cart?.addItem(product, formatPrice(product.price))"
+                                    @remove="cart?.removeItem(product.id)"
+                                />
                             </div>
 
                             <div class="card-meta-top">
@@ -284,31 +329,54 @@ onMounted(() => {
             :menu-name="menu.name"
             :location-name="menu.location?.name ?? ''"
         />
+        <CartFab
+            v-if="hasCart && menu.show_prices"
+            :item-count="cart?.totalItems.value ?? 0"
+            @click="cartOpen = true"
+        />
+        <CartDrawer
+            v-if="hasCart && menu.show_prices"
+            :open="cartOpen"
+            :items="cart?.items.value ?? []"
+            :total-price="cart?.totalPrice.value ?? 0"
+            :format-price="(n) => formatPrice(n)"
+            :customer-name="cart?.customerName.value ?? ''"
+            :order-email="menu.location?.order_email ?? null"
+            :order-whatsapp="menu.location?.order_whatsapp ?? null"
+            @close="cartOpen = false"
+            @increment="(id) => cart?.incrementItem(id)"
+            @decrement="(id) => cart?.removeItem(id)"
+            @delete="(id) => cart?.deleteItem(id)"
+            @clear="cart?.clearCart()"
+            @update:customer-name="(name) => { if (cart) cart.customerName.value = name; }"
+            @send-whatsapp="sendViaWhatsApp"
+            @send-email="sendViaEmail"
+        />
     </div>
 </template>
 
 <style scoped>
 .menu-modern {
     /* Canonical ML variables (overridable by customization) */
-    --ml-bg: oklch(0.135 0.012 270);
-    --ml-ink: oklch(0.97 0.004 270);
-    --ml-ink-soft: oklch(0.72 0.008 270);
-    --ml-accent: oklch(0.89 0.18 100);
-    --ml-rule: oklch(0.28 0.014 270);
+    --ml-bg: oklch(0.975 0.006 270);
+    --ml-ink: oklch(0.16 0.02 270);
+    --ml-ink-soft: oklch(0.45 0.015 270);
+    --ml-accent: oklch(0.50 0.18 270);
+    --ml-rule: oklch(0.90 0.008 270);
     --ml-font-display: 'Syne', ui-sans-serif, system-ui, sans-serif;
     --ml-font-body: 'Manrope', ui-sans-serif, system-ui, sans-serif;
     --ml-spacing: 1;
 
     /* Template internal variables now read from ML canonical */
     --bg: var(--ml-bg);
-    --panel: oklch(0.175 0.014 270);
-    --panel-2: oklch(0.22 0.016 270);
+    --panel: oklch(0.99 0.004 270);
+    --panel-2: oklch(0.96 0.008 270);
     --ink: var(--ml-ink);
     --ink-soft: var(--ml-ink-soft);
-    --ink-faint: oklch(0.52 0.01 270);
+    --ink-faint: oklch(0.60 0.01 270);
     --rule: var(--ml-rule);
     --accent: var(--ml-accent);
-    --accent-glow: oklch(0.89 0.18 100 / 0.3);
+    --accent-glow: oklch(0.50 0.18 270 / 0.15);
     --menu-paper: var(--panel);
     --menu-ink: var(--ink);
     --menu-rule: var(--rule);

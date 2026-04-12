@@ -66,6 +66,8 @@ class Location extends Model
         'longitude',
         'primary_color',
         'secondary_color',
+        'order_email',
+        'order_whatsapp',
     ];
 
     public static function getFilterableFields(): array
