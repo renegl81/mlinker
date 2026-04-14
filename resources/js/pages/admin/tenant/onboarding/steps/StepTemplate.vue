@@ -60,6 +60,7 @@ function closePreview() {
 
 <template>
     <div>
+    <div>
         <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-teal-500/15">
             <Sparkles class="h-6 w-6 text-teal-400" />
         </div>
@@ -167,4 +168,5 @@ function closePreview() {
             </div>
         </Transition>
     </Teleport>
+    </div>
 </template>

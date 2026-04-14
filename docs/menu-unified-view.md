@@ -195,30 +195,36 @@ Tres zonas verticales:
 
 Marcar con `[x]` al completar. Si el trabajo se interrumpe, continuar desde el primer `[ ]`.
 
-- [ ] Leídos `MenuController`, `Show.vue`, `Edit.vue`, `Form.vue`, `MenuUpdateRequest`, `UpdateMenu`
-- [ ] Tabla de campos editables documentada (en Notas abajo)
-- [ ] Endpoints PATCH de Section/Product verificados o diseñados
-- [ ] `MenuUpdateRequest` acepta payloads parciales sin romper creación
-- [ ] Composable `useMenuEditor` implementado con debounce + queue + indicador
-- [ ] Componentes inline creados (`InlineEditableText`, `InlineEditablePrice`, `InlineSwitch`, `SaveIndicator`)
-- [ ] `Show.vue` partido en sub-componentes y refactorizado
-- [ ] Header con edición inline + switches de visualización integrados
-- [ ] Secciones y productos con edición inline y drag & drop funcionando
-- [ ] Drawer de detalle de producto (campos ricos) funcional
-- [ ] `Edit.vue` eliminado o redirigiendo a `show`
-- [ ] i18n `menus.show.*` y `menus.inline.*` añadidos en es + en
-- [ ] Tests backend actualizados y verdes
+- [x] Leídos `MenuController`, `Show.vue`, `Edit.vue`, `Form.vue`, `MenuUpdateRequest`, `UpdateMenu`
+- [x] Tabla de campos editables documentada (en Notas abajo)
+- [x] Endpoints PATCH de Section/Product verificados o diseñados
+- [x] `MenuUpdateRequest` acepta payloads parciales sin romper creación (nuevo `MenuPatchRequest` con `sometimes`)
+- [x] Composable `useMenuEditor` implementado con debounce + queue + indicador
+- [x] Componentes inline creados (`InlineEditableText`, `InlineEditablePrice`, `SaveIndicator`, `ProductDetailDrawer`)
+- [x] `Show.vue` partido en sub-componentes y refactorizado
+- [x] Header con edición inline + switches de visualización integrados
+- [x] Secciones y productos con edición inline y drag & drop funcionando
+- [x] Drawer de detalle de producto (campos ricos) funcional
+- [x] `Edit.vue` redirige a `show` (controller devuelve RedirectResponse)
+- [x] i18n `panel.menu_show.*` añadidos en es + en (y ca, eu, gl con fallback en)
+- [x] Tests backend actualizados y verdes (64 tests, 295 assertions)
 - [ ] Prueba manual end-to-end OK
-- [ ] Resumen de cambios reportado al usuario
+- [x] Resumen de cambios reportado al usuario
 
 ### Notas (rellenar durante el trabajo)
 
-- Campos editables inline del menú: _pendiente_
-- Campos editables inline de sección: _pendiente_
-- Campos editables inline de producto: _pendiente_
-- Campos que quedan en drawer de producto: _pendiente_
-- Endpoints PATCH existentes encontrados: _pendiente_
-- Decisiones tomadas en puntos ambiguos: _pendiente_
+- Campos editables inline del menú: `name`, `description`, `is_active` (switch), `show_prices`, `show_currency`, `show_calories` (switches en panel colapsable)
+- Campos editables inline de sección: `name`, `description`
+- Campos editables inline de producto: `name`, `description`, `price`
+- Campos que quedan en drawer de producto: `calories`, `tags`, `allergens` (selección múltiple), `ingredients` (lista editable)
+- Endpoints PATCH existentes encontrados: ninguno pre-existente. Los PUT de section/product eran para form completo. Se añadieron: `PATCH /panel/menus/{menu}/inline`, `PATCH /panel/sections/{section}`, `PATCH /panel/products/{product}`.
+- Decisiones tomadas en puntos ambiguos:
+  - Se optó por endpoints PATCH separados (no reutilizar PUT existentes) para evitar romper formularios de edición completos que requieren campos obligatorios.
+  - El drawer de producto sigue usando PUT existente (form completo) por ser de campos ricos — no conflicto.
+  - `InlineSwitch` no se creó como componente separado; se reutilizó `Switch` del design system directamente en Show.vue.
+  - `Edit.vue` se mantiene como archivo pero el controller redirige — no se borró el archivo para no romper posibles referencias en navegación antigua.
+  - Sección colapsable "Visualización" se inicia cerrada para no abrumar.
+  - El agente de onboarding toca `routes/tenant.php`: las rutas añadidas son aditivas (no modifican las existentes), sin conflicto esperado.
 
 ---
 

@@ -8,9 +8,11 @@ use App\Actions\Plan\CheckLimit;
 use App\Actions\Product\CreateProduct;
 use App\Actions\Product\DeleteProduct;
 use App\Actions\Product\DuplicateProduct;
+use App\Actions\Product\PatchProduct;
 use App\Actions\Product\UpdateProduct;
 use App\Exceptions\PlanLimitExceededException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Product\ProductPatchRequest;
 use App\Http\Requests\Product\StoreProductRequest;
 use App\Http\Requests\Product\UpdateProductRequest;
 use App\Models\Allergen;
@@ -19,6 +21,7 @@ use App\Models\Menu;
 use App\Models\Product;
 use App\Models\Section;
 use App\Services\IngredientCatalog;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -92,6 +95,13 @@ class ProductController extends Controller
         return redirect()
             ->route('tenant.menus.show', ['menu' => $menu?->id])
             ->with('success', 'Producto actualizado correctamente.');
+    }
+
+    public function patch(ProductPatchRequest $request, Product $product, PatchProduct $patchProduct): JsonResponse
+    {
+        $product = $patchProduct->execute($product, $request->validated());
+
+        return response()->json(['product' => $product->load('allergens')]);
     }
 
     public function destroy(Product $product, DeleteProduct $deleteProduct): RedirectResponse

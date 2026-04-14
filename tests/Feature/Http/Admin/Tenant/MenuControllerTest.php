@@ -256,4 +256,92 @@ class MenuControllerTest extends TestCase
         $response->assertSessionHas('error');
         $this->assertDatabaseCount('menus', 1);
     }
+
+    // -------------------------------------------------------------------------
+    // Patch (inline endpoint)
+    // -------------------------------------------------------------------------
+
+    #[Test]
+    public function patch_updates_partial_fields_and_returns_json(): void
+    {
+        $menu = Menu::factory()->create([
+            'tenant_id' => 'menu-ctrl-tenant',
+            'location_id' => $this->location->id,
+            'name' => 'Original',
+            'is_active' => false,
+        ]);
+
+        $response = $this->actingAs($this->user)
+            ->patchJson(
+                $this->tenantUrl('tenant.menus.patch', ['menu' => $menu->id]),
+                ['name' => 'Actualizado inline']
+            );
+
+        $response->assertOk();
+        $response->assertJsonPath('menu.name', 'Actualizado inline');
+
+        $this->assertDatabaseHas('menus', [
+            'id' => $menu->id,
+            'name' => 'Actualizado inline',
+            'is_active' => false, // unchanged
+        ]);
+    }
+
+    #[Test]
+    public function patch_updates_boolean_flag(): void
+    {
+        $menu = Menu::factory()->create([
+            'tenant_id' => 'menu-ctrl-tenant',
+            'location_id' => $this->location->id,
+            'is_active' => false,
+            'show_prices' => false,
+        ]);
+
+        $response = $this->actingAs($this->user)
+            ->patchJson(
+                $this->tenantUrl('tenant.menus.patch', ['menu' => $menu->id]),
+                ['is_active' => true, 'show_prices' => true]
+            );
+
+        $response->assertOk();
+        $this->assertDatabaseHas('menus', [
+            'id' => $menu->id,
+            'is_active' => true,
+            'show_prices' => true,
+        ]);
+    }
+
+    #[Test]
+    public function patch_rejects_empty_name(): void
+    {
+        $menu = Menu::factory()->create([
+            'tenant_id' => 'menu-ctrl-tenant',
+            'location_id' => $this->location->id,
+        ]);
+
+        $response = $this->actingAs($this->user)
+            ->patchJson(
+                $this->tenantUrl('tenant.menus.patch', ['menu' => $menu->id]),
+                ['name' => '']
+            );
+
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors('name');
+    }
+
+    #[Test]
+    public function edit_redirects_to_show(): void
+    {
+        $menu = Menu::factory()->create([
+            'tenant_id' => 'menu-ctrl-tenant',
+            'location_id' => $this->location->id,
+        ]);
+
+        $response = $this->actingAs($this->user)
+            ->get($this->tenantUrl('tenant.menus.edit', ['menu' => $menu->id]));
+
+        $response->assertRedirect(
+            $this->tenantUrl('tenant.menus.show', ['menu' => $menu->id])
+        );
+    }
 }

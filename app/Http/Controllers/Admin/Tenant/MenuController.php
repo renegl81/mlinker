@@ -7,16 +7,20 @@ use App\Actions\Menu\CreateMenu;
 use App\Actions\Menu\DeleteMenu;
 use App\Actions\Menu\DuplicateMenu;
 use App\Actions\Menu\GetMenus;
+use App\Actions\Menu\PatchMenu;
 use App\Actions\Menu\UpdateMenu;
 use App\Actions\Plan\CheckLimit;
 use App\Exceptions\PlanLimitExceededException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Menu\MenuPatchRequest;
 use App\Http\Requests\Menu\MenuStoreRequest;
 use App\Http\Requests\Menu\MenuUpdateRequest;
+use App\Models\Allergen;
 use App\Models\Location;
 use App\Models\Menu;
 use App\Models\Template;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -67,16 +71,9 @@ class MenuController extends Controller
             ->with('success', __('messages.menus.created'));
     }
 
-    public function edit(Menu $menu): Response
+    public function edit(Menu $menu): RedirectResponse
     {
-        $menu->load('location');
-
-        return Inertia::render('admin/tenant/menus/Edit', [
-            'menu' => $menu,
-            'location' => $menu->location,
-            'templates' => Template::where('is_active', true)->get(),
-            'supportedLocales' => config('menulinker.supported_locales'),
-        ]);
+        return redirect()->route('tenant.menus.show', ['menu' => $menu->id]);
     }
 
     public function update(MenuUpdateRequest $request, Menu $menu, UpdateMenu $updateMenu): RedirectResponse
@@ -86,6 +83,13 @@ class MenuController extends Controller
         return redirect()
             ->route('tenant.menus.show', ['menu' => $menu->id])
             ->with('success', __('messages.menus.updated'));
+    }
+
+    public function patch(MenuPatchRequest $request, Menu $menu, PatchMenu $patchMenu): JsonResponse
+    {
+        $menu = $patchMenu->execute($menu, $request->validated());
+
+        return response()->json(['menu' => $menu]);
     }
 
     public function destroy(Menu $menu, DeleteMenu $deleteMenu): RedirectResponse
@@ -154,6 +158,7 @@ class MenuController extends Controller
             'sections' => fn ($q) => $q->orderBy('sort_order'),
             'sections.products' => fn ($q) => $q->orderBy('products.id'),
             'sections.products.allergens',
+            'sections.products.ingredients',
             'qrCode',
         ]);
 
@@ -171,6 +176,9 @@ class MenuController extends Controller
             'qrCodeImageUrl' => $this->resolveQrImageUrl($menu),
             'publicMenuUrl' => $publicMenuUrl,
             'locations' => Location::where('id', '!=', $menu->location_id)->get(['id', 'name']),
+            'templates' => Template::where('is_active', true)->get(['id', 'name']),
+            'supportedLocales' => config('menulinker.supported_locales'),
+            'allergens' => Allergen::orderBy('name')->get(['id', 'name', 'code']),
         ]);
     }
 

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import HeadingSmall from '@/components/HeadingSmall.vue';
 import AllergenIcon from '@/components/ui/AllergenIcon.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -19,6 +18,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
 import {
     Tooltip,
     TooltipContent,
@@ -33,9 +33,14 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog';
+import InlineEditableText from '@/components/inline/InlineEditableText.vue';
+import InlineEditablePrice from '@/components/inline/InlineEditablePrice.vue';
+import SaveIndicator from '@/components/inline/SaveIndicator.vue';
+import ProductDetailDrawer from '@/components/inline/ProductDetailDrawer.vue';
+import { useMenuEditor } from '@/composables/useMenuEditor';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { index as locationMenusRoute } from '@/routes/tenant/locations/menus';
-import { destroy as menuRouteDestroy, edit as menuRouteEdit } from '@/routes/tenant/menus';
+import { destroy as menuRouteDestroy } from '@/routes/tenant/menus';
 import type { BreadcrumbItem, Menu } from '@/types';
 import { Head, Link, usePage, router } from '@inertiajs/vue3';
 import { useConfirmDialog } from '@/composables/useConfirmDialog';
@@ -45,6 +50,7 @@ import {
     ArrowRight,
     ArrowUp,
     BookOpen,
+    ChevronDown,
     Copy,
     Download,
     Eye,
@@ -58,12 +64,13 @@ import {
     Plus,
     QrCode as QrCodeIcon,
     RefreshCw,
+    Settings,
     Smartphone,
     Trash2,
     Upload,
     X,
 } from 'lucide-vue-next';
-import { computed, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -75,15 +82,22 @@ interface Allergen {
     code: string | null;
 }
 
+interface Ingredient {
+    id: number;
+    name: string;
+}
+
 interface Product {
     id: number;
     name: string;
     description: string | null;
     price: string | number | null;
+    calories: string | number | null;
     image_url: string | null;
     image_path: string | null;
     tags: string[] | null;
     allergens: Allergen[];
+    ingredients?: Ingredient[];
 }
 
 interface Section {
@@ -94,16 +108,20 @@ interface Section {
     products?: Product[];
 }
 
+interface SupportedLocale {
+    native: string;
+    flag: string;
+}
+
+interface Template {
+    id: number;
+    name: string;
+}
+
 interface MenuWithSections extends Menu {
     sections: Section[];
 }
 
-function formatPrice(price: string | number | null | undefined): string {
-    if (price === null || price === undefined || price === '') return '';
-    const n = typeof price === 'string' ? parseFloat(price) : price;
-    if (Number.isNaN(n)) return '';
-    return n.toFixed(2) + ' €';
-}
 
 const TAG_LABELS: Record<string, string> = {
     vegetarian: '🌱',
@@ -122,11 +140,79 @@ interface Props {
     qrCodeImageUrl: string | null;
     publicMenuUrl: string;
     locations: LocationOption[];
+    templates: Template[];
+    supportedLocales: Record<string, SupportedLocale>;
+    allergens: Allergen[];
 }
 
 const props = defineProps<Props>();
 const page = usePage();
 const messages = computed(() => page.props.messages as any);
+
+// ── Local reactive copy of menu for optimistic updates ───────────────────────
+const localMenu = reactive({
+    name: props.menu.name,
+    description: props.menu.description,
+    is_active: props.menu.is_active,
+    show_prices: props.menu.show_prices,
+    show_currency: props.menu.show_currency,
+    show_calories: props.menu.show_calories,
+});
+
+// ── Menu editor composable ───────────────────────────────────────────────────
+const { saveStatus, saveError, patchMenu, patchSection, patchProduct } = useMenuEditor(props.menu.id);
+
+async function saveName(value: string) {
+    localMenu.name = value;
+    try { await patchMenu({ name: value }); } catch { localMenu.name = props.menu.name; }
+}
+async function saveDescription(value: string) {
+    localMenu.description = value || null;
+    try { await patchMenu({ description: value || null }); } catch { localMenu.description = props.menu.description; }
+}
+async function saveFlag(flag: 'is_active' | 'show_prices' | 'show_currency' | 'show_calories', value: boolean) {
+    (localMenu as Record<string, unknown>)[flag] = value;
+    try { await patchMenu({ [flag]: value }); } catch { (localMenu as Record<string, unknown>)[flag] = (props.menu as unknown as Record<string, unknown>)[flag]; }
+}
+
+async function saveSectionName(sectionId: number, value: string, section: Section) {
+    const oldName = section.name;
+    section.name = value;
+    try { await patchSection(sectionId, { name: value }); } catch { section.name = oldName; }
+}
+async function saveSectionDescription(sectionId: number, value: string, section: Section) {
+    const oldDesc = section.description;
+    section.description = value || null;
+    try { await patchSection(sectionId, { description: value || null }); } catch { section.description = oldDesc; }
+}
+
+async function saveProductName(productId: number, value: string, product: Product) {
+    const old = product.name;
+    product.name = value;
+    try { await patchProduct(productId, { name: value }); } catch { product.name = old; }
+}
+async function saveProductDescription(productId: number, value: string, product: Product) {
+    const old = product.description;
+    product.description = value || null;
+    try { await patchProduct(productId, { description: value || null }); } catch { product.description = old; }
+}
+async function saveProductPrice(productId: number, value: number | null, product: Product) {
+    const old = product.price;
+    product.price = value;
+    try { await patchProduct(productId, { price: value }); } catch { product.price = old; }
+}
+
+// ── Product detail drawer ────────────────────────────────────────────────────
+const drawerOpen = ref(false);
+const drawerProduct = ref<Product | null>(null);
+
+function openProductDrawer(product: Product) {
+    drawerProduct.value = product;
+    drawerOpen.value = true;
+}
+
+// ── Visibility options panel toggle ─────────────────────────────────────────
+const showVisibilityOptions = ref(false);
 
 const showPreview = ref(false);
 const previewMode = ref<'mobile' | 'desktop'>('mobile');
@@ -249,36 +335,6 @@ function submitAddSection() {
     );
 }
 
-// Edit section inline
-const editingSectionId = ref<number | null>(null);
-const editSectionName = ref('');
-const editSectionDescription = ref('');
-
-function startEditSection(section: Section) {
-    editingSectionId.value = section.id;
-    editSectionName.value = section.name;
-    editSectionDescription.value = section.description ?? '';
-}
-
-function cancelEditSection() {
-    editingSectionId.value = null;
-}
-
-function submitEditSection(section: Section) {
-    router.put(
-        `/panel/sections/${section.id}`,
-        {
-            name: editSectionName.value.trim(),
-            description: editSectionDescription.value.trim() || null,
-        },
-        {
-            preserveScroll: true,
-            onSuccess: () => {
-                editingSectionId.value = null;
-            },
-        },
-    );
-}
 
 async function deleteSection(sectionId: number) {
     const ok = await confirmDialog({
@@ -344,20 +400,53 @@ function submitImport() {
 
     <AppLayout :breadcrumbs="breadcrumbItems">
         <div class="flex h-full flex-1 flex-col gap-6 rounded-xl p-4">
-            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div class="flex items-center gap-4">
-                    <Button variant="outline" size="icon" as-child>
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div class="flex items-start gap-4 flex-1 min-w-0">
+                    <Button variant="outline" size="icon" class="mt-1 shrink-0" as-child>
                         <Link :href="locationMenusRoute(menu.location_id).url">
                             <ArrowLeft class="h-4 w-4" />
                         </Link>
                     </Button>
-                    <HeadingSmall
-                        :title="menu.name"
-                        :description="messages.menus.caption"
-                    />
+                    <div class="flex-1 min-w-0">
+                        <!-- Título editable inline -->
+                        <h1 class="text-xl font-semibold leading-tight">
+                            <InlineEditableText
+                                :model-value="localMenu.name"
+                                :placeholder="t('panel.menu_show.menu_name_placeholder')"
+                                empty-label="Sin nombre"
+                                @save="saveName"
+                            >
+                                <span class="text-xl font-semibold">{{ localMenu.name }}</span>
+                            </InlineEditableText>
+                        </h1>
+                        <!-- Descripción editable inline -->
+                        <div class="mt-0.5 text-sm text-muted-foreground">
+                            <InlineEditableText
+                                :model-value="localMenu.description ?? ''"
+                                :placeholder="t('panel.menu_show.menu_desc_placeholder')"
+                                :empty-label="t('panel.menu_show.menu_desc_add')"
+                                :multiline="true"
+                                @save="saveDescription"
+                            />
+                        </div>
+                        <!-- Save indicator + is_active switch -->
+                        <div class="mt-1.5 flex items-center gap-3">
+                            <SaveIndicator :status="saveStatus" :error-message="saveError" />
+                            <label class="flex items-center gap-1.5 cursor-pointer select-none">
+                                <Switch
+                                    :checked="localMenu.is_active"
+                                    @update:checked="saveFlag('is_active', $event)"
+                                    :aria-label="t('panel.menu_show.is_active_label')"
+                                />
+                                <span class="text-xs font-medium" :class="localMenu.is_active ? 'text-teal-700' : 'text-muted-foreground'">
+                                    {{ localMenu.is_active ? messages.menus.status.active : messages.menus.status.inactive }}
+                                </span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex items-center gap-2">
-                    <!-- Primary actions (always visible) -->
+                <div class="flex items-center gap-2 shrink-0">
+                    <!-- Preview -->
                     <TooltipProvider>
                         <Tooltip>
                             <TooltipTrigger as-child>
@@ -367,20 +456,6 @@ function submitImport() {
                                 </Button>
                             </TooltipTrigger>
                             <TooltipContent>{{ t('panel.menu_show.preview') }}</TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-
-                    <TooltipProvider>
-                        <Tooltip>
-                            <TooltipTrigger as-child>
-                                <Button as-child>
-                                    <Link :href="menuRouteEdit(menu.id).url">
-                                        <Pencil class="mr-2 h-4 w-4" />
-                                        {{ messages.menus.actions.edit }}
-                                    </Link>
-                                </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>{{ messages.menus.actions.edit }}</TooltipContent>
                         </Tooltip>
                     </TooltipProvider>
 
@@ -448,20 +523,26 @@ function submitImport() {
                 <div class="space-y-6 lg:col-span-2">
                     <!-- Información general -->
                     <Card>
-                        <CardHeader>
+                        <CardHeader class="pb-3">
                             <CardTitle class="text-lg font-semibold">
                                 {{ messages.menus.form.title_edit || 'Información del Menú' }}
                             </CardTitle>
                         </CardHeader>
-                        <CardContent class="space-y-6">
-                            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-                                <div class="flex flex-col gap-1.5">
+                        <CardContent class="space-y-4">
+                            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                                <div class="flex flex-col gap-1">
                                     <span class="text-xs font-bold tracking-wider text-muted-foreground uppercase">
                                         {{ messages.menus.fields.name }}
                                     </span>
-                                    <p class="text-sm font-medium">{{ menu.name }}</p>
+                                    <InlineEditableText
+                                        :model-value="localMenu.name"
+                                        :placeholder="t('panel.menu_show.menu_name_placeholder')"
+                                        @save="saveName"
+                                    >
+                                        <span class="text-sm font-medium">{{ localMenu.name }}</span>
+                                    </InlineEditableText>
                                 </div>
-                                <div class="flex flex-col gap-1.5">
+                                <div class="flex flex-col gap-1">
                                     <span class="text-xs font-bold tracking-wider text-muted-foreground uppercase">
                                         {{ messages.menus.fields.location }}
                                     </span>
@@ -469,16 +550,20 @@ function submitImport() {
                                 </div>
                             </div>
 
-                            <div v-if="menu.description" class="flex flex-col gap-1.5">
+                            <div class="flex flex-col gap-1">
                                 <span class="text-xs font-bold tracking-wider text-muted-foreground uppercase">
                                     {{ messages.menus.fields.description }}
                                 </span>
-                                <p class="text-sm leading-relaxed text-pretty text-muted-foreground">
-                                    {{ menu.description }}
-                                </p>
+                                <InlineEditableText
+                                    :model-value="localMenu.description ?? ''"
+                                    :placeholder="t('panel.menu_show.menu_desc_placeholder')"
+                                    :empty-label="t('panel.menu_show.menu_desc_add')"
+                                    :multiline="true"
+                                    @save="saveDescription"
+                                />
                             </div>
 
-                            <div v-if="menu.template" class="flex flex-col gap-1.5">
+                            <div v-if="menu.template" class="flex flex-col gap-1">
                                 <span class="text-xs font-bold tracking-wider text-muted-foreground uppercase">
                                     {{ messages.menus.fields.template }}
                                 </span>
@@ -498,7 +583,7 @@ function submitImport() {
                                 >
                                     <img
                                         :src="menu.image_path"
-                                        :alt="menu.name"
+                                        :alt="localMenu.name"
                                         class="h-48 w-full object-cover"
                                     />
                                 </div>
@@ -565,18 +650,28 @@ function submitImport() {
                                     :key="section.id"
                                     class="space-y-3"
                                 >
-                                    <!-- Cabecera de sección -->
-                                    <div v-if="editingSectionId !== section.id" class="flex items-baseline justify-between border-b pb-2">
-                                        <div class="flex-1">
-                                            <h3 class="text-base font-semibold">{{ section.name }}</h3>
-                                            <p
-                                                v-if="section.description"
-                                                class="mt-0.5 text-xs text-muted-foreground"
-                                            >
-                                                {{ section.description }}
-                                            </p>
+                                    <!-- Cabecera de sección — edición inline -->
+                                    <div class="flex items-start justify-between border-b pb-2">
+                                        <div class="flex-1 min-w-0">
+                                            <h3 class="text-base font-semibold">
+                                                <InlineEditableText
+                                                    :model-value="section.name"
+                                                    :placeholder="t('panel.menu_show.section_name_placeholder')"
+                                                    @save="saveSectionName(section.id, $event, section)"
+                                                >
+                                                    <span class="text-base font-semibold">{{ section.name }}</span>
+                                                </InlineEditableText>
+                                            </h3>
+                                            <div class="mt-0.5 text-xs text-muted-foreground">
+                                                <InlineEditableText
+                                                    :model-value="section.description ?? ''"
+                                                    :placeholder="t('panel.menu_show.section_desc')"
+                                                    :empty-label="t('panel.menu_show.section_desc_add')"
+                                                    @save="saveSectionDescription(section.id, $event, section)"
+                                                />
+                                            </div>
                                         </div>
-                                        <div class="flex items-center gap-1">
+                                        <div class="flex items-center gap-1 ml-2 shrink-0">
                                             <!-- Move up/down buttons -->
                                             <Button
                                                 size="icon"
@@ -610,23 +705,6 @@ function submitImport() {
                                                     {{ t('panel.menu_show.add_dish') }}
                                                 </Link>
                                             </Button>
-                                            <!-- Edit section -->
-                                            <TooltipProvider>
-                                                <Tooltip>
-                                                    <TooltipTrigger as-child>
-                                                        <Button
-                                                            size="icon"
-                                                            variant="ghost"
-                                                            class="h-7 w-7"
-                                                            @click="startEditSection(section)"
-                                                            :aria-label="t('panel.menu_show.edit_section')"
-                                                        >
-                                                            <Pencil class="h-3 w-3" />
-                                                        </Button>
-                                                    </TooltipTrigger>
-                                                    <TooltipContent>{{ t('panel.menu_show.edit_section') }}</TooltipContent>
-                                                </Tooltip>
-                                            </TooltipProvider>
                                             <!-- Delete section -->
                                             <TooltipProvider>
                                                 <Tooltip>
@@ -644,18 +722,6 @@ function submitImport() {
                                                     <TooltipContent>{{ t('panel.menu_show.delete_section') }}</TooltipContent>
                                                 </Tooltip>
                                             </TooltipProvider>
-                                        </div>
-                                    </div>
-
-                                    <!-- Inline edit section form -->
-                                    <div v-else class="rounded-lg border border-primary/30 bg-primary/5 p-3 mb-2">
-                                        <div class="space-y-2">
-                                            <Input v-model="editSectionName" :placeholder="t('panel.menu_show.section_name_placeholder')" />
-                                            <Input v-model="editSectionDescription" :placeholder="t('panel.menu_show.section_desc_edit_placeholder')" />
-                                            <div class="flex gap-2">
-                                                <Button size="sm" @click="submitEditSection(section)">{{ t('common.save') }}</Button>
-                                                <Button size="sm" variant="outline" @click="cancelEditSection">{{ t('common.cancel') }}</Button>
-                                            </div>
                                         </div>
                                     </div>
 
@@ -687,7 +753,13 @@ function submitImport() {
 
                                             <div class="flex-1 min-w-0">
                                                 <div class="flex items-center gap-1.5 flex-wrap">
-                                                    <p class="text-sm font-medium">{{ product.name }}</p>
+                                                    <InlineEditableText
+                                                        :model-value="product.name"
+                                                        :placeholder="t('panel.menu_show.product_name')"
+                                                        @save="saveProductName(product.id, $event, product)"
+                                                    >
+                                                        <span class="text-sm font-medium">{{ product.name }}</span>
+                                                    </InlineEditableText>
                                                     <!-- Tags -->
                                                     <span
                                                         v-for="tag in (product.tags ?? [])"
@@ -696,12 +768,14 @@ function submitImport() {
                                                         class="text-base leading-none"
                                                     >{{ TAG_LABELS[tag] ?? tag }}</span>
                                                 </div>
-                                                <p
-                                                    v-if="product.description"
-                                                    class="mt-0.5 line-clamp-2 text-xs text-muted-foreground"
-                                                >
-                                                    {{ product.description }}
-                                                </p>
+                                                <div class="mt-0.5 text-xs text-muted-foreground">
+                                                    <InlineEditableText
+                                                        :model-value="product.description ?? ''"
+                                                        :placeholder="t('panel.menu_show.product_desc_placeholder')"
+                                                        :empty-label="t('panel.menu_show.product_desc_add')"
+                                                        @save="saveProductDescription(product.id, $event, product)"
+                                                    />
+                                                </div>
                                                 <!-- Allergens -->
                                                 <div v-if="product.allergens && product.allergens.length > 0" class="mt-1 flex gap-1 flex-wrap">
                                                     <AllergenIcon
@@ -715,29 +789,37 @@ function submitImport() {
                                             </div>
 
                                             <div class="flex items-center gap-1 shrink-0">
-                                                <span class="text-sm font-semibold text-primary mr-2">
-                                                    {{ formatPrice(product.price) }}
-                                                </span>
+                                                <!-- Precio editable inline -->
+                                                <InlineEditablePrice
+                                                    :model-value="product.price"
+                                                    @save="saveProductPrice(product.id, $event, product)"
+                                                />
+                                                <!-- Editar detalle completo (drawer) -->
+                                                <TooltipProvider>
+                                                    <Tooltip>
+                                                        <TooltipTrigger as-child>
+                                                            <Button
+                                                                size="icon"
+                                                                variant="ghost"
+                                                                class="h-7 w-7"
+                                                                @click="openProductDrawer(product)"
+                                                                :aria-label="t('panel.menu_show.edit_dish')"
+                                                            >
+                                                                <Pencil class="h-3 w-3" />
+                                                            </Button>
+                                                        </TooltipTrigger>
+                                                        <TooltipContent>{{ t('panel.menu_show.edit_dish_detail') }}</TooltipContent>
+                                                    </Tooltip>
+                                                </TooltipProvider>
                                                 <!-- Duplicate -->
                                                 <Button
                                                     size="icon"
                                                     variant="ghost"
                                                     class="h-7 w-7"
                                                     @click="duplicateProduct(product.id)"
-                                                    title="Duplicar plato"
+                                                    :title="t('panel.menu_show.duplicate_dish')"
                                                 >
                                                     <Copy class="h-3 w-3" />
-                                                </Button>
-                                                <!-- Edit -->
-                                                <Button
-                                                    size="icon"
-                                                    variant="ghost"
-                                                    class="h-7 w-7"
-                                                    as-child
-                                                >
-                                                    <Link :href="`/panel/products/${product.id}/edit`" :title="t('panel.menu_show.edit_dish')">
-                                                        <Pencil class="h-3 w-3" />
-                                                    </Link>
                                                 </Button>
                                                 <!-- Delete -->
                                                 <Button
@@ -787,30 +869,55 @@ function submitImport() {
 
                 <!-- Columna lateral: configuración y estado -->
                 <div class="space-y-6">
+                    <!-- Opciones de visualización con switches inline -->
                     <Card>
-                        <CardHeader>
-                            <CardTitle class="text-md font-semibold">
-                                {{ messages.menus.fields.settings || 'Configuración' }}
-                            </CardTitle>
+                        <CardHeader class="pb-2">
+                            <button
+                                type="button"
+                                class="flex w-full items-center justify-between text-left"
+                                @click="showVisibilityOptions = !showVisibilityOptions"
+                                :aria-expanded="showVisibilityOptions"
+                            >
+                                <CardTitle class="text-md font-semibold flex items-center gap-1.5">
+                                    <Settings class="h-4 w-4 text-primary" />
+                                    {{ messages.menus.fields.settings || 'Visualización' }}
+                                </CardTitle>
+                                <ChevronDown
+                                    class="h-4 w-4 text-muted-foreground transition-transform duration-200"
+                                    :class="showVisibilityOptions ? 'rotate-180' : ''"
+                                />
+                            </button>
                         </CardHeader>
-                        <CardContent class="space-y-3 text-sm">
-                            <div class="flex items-center justify-between border-b border-muted py-1.5">
-                                <span class="text-muted-foreground">{{ messages.menus.fields.show_prices }}</span>
-                                <Badge :variant="menu.show_prices ? 'default' : 'secondary'">
-                                    {{ menu.show_prices ? messages.menus.status.active : messages.menus.status.inactive }}
-                                </Badge>
-                            </div>
-                            <div class="flex items-center justify-between border-b border-muted py-1.5">
-                                <span class="text-muted-foreground">{{ messages.menus.fields.show_currency }}</span>
-                                <Badge :variant="menu.show_currency ? 'default' : 'secondary'">
-                                    {{ menu.show_currency ? messages.menus.status.active : messages.menus.status.inactive }}
-                                </Badge>
+                        <CardContent v-if="showVisibilityOptions" class="space-y-3 text-sm pt-0">
+                            <div class="flex items-center justify-between py-1.5">
+                                <label :for="`switch-show-prices`" class="cursor-pointer text-muted-foreground">
+                                    {{ messages.menus.fields.show_prices }}
+                                </label>
+                                <Switch
+                                    id="switch-show-prices"
+                                    :checked="localMenu.show_prices"
+                                    @update:checked="saveFlag('show_prices', $event)"
+                                />
                             </div>
                             <div class="flex items-center justify-between py-1.5">
-                                <span class="text-muted-foreground">{{ messages.menus.fields.show_calories }}</span>
-                                <Badge :variant="menu.show_calories ? 'default' : 'secondary'">
-                                    {{ menu.show_calories ? messages.menus.status.active : messages.menus.status.inactive }}
-                                </Badge>
+                                <label :for="`switch-show-currency`" class="cursor-pointer text-muted-foreground">
+                                    {{ messages.menus.fields.show_currency }}
+                                </label>
+                                <Switch
+                                    id="switch-show-currency"
+                                    :checked="localMenu.show_currency"
+                                    @update:checked="saveFlag('show_currency', $event)"
+                                />
+                            </div>
+                            <div class="flex items-center justify-between py-1.5">
+                                <label :for="`switch-show-calories`" class="cursor-pointer text-muted-foreground">
+                                    {{ messages.menus.fields.show_calories }}
+                                </label>
+                                <Switch
+                                    id="switch-show-calories"
+                                    :checked="localMenu.show_calories"
+                                    @update:checked="saveFlag('show_calories', $event)"
+                                />
                             </div>
                         </CardContent>
                     </Card>
@@ -903,35 +1010,44 @@ function submitImport() {
                         </CardContent>
                     </Card>
 
-                    <!-- Estado del menú -->
+                    <!-- Estado del menú (con switch) -->
                     <Card
-                        :class="
-                            menu.is_active
-                                ? 'border-green-200 bg-green-50/50'
-                                : 'border-red-200 bg-red-50/50'
-                        "
+                        :class="localMenu.is_active ? 'border-teal-200 bg-teal-50/50' : 'border-muted'"
                     >
-                        <CardContent class="flex items-center justify-center gap-2 py-4">
-                            <div
-                                :class="menu.is_active ? 'bg-green-500' : 'bg-red-500'"
-                                class="h-2 w-2 animate-pulse rounded-full"
+                        <CardContent class="flex items-center justify-between gap-2 py-3 px-4">
+                            <div class="flex items-center gap-2">
+                                <div
+                                    :class="localMenu.is_active ? 'bg-teal-500' : 'bg-muted-foreground/40'"
+                                    class="h-2 w-2 animate-pulse rounded-full"
+                                />
+                                <span
+                                    :class="localMenu.is_active ? 'text-teal-700' : 'text-muted-foreground'"
+                                    class="text-xs font-bold tracking-widest uppercase"
+                                >
+                                    {{ localMenu.is_active ? messages.menus.status.active : messages.menus.status.inactive }}
+                                </span>
+                            </div>
+                            <Switch
+                                :checked="localMenu.is_active"
+                                @update:checked="saveFlag('is_active', $event)"
+                                :aria-label="t('panel.menu_show.is_active_label')"
                             />
-                            <span
-                                :class="menu.is_active ? 'text-green-700' : 'text-red-700'"
-                                class="text-xs font-bold tracking-widest uppercase"
-                            >
-                                {{
-                                    menu.is_active
-                                        ? messages.menus.status.active
-                                        : messages.menus.status.inactive
-                                }}
-                            </span>
                         </CardContent>
                     </Card>
                 </div>
             </div>
         </div>
     </AppLayout>
+
+    <!-- ═══ PRODUCT DETAIL DRAWER ═══ -->
+    <ProductDetailDrawer
+        :open="drawerOpen"
+        :product="drawerProduct"
+        :menu-id="menu.id"
+        :allergens="allergens"
+        @update:open="drawerOpen = $event"
+        @saved="drawerOpen = false"
+    />
 
     <!-- ═══ IMPORT DIALOG ═══ -->
     <Dialog v-model:open="showImportDialog">

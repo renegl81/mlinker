@@ -94,14 +94,19 @@ Route::middleware([
                 Route::post('menus/{menu}/products', [ProductController::class, 'store'])->name('menus.products.store');
                 Route::get('products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
                 Route::put('products/{product}', [ProductController::class, 'update'])->name('products.update');
+                Route::patch('products/{product}', [ProductController::class, 'patch'])->name('products.patch');
                 Route::delete('products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
                 Route::post('products/{product}/duplicate', [ProductController::class, 'duplicate'])->name('products.duplicate');
 
                 // Secciones
                 Route::post('menus/{menu}/sections', [SectionController::class, 'store'])->name('menus.sections.store');
                 Route::put('sections/{section}', [SectionController::class, 'update'])->name('sections.update');
+                Route::patch('sections/{section}', [SectionController::class, 'patch'])->name('sections.patch');
                 Route::delete('sections/{section}', [SectionController::class, 'destroy'])->name('sections.destroy');
                 Route::post('menus/{menu}/sections/reorder', [SectionController::class, 'reorder'])->name('menus.sections.reorder');
+
+                // Patch inline de menú (edición sin navegación — campos parciales, responde JSON)
+                Route::patch('menus/{menu}/inline', [MenuController::class, 'patch'])->name('menus.patch');
 
                 // Duplicar menú
                 Route::post('menus/{menu}/duplicate', [MenuController::class, 'duplicate'])->name('menus.duplicate');
