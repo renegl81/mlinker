@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { usePage } from '@inertiajs/vue3';
 import { Check } from 'lucide-vue-next';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import StepBasics from './steps/StepBasics.vue';
 import StepProducts from './steps/StepProducts.vue';
@@ -114,6 +114,18 @@ if (props.step === 2 && props.menu) {
 if (props.step === 3) {
     currentSubStep.value = 'success';
 }
+
+// Inertia reuses the same component on navigation — sync sub-step when
+// the server-side step advances (e.g. after storeBasics → step=1).
+watch(
+    () => props.step,
+    (s) => {
+        currentSubStep.value = mapStep(s);
+        if (s === 1 && props.location) currentSubStep.value = 'template';
+        if (s === 2 && props.menu) currentSubStep.value = 'section';
+        if (s === 3) currentSubStep.value = 'success';
+    },
+);
 </script>
 
 <template>

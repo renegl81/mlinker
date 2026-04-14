@@ -176,7 +176,7 @@ class MenuController extends Controller
             'qrCodeImageUrl' => $this->resolveQrImageUrl($menu),
             'publicMenuUrl' => $publicMenuUrl,
             'locations' => Location::where('id', '!=', $menu->location_id)->get(['id', 'name']),
-            'templates' => Template::where('is_active', true)->get(['id', 'name']),
+            'templates' => Template::where('is_active', true)->get(['id', 'name', 'component_name']),
             'supportedLocales' => config('menulinker.supported_locales'),
             'allergens' => Allergen::orderBy('name')->get(['id', 'name', 'code']),
         ]);

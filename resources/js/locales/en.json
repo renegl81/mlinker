@@ -405,7 +405,8 @@
             "reset": "Reset",
             "reset_confirm": "Reset to template defaults? All customizations will be lost.",
             "upgrade_required": "Available on {plan} plan",
-            "preview": "Preview"
+            "preview": "Preview",
+            "template": "Template"
         },
         "location_show": {
             "preview": "Website preview",

@@ -405,7 +405,8 @@
             "reset": "Restablecer",
             "reset_confirm": "¿Restaurar los valores por defecto de la plantilla? Se perderán todas las personalizaciones.",
             "upgrade_required": "Disponible en plan {plan}",
-            "preview": "Vista previa"
+            "preview": "Vista previa",
+            "template": "Plantilla"
         },
         "location_show": {
             "preview": "Vista previa web",

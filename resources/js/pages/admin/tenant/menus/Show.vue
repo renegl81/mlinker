@@ -44,12 +44,14 @@ import { destroy as menuRouteDestroy } from '@/routes/tenant/menus';
 import type { BreadcrumbItem, Menu } from '@/types';
 import { Head, Link, usePage, router } from '@inertiajs/vue3';
 import { useConfirmDialog } from '@/composables/useConfirmDialog';
+import TemplatePreview from '@/components/template-bodies/TemplatePreview.vue';
 import {
     ArrowDown,
     ArrowLeft,
     ArrowRight,
     ArrowUp,
     BookOpen,
+    Check,
     ChevronDown,
     Copy,
     Download,
@@ -70,7 +72,7 @@ import {
     Upload,
     X,
 } from 'lucide-vue-next';
-import { computed, reactive, ref } from 'vue';
+import { computed, onMounted, onUnmounted, reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -116,6 +118,7 @@ interface SupportedLocale {
 interface Template {
     id: number;
     name: string;
+    component_name: string;
 }
 
 interface MenuWithSections extends Menu {
@@ -221,6 +224,56 @@ const iframeKey = ref(0);
 function refreshPreview() {
     iframeKey.value++;
 }
+
+// ── Template switcher (preview panel) ───────────────────────────────────────
+const activeTemplateId = ref<number>(props.menu.template_id);
+const isTemplatePatching = ref(false);
+const templateAnnouncement = ref('');
+
+const activeTemplateIndex = computed(() =>
+    props.templates.findIndex(t => t.id === activeTemplateId.value),
+);
+
+async function selectPreviewTemplate(template: Template) {
+    if (template.id === activeTemplateId.value || isTemplatePatching.value) return;
+    const previousId = activeTemplateId.value;
+    activeTemplateId.value = template.id;
+    isTemplatePatching.value = true;
+    templateAnnouncement.value = '';
+
+    router.patch(`/panel/menus/${props.menu.id}/patch`, { template_id: template.id }, {
+        preserveScroll: true,
+        preserveState: true,
+        onSuccess: () => {
+            refreshPreview();
+            templateAnnouncement.value = `Plantilla cambiada a ${template.name}`;
+        },
+        onError: () => {
+            activeTemplateId.value = previousId;
+        },
+        onFinish: () => {
+            isTemplatePatching.value = false;
+        },
+    });
+}
+
+function navigateTemplate(direction: 1 | -1) {
+    const idx = activeTemplateIndex.value;
+    const next = idx + direction;
+    if (next >= 0 && next < props.templates.length) {
+        selectPreviewTemplate(props.templates[next]);
+    }
+}
+
+function handlePreviewKeydown(e: KeyboardEvent) {
+    if (!showPreview.value) return;
+    if (e.key === 'ArrowLeft') { e.preventDefault(); navigateTemplate(-1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); navigateTemplate(1); }
+    if (e.key === 'Escape') { showPreview.value = false; }
+}
+
+onMounted(() => window.addEventListener('keydown', handlePreviewKeydown));
+onUnmounted(() => window.removeEventListener('keydown', handlePreviewKeydown));
 
 const breadcrumbItems: BreadcrumbItem[] = [
     {
@@ -461,18 +514,11 @@ function submitImport() {
 
                     <!-- More actions dropdown -->
                     <DropdownMenu>
-                        <TooltipProvider>
-                            <Tooltip>
-                                <TooltipTrigger as-child>
-                                    <DropdownMenuTrigger as-child>
-                                        <Button variant="outline" size="icon" :aria-label="t('panel.menu_show.more_actions')">
-                                            <MoreHorizontal class="h-4 w-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                </TooltipTrigger>
-                                <TooltipContent>{{ t('panel.menu_show.more_actions') }}</TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
+                        <DropdownMenuTrigger as-child>
+                            <Button variant="outline" size="icon" :aria-label="t('panel.menu_show.more_actions')" :title="t('panel.menu_show.more_actions')">
+                                <MoreHorizontal class="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" class="w-56">
                             <DropdownMenuItem as-child>
                                 <Link :href="`/panel/menus/${menu.id}/customize`" class="flex cursor-pointer items-center gap-2">
@@ -1169,6 +1215,44 @@ function submitImport() {
                             </button>
                         </div>
                     </div>
+
+                    <!-- Template strip -->
+                    <div
+                        v-if="templates.length > 0"
+                        class="preview-template-strip"
+                        role="radiogroup"
+                        aria-label="Plantilla"
+                    >
+                        <div class="preview-template-strip-inner">
+                            <button
+                                v-for="tpl in templates"
+                                :key="tpl.id"
+                                type="button"
+                                role="radio"
+                                :aria-checked="activeTemplateId === tpl.id"
+                                :tabindex="activeTemplateId === tpl.id ? 0 : -1"
+                                class="preview-tpl-thumb"
+                                :class="{ 'is-active': activeTemplateId === tpl.id }"
+                                :title="tpl.name"
+                                @click="selectPreviewTemplate(tpl)"
+                            >
+                                <!-- Live mini preview -->
+                                <div class="preview-tpl-thumb-frame" aria-hidden="true">
+                                    <div class="preview-tpl-thumb-scale">
+                                        <TemplatePreview :component-name="tpl.component_name" />
+                                    </div>
+                                </div>
+                                <span class="preview-tpl-name">{{ tpl.name }}</span>
+                                <span v-if="activeTemplateId === tpl.id" class="preview-tpl-check">
+                                    <Check class="h-2.5 w-2.5 text-white" />
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Aria live region for template change announcements -->
+                    <div aria-live="polite" aria-atomic="true" class="sr-only">{{ templateAnnouncement }}</div>
+
                     <!-- Iframe container -->
                     <div class="preview-body">
                         <div
@@ -1396,5 +1480,98 @@ function submitImport() {
         box-shadow: none;
         height: calc(100vh - 80px);
     }
+}
+
+/* ── Template strip ── */
+.preview-template-strip {
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-card);
+    padding: 0.5rem 0.75rem;
+}
+
+.preview-template-strip-inner {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    padding-bottom: 2px;
+}
+
+.preview-tpl-thumb {
+    position: relative;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 2px;
+    border-radius: 8px;
+    transition: all 150ms;
+    outline: none;
+}
+
+.preview-tpl-thumb:focus-visible {
+    box-shadow: 0 0 0 2px var(--color-ring);
+}
+
+.preview-tpl-thumb-frame {
+    width: 56px;
+    height: 72px;
+    overflow: hidden;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    transition: border-color 150ms;
+    background: #f5f5f5;
+}
+
+.preview-tpl-thumb.is-active .preview-tpl-thumb-frame {
+    border-color: oklch(0.6 0.14 185);
+    box-shadow: 0 0 0 1px oklch(0.6 0.14 185 / 0.4);
+}
+
+.preview-tpl-thumb:not(.is-active):hover .preview-tpl-thumb-frame {
+    border-color: var(--color-border);
+}
+
+/* Scale the 600×800 body down to fit the 56×72 thumbnail */
+.preview-tpl-thumb-scale {
+    width: 600px;
+    height: 800px;
+    transform: scale(0.09);
+    transform-origin: top left;
+    pointer-events: none;
+}
+
+.preview-tpl-name {
+    font-size: 9px;
+    font-weight: 500;
+    color: var(--color-muted-foreground);
+    max-width: 56px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+.preview-tpl-thumb.is-active .preview-tpl-name {
+    color: oklch(0.6 0.14 185);
+}
+
+.preview-tpl-check {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: oklch(0.6 0.14 185);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 </style>

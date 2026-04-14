@@ -12,6 +12,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { FONT_PAIRINGS, buildGoogleFontsUrl } from '@/config/fontPairings';
+import TemplatePreview from '@/components/template-bodies/TemplatePreview.vue';
+import type { MenuCustomization } from '@/components/template-bodies/TemplatePreview.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
@@ -22,6 +24,7 @@ import {
     ChevronRight,
     Eye,
     ExternalLink,
+    Layout,
     Lock,
     Monitor,
     Palette,
@@ -35,6 +38,12 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 
+interface TemplateOption {
+    id: number;
+    name: string;
+    component_name: string;
+}
+
 interface Props {
     menu: {
         id: number;
@@ -44,6 +53,7 @@ interface Props {
     };
     publicMenuUrl: string | null;
     customization: Record<string, any>;
+    templates: TemplateOption[];
 }
 
 const props = defineProps<Props>();
@@ -100,8 +110,68 @@ const sections = ref({
     numbering: props.customization?.sections?.numbering ?? 'none',
 });
 
+// ── Template selection ──
+const activeTemplateId = ref<number>(props.menu.template_id);
+const isTemplatePatching = ref(false);
+
+const currentComponentName = computed<string>(() => {
+    const tpl = props.templates.find(t => t.id === activeTemplateId.value);
+    return tpl?.component_name ?? props.templates[0]?.component_name ?? 'Basic';
+});
+
+const currentCustomization = computed<MenuCustomization>(() => ({
+    colors: {
+        accent: colors.value.accent || undefined,
+        bg: colors.value.bg || undefined,
+        ink: colors.value.ink || undefined,
+        ink_soft: colors.value.ink_soft || undefined,
+        rule: colors.value.rule || undefined,
+    },
+    fonts: {
+        display: fonts.value.display || undefined,
+        body: fonts.value.body || undefined,
+    },
+    layout: {
+        show_allergens: layout.value.show_allergens,
+        show_ingredients: layout.value.show_ingredients,
+        show_product_images: layout.value.show_product_images,
+        show_section_descriptions: layout.value.show_section_descriptions,
+        image_position: layout.value.image_position,
+        price_alignment: layout.value.price_alignment,
+    },
+    spacing: { density: spacing.value.density },
+    header: {
+        show_restaurant_name: header.value.show_restaurant_name,
+        tagline: header.value.tagline || undefined,
+        name_display_style: header.value.name_display_style,
+    },
+    sections: {
+        divider_style: sections.value.divider_style,
+        title_alignment: sections.value.title_alignment,
+        numbering: sections.value.numbering,
+    },
+}));
+
+function selectTemplate(tpl: TemplateOption) {
+    if (tpl.id === activeTemplateId.value || isTemplatePatching.value) return;
+    const previousId = activeTemplateId.value;
+    activeTemplateId.value = tpl.id;
+    isTemplatePatching.value = true;
+
+    router.patch(`/panel/menus/${props.menu.id}/patch`, { template_id: tpl.id }, {
+        preserveScroll: true,
+        preserveState: true,
+        onError: () => {
+            activeTemplateId.value = previousId;
+        },
+        onFinish: () => {
+            isTemplatePatching.value = false;
+        },
+    });
+}
+
 // ── Collapsible sections ──
-const openSections = ref<Set<string>>(new Set(['colors']));
+const openSections = ref<Set<string>>(new Set(['template', 'colors']));
 function toggleSection(id: string) {
     if (openSections.value.has(id)) {
         openSections.value.delete(id);
@@ -289,6 +359,62 @@ function preloadFont(pairing: typeof FONT_PAIRINGS[0]) {
                             <Check class="h-3 w-3" />
                             {{ t('panel.customizer.saved') }}
                         </span>
+                    </div>
+                </div>
+
+                <Separator />
+
+                <!-- ── TEMPLATE SECTION ── -->
+                <div class="pt-2" v-if="templates.length > 0">
+                    <button
+                        type="button"
+                        class="flex w-full items-center justify-between py-2 text-sm font-medium text-foreground hover:text-foreground transition-colors"
+                        @click="toggleSection('template')"
+                    >
+                        <span class="flex items-center gap-2">
+                            <Layout class="h-4 w-4" />
+                            {{ t('panel.customizer.template') }}
+                        </span>
+                        <ChevronDown v-if="isSectionOpen('template')" class="h-4 w-4" />
+                        <ChevronRight v-else class="h-4 w-4" />
+                    </button>
+
+                    <div v-if="isSectionOpen('template')" class="pb-3">
+                        <div
+                            class="grid grid-cols-2 gap-2"
+                            role="radiogroup"
+                            :aria-label="t('panel.customizer.template')"
+                        >
+                            <button
+                                v-for="tpl in templates"
+                                :key="tpl.id"
+                                type="button"
+                                role="radio"
+                                :aria-checked="activeTemplateId === tpl.id"
+                                class="relative flex flex-col overflow-hidden rounded-lg border-2 text-left transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                                :class="activeTemplateId === tpl.id
+                                    ? 'border-primary bg-primary/5 shadow-sm'
+                                    : 'border-input hover:border-primary/40'"
+                                @click="selectTemplate(tpl)"
+                            >
+                                <!-- Live mini preview -->
+                                <div class="relative h-20 w-full overflow-hidden bg-muted/50" aria-hidden="true">
+                                    <div
+                                        class="pointer-events-none absolute left-0 top-0"
+                                        style="width: 600px; height: 800px; transform: scale(0.165); transform-origin: top left;"
+                                    >
+                                        <TemplatePreview :component-name="tpl.component_name" />
+                                    </div>
+                                </div>
+                                <div class="px-2 py-1.5 flex items-center justify-between gap-1">
+                                    <span class="text-[11px] font-medium leading-tight truncate">{{ tpl.name }}</span>
+                                    <Check
+                                        v-if="activeTemplateId === tpl.id"
+                                        class="h-3 w-3 flex-shrink-0 text-primary"
+                                    />
+                                </div>
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -707,36 +833,26 @@ function preloadFont(pairing: typeof FONT_PAIRINGS[0]) {
                                 <Monitor class="h-3.5 w-3.5" />
                             </button>
                         </div>
-                        <button type="button" class="rounded-md p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-all" @click="refreshPreview">
-                            <RefreshCw class="h-3.5 w-3.5" />
-                        </button>
-                        <a v-if="publicMenuUrl" :href="publicMenuUrl" target="_blank" rel="noopener" class="rounded-md p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-all">
+                        <a v-if="publicMenuUrl" :href="publicMenuUrl" target="_blank" rel="noopener" class="rounded-md p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-all" :title="t('panel.menu_show.open_new_tab')">
                             <ExternalLink class="h-3.5 w-3.5" />
                         </a>
                     </div>
                 </div>
 
-                <!-- Iframe -->
-                <div class="flex-1 flex items-start justify-center overflow-hidden bg-muted/50 p-6">
+                <!-- Live preview (replaces iframe) -->
+                <div class="flex-1 flex items-start justify-center overflow-auto bg-muted/50 p-6">
                     <div
                         class="transition-all duration-400 overflow-hidden bg-white flex-shrink-0"
                         :class="{
-                            'w-[375px] max-h-[812px] rounded-[2rem] shadow-[0_0_0_8px_oklch(0.25_0.01_260),0_20px_60px_-20px_oklch(0_0_0/0.35)]': previewMode === 'mobile',
+                            'w-[375px] rounded-[2rem] shadow-[0_0_0_8px_oklch(0.25_0.01_260),0_20px_60px_-20px_oklch(0_0_0/0.35)]': previewMode === 'mobile',
                             'w-full rounded-xl shadow-[0_8px_30px_-12px_oklch(0_0_0/0.2)]': previewMode === 'desktop',
                         }"
-                        :style="{ height: 'calc(100vh - 8rem)' }"
                     >
-                        <iframe
-                            v-if="publicMenuUrl"
-                            :key="iframeKey"
-                            :src="publicMenuUrl"
-                            :title="menu.name"
-                            class="h-full w-full border-none block"
-                            :class="previewMode === 'mobile' ? 'rounded-[2rem]' : 'rounded-xl'"
+                        <TemplatePreview
+                            :component-name="currentComponentName"
+                            :customization="currentCustomization"
+                            :interactive="false"
                         />
-                        <div v-else class="flex h-full items-center justify-center text-sm text-muted-foreground">
-                            {{ t('panel.customizer.preview') }}
-                        </div>
                     </div>
                 </div>
             </div>

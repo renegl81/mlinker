@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Menu;
 use App\Models\Plan;
 use App\Models\Subscription;
+use App\Models\Template;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -30,6 +31,7 @@ class MenuCustomizationController extends Controller
             'menu' => $menu,
             'publicMenuUrl' => $publicMenuUrl,
             'customization' => $menu->customization ?? [],
+            'templates' => Template::where('is_active', true)->get(['id', 'name', 'component_name']),
         ]);
     }
 
