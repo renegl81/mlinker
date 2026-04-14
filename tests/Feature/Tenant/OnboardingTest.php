@@ -30,7 +30,7 @@ class OnboardingTest extends TestCase
 
         Event::fake([TenantCreated::class, TenantDeleted::class]);
 
-        $this->tenant = Tenant::create(['id' => 'test-tenant']);
+        $this->tenant = Tenant::create(['id' => 'test-tenant', 'name' => 'Cafetería Test']);
         $this->tenant->domains()->create(['domain' => 'test.localhost']);
 
         tenancy()->initialize($this->tenant);
@@ -85,7 +85,7 @@ class OnboardingTest extends TestCase
     }
 
     #[Test]
-    public function onboarding_wizard_shows_current_step(): void
+    public function onboarding_wizard_shows_step_0_with_tenant_name_prefilled(): void
     {
         $response = $this->actingAs($this->user)
             ->get($this->tenantUrl('tenant.onboarding.show'));
@@ -94,16 +94,15 @@ class OnboardingTest extends TestCase
         $response->assertInertia(fn ($page) => $page
             ->component('admin/tenant/onboarding/Wizard')
             ->where('step', 0)
+            ->where('tenantName', 'Cafetería Test')
         );
     }
 
     #[Test]
-    public function store_location_creates_location_and_advances_to_step_2(): void
+    public function store_basics_creates_location_using_tenant_name_and_advances_to_step_2(): void
     {
         $response = $this->actingAs($this->user)
-            ->post($this->tenantUrl('tenant.onboarding.location'), [
-                'name' => 'Cafetería Test',
-                'address' => 'Calle Mayor, 1',
+            ->post($this->tenantUrl('tenant.onboarding.basics'), [
                 'city' => 'Madrid',
                 'phone' => '+34 600 000 000',
             ]);
@@ -121,54 +120,71 @@ class OnboardingTest extends TestCase
     }
 
     #[Test]
-    public function store_location_requires_name(): void
+    public function store_basics_allows_empty_city_and_phone(): void
     {
         $response = $this->actingAs($this->user)
-            ->post($this->tenantUrl('tenant.onboarding.location'), [
-                'name' => '',
-            ]);
+            ->post($this->tenantUrl('tenant.onboarding.basics'), []);
 
-        $response->assertSessionHasErrors('name');
+        $response->assertRedirect($this->tenantUrl('tenant.onboarding.show'));
+
+        $this->assertDatabaseHas('locations', [
+            'name' => 'Cafetería Test',
+            'tenant_id' => 'test-tenant',
+        ]);
     }
 
     #[Test]
-    public function store_menu_creates_menu_and_advances_to_step_3(): void
+    public function store_menu_requires_template_id_and_location_id(): void
+    {
+        $response = $this->actingAs($this->user)
+            ->post($this->tenantUrl('tenant.onboarding.menu'), [
+                'template_id' => '',
+                'location_id' => 999,
+            ]);
+
+        $response->assertSessionHasErrors(['template_id', 'location_id']);
+    }
+
+    #[Test]
+    public function store_menu_with_invalid_template_id_gives_422(): void
     {
         $location = Location::factory()->create(['tenant_id' => 'test-tenant']);
-        Template::factory()->create(['component_name' => 'Basic', 'is_active' => true]);
+
+        $response = $this->actingAs($this->user)
+            ->post($this->tenantUrl('tenant.onboarding.menu'), [
+                'template_id' => 99999,
+                'location_id' => $location->id,
+            ]);
+
+        $response->assertSessionHasErrors('template_id');
+    }
+
+    #[Test]
+    public function store_menu_creates_menu_with_template_and_tenant_name_and_advances_to_step_3(): void
+    {
+        $location = Location::factory()->create(['tenant_id' => 'test-tenant']);
+        $template = Template::factory()->create(['component_name' => 'Basic', 'is_active' => true]);
 
         $this->tenant->onboarding_step = 2;
         $this->tenant->save();
 
         $response = $this->actingAs($this->user)
             ->post($this->tenantUrl('tenant.onboarding.menu'), [
-                'name' => 'Carta de Verano',
-                'description' => 'Menú especial de verano',
+                'template_id' => $template->id,
                 'location_id' => $location->id,
             ]);
 
         $response->assertRedirect($this->tenantUrl('tenant.onboarding.show'));
 
         $this->assertDatabaseHas('menus', [
-            'name' => 'Carta de Verano',
+            'name' => 'Cafetería Test',
             'location_id' => $location->id,
+            'template_id' => $template->id,
             'tenant_id' => 'test-tenant',
         ]);
 
         $this->tenant->refresh();
         $this->assertEquals(3, $this->tenant->onboarding_step);
-    }
-
-    #[Test]
-    public function store_menu_requires_name_and_location(): void
-    {
-        $response = $this->actingAs($this->user)
-            ->post($this->tenantUrl('tenant.onboarding.menu'), [
-                'name' => '',
-                'location_id' => 999,
-            ]);
-
-        $response->assertSessionHasErrors(['name', 'location_id']);
     }
 
     #[Test]
@@ -231,7 +247,6 @@ class OnboardingTest extends TestCase
                 'menu_id' => $menu->id,
             ]);
 
-        // Redirects to location show (if location exists) or dashboard, with welcome_onboarding
         $response->assertRedirect();
         $response->assertSessionHas('welcome_onboarding');
 

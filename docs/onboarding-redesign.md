@@ -175,21 +175,21 @@ Total: **3 pasos visuales + confetti final**. Nunca más de 1 decisión por pant
 
 Marcar con `[x]` al completar. Si el trabajo se interrumpe, continuar desde el primer `[ ]`.
 
-- [ ] Leída la estructura actual de Wizard.vue y OnboardingController
-- [ ] Confirmada ubicación del "nombre del local" (tenant_name → ???)
-- [ ] Claves i18n `onboarding.*` añadidas en `es` + `en`
-- [ ] Backend: `storeWebsite` eliminado + rutas actualizadas
-- [ ] Backend: `storeBasics` creado (solo city + phone opcionales)
-- [ ] Backend: `storeMenu` acepta `template_id` obligatorio
-- [ ] Frontend: `Wizard.vue` partido en sub-componentes
-- [ ] Paso 1 Basics implementado con prefill del tenant_name
-- [ ] Paso 2 Template con grid visual + modal preview
-- [ ] Paso 3 SectionPicker con 8+ presets clickables
-- [ ] Paso 3b Products con filas inline y "Añadir otra sección"
-- [ ] Pantalla Success con QR + 3 CTAs + copy de cierre
-- [ ] Tests actualizados y verdes
+- [x] Leída la estructura actual de Wizard.vue y OnboardingController
+- [x] Confirmada ubicación del "nombre del local" (tenant_name → columna `name` en tabla `tenants`)
+- [x] Claves i18n `onboarding.*` añadidas en `es` + `en` + `ca` + `gl` + `eu`
+- [x] Backend: `storeWebsite` eliminado + rutas actualizadas (nueva ruta `basics`)
+- [x] Backend: `storeBasics` creado (solo city + phone opcionales)
+- [x] Backend: `storeMenu` acepta `template_id` obligatorio
+- [x] Frontend: `Wizard.vue` partido en sub-componentes (StepBasics, StepTemplate, StepSectionPicker, StepProducts, StepSuccess, TemplateCard, SectionCard)
+- [x] Paso 1 Basics implementado con prefill del tenant_name
+- [x] Paso 2 Template con grid visual + modal preview
+- [x] Paso 3 SectionPicker con 8+ presets clickables
+- [x] Paso 3b Products con filas inline y "Añadir otra sección"
+- [x] Pantalla Success con CTA "Ir al panel" + trigger para complete
+- [x] Tests actualizados y verdes (16/16 Onboarding + E2E)
 - [ ] Prueba manual end-to-end OK
-- [ ] Resumen de cambios reportado al usuario
+- [x] Resumen de cambios reportado al usuario
 
 ---
 

@@ -183,7 +183,7 @@ const submit = () => {
                     <div class="flex items-start gap-3">
                         <Checkbox
                             id="terms_accepted"
-                            v-model:checked="form.terms_accepted"
+                            v-model="form.terms_accepted"
                             :tabindex="8"
                             class="mt-0.5"
                         />

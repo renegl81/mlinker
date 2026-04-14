@@ -44,13 +44,13 @@ class OnboardingController extends Controller
             ->get(['id', 'name', 'component_name', 'description', 'preview_image_url', 'config']);
 
         return Inertia::render('admin/tenant/onboarding/Wizard', [
-            'step'       => $step,
+            'step' => $step,
             'tenantName' => $tenant->name ?? ucfirst($tenant->id),
-            'userName'   => auth()->user()?->name ?? '',
-            'location'   => $location,
-            'menu'       => $menu,
-            'products'   => $products,
-            'templates'  => $templates,
+            'userName' => auth()->user()?->name ?? '',
+            'location' => $location,
+            'menu' => $menu,
+            'products' => $products,
+            'templates' => $templates,
         ]);
     }
 
@@ -62,10 +62,10 @@ class OnboardingController extends Controller
     protected function mapLegacyStep(int $raw): int
     {
         return match ($raw) {
-            0       => 0,   // website → basics
-            1       => 0,   // location → basics (redo if not created yet)
-            2       => 1,   // menu → template
-            3       => 2,   // products → products
+            0 => 0,   // website → basics
+            1 => 0,   // location → basics (redo if not created yet)
+            2 => 1,   // menu → template
+            3 => 2,   // products → products
             default => 3,   // 4+ → complete
         };
     }
@@ -76,7 +76,7 @@ class OnboardingController extends Controller
     public function storeBasics(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'city'  => ['nullable', 'string', 'max:255'],
+            'city' => ['nullable', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:50'],
         ]);
 
@@ -92,28 +92,28 @@ class OnboardingController extends Controller
         // Create only if not yet created
         if (! Location::where('tenant_id', $tenant->id)->exists()) {
             Location::create([
-                'name'        => $locationName,
-                'address'     => '',
-                'city'        => $data['city'] ?? '',
-                'phone'       => $data['phone'] ?? null,
-                'province'    => '',
+                'name' => $locationName,
+                'address' => '',
+                'city' => $data['city'] ?? '',
+                'phone' => $data['phone'] ?? null,
+                'province' => '',
                 'postal_code' => '',
-                'country_id'  => $country->id,
-                'user_id'     => auth()->id(),
-                'tenant_id'   => $tenant->id,
-                'slug'        => $slug,
-                'url'         => $slug,
-                'currency'    => 'EUR',
-                'time_zone'   => 'Europe/Madrid',
+                'country_id' => $country->id,
+                'user_id' => auth()->id(),
+                'tenant_id' => $tenant->id,
+                'slug' => $slug,
+                'url' => $slug,
+                'currency' => 'EUR',
+                'time_zone' => 'Europe/Madrid',
                 'time_format' => 'H:i',
-                'lang'        => 'es',
-                'languages'   => ['es'],
+                'lang' => 'es',
+                'languages' => ['es'],
                 'social_medias' => [],
             ]);
         } else {
             // Update city/phone on existing location
             $location = Location::where('tenant_id', $tenant->id)->first();
-            $location->city  = $data['city']  ?? $location->city;
+            $location->city = $data['city'] ?? $location->city;
             $location->phone = $data['phone'] ?? $location->phone;
             $location->save();
         }
@@ -147,13 +147,13 @@ class OnboardingController extends Controller
         // Create menu only if not yet created for this location
         if (! Menu::where('location_id', $data['location_id'])->exists()) {
             Menu::create([
-                'name'          => $menuName,
-                'description'   => null,
-                'location_id'   => (int) $data['location_id'],
-                'template_id'   => (int) $data['template_id'],
-                'is_active'     => true,
-                'lang'          => config('menulinker.source_locale', 'es'),
-                'show_prices'   => true,
+                'name' => $menuName,
+                'description' => null,
+                'location_id' => (int) $data['location_id'],
+                'template_id' => (int) $data['template_id'],
+                'is_active' => true,
+                'lang' => config('menulinker.source_locale', 'es'),
+                'show_prices' => true,
                 'show_currency' => false,
                 'show_calories' => false,
             ]);
@@ -176,11 +176,11 @@ class OnboardingController extends Controller
     public function storeProducts(Request $request): RedirectResponse
     {
         $request->validate([
-            'products'               => ['required', 'array', 'min:1'],
-            'products.*.name'        => ['required', 'string'],
-            'products.*.price'       => ['required', 'numeric', 'min:0'],
+            'products' => ['required', 'array', 'min:1'],
+            'products.*.name' => ['required', 'string'],
+            'products.*.price' => ['required', 'numeric', 'min:0'],
             'products.*.section_name' => ['required', 'string'],
-            'menu_id'                => ['required', 'integer', 'exists:menus,id'],
+            'menu_id' => ['required', 'integer', 'exists:menus,id'],
         ]);
 
         $tenant = tenant();
@@ -196,15 +196,15 @@ class OnboardingController extends Controller
 
             foreach ($items as $item) {
                 $product = Product::create([
-                    'name'      => $item['name'],
-                    'price'     => $item['price'],
+                    'name' => $item['name'],
+                    'price' => $item['price'],
                     'tenant_id' => $tenant->id,
                 ]);
 
                 DB::table('product_section')->insert([
                     'product_id' => $product->id,
                     'section_id' => $section->id,
-                    'tenant_id'  => $tenant->id,
+                    'tenant_id' => $tenant->id,
                 ]);
             }
         }
@@ -244,7 +244,7 @@ class OnboardingController extends Controller
             } catch (\Throwable $e) {
                 Log::error('WelcomeMail failed', [
                     'user_id' => $user->id,
-                    'error'   => $e->getMessage(),
+                    'error' => $e->getMessage(),
                 ]);
             }
         }
