@@ -1,7 +1,7 @@
 <x-mail::message>
 # Problema con tu pago
 
-Hemos detectado un problema al procesar el pago de tu suscripcion en MenuLinker.
+Hemos detectado un problema al procesar el pago de tu suscripcion en {{ config('app.name') }}.
 
 Por favor, revisa tu metodo de pago para evitar interrupciones en el servicio.
 
@@ -12,5 +12,5 @@ Actualizar metodo de pago
 Si crees que es un error o necesitas ayuda, contacta con nosotros.
 
 Un saludo,<br>
-El equipo de **MenuLinker**
+El equipo de **{{ config('app.name') }}**
 </x-mail::message>

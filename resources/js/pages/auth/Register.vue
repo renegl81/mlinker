@@ -2,10 +2,11 @@
 import InputError from '@/components/InputError.vue';
 import TextLink from '@/components/TextLink.vue';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Input, PasswordInput } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthBase from '@/layouts/AuthLayout.vue';
-import { login } from '@/routes';
+import { login, privacy, terms } from '@/routes';
 import { Head, router, usePage } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
 import { computed, ref, watch } from 'vue';
@@ -25,6 +26,7 @@ const form = ref({
     password: '',
     password_confirmation: '',
     locale: i18nLocale.value,
+    terms_accepted: false,
 });
 
 const processing = ref(false);
@@ -149,10 +151,9 @@ const submit = () => {
 
                 <div class="grid gap-2">
                     <Label for="password">{{ t('password') }}</Label>
-                    <Input
+                    <PasswordInput
                         id="password"
                         v-model="form.password"
-                        type="password"
                         required
                         :tabindex="6"
                         autocomplete="new-password"
@@ -166,10 +167,9 @@ const submit = () => {
                     <Label for="password_confirmation">{{
                         t('password_confirmation')
                     }}</Label>
-                    <Input
+                    <PasswordInput
                         id="password_confirmation"
                         v-model="form.password_confirmation"
-                        type="password"
                         required
                         :tabindex="7"
                         autocomplete="new-password"
@@ -179,11 +179,29 @@ const submit = () => {
                     <InputError :message="errors.password_confirmation" />
                 </div>
 
+                <div class="flex flex-col gap-2">
+                    <div class="flex items-start gap-3">
+                        <Checkbox
+                            id="terms_accepted"
+                            v-model:checked="form.terms_accepted"
+                            :tabindex="8"
+                            class="mt-0.5"
+                        />
+                        <Label for="terms_accepted" class="cursor-pointer text-sm font-normal leading-snug text-muted-foreground">
+                            {{ t('terms_accept_prefix') }}
+                            <a :href="terms().url" target="_blank" rel="noopener noreferrer" class="text-teal-600 underline underline-offset-2 hover:text-teal-700">{{ t('terms_accept_terms') }}</a>
+                            {{ t('terms_accept_and') }}
+                            <a :href="privacy().url" target="_blank" rel="noopener noreferrer" class="text-teal-600 underline underline-offset-2 hover:text-teal-700">{{ t('terms_accept_privacy') }}</a>
+                        </Label>
+                    </div>
+                    <InputError :message="errors.terms_accepted" />
+                </div>
+
                 <Button
                     type="submit"
                     class="mt-2 h-11 w-full rounded-full bg-teal-500 text-white shadow-md shadow-teal-500/20 hover:bg-teal-600"
-                    :tabindex="8"
-                    :disabled="processing"
+                    :tabindex="9"
+                    :disabled="processing || !form.terms_accepted"
                     data-test="register-user-button"
                 >
                     <LoaderCircle
@@ -199,7 +217,7 @@ const submit = () => {
                 <TextLink
                     :href="login()"
                     class="underline underline-offset-4"
-                    :tabindex="9"
+                    :tabindex="10"
                     >{{ t('login_link') }}</TextLink
                 >
             </div>

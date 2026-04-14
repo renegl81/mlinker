@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import LockedMetricCard from '@/components/dashboard/LockedMetricCard.vue';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { dashboard } from '@/routes/tenant';
@@ -463,72 +464,44 @@ const weeklyChangeAbs = computed(() => Math.abs(props.weekly_comparison?.change_
                     </Card>
 
                     <!-- Card bloqueada: menú popular -->
-                    <Card class="relative overflow-hidden">
-                        <CardHeader class="flex flex-row items-center justify-between pb-2">
-                            <CardTitle class="text-sm font-medium text-muted-foreground">
-                                {{ t('panel.dashboard.top_menu') }}
-                            </CardTitle>
-                            <Star class="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div class="text-2xl font-bold blur-sm select-none">Carta de verano</div>
-                            <p class="mt-1 text-xs text-muted-foreground blur-sm select-none">248 visitas</p>
-                        </CardContent>
-                        <div class="absolute inset-0 flex flex-col items-center justify-center bg-background/70 backdrop-blur-[2px]">
-                            <Lock class="mb-1 h-5 w-5 text-muted-foreground" />
-                        </div>
-                    </Card>
+                    <LockedMetricCard
+                        :title="t('panel.dashboard.top_menu')"
+                        :icon="Star"
+                        :description="t('panel.dashboard.locked.top_menu_desc')"
+                        preview-value="Carta de verano"
+                        preview-caption="248 visitas"
+                        badge-variant="pro"
+                    />
 
                     <!-- Card bloqueada: fuente -->
-                    <Card class="relative overflow-hidden">
-                        <CardHeader class="flex flex-row items-center justify-between pb-2">
-                            <CardTitle class="text-sm font-medium text-muted-foreground">
-                                {{ t('panel.dashboard.main_source') }}
-                            </CardTitle>
-                            <TrendingUp class="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div class="text-2xl font-bold blur-sm select-none">QR</div>
-                            <p class="mt-1 text-xs text-muted-foreground blur-sm select-none">70% del tráfico</p>
-                        </CardContent>
-                        <div class="absolute inset-0 flex flex-col items-center justify-center bg-background/70 backdrop-blur-[2px]">
-                            <Lock class="mb-1 h-5 w-5 text-muted-foreground" />
-                        </div>
-                    </Card>
+                    <LockedMetricCard
+                        :title="t('panel.dashboard.main_source')"
+                        :icon="TrendingUp"
+                        :description="t('panel.dashboard.locked.main_source_desc')"
+                        preview-value="QR"
+                        preview-caption="70% del tráfico"
+                        badge-variant="pro"
+                    />
 
                     <!-- Card bloqueada: visitas web -->
-                    <Card class="relative overflow-hidden">
-                        <CardHeader class="flex flex-row items-center justify-between pb-2">
-                            <CardTitle class="text-sm font-medium text-muted-foreground">
-                                {{ t('panel.dashboard.home_visits') }}
-                            </CardTitle>
-                            <Home class="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div class="text-4xl font-bold blur-sm select-none">124</div>
-                            <p class="mt-1 text-xs text-muted-foreground blur-sm select-none">visitas</p>
-                        </CardContent>
-                        <div class="absolute inset-0 flex flex-col items-center justify-center bg-background/70 backdrop-blur-[2px]">
-                            <Lock class="mb-1 h-5 w-5 text-muted-foreground" />
-                        </div>
-                    </Card>
+                    <LockedMetricCard
+                        :title="t('panel.dashboard.home_visits')"
+                        :icon="Home"
+                        :description="t('panel.dashboard.locked.home_visits_desc')"
+                        preview-value="124"
+                        preview-caption="visitas"
+                        badge-variant="pro"
+                    />
 
                     <!-- Card bloqueada: descargas QR -->
-                    <Card class="relative overflow-hidden">
-                        <CardHeader class="flex flex-row items-center justify-between pb-2">
-                            <CardTitle class="text-sm font-medium text-muted-foreground">
-                                {{ t('panel.dashboard.qr_downloads') }}
-                            </CardTitle>
-                            <QrCode class="h-4 w-4 text-muted-foreground" />
-                        </CardHeader>
-                        <CardContent>
-                            <div class="text-4xl font-bold blur-sm select-none">37</div>
-                            <p class="mt-1 text-xs text-muted-foreground blur-sm select-none">descargas</p>
-                        </CardContent>
-                        <div class="absolute inset-0 flex flex-col items-center justify-center bg-background/70 backdrop-blur-[2px]">
-                            <Lock class="mb-1 h-5 w-5 text-muted-foreground" />
-                        </div>
-                    </Card>
+                    <LockedMetricCard
+                        :title="t('panel.dashboard.qr_downloads')"
+                        :icon="QrCode"
+                        :description="t('panel.dashboard.locked.qr_downloads_desc')"
+                        preview-value="37"
+                        preview-caption="descargas"
+                        badge-variant="pro"
+                    />
                 </div>
 
                 <!-- Gráfico + resto bloqueado -->

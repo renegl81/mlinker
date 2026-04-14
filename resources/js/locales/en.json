@@ -70,6 +70,10 @@
         "activation_sent": {
             "title": "Check your inbox",
             "description": "We've sent you an activation link"
+        },
+        "common": {
+            "show_password": "Show password",
+            "hide_password": "Hide password"
         }
     },
     "catalog": {
@@ -320,7 +324,8 @@
             "clone_to_location": "Clone to another location",
             "clone_to_location_desc": "A complete copy of this menu (with all sections, products, allergens, and ingredients) will be created in the selected location.",
             "select_location": "Select target location",
-            "clone_confirm": "Clone menu"
+            "clone_confirm": "Clone menu",
+            "more_actions": "More actions"
         },
         "customizer": {
             "title": "Customize menu",
@@ -482,7 +487,8 @@
             "edit_form_description": "Update the menu details.",
             "language": "Menu language",
             "language_locked": "Upgrade your plan to change the menu language.",
-            "language_hint": "All menu text (dishes, sections, ingredients) is assumed to be in this language."
+            "language_hint": "All menu text (dishes, sections, ingredients) is assumed to be in this language.",
+            "name_hint": "Your customers will see this when they scan the QR."
         },
         "billing": {
             "manage_subscription": "Manage subscription",
@@ -601,7 +607,7 @@
             "step_dishes": "Your dishes",
             "step_done": "Done!",
             "website_title": "Your website",
-            "website_body": "Publish your own public website on your MenuLinker domain. Your customers can view your menu, opening hours and contact details.",
+            "website_body": "Publish your own public website on your {appName} domain. Your customers can view your menu, opening hours and contact details.",
             "publish_website": "Publish my website",
             "publish_website_hint": "If enabled, your subdomain will be publicly visible with your menu and contact info.",
             "business_type": "Business type",
@@ -623,15 +629,67 @@
             "menu_title": "Your menu",
             "menu_body": "Give your digital menu a name.",
             "menu_name": "Menu name",
-            "menu_name_placeholder": "E.g. Summer Menu",
+            "menu_name_label": "What would you like to call this menu?",
+            "menu_name_placeholder": "Spring menu, Today's special, Drinks menu…",
+            "menu_name_hint": "Your customers will see this when they scan the QR. You can have multiple menus (e.g. breakfast + lunch).",
             "menu_desc_placeholder": "A short description (optional)",
             "dishes_title": "Your dishes",
             "dishes_body": "Add at least one product to your menu. You can add more from the panel.",
             "dish_number": "Dish #{n}",
             "dish_name_placeholder": "E.g. Caesar Salad",
+            "add_dish": "Add another dish",
+            "items": {
+                "default": {
+                    "title": "Your menu",
+                    "body": "Add at least one item to your menu. You can add more from the panel.",
+                    "item_number": "Item #{n}",
+                    "item_name_placeholder": "E.g. item",
+                    "add_cta": "Add another item",
+                    "step": "Items"
+                },
+                "restaurant": {
+                    "title": "Your dishes",
+                    "body": "Add at least one dish to your menu. You can add more from the panel.",
+                    "item_number": "Dish #{n}",
+                    "item_name_placeholder": "E.g. Caesar Salad",
+                    "add_cta": "Add dish",
+                    "step": "Dishes"
+                },
+                "cafe": {
+                    "title": "Your menu",
+                    "body": "Add at least one product to your menu. You can add more from the panel.",
+                    "item_number": "Item #{n}",
+                    "item_name_placeholder": "E.g. Flat white",
+                    "add_cta": "Add product",
+                    "step": "Products"
+                },
+                "bar": {
+                    "title": "Your menu",
+                    "body": "Add at least one item to your menu. You can add more from the panel.",
+                    "item_number": "Item #{n}",
+                    "item_name_placeholder": "E.g. Beer, Gin & Tonic…",
+                    "add_cta": "Add item",
+                    "step": "Items"
+                },
+                "fastfood": {
+                    "title": "Your menu",
+                    "body": "Add at least one product to your menu. You can add more from the panel.",
+                    "item_number": "Item #{n}",
+                    "item_name_placeholder": "E.g. Double cheeseburger",
+                    "add_cta": "Add product",
+                    "step": "Products"
+                },
+                "finedining": {
+                    "title": "Your dishes",
+                    "body": "Add at least one dish to your menu. You can add more from the panel.",
+                    "item_number": "Dish #{n}",
+                    "item_name_placeholder": "E.g. Tuna tartare",
+                    "add_cta": "Add dish",
+                    "step": "Dishes"
+                }
+            },
             "other_section": "Other…",
             "custom_section_placeholder": "E.g. Tapas",
-            "add_dish": "Add another dish",
             "products_error": "Please fill in all product fields.",
             "complete_title": "Your menu is almost ready!",
             "complete_body": "Click \"Finish\" to generate the QR code for your menu and access the admin panel.",
@@ -640,7 +698,13 @@
             "summary_menu": "Menu",
             "products_added": "product added | products added",
             "finish": "Finish and generate QR",
-            "step_counter": "Step {current} of {total}"
+            "step_counter": "Step {current} of {total}",
+            "welcome": {
+                "title": "Your menu is almost ready!",
+                "body": "Now customise it: add an image, more products, change the template…",
+                "cta_customize": "Start customising",
+                "cta_public": "View my public menu"
+            }
         },
         "dashboard": {
             "title": "Dashboard",
@@ -670,7 +734,17 @@
             "device_tablet": "Tablet",
             "device_desktop": "Desktop",
             "weekly_change": "vs previous week",
-            "hour_suffix": "h"
+            "hour_suffix": "h",
+            "locked": {
+                "pro_badge": "Pro",
+                "soon_badge": "Coming soon",
+                "top_menu_desc": "Find out which menu gets the most visits. Available with the Pro plan.",
+                "main_source_desc": "See where your customers come from: QR, social media or direct. Available with the Pro plan.",
+                "home_visits_desc": "Total visits to your public website. Available with the Pro plan.",
+                "qr_downloads_desc": "Number of times your QR has been downloaded. Available with the Pro plan.",
+                "unlock_cta": "Unlock with Pro",
+                "sample_label": "Sample data"
+            }
         }
     },
     "settings": {
@@ -823,8 +897,8 @@
             }
         },
         "getting_started": {
-            "intro_title": "Welcome to MenuLinker",
-            "intro_body": "MenuLinker is a SaaS platform for the hospitality industry that lets you create digital menus accessible via QR codes. Your customers scan the QR at the table and instantly access the updated menu — no app download required.",
+            "intro_title": "Welcome to {appName}",
+            "intro_body": "{appName} is a SaaS platform for the hospitality industry that lets you create digital menus accessible via QR codes. Your customers scan the QR at the table and instantly access the updated menu — no app download required.",
             "step1_title": "Step 1: Create your first location",
             "step1_body": "Go to the «Locations» section and click «New location». Enter the establishment name, full address and a contact phone number. The location is the base unit — each location can have one or more menus.",
             "step2_title": "Step 2: Create your first menu",
@@ -836,7 +910,7 @@
             "tip": "Tip: You can start completely free with the basic plan. No credit card is required to try the platform."
         },
         "locations": {
-            "what_title": "What is a location in MenuLinker?",
+            "what_title": "What is a location in {appName}?",
             "what_body": "A location represents a physical establishment of your business: a restaurant, a bar, a café or any point of sale. Each location has its own configuration, menus, opening hours and visual identity.",
             "create_title": "How to create a location",
             "create_body": "Go to «Locations» in the navigation menu and click «New location». Fill in the form with the name, address, city and country. Once created, you can complete the rest of the information from the edit page.",
@@ -858,7 +932,7 @@
             "activate_title": "Activating and deactivating a menu",
             "activate_body": "You can have several menus per location and activate or deactivate each one as needed. Only active menus are accessible via QR. This lets you prepare seasonal menus before publishing them.",
             "templates_title": "The 8 available templates",
-            "templates_body": "MenuLinker offers 8 design templates to suit different types of business: from elegant designs for fine dining restaurants to informal styles for bars and cafés. Each template is optimised for mobile and includes support for images, allergens and multiple languages.",
+            "templates_body": "{appName} offers 8 design templates to suit different types of business: from elegant designs for fine dining restaurants to informal styles for bars and cafés. Each template is optimised for mobile and includes support for images, allergens and multiple languages.",
             "tip": "Tip: You can have several menus active simultaneously per location. For example, a lunch menu, a dinner menu and a wine list, each with its own QR code."
         },
         "products": {

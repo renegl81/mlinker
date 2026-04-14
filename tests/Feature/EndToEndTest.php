@@ -73,6 +73,7 @@ class EndToEndTest extends TestCase
             'tenant_domain' => 'el-restaurante',
             'password' => 'password',
             'password_confirmation' => 'password',
+            'terms_accepted' => true,
         ]);
 
         // User redirected to activation page
@@ -128,8 +129,9 @@ class EndToEndTest extends TestCase
                 'menu_id' => $menu->id,
             ]);
 
-        $response->assertRedirect('http://e2e-onboard.localhost'.route('tenant.dashboard', [], false));
-        $response->assertSessionHas('success');
+        // Post-onboarding now redirects to the first location's show page (or dashboard as fallback)
+        $response->assertRedirect();
+        $response->assertSessionHas('welcome_onboarding');
 
         $this->assertDatabaseHas('qr_codes', ['menu_id' => $menu->id]);
 

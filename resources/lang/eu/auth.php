@@ -28,7 +28,13 @@ return [
         'already_registered' => 'Baduzu konturik?',
         'login_link' => 'Saioa hasi',
 
+        'terms_accept_prefix' => 'Irakurri eta onartzen ditut',
+        'terms_accept_terms' => 'Zerbitzu Baldintzak',
+        'terms_accept_and' => 'eta',
+        'terms_accept_privacy' => 'Pribatutasun Politika',
+
         'validation' => [
+            'terms_required' => 'Jarraitzeko baldintzak eta pribatutasun politika onartu behar dituzu.',
             'name_required' => 'Izena beharrezkoa da.',
             'name_string' => 'Izenak testua izan behar du.',
             'name_max' => 'Izenak ezin du 255 karaktere baino gehiago izan.',
@@ -46,6 +52,10 @@ return [
             'tenant_domain_lowercase' => 'Domeinuak letra xeheetan egon behar du.',
             'tenant_domain_regex' => 'Domeinuak letra xeheak, zenbakiak eta marratxoak baino ezin ditu izan.',
             'tenant_domain_unique' => 'Domeinu hau jada erabiltzen ari da.',
+        ],
+
+        'attributes' => [
+            'terms_accepted' => 'baldintzak eta pribatutasun politika',
         ],
 
         'activation' => [

@@ -40,6 +40,7 @@ class OnboardingController extends Controller
             'location' => $location,
             'menu' => $menu,
             'products' => $products,
+            'business_type' => tenant()->business_type ?? 'restaurant',
         ]);
     }
 
@@ -246,7 +247,16 @@ class OnboardingController extends Controller
             }
         }
 
+        $location = Location::orderBy('id')->first();
+
+        if ($location) {
+            return redirect()->route('tenant.locations.show', $location)
+                ->with('welcome_onboarding', true)
+                ->with('menu_public_url', $menuUrl);
+        }
+
         return redirect()->route('tenant.dashboard')
-            ->with('success', '¡Tu menú está listo!');
+            ->with('welcome_onboarding', true)
+            ->with('menu_public_url', $menuUrl);
     }
 }

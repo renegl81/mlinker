@@ -41,13 +41,13 @@
                             {{ page.props.messages.users.fields.password }}
                             <span v-if="isEdit" class="text-muted-foreground text-xs">({{ page.props.messages.users.fields.optional }})</span>
                         </Label>
-                        <Input
+                        <PasswordInput
                             id="password"
-                            type="password"
                             :model-value="form.password"
                             @update:model-value="$emit('update:password', $event)"
                             :placeholder="isEdit ? page.props.messages.users.placeholders.password_edit : page.props.messages.users.placeholders.password"
                             :class="{ 'border-destructive': form.errors.password }"
+                            autocomplete="new-password"
                         />
                         <p v-if="form.errors.password" class="text-sm text-destructive">
                             {{ form.errors.password }}
@@ -59,13 +59,13 @@
                             {{ page.props.messages.users.fields.password_confirmation }}
                             <span v-if="isEdit" class="text-muted-foreground text-xs">({{ page.props.messages.users.fields.optional }})</span>
                         </Label>
-                        <Input
+                        <PasswordInput
                             id="password_confirmation"
-                            type="password"
                             :model-value="form.password_confirmation"
                             @update:model-value="$emit('update:passwordConfirmation', $event)"
                             :placeholder="page.props.messages.users.placeholders.password_confirmation"
                             :class="{ 'border-destructive': form.errors.password_confirmation }"
+                            autocomplete="new-password"
                         />
                     </div>
 
@@ -134,7 +134,7 @@
 import { Link, usePage } from '@inertiajs/vue3'
 import { computed } from 'vue'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Input, PasswordInput } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import {

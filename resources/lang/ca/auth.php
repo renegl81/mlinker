@@ -28,7 +28,13 @@ return [
         'already_registered' => 'Ja tens un compte?',
         'login_link' => 'Iniciar sessió',
 
+        'terms_accept_prefix' => 'He llegit i accepto els',
+        'terms_accept_terms' => 'Termes de servei',
+        'terms_accept_and' => 'i la',
+        'terms_accept_privacy' => 'Política de privacitat',
+
         'validation' => [
+            'terms_required' => 'Has d\'acceptar els termes i la política de privacitat per continuar.',
             'name_required' => 'El nom és obligatori.',
             'name_string' => 'El nom ha de ser text.',
             'name_max' => 'El nom no pot superar els 255 caràcters.',
@@ -46,6 +52,10 @@ return [
             'tenant_domain_lowercase' => 'El domini ha d\'estar en minúscules.',
             'tenant_domain_regex' => 'El domini només pot contenir lletres minúscules, números i guions.',
             'tenant_domain_unique' => 'Aquest domini ja s\'està utilitzant.',
+        ],
+
+        'attributes' => [
+            'terms_accepted' => 'termes i condicions',
         ],
 
         'activation' => [

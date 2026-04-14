@@ -20,6 +20,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
+import {
     Dialog,
     DialogContent,
     DialogDescription,
@@ -352,24 +358,46 @@ function submitImport() {
                 </div>
                 <div class="flex items-center gap-2">
                     <!-- Primary actions (always visible) -->
-                    <Button variant="outline" @click="showPreview = !showPreview">
-                        <Eye class="mr-2 h-4 w-4" />
-                        <span class="hidden sm:inline">{{ t('panel.menu_show.preview') }}</span>
-                    </Button>
-                    <Button as-child>
-                        <Link :href="menuRouteEdit(menu.id).url">
-                            <Pencil class="mr-2 h-4 w-4" />
-                            {{ messages.menus.actions.edit }}
-                        </Link>
-                    </Button>
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger as-child>
+                                <Button variant="outline" @click="showPreview = !showPreview">
+                                    <Eye class="mr-2 h-4 w-4" />
+                                    <span class="hidden sm:inline">{{ t('panel.menu_show.preview') }}</span>
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>{{ t('panel.menu_show.preview') }}</TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger as-child>
+                                <Button as-child>
+                                    <Link :href="menuRouteEdit(menu.id).url">
+                                        <Pencil class="mr-2 h-4 w-4" />
+                                        {{ messages.menus.actions.edit }}
+                                    </Link>
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>{{ messages.menus.actions.edit }}</TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
 
                     <!-- More actions dropdown -->
                     <DropdownMenu>
-                        <DropdownMenuTrigger as-child>
-                            <Button variant="outline" size="icon">
-                                <MoreHorizontal class="h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger as-child>
+                                    <DropdownMenuTrigger as-child>
+                                        <Button variant="outline" size="icon" :aria-label="t('panel.menu_show.more_actions')">
+                                            <MoreHorizontal class="h-4 w-4" />
+                                        </Button>
+                                    </DropdownMenuTrigger>
+                                </TooltipTrigger>
+                                <TooltipContent>{{ t('panel.menu_show.more_actions') }}</TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
                         <DropdownMenuContent align="end" class="w-56">
                             <DropdownMenuItem as-child>
                                 <Link :href="`/panel/menus/${menu.id}/customize`" class="flex cursor-pointer items-center gap-2">
@@ -583,25 +611,39 @@ function submitImport() {
                                                 </Link>
                                             </Button>
                                             <!-- Edit section -->
-                                            <Button
-                                                size="icon"
-                                                variant="ghost"
-                                                class="h-7 w-7"
-                                                @click="startEditSection(section)"
-                                                :title="t('panel.menu_show.edit_section')"
-                                            >
-                                                <Pencil class="h-3 w-3" />
-                                            </Button>
+                                            <TooltipProvider>
+                                                <Tooltip>
+                                                    <TooltipTrigger as-child>
+                                                        <Button
+                                                            size="icon"
+                                                            variant="ghost"
+                                                            class="h-7 w-7"
+                                                            @click="startEditSection(section)"
+                                                            :aria-label="t('panel.menu_show.edit_section')"
+                                                        >
+                                                            <Pencil class="h-3 w-3" />
+                                                        </Button>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent>{{ t('panel.menu_show.edit_section') }}</TooltipContent>
+                                                </Tooltip>
+                                            </TooltipProvider>
                                             <!-- Delete section -->
-                                            <Button
-                                                size="icon"
-                                                variant="ghost"
-                                                class="h-7 w-7 text-destructive hover:text-destructive"
-                                                @click="deleteSection(section.id)"
-                                                :title="t('panel.menu_show.delete_section')"
-                                            >
-                                                <Trash2 class="h-3 w-3" />
-                                            </Button>
+                                            <TooltipProvider>
+                                                <Tooltip>
+                                                    <TooltipTrigger as-child>
+                                                        <Button
+                                                            size="icon"
+                                                            variant="ghost"
+                                                            class="h-7 w-7 text-destructive hover:text-destructive"
+                                                            @click="deleteSection(section.id)"
+                                                            :aria-label="t('panel.menu_show.delete_section')"
+                                                        >
+                                                            <Trash2 class="h-3 w-3" />
+                                                        </Button>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent>{{ t('panel.menu_show.delete_section') }}</TooltipContent>
+                                                </Tooltip>
+                                            </TooltipProvider>
                                         </div>
                                     </div>
 

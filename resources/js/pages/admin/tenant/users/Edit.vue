@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Input, PasswordInput } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem } from '@/types';
@@ -108,12 +108,12 @@ const isSelfEdit = props.user.id === props.currentUserId;
                         </div>
                         <div class="space-y-1.5">
                             <Label class="panel-label">{{ t('panel.users.new_password') }}</Label>
-                            <Input v-model="form.password" type="password" class="panel-input" :placeholder="t('panel.users.password_blank_hint')" />
+                            <PasswordInput v-model="form.password" class="panel-input" :placeholder="t('panel.users.password_blank_hint')" autocomplete="new-password" />
                             <p v-if="form.errors.password" class="text-xs text-destructive">{{ form.errors.password }}</p>
                         </div>
                         <div class="space-y-1.5">
                             <Label class="panel-label">{{ t('panel.users.confirm_password') }}</Label>
-                            <Input v-model="form.password_confirmation" type="password" class="panel-input" />
+                            <PasswordInput v-model="form.password_confirmation" class="panel-input" autocomplete="new-password" />
                         </div>
                     </div>
                 </div>

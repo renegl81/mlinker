@@ -70,6 +70,10 @@
         "activation_sent": {
             "title": "Revisa o teu correo",
             "description": "Enviámosche unha ligazón de activación"
+        },
+        "common": {
+            "show_password": "Mostrar contrasinal",
+            "hide_password": "Ocultar contrasinal"
         }
     },
     "catalog": {
@@ -320,7 +324,8 @@
             "clone_to_location": "Clonar a outro local",
             "clone_to_location_desc": "Crearanse unha copia completa deste menú (con todas as seccións, produtos, alérxenos e ingredientes) no local seleccionado.",
             "select_location": "Seleccionar local de destino",
-            "clone_confirm": "Clonar menú"
+            "clone_confirm": "Clonar menú",
+            "more_actions": "Máis accións"
         },
         "customizer": {
             "title": "Personalizar menú",
@@ -470,7 +475,8 @@
             "edit_form_description": "Actualiza os datos do menú.",
             "language": "Idioma do menú",
             "language_locked": "Mellora o teu plan para cambiar o idioma do menú.",
-            "language_hint": "Idioma no que está escrito o contido do menú."
+            "language_hint": "Idioma no que está escrito o contido do menú.",
+            "name_hint": "Os teus clientes vano ver ao escanear o QR."
         },
         "billing": {
             "manage_subscription": "Xestionar subscrición",
@@ -588,7 +594,7 @@
             "step_dishes": "Os teus pratos",
             "step_done": "Listo!",
             "website_title": "A túa páxina web",
-            "website_body": "Publica a túa propia web pública no teu dominio de MenuLinker. Os teus clientes poderán ver a túa carta, horarios e contacto.",
+            "website_body": "Publica a túa propia web pública no teu dominio de {appName}. Os teus clientes poderán ver a túa carta, horarios e contacto.",
             "publish_website": "Publicar a miña páxina web",
             "publish_website_hint": "Se o activas, o teu subdominio será visible publicamente coa túa carta e datos de contacto.",
             "business_type": "Tipo de negocio",
@@ -610,15 +616,67 @@
             "menu_title": "O teu menú",
             "menu_body": "Dálle un nome ao teu menú dixital.",
             "menu_name": "Nome do menú",
-            "menu_name_placeholder": "Ex. Carta de Verán",
+            "menu_name_label": "Como queres chamar a este menú?",
+            "menu_name_placeholder": "Carta de primavera, Menú do día, Carta de bebidas…",
+            "menu_name_hint": "Os teus clientes vano ver ao escanear o QR. Podes ter varios menús (ex. almorzos + xantares).",
             "menu_desc_placeholder": "Unha breve descrición (opcional)",
             "dishes_title": "Os teus pratos",
             "dishes_body": "Engade polo menos un produto ao teu menú. Poderás engadir máis desde o panel.",
             "dish_number": "Prato #{n}",
             "dish_name_placeholder": "Ex. Ensalada César",
+            "add_dish": "Engadir outro prato",
+            "items": {
+                "default": {
+                    "title": "A túa carta",
+                    "body": "Engade polo menos un produto ao teu menú. Poderás engadir máis desde o panel.",
+                    "item_number": "Produto #{n}",
+                    "item_name_placeholder": "Ex. produto",
+                    "add_cta": "Engadir outro produto",
+                    "step": "Produtos"
+                },
+                "restaurant": {
+                    "title": "Os teus pratos",
+                    "body": "Engade polo menos un prato á túa carta. Poderás engadir máis desde o panel.",
+                    "item_number": "Prato #{n}",
+                    "item_name_placeholder": "Ex. Ensalada César",
+                    "add_cta": "Engadir prato",
+                    "step": "Pratos"
+                },
+                "cafe": {
+                    "title": "A túa carta",
+                    "body": "Engade polo menos un produto á túa carta. Poderás engadir máis desde o panel.",
+                    "item_number": "Produto #{n}",
+                    "item_name_placeholder": "Ex. Café con leite",
+                    "add_cta": "Engadir produto",
+                    "step": "Produtos"
+                },
+                "bar": {
+                    "title": "A túa carta",
+                    "body": "Engade polo menos un artigo á túa carta. Poderás engadir máis desde o panel.",
+                    "item_number": "Artigo #{n}",
+                    "item_name_placeholder": "Ex. Cervexa, Vermú…",
+                    "add_cta": "Engadir artigo",
+                    "step": "Artigos"
+                },
+                "fastfood": {
+                    "title": "O teu menú",
+                    "body": "Engade polo menos un produto ao teu menú. Poderás engadir máis desde o panel.",
+                    "item_number": "Produto #{n}",
+                    "item_name_placeholder": "Ex. Hamburguesa dobre",
+                    "add_cta": "Engadir produto",
+                    "step": "Produtos"
+                },
+                "finedining": {
+                    "title": "Os teus pratos",
+                    "body": "Engade polo menos un prato á túa carta. Poderás engadir máis desde o panel.",
+                    "item_number": "Prato #{n}",
+                    "item_name_placeholder": "Ex. Tártaro de atún",
+                    "add_cta": "Engadir prato",
+                    "step": "Pratos"
+                }
+            },
             "other_section": "Outra…",
             "custom_section_placeholder": "Ex. Tapas",
-            "add_dish": "Engadir outro prato",
             "products_error": "Completa todos os campos dos produtos.",
             "complete_title": "O teu menú está case listo!",
             "complete_body": "Fai clic en \"Finalizar\" para xerar o código QR do teu menú e acceder ao panel de administración.",
@@ -627,7 +685,13 @@
             "summary_menu": "Menú",
             "products_added": "produto engadido | produtos engadidos",
             "finish": "Finalizar e xerar QR",
-            "step_counter": "Paso {current} de {total}"
+            "step_counter": "Paso {current} de {total}",
+            "welcome": {
+                "title": "O teu menú está case listo!",
+                "body": "Agora personalízao: engade imaxe, máis produtos, cambia a plantilla…",
+                "cta_customize": "Comezar a personalizar",
+                "cta_public": "Ver o meu menú público"
+            }
         },
         "dashboard": {
             "title": "Dashboard",
@@ -657,7 +721,17 @@
             "device_tablet": "Tableta",
             "device_desktop": "Escritorio",
             "weekly_change": "vs semana anterior",
-            "hour_suffix": "h"
+            "hour_suffix": "h",
+            "locked": {
+                "pro_badge": "Pro",
+                "soon_badge": "Proximamente",
+                "top_menu_desc": "Descobre cal é o teu menú máis visitado. Dispoñible co plan Pro.",
+                "main_source_desc": "Sabe de onde veñen os teus clientes: QR, redes sociais ou directo. Dispoñible co plan Pro.",
+                "home_visits_desc": "Visitas totais á túa páxina web pública. Dispoñible co plan Pro.",
+                "qr_downloads_desc": "Número de veces que se descargou o teu QR. Dispoñible co plan Pro.",
+                "unlock_cta": "Desbloquear con Pro",
+                "sample_label": "Datos de mostra"
+            }
         }
     },
     "settings": {
@@ -810,8 +884,8 @@
             }
         },
         "getting_started": {
-            "intro_title": "Benvido a MenuLinker",
-            "intro_body": "MenuLinker é unha plataforma SaaS para hostalería que che permite crear menús dixitais accesibles mediante códigos QR. Os teus clientes escanean o QR na mesa e acceden ao menú actualizado ao instante, sen descargar ningunha app.",
+            "intro_title": "Benvido a {appName}",
+            "intro_body": "{appName} é unha plataforma SaaS para hostalería que che permite crear menús dixitais accesibles mediante códigos QR. Os teus clientes escanean o QR na mesa e acceden ao menú actualizado ao instante, sen descargar ningunha app.",
             "step1_title": "Paso 1: Crea o teu primeiro local",
             "step1_body": "Vai á sección «Locais» e preme «Novo local». Introduce o nome do establecemento, o seu enderezo completo e un número de teléfono de contacto.",
             "step2_title": "Paso 2: Crea o teu primeiro menú",
@@ -823,7 +897,7 @@
             "tip": "Consello: Podes empezar completamente gratis co plan básico. Non precisas tarxeta de crédito para probar a plataforma."
         },
         "locations": {
-            "what_title": "Que é un local en MenuLinker?",
+            "what_title": "Que é un local en {appName}?",
             "what_body": "Un local representa un establecemento físico do teu negocio: un restaurante, un bar, unha cafetería ou calquera punto de venda.",
             "create_title": "Como crear un local",
             "create_body": "Vai a «Locais» no menú de navegación e preme o botón «Novo local». Enche o formulario co nome, enderezo, cidade e país.",
@@ -845,7 +919,7 @@
             "activate_title": "Activar e desactivar un menú",
             "activate_body": "Podes ter varios menús por local e activar ou desactivar cada un segundo necesites.",
             "templates_title": "As 8 plantillas dispoñibles",
-            "templates_body": "MenuLinker ofrece 8 plantillas de deseño para adaptarse a distintos tipos de negocio, todas optimizadas para móbil.",
+            "templates_body": "{appName} ofrece 8 plantillas de deseño para adaptarse a distintos tipos de negocio, todas optimizadas para móbil.",
             "tip": "Consello: Podes ter varios menús activos simultaneamente por local, cada un co seu propio QR."
         },
         "products": {

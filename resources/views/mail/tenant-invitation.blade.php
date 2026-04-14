@@ -12,5 +12,5 @@ Aceptar invitación
 Si no esperabas esta invitación, puedes ignorar este correo.
 
 Un saludo,<br>
-El equipo de **MenuLinker**
+El equipo de **{{ config('app.name') }}**
 </x-mail::message>

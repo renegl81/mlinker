@@ -24,5 +24,5 @@ Descargar QR
 Si tienes cualquier duda, responde a este correo y te ayudamos.
 
 Un saludo,<br>
-El equipo de **MenuLinker**
+El equipo de **{{ config('app.name') }}**
 </x-mail::message>

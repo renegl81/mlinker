@@ -20,5 +20,5 @@ Copia y pega este mensaje en WhatsApp:
 Recuerda que puedes actualizar precios, añadir productos o cambiar secciones en cualquier momento desde el panel y los cambios se publican al instante.
 
 Un saludo,<br>
-El equipo de **MenuLinker**
+El equipo de **{{ config('app.name') }}**
 </x-mail::message>

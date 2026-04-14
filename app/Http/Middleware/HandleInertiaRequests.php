@@ -59,6 +59,8 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'success' => fn () => $request->session()->get('success'),
                 'error' => fn () => $request->session()->get('error'),
+                'welcome_onboarding' => fn () => $request->session()->get('welcome_onboarding'),
+                'menu_public_url' => fn () => $request->session()->get('menu_public_url'),
             ],
             'messages' => fn () => App::environment('production')
                  ? cache()->rememberForever('messages.'.app()->getLocale(), fn () => __('messages'))

@@ -32,6 +32,7 @@ class RegisterRequest extends FormRequest
             'tenant_name' => ['required', 'string', 'max:255'],
             'tenant_domain' => ['required', 'string', 'lowercase', 'max:255', 'regex:/^[a-z0-9-]+$/', 'unique:domains,domain'],
             'locale' => ['sometimes', 'string', 'max:5'],
+            'terms_accepted' => ['accepted'],
         ];
     }
 
@@ -57,6 +58,7 @@ class RegisterRequest extends FormRequest
             'tenant_domain.lowercase' => __('auth.register.validation.tenant_domain_lowercase'),
             'tenant_domain.regex' => __('auth.register.validation.tenant_domain_regex'),
             'tenant_domain.unique' => __('auth.register.validation.tenant_domain_unique'),
+            'terms_accepted.accepted' => __('auth.register.validation.terms_required'),
         ];
     }
 
@@ -74,6 +76,7 @@ class RegisterRequest extends FormRequest
             'password_confirmation' => __('auth.register.password_confirmation'),
             'tenant_name' => __('auth.register.tenant_name'),
             'tenant_domain' => __('auth.register.tenant_domain'),
+            'terms_accepted' => __('auth.register.attributes.terms_accepted'),
         ];
     }
 }

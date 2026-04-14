@@ -19,6 +19,7 @@ test('new users can register', function () {
         'tenant_domain' => 'test-restaurant',
         'password' => 'password',
         'password_confirmation' => 'password',
+        'terms_accepted' => true,
     ]);
 
     $this->assertGuest();

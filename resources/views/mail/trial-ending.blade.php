@@ -12,5 +12,5 @@ Gestionar suscripcion
 Si tienes cualquier duda, estamos a tu disposicion.
 
 Un saludo,<br>
-El equipo de **MenuLinker**
+El equipo de **{{ config('app.name') }}**
 </x-mail::message>

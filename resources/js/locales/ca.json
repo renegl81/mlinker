@@ -70,6 +70,10 @@
         "activation_sent": {
             "title": "Revisa el teu correu",
             "description": "T'hem enviat un enllaç d'activació"
+        },
+        "common": {
+            "show_password": "Mostra la contrasenya",
+            "hide_password": "Amaga la contrasenya"
         }
     },
     "catalog": {
@@ -320,7 +324,8 @@
             "clone_to_location": "Clonar a un altre local",
             "clone_to_location_desc": "Es crearà una còpia completa d'aquest menú (amb totes les seccions, productes, al·lèrgens i ingredients) al local seleccionat.",
             "select_location": "Seleccionar local de destinació",
-            "clone_confirm": "Clonar menú"
+            "clone_confirm": "Clonar menú",
+            "more_actions": "Més accions"
         },
         "customizer": {
             "title": "Personalizar menú",
@@ -470,7 +475,8 @@
             "edit_form_description": "Actualitza les dades del menú.",
             "language": "Idioma del menú",
             "language_locked": "Millora el teu pla per canviar l'idioma del menú.",
-            "language_hint": "Idioma en el qual està escrit el contingut del menú."
+            "language_hint": "Idioma en el qual està escrit el contingut del menú.",
+            "name_hint": "Els teus clients ho veuran en escanejar el QR."
         },
         "billing": {
             "manage_subscription": "Gestionar subscripció",
@@ -588,7 +594,7 @@
             "step_dishes": "Els teus plats",
             "step_done": "Llest!",
             "website_title": "La teva pàgina web",
-            "website_body": "Publica la teva pròpia web pública al teu domini de MenuLinker. Els teus clients podran veure la teva carta, horaris i contacte.",
+            "website_body": "Publica la teva pròpia web pública al teu domini de {appName}. Els teus clients podran veure la teva carta, horaris i contacte.",
             "publish_website": "Publicar la meva pàgina web",
             "publish_website_hint": "Si l'actives, el teu subdomini serà visible públicament amb la teva carta i dades de contacte.",
             "business_type": "Tipus de negoci",
@@ -610,15 +616,67 @@
             "menu_title": "El teu menú",
             "menu_body": "Posa un nom al teu menú digital.",
             "menu_name": "Nom del menú",
-            "menu_name_placeholder": "Ex. Carta d'Estiu",
+            "menu_name_label": "Com vols anomenar aquest menú?",
+            "menu_name_placeholder": "Carta de primavera, Menú del dia, Carta de begudes…",
+            "menu_name_hint": "Els teus clients ho veuran en escanejar el QR. Pots tenir diversos menús (p. ex. esmorzars + dinars).",
             "menu_desc_placeholder": "Una breu descripció (opcional)",
             "dishes_title": "Els teus plats",
             "dishes_body": "Afegeix almenys un producte al teu menú. Podràs afegir-ne més des del tauler.",
             "dish_number": "Plat #{n}",
             "dish_name_placeholder": "Ex. Amanida César",
+            "add_dish": "Afegir un altre plat",
+            "items": {
+                "default": {
+                    "title": "La teva carta",
+                    "body": "Afegeix almenys un producte al teu menú. Podràs afegir-ne més des del tauler.",
+                    "item_number": "Producte #{n}",
+                    "item_name_placeholder": "Ex. producte",
+                    "add_cta": "Afegir un altre producte",
+                    "step": "Productes"
+                },
+                "restaurant": {
+                    "title": "Els teus plats",
+                    "body": "Afegeix almenys un plat a la teva carta. Podràs afegir-ne més des del tauler.",
+                    "item_number": "Plat #{n}",
+                    "item_name_placeholder": "Ex. Amanida César",
+                    "add_cta": "Afegir plat",
+                    "step": "Plats"
+                },
+                "cafe": {
+                    "title": "La teva carta",
+                    "body": "Afegeix almenys un producte a la teva carta. Podràs afegir-ne més des del tauler.",
+                    "item_number": "Producte #{n}",
+                    "item_name_placeholder": "Ex. Cafè amb llet",
+                    "add_cta": "Afegir producte",
+                    "step": "Productes"
+                },
+                "bar": {
+                    "title": "La teva carta",
+                    "body": "Afegeix almenys un article a la teva carta. Podràs afegir-ne més des del tauler.",
+                    "item_number": "Article #{n}",
+                    "item_name_placeholder": "Ex. Cervesa, Vermut…",
+                    "add_cta": "Afegir article",
+                    "step": "Articles"
+                },
+                "fastfood": {
+                    "title": "El teu menú",
+                    "body": "Afegeix almenys un producte al teu menú. Podràs afegir-ne més des del tauler.",
+                    "item_number": "Producte #{n}",
+                    "item_name_placeholder": "Ex. Hamburguesa doble",
+                    "add_cta": "Afegir producte",
+                    "step": "Productes"
+                },
+                "finedining": {
+                    "title": "Els teus plats",
+                    "body": "Afegeix almenys un plat a la teva carta. Podràs afegir-ne més des del tauler.",
+                    "item_number": "Plat #{n}",
+                    "item_name_placeholder": "Ex. Tàrtar de tonyina",
+                    "add_cta": "Afegir plat",
+                    "step": "Plats"
+                }
+            },
             "other_section": "Altra…",
             "custom_section_placeholder": "Ex. Tapes",
-            "add_dish": "Afegir un altre plat",
             "products_error": "Completa tots els camps dels productes.",
             "complete_title": "El teu menú és gairebé llest!",
             "complete_body": "Fes clic a \"Finalitzar\" per generar el codi QR del teu menú i accedir al tauler d'administració.",
@@ -627,7 +685,13 @@
             "summary_menu": "Menú",
             "products_added": "producte afegit | productes afegits",
             "finish": "Finalitzar i generar QR",
-            "step_counter": "Pas {current} de {total}"
+            "step_counter": "Pas {current} de {total}",
+            "welcome": {
+                "title": "El teu menú està quasi a punt!",
+                "body": "Ara personalitza'l: afegeix imatge, més productes, canvia la plantilla…",
+                "cta_customize": "Començar a personalitzar",
+                "cta_public": "Veure el meu menú públic"
+            }
         },
         "dashboard": {
             "title": "Dashboard",
@@ -657,7 +721,17 @@
             "device_tablet": "Tauleta",
             "device_desktop": "Escriptori",
             "weekly_change": "vs setmana anterior",
-            "hour_suffix": "h"
+            "hour_suffix": "h",
+            "locked": {
+                "pro_badge": "Pro",
+                "soon_badge": "Aviat",
+                "top_menu_desc": "Descobreix quin és el teu menú més visitat. Disponible amb el pla Pro.",
+                "main_source_desc": "Sàpigues d'on vénen els teus clients: QR, xarxes socials o directe. Disponible amb el pla Pro.",
+                "home_visits_desc": "Visites totals a la teva pàgina web pública. Disponible amb el pla Pro.",
+                "qr_downloads_desc": "Nombre de vegades que s'ha descarregat el teu QR. Disponible amb el pla Pro.",
+                "unlock_cta": "Desbloqueja amb Pro",
+                "sample_label": "Dades de mostra"
+            }
         }
     },
     "settings": {
@@ -810,8 +884,8 @@
             }
         },
         "getting_started": {
-            "intro_title": "Benvingut a MenuLinker",
-            "intro_body": "MenuLinker és una plataforma SaaS per a hostaleria que et permet crear menús digitals accessibles mitjançant codis QR. Els teus clients escanegen el QR a la taula i accedeixen al menú actualitzat a l'instant, sense descarregar cap app.",
+            "intro_title": "Benvingut a {appName}",
+            "intro_body": "{appName} és una plataforma SaaS per a hostaleria que et permet crear menús digitals accessibles mitjançant codis QR. Els teus clients escanegen el QR a la taula i accedeixen al menú actualitzat a l'instant, sense descarregar cap app.",
             "step1_title": "Pas 1: Crea el teu primer local",
             "step1_body": "Vés a la secció «Locals» i prem «Nou local». Introdueix el nom de l'establiment, la seva adreça completa i un telèfon de contacte. El local és la unitat base: cada local pot tenir un o diversos menús.",
             "step2_title": "Pas 2: Crea el teu primer menú",
@@ -823,7 +897,7 @@
             "tip": "Consell: Pots començar completament gratis amb el pla bàsic. No necessites targeta de crèdit per provar la plataforma."
         },
         "locations": {
-            "what_title": "Què és un local a MenuLinker?",
+            "what_title": "Què és un local a {appName}?",
             "what_body": "Un local representa un establiment físic del teu negoci: un restaurant, un bar, una cafeteria o qualsevol punt de venda. Cada local té la seva pròpia configuració, menús, horaris i identitat visual.",
             "create_title": "Com crear un local",
             "create_body": "Vés a «Locals» al menú de navegació i prem el botó «Nou local». Omple el formulari amb el nom, adreça, ciutat i país. Un cop creat, podràs completar la resta d'informació des de la pàgina d'edició.",
@@ -845,7 +919,7 @@
             "activate_title": "Activar i desactivar un menú",
             "activate_body": "Pots tenir diversos menús per local i activar o desactivar cadascun segons necessitis. Només els menús actius són accessibles a través del QR. Això et permet preparar menús de temporada abans de publicar-los.",
             "templates_title": "Les 8 plantilles disponibles",
-            "templates_body": "MenuLinker ofereix 8 plantilles de disseny per adaptar-se a diferents tipus de negoci: des de dissenys elegants per a restaurants de cuina d'autor fins a estils informals per a bars i cafeteries. Cada plantilla està optimitzada per a mòbil i inclou suport per a imatges, al·lèrgens i múltiples idiomes.",
+            "templates_body": "{appName} ofereix 8 plantilles de disseny per adaptar-se a diferents tipus de negoci: des de dissenys elegants per a restaurants de cuina d'autor fins a estils informals per a bars i cafeteries. Cada plantilla està optimitzada per a mòbil i inclou suport per a imatges, al·lèrgens i múltiples idiomes.",
             "tip": "Consell: Pots tenir diversos menús actius simultàniament per local. Per exemple, una carta de dia, una carta de nit i una carta de vins, cadascun amb el seu propi QR."
         },
         "products": {

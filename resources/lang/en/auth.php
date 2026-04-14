@@ -38,7 +38,13 @@ return [
         'already_registered' => 'Already have an account?',
         'login_link' => 'Log in',
 
+        'terms_accept_prefix' => 'I have read and accept the',
+        'terms_accept_terms' => 'Terms of Service',
+        'terms_accept_and' => 'and the',
+        'terms_accept_privacy' => 'Privacy Policy',
+
         'validation' => [
+            'terms_required' => 'You must accept the terms and privacy policy to continue.',
             'name_required' => 'Name is required.',
             'name_string' => 'Name must be text.',
             'name_max' => 'Name cannot exceed 255 characters.',
@@ -56,6 +62,10 @@ return [
             'tenant_domain_lowercase' => 'Domain must be lowercase.',
             'tenant_domain_regex' => 'Domain can only contain lowercase letters, numbers, and hyphens.',
             'tenant_domain_unique' => 'This domain is already in use.',
+        ],
+
+        'attributes' => [
+            'terms_accepted' => 'terms and conditions',
         ],
 
         'activation' => [

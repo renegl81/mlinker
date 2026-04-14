@@ -2,7 +2,7 @@
 import NewPasswordController from '@/actions/App/Http/Controllers/Auth/NewPasswordController';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Input, PasswordInput } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import { Form, Head } from '@inertiajs/vue3';
@@ -50,9 +50,8 @@ const inputEmail = ref(props.email);
 
                 <div class="grid gap-2">
                     <Label for="password">{{ t('auth.reset.password_label') }}</Label>
-                    <Input
+                    <PasswordInput
                         id="password"
-                        type="password"
                         name="password"
                         autocomplete="new-password"
                         autofocus
@@ -65,9 +64,8 @@ const inputEmail = ref(props.email);
                     <Label for="password_confirmation">
                         {{ t('auth.reset.password_confirmation_label') }}
                     </Label>
-                    <Input
+                    <PasswordInput
                         id="password_confirmation"
-                        type="password"
                         name="password_confirmation"
                         autocomplete="new-password"
                         :placeholder="t('auth.reset.password_confirmation_placeholder')"

@@ -70,6 +70,10 @@
         "activation_sent": {
             "title": "Revisa tu correo",
             "description": "Te hemos enviado un enlace de activación"
+        },
+        "common": {
+            "show_password": "Mostrar contraseña",
+            "hide_password": "Ocultar contraseña"
         }
     },
     "catalog": {
@@ -320,7 +324,8 @@
             "clone_to_location": "Clonar a otro local",
             "clone_to_location_desc": "Se creará una copia completa de este menú (con todas sus secciones, productos, alérgenos e ingredientes) en el local seleccionado.",
             "select_location": "Seleccionar local de destino",
-            "clone_confirm": "Clonar menú"
+            "clone_confirm": "Clonar menú",
+            "more_actions": "Más acciones"
         },
         "customizer": {
             "title": "Personalizar menú",
@@ -482,7 +487,8 @@
             "edit_form_description": "Actualiza los datos del menú.",
             "language": "Idioma del menú",
             "language_locked": "Mejora tu plan para cambiar el idioma del menú.",
-            "language_hint": "Todos los textos del menú (platos, secciones, ingredientes) se asumen en este idioma."
+            "language_hint": "Todos los textos del menú (platos, secciones, ingredientes) se asumen en este idioma.",
+            "name_hint": "Tus clientes lo verán al escanear el QR."
         },
         "billing": {
             "manage_subscription": "Gestionar suscripción",
@@ -601,7 +607,7 @@
             "step_dishes": "Tus platos",
             "step_done": "¡Listo!",
             "website_title": "Tu página web",
-            "website_body": "Publica tu propia web pública en tu dominio de MenuLinker. Tus clientes podrán ver tu carta, horarios y contacto.",
+            "website_body": "Publica tu propia web pública en tu dominio de {appName}. Tus clientes podrán ver tu carta, horarios y contacto.",
             "publish_website": "Publicar mi página web",
             "publish_website_hint": "Si lo activas, tu subdominio será visible públicamente con tu carta y datos de contacto.",
             "business_type": "Tipo de negocio",
@@ -623,15 +629,67 @@
             "menu_title": "Tu menú",
             "menu_body": "Dale un nombre a tu menú digital.",
             "menu_name": "Nombre del menú",
-            "menu_name_placeholder": "Ej. Carta de Verano",
+            "menu_name_label": "¿Cómo quieres llamar a este menú?",
+            "menu_name_placeholder": "Carta de primavera, Menú del día, Carta de bebidas…",
+            "menu_name_hint": "Tus clientes lo verán al escanear el QR. Puedes tener varios menús (ej. desayunos + comidas).",
             "menu_desc_placeholder": "Una breve descripción (opcional)",
             "dishes_title": "Tus platos",
             "dishes_body": "Añade al menos un producto a tu menú. Podrás añadir más desde el panel.",
             "dish_number": "Plato #{n}",
             "dish_name_placeholder": "Ej. Ensalada César",
+            "add_dish": "Añadir otro plato",
+            "items": {
+                "default": {
+                    "title": "Tu carta",
+                    "body": "Añade al menos un producto a tu menú. Podrás añadir más desde el panel.",
+                    "item_number": "Producto #{n}",
+                    "item_name_placeholder": "Ej. producto",
+                    "add_cta": "Añadir otro producto",
+                    "step": "Productos"
+                },
+                "restaurant": {
+                    "title": "Tus platos",
+                    "body": "Añade al menos un plato a tu carta. Podrás añadir más desde el panel.",
+                    "item_number": "Plato #{n}",
+                    "item_name_placeholder": "Ej. Ensalada César",
+                    "add_cta": "Añadir plato",
+                    "step": "Platos"
+                },
+                "cafe": {
+                    "title": "Tu carta",
+                    "body": "Añade al menos un producto a tu carta. Podrás añadir más desde el panel.",
+                    "item_number": "Producto #{n}",
+                    "item_name_placeholder": "Ej. Café con leche",
+                    "add_cta": "Añadir producto",
+                    "step": "Productos"
+                },
+                "bar": {
+                    "title": "Tu carta",
+                    "body": "Añade al menos un artículo a tu carta. Podrás añadir más desde el panel.",
+                    "item_number": "Artículo #{n}",
+                    "item_name_placeholder": "Ej. Caña, Vermut…",
+                    "add_cta": "Añadir artículo",
+                    "step": "Artículos"
+                },
+                "fastfood": {
+                    "title": "Tu menú",
+                    "body": "Añade al menos un producto a tu menú. Podrás añadir más desde el panel.",
+                    "item_number": "Producto #{n}",
+                    "item_name_placeholder": "Ej. Hamburguesa doble",
+                    "add_cta": "Añadir producto",
+                    "step": "Productos"
+                },
+                "finedining": {
+                    "title": "Tus platos",
+                    "body": "Añade al menos un plato a tu carta. Podrás añadir más desde el panel.",
+                    "item_number": "Plato #{n}",
+                    "item_name_placeholder": "Ej. Tartar de atún",
+                    "add_cta": "Añadir plato",
+                    "step": "Platos"
+                }
+            },
             "other_section": "Otra…",
             "custom_section_placeholder": "Ej. Tapas",
-            "add_dish": "Añadir otro plato",
             "products_error": "Completa todos los campos de los productos.",
             "complete_title": "¡Tu menú está casi listo!",
             "complete_body": "Haz clic en \"Finalizar\" para generar el código QR de tu menú y acceder al panel de administración.",
@@ -640,7 +698,13 @@
             "summary_menu": "Menú",
             "products_added": "producto añadido | productos añadidos",
             "finish": "Finalizar y generar QR",
-            "step_counter": "Paso {current} de {total}"
+            "step_counter": "Paso {current} de {total}",
+            "welcome": {
+                "title": "¡Tu menú está casi listo!",
+                "body": "Ahora personalízalo: añade imagen, más productos, cambia la plantilla…",
+                "cta_customize": "Empezar a personalizar",
+                "cta_public": "Ver mi menú público"
+            }
         },
         "dashboard": {
             "title": "Dashboard",
@@ -670,7 +734,17 @@
             "device_tablet": "Tablet",
             "device_desktop": "Escritorio",
             "weekly_change": "vs semana anterior",
-            "hour_suffix": "h"
+            "hour_suffix": "h",
+            "locked": {
+                "pro_badge": "Pro",
+                "soon_badge": "Próximamente",
+                "top_menu_desc": "Descubre cuál es tu menú más visitado. Disponible con el plan Pro.",
+                "main_source_desc": "Conoce desde dónde llegan tus clientes: QR, redes sociales o directo. Disponible con el plan Pro.",
+                "home_visits_desc": "Visitas totales a tu página web pública. Disponible con el plan Pro.",
+                "qr_downloads_desc": "Número de veces que se ha descargado tu QR. Disponible con el plan Pro.",
+                "unlock_cta": "Desbloquear con Pro",
+                "sample_label": "Datos de muestra"
+            }
         }
     },
     "settings": {
@@ -823,8 +897,8 @@
             }
         },
         "getting_started": {
-            "intro_title": "Bienvenido a MenuLinker",
-            "intro_body": "MenuLinker es una plataforma SaaS para hostelería que te permite crear menús digitales accesibles mediante códigos QR. Tus clientes escanean el QR en la mesa y acceden al menú actualizado al instante, sin descargar ninguna app.",
+            "intro_title": "Bienvenido a {appName}",
+            "intro_body": "{appName} es una plataforma SaaS para hostelería que te permite crear menús digitales accesibles mediante códigos QR. Tus clientes escanean el QR en la mesa y acceden al menú actualizado al instante, sin descargar ninguna app.",
             "step1_title": "Paso 1: Crea tu primer local",
             "step1_body": "Ve a la sección «Locales» y pulsa «Nuevo local». Introduce el nombre del establecimiento, su dirección completa y un número de teléfono de contacto. El local es la unidad base: cada local puede tener uno o varios menús.",
             "step2_title": "Paso 2: Crea tu primer menú",
@@ -836,7 +910,7 @@
             "tip": "Consejo: Puedes empezar completamente gratis con el plan básico. No necesitas tarjeta de crédito para probar la plataforma."
         },
         "locations": {
-            "what_title": "¿Qué es un local en MenuLinker?",
+            "what_title": "¿Qué es un local en {appName}?",
             "what_body": "Un local representa un establecimiento físico de tu negocio: un restaurante, un bar, una cafetería o cualquier punto de venta. Cada local tiene su propia configuración, menús, horarios e identidad visual.",
             "create_title": "Cómo crear un local",
             "create_body": "Ve a «Locales» en el menú de navegación y pulsa el botón «Nuevo local». Rellena el formulario con el nombre, dirección, ciudad y país. Una vez creado, podrás completar el resto de información desde la página de edición.",
@@ -858,7 +932,7 @@
             "activate_title": "Activar y desactivar un menú",
             "activate_body": "Puedes tener varios menús por local y activar o desactivar cada uno según necesites. Solo los menús activos son accesibles a través del QR. Esto te permite preparar menús de temporada antes de publicarlos.",
             "templates_title": "Las 8 plantillas disponibles",
-            "templates_body": "MenuLinker ofrece 8 plantillas de diseño para adaptarse a distintos tipos de negocio: desde diseños elegantes para restaurantes de alta cocina hasta estilos informales para bares y cafeterías. Cada plantilla está optimizada para móvil y incluye soporte para imágenes, alérgenos y múltiples idiomas.",
+            "templates_body": "{appName} ofrece 8 plantillas de diseño para adaptarse a distintos tipos de negocio: desde diseños elegantes para restaurantes de alta cocina hasta estilos informales para bares y cafeterías. Cada plantilla está optimizada para móvil y incluye soporte para imágenes, alérgenos y múltiples idiomas.",
             "tip": "Consejo: Puedes tener varios menús activos simultáneamente por local. Por ejemplo, una carta de día, una carta de noche y una carta de vinos, cada una con su propio QR."
         },
         "products": {

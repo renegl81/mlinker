@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import HeadingSmall from '@/components/HeadingSmall.vue';
 import MenuSection from './components/MenuSection.vue';
+import WelcomeAfterOnboardingDialog from '@/components/WelcomeAfterOnboardingDialog.vue';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -30,7 +31,7 @@ import {
     Trash2,
     X,
 } from 'lucide-vue-next';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -86,10 +87,33 @@ function duplicateLocation() {
         onFinish: () => { duplicating.value = false; },
     });
 }
+
+// Welcome after onboarding dialog
+const showWelcomeDialog = ref(false);
+const welcomePublicUrl = ref('');
+
+onMounted(() => {
+    const flash = page.props.flash as any;
+    if (flash?.welcome_onboarding && !localStorage.getItem('ml_welcome_shown')) {
+        welcomePublicUrl.value = flash.menu_public_url ?? props.publicUrl ?? '';
+        showWelcomeDialog.value = true;
+    }
+});
+
+function closeWelcomeDialog() {
+    showWelcomeDialog.value = false;
+    localStorage.setItem('ml_welcome_shown', '1');
+}
 </script>
 
 <template>
     <Head :title="`${messages.locations.single}: ${location.name}`" />
+
+    <WelcomeAfterOnboardingDialog
+        :open="showWelcomeDialog"
+        :public-url="welcomePublicUrl"
+        @close="closeWelcomeDialog"
+    />
 
     <AppLayout :breadcrumbs="breadcrumbItems">
         <div class="flex h-full flex-1 flex-col gap-6 rounded-xl p-4">

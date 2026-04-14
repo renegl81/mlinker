@@ -252,6 +252,7 @@ class PlanLimitTest extends TestCase
             'tenant_domain' => 'jane-restaurant',
             'password' => 'password',
             'password_confirmation' => 'password',
+            'terms_accepted' => true,
         ]);
 
         $freePlan = Plan::where('slug', 'free')->first();

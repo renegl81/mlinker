@@ -16,5 +16,5 @@ Gestionar suscripcion
 Lamentamos verte marchar. Si tienes alguna sugerencia sobre como mejorar, nos encantaria escucharte.
 
 Un saludo,<br>
-El equipo de **MenuLinker**
+El equipo de **{{ config('app.name') }}**
 </x-mail::message>

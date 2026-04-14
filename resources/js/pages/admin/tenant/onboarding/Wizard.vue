@@ -33,6 +33,7 @@ const props = defineProps<{
     location?: Location | null;
     menu?: Menu | null;
     products?: Product[];
+    businessType?: string;
 }>();
 
 // ─── Step 0: Tu web ───────────────────────────────────────────────────────────
@@ -148,12 +149,26 @@ function submitComplete() {
     );
 }
 
+// ─── Business-type dynamic copy ───────────────────────────────────────────────
+const bizType = computed(() => {
+    const type = props.businessType || websiteForm.business_type || 'default';
+    const supported = ['restaurant', 'cafe', 'bar', 'fastfood', 'finedining'];
+    return supported.includes(type) ? type : 'default';
+});
+
+const itemsKey = (key: string) => {
+    const full = `panel.onboarding.items.${bizType.value}.${key}`;
+    const fallback = `panel.onboarding.items.default.${key}`;
+    const val = t(full);
+    return val !== full ? val : t(fallback);
+};
+
 // ─── Progress ─────────────────────────────────────────────────────────────────
 const steps = computed(() => [
     { label: t('panel.onboarding.step_website') },
     { label: t('panel.onboarding.step_business') },
     { label: t('panel.onboarding.step_menu') },
-    { label: t('panel.onboarding.step_dishes') },
+    { label: itemsKey('step') },
     { label: t('panel.onboarding.step_done') },
 ]);
 
@@ -221,7 +236,7 @@ const errorClass = 'text-xs text-red-400';
                     </div>
                     <h1 class="mb-2 text-2xl font-bold text-white">{{ t('panel.onboarding.website_title') }}</h1>
                     <p class="mb-6 text-sm text-slate-400">
-                        {{ t('panel.onboarding.website_body') }}
+                        {{ t('panel.onboarding.website_body', { appName }) }}
                     </p>
 
                     <form class="space-y-6" @submit.prevent="submitWebsite">
@@ -380,7 +395,7 @@ const errorClass = 'text-xs text-red-400';
 
                         <div class="space-y-2">
                             <label for="menu-name" :class="labelClass">
-                                {{ t('panel.onboarding.menu_name') }} <span class="text-red-400">*</span>
+                                {{ t('panel.onboarding.menu_name_label') }} <span class="text-red-400">*</span>
                             </label>
                             <input
                                 id="menu-name"
@@ -389,6 +404,7 @@ const errorClass = 'text-xs text-red-400';
                                 :placeholder="t('panel.onboarding.menu_name_placeholder')"
                                 :class="[inputClass, menuForm.errors.name && 'border-red-500']"
                             />
+                            <p class="text-xs text-slate-500">{{ t('panel.onboarding.menu_name_hint') }}</p>
                             <p v-if="menuForm.errors.name" :class="errorClass">{{ menuForm.errors.name }}</p>
                         </div>
 
@@ -438,9 +454,9 @@ const errorClass = 'text-xs text-red-400';
                     <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-teal-500/15">
                         <Zap class="h-6 w-6 text-teal-400" />
                     </div>
-                    <h1 class="mb-2 text-2xl font-bold text-white">{{ t('panel.onboarding.dishes_title') }}</h1>
+                    <h1 class="mb-2 text-2xl font-bold text-white">{{ itemsKey('title') }}</h1>
                     <p class="mb-6 text-sm text-slate-400">
-                        {{ t('panel.onboarding.dishes_body') }}
+                        {{ itemsKey('body') }}
                     </p>
 
                     <div class="mb-4 space-y-4">
@@ -451,7 +467,7 @@ const errorClass = 'text-xs text-red-400';
                         >
                             <div class="mb-3 flex items-center justify-between">
                                 <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                                    {{ t('panel.onboarding.dish_number', { n: index + 1 }) }}
+                                    {{ itemsKey('item_number').replace('{n}', String(index + 1)) }}
                                 </span>
                                 <button
                                     v-if="productRows.length > 1"
@@ -470,7 +486,7 @@ const errorClass = 'text-xs text-red-400';
                                     <input
                                         v-model="row.name"
                                         type="text"
-                                        :placeholder="t('panel.onboarding.dish_name_placeholder')"
+                                        :placeholder="itemsKey('item_name_placeholder')"
                                         :class="inputClass"
                                     />
                                 </div>
@@ -512,7 +528,7 @@ const errorClass = 'text-xs text-red-400';
                         @click="addProduct"
                     >
                         <Plus class="h-4 w-4" />
-                        {{ t('panel.onboarding.add_dish') }}
+                        {{ itemsKey('add_cta') }}
                     </button>
 
                     <p v-if="productsError" :class="[errorClass, 'mb-3']">{{ productsError }}</p>

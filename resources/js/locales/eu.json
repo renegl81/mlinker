@@ -70,6 +70,10 @@
         "activation_sent": {
             "title": "Begiratu zure posta",
             "description": "Aktibazio esteka bat bidali dizugu"
+        },
+        "common": {
+            "show_password": "Erakutsi pasahitza",
+            "hide_password": "Ezkutatu pasahitza"
         }
     },
     "catalog": {
@@ -320,7 +324,8 @@
             "clone_to_location": "Beste toki batera klonatu",
             "clone_to_location_desc": "Menu honen kopia osoa (sekzio, produktu, alergenoak eta osagaiekin) hautatutako tokian sortuko da.",
             "select_location": "Helburuko tokia hautatu",
-            "clone_confirm": "Menua klonatu"
+            "clone_confirm": "Menua klonatu",
+            "more_actions": "Ekintza gehiago"
         },
         "customizer": {
             "title": "Personalizar menú",
@@ -470,7 +475,8 @@
             "edit_form_description": "Eguneratu menuaren datuak.",
             "language": "Menuaren hizkuntza",
             "language_locked": "Eguneratu zure plana menuaren hizkuntza aldatzeko.",
-            "language_hint": "Menuaren edukia idatzita dagoen hizkuntza."
+            "language_hint": "Menuaren edukia idatzita dagoen hizkuntza.",
+            "name_hint": "Zure bezeroek QR eskaneatzerakoan ikusiko dute."
         },
         "billing": {
             "manage_subscription": "Harpidetza kudeatu",
@@ -588,7 +594,7 @@
             "step_dishes": "Zure platerrak",
             "step_done": "Prest!",
             "website_title": "Zure web orria",
-            "website_body": "Argitaratu zure web publiko propioa zure MenuLinker domeinuan. Zure bezeroek zure karta, ordutegia eta kontaktua ikus ditzakete.",
+            "website_body": "Argitaratu zure web publiko propioa zure {appName} domeinuan. Zure bezeroek zure karta, ordutegia eta kontaktua ikus ditzakete.",
             "publish_website": "Nire web orria argitaratu",
             "publish_website_hint": "Aktibatzen baduzu, zure azpidomeinu publiko ikusgai izango da zure karta eta kontaktu datuekin.",
             "business_type": "Negozio mota",
@@ -610,15 +616,67 @@
             "menu_title": "Zure menua",
             "menu_body": "Jarri izena zure menu digitalari.",
             "menu_name": "Menuaren izena",
-            "menu_name_placeholder": "Adib. Udako Karta",
+            "menu_name_label": "Nola deitu nahi diozu menu honi?",
+            "menu_name_placeholder": "Udaberriko karta, Eguneko menua, Edaien karta…",
+            "menu_name_hint": "Zure bezeroek QR eskaneatzerakoan ikusiko dute. Menu bat baino gehiago izan ditzakezu (adib. gosaria + bazkaria).",
             "menu_desc_placeholder": "Deskribapen laburra (aukerakoa)",
             "dishes_title": "Zure platerrak",
             "dishes_body": "Gehitu gutxienez produktu bat zure menura. Panelatik gehiago gehi ditzakezu.",
             "dish_number": "Plater #{n}",
             "dish_name_placeholder": "Adib. Entsalada Zesar",
+            "add_dish": "Beste plater bat gehitu",
+            "items": {
+                "default": {
+                    "title": "Zure karta",
+                    "body": "Gehitu gutxienez produktu bat zure menura. Panelatik gehiago gehi ditzakezu.",
+                    "item_number": "Produktua #{n}",
+                    "item_name_placeholder": "Adib. produktua",
+                    "add_cta": "Beste produktu bat gehitu",
+                    "step": "Produktuak"
+                },
+                "restaurant": {
+                    "title": "Zure platerrak",
+                    "body": "Gehitu gutxienez plater bat zure kartara. Panelatik gehiago gehi ditzakezu.",
+                    "item_number": "Plater #{n}",
+                    "item_name_placeholder": "Adib. Entsalada Zesar",
+                    "add_cta": "Platera gehitu",
+                    "step": "Platerrak"
+                },
+                "cafe": {
+                    "title": "Zure karta",
+                    "body": "Gehitu gutxienez produktu bat zure kartara. Panelatik gehiago gehi ditzakezu.",
+                    "item_number": "Produktua #{n}",
+                    "item_name_placeholder": "Adib. Kafesne",
+                    "add_cta": "Produktua gehitu",
+                    "step": "Produktuak"
+                },
+                "bar": {
+                    "title": "Zure karta",
+                    "body": "Gehitu gutxienez artikulu bat zure kartara. Panelatik gehiago gehi ditzakezu.",
+                    "item_number": "Artikulua #{n}",
+                    "item_name_placeholder": "Adib. Garagardoa, Bermuta…",
+                    "add_cta": "Artikulua gehitu",
+                    "step": "Artikuluak"
+                },
+                "fastfood": {
+                    "title": "Zure menua",
+                    "body": "Gehitu gutxienez produktu bat zure menura. Panelatik gehiago gehi ditzakezu.",
+                    "item_number": "Produktua #{n}",
+                    "item_name_placeholder": "Adib. Bikoitza hamburgesa",
+                    "add_cta": "Produktua gehitu",
+                    "step": "Produktuak"
+                },
+                "finedining": {
+                    "title": "Zure platerrak",
+                    "body": "Gehitu gutxienez plater bat zure kartara. Panelatik gehiago gehi ditzakezu.",
+                    "item_number": "Plater #{n}",
+                    "item_name_placeholder": "Adib. Atun tartarra",
+                    "add_cta": "Platera gehitu",
+                    "step": "Platerrak"
+                }
+            },
             "other_section": "Beste bat…",
             "custom_section_placeholder": "Adib. Tapak",
-            "add_dish": "Beste plater bat gehitu",
             "products_error": "Bete produktuen eremu guztiak.",
             "complete_title": "Zure menua ia prest dago!",
             "complete_body": "Egin klik \"Amaitu\" botoia zure menuaren QR kodea sortzeko eta administrazio panelera sartzeko.",
@@ -627,7 +685,13 @@
             "summary_menu": "Menua",
             "products_added": "produktu gehituta | produktu gehituta",
             "finish": "Amaitu eta QR sortu",
-            "step_counter": "{current}. urratsa {total}tik"
+            "step_counter": "{current}. urratsa {total}tik",
+            "welcome": {
+                "title": "Zure menua ia prest dago!",
+                "body": "Orain pertsonalizatu: gehitu irudia, produktu gehiago, aldatu txantiloia…",
+                "cta_customize": "Pertsonalizatzen hasi",
+                "cta_public": "Ikusi nire menu publikoa"
+            }
         },
         "dashboard": {
             "title": "Dashboard",
@@ -657,7 +721,17 @@
             "device_tablet": "Tableta",
             "device_desktop": "Mahaigaina",
             "weekly_change": "vs aurreko astea",
-            "hour_suffix": "h"
+            "hour_suffix": "h",
+            "locked": {
+                "pro_badge": "Pro",
+                "soon_badge": "Laster",
+                "top_menu_desc": "Ikusi zein den zure menu bisitatiena. Pro planarekin erabilgarri.",
+                "main_source_desc": "Jakin nondik datozen zure bezeroak: QR, sare sozialak edo zuzenean. Pro planarekin erabilgarri.",
+                "home_visits_desc": "Zure web publikoaren bisita guztiak. Pro planarekin erabilgarri.",
+                "qr_downloads_desc": "Zure QR deskargatu den aldien kopurua. Pro planarekin erabilgarri.",
+                "unlock_cta": "Desblokeatu Pro-rekin",
+                "sample_label": "Lagin datuak"
+            }
         }
     },
     "settings": {
@@ -810,8 +884,8 @@
             }
         },
         "getting_started": {
-            "intro_title": "Ongi etorri MenuLinker-era",
-            "intro_body": "MenuLinker ostalaritzako SaaS plataforma bat da, QR kode bidez eskuragarri dauden menu digitalak sortzeko aukera ematen dizuna. Zure bezeroek mahian QR eskaneatzen dute eta berehala sartzen dira eguneratutako menura, aplikaziorik deskargatu gabe.",
+            "intro_title": "Ongi etorri {appName}-era",
+            "intro_body": "{appName} ostalaritzako SaaS plataforma bat da, QR kode bidez eskuragarri dauden menu digitalak sortzeko aukera ematen dizuna. Zure bezeroek mahian QR eskaneatzen dute eta berehala sartzen dira eguneratutako menura, aplikaziorik deskargatu gabe.",
             "step1_title": "1. urratsa: Sortu zure lehen tokia",
             "step1_body": "Joan «Tokiak» atalera eta sakatu «Toki berria». Sartu establezimenduko izena, helbide osoa eta harremanetarako telefono zenbakia.",
             "step2_title": "2. urratsa: Sortu zure lehen menua",
@@ -823,7 +897,7 @@
             "tip": "Aholkua: Oinarrizko plan doainarekin hasi zaitezke. Ez da kreditu txartelik behar plataforma probatzeko."
         },
         "locations": {
-            "what_title": "Zer da toki bat MenuLinker-en?",
+            "what_title": "Zer da toki bat {appName}-en?",
             "what_body": "Toki batek zure negozioaren establezimendu fisiko bat adierazten du: jatetxe bat, taberna bat, kafetegi bat edo edozein salmenta puntu.",
             "create_title": "Nola sortu toki bat",
             "create_body": "Joan «Tokiak» atalera nabigazio menuan eta sakatu «Toki berria» botoia. Bete formularioa izenarekin, helbidearekin, hiria eta herrialdea.",
@@ -845,7 +919,7 @@
             "activate_title": "Menu bat aktibatu eta desaktibatu",
             "activate_body": "Toki bakoitzeko hainbat menu eduki ditzakezu eta behar duzunaren arabera aktibatu edo desaktibatu.",
             "templates_title": "Eskuragarri dauden 8 txantiloiak",
-            "templates_body": "MenuLinker-ek 8 diseinu txantiloi eskaintzen ditu negozio mota ezberdintarako, guztiak mugikorrerako optimizatuta.",
+            "templates_body": "{appName}-ek 8 diseinu txantiloi eskaintzen ditu negozio mota ezberdintarako, guztiak mugikorrerako optimizatuta.",
             "tip": "Aholkua: Aldi berean hainbat menu aktibo eduki ditzakezu toki bakoitzeko, bakoitza bere QR kodearekin."
         },
         "products": {

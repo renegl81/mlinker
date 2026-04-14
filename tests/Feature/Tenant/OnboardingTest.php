@@ -231,8 +231,9 @@ class OnboardingTest extends TestCase
                 'menu_id' => $menu->id,
             ]);
 
-        $response->assertRedirect($this->tenantUrl('tenant.dashboard'));
-        $response->assertSessionHas('success');
+        // Redirects to location show (if location exists) or dashboard, with welcome_onboarding
+        $response->assertRedirect();
+        $response->assertSessionHas('welcome_onboarding');
 
         $this->assertDatabaseHas('qr_codes', ['menu_id' => $menu->id]);
 

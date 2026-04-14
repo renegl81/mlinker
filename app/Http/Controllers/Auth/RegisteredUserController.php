@@ -45,7 +45,7 @@ class RegisteredUserController extends Controller
         $tenant = (object) ['id' => $validated['tenant_domain']];
 
         // Crear usuario y asociar al tenant
-        DB::transaction(function () use ($validated, $tenant, $domainName) {
+        DB::transaction(function () use ($validated, $tenant, $domainName, $locale) {
             $user = User::create([
                 'name' => $validated['name'],
                 'last_name' => $validated['last_name'],

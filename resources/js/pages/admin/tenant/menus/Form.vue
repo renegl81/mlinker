@@ -166,6 +166,7 @@ const handleFileChange = async (event: Event) => {
                             :placeholder="messages.menus.placeholders.name"
                             :class="{ 'border-destructive': form.errors.name }"
                         />
+                        <p class="text-xs text-muted-foreground">{{ t('panel.menus.name_hint') }}</p>
                         <p
                             v-if="form.errors.name"
                             class="text-sm text-destructive"

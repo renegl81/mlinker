@@ -28,7 +28,13 @@ return [
         'already_registered' => '¿Ya tienes una cuenta?',
         'login_link' => 'Iniciar sesión',
 
+        'terms_accept_prefix' => 'He leído y acepto los',
+        'terms_accept_terms' => 'Términos de servicio',
+        'terms_accept_and' => 'y la',
+        'terms_accept_privacy' => 'Política de privacidad',
+
         'validation' => [
+            'terms_required' => 'Debes aceptar los términos y la política de privacidad para continuar.',
             'name_required' => 'El nombre es obligatorio.',
             'name_string' => 'El nombre debe ser texto.',
             'name_max' => 'El nombre no puede superar los 255 caracteres.',
@@ -46,6 +52,10 @@ return [
             'tenant_domain_lowercase' => 'El dominio debe estar en minúsculas.',
             'tenant_domain_regex' => 'El dominio solo puede contener letras minúsculas, números y guiones.',
             'tenant_domain_unique' => 'Este dominio ya está en uso.',
+        ],
+
+        'attributes' => [
+            'terms_accepted' => 'términos y condiciones',
         ],
 
         'activation' => [
