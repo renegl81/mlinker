@@ -28,7 +28,6 @@ import {
     Lock,
     Monitor,
     Palette,
-    RefreshCw,
     RotateCcw,
     Smartphone,
     Type,
@@ -185,11 +184,6 @@ function isSectionOpen(id: string) {
 
 // ── Preview ──
 const previewMode = ref<'mobile' | 'desktop'>('mobile');
-const iframeKey = ref(0);
-
-function refreshPreview() {
-    iframeKey.value++;
-}
 
 // ── Save state ──
 const saveStatus = ref<'idle' | 'saving' | 'saved'>('idle');
@@ -263,7 +257,6 @@ function save() {
             preserveScroll: true,
             onSuccess: () => {
                 saveStatus.value = 'saved';
-                refreshPreview();
                 savedTimeout = setTimeout(() => {
                     saveStatus.value = 'idle';
                 }, 2000);
@@ -293,7 +286,6 @@ function confirmReset() {
             spacing.value = { density: 'comfortable' };
             header.value = { show_restaurant_name: true, tagline: '', name_display_style: 'default' };
             sections.value = { divider_style: 'line', title_alignment: 'left', numbering: 'none' };
-            refreshPreview();
         },
     });
 }
