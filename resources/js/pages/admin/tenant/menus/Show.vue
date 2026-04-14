@@ -241,20 +241,15 @@ async function selectPreviewTemplate(template: Template) {
     isTemplatePatching.value = true;
     templateAnnouncement.value = '';
 
-    router.patch(`/panel/menus/${props.menu.id}/patch`, { template_id: template.id }, {
-        preserveScroll: true,
-        preserveState: true,
-        onSuccess: () => {
-            refreshPreview();
-            templateAnnouncement.value = `Plantilla cambiada a ${template.name}`;
-        },
-        onError: () => {
-            activeTemplateId.value = previousId;
-        },
-        onFinish: () => {
-            isTemplatePatching.value = false;
-        },
-    });
+    try {
+        await patchMenu({ template_id: template.id });
+        refreshPreview();
+        templateAnnouncement.value = `Plantilla cambiada a ${template.name}`;
+    } catch {
+        activeTemplateId.value = previousId;
+    } finally {
+        isTemplatePatching.value = false;
+    }
 }
 
 function navigateTemplate(direction: 1 | -1) {

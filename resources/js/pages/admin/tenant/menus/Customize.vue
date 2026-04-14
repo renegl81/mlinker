@@ -17,6 +17,7 @@ import type { MenuCustomization } from '@/components/template-bodies/TemplatePre
 import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
+import axios from 'axios';
 import {
     ArrowLeft,
     Check,
@@ -28,7 +29,6 @@ import {
     Lock,
     Monitor,
     Palette,
-    RefreshCw,
     RotateCcw,
     Smartphone,
     Type,
@@ -158,16 +158,13 @@ function selectTemplate(tpl: TemplateOption) {
     activeTemplateId.value = tpl.id;
     isTemplatePatching.value = true;
 
-    router.patch(`/panel/menus/${props.menu.id}/patch`, { template_id: tpl.id }, {
-        preserveScroll: true,
-        preserveState: true,
-        onError: () => {
+    axios.patch(`/panel/menus/${props.menu.id}/inline`, { template_id: tpl.id })
+        .catch(() => {
             activeTemplateId.value = previousId;
-        },
-        onFinish: () => {
+        })
+        .finally(() => {
             isTemplatePatching.value = false;
-        },
-    });
+        });
 }
 
 // ── Collapsible sections ──
@@ -185,11 +182,6 @@ function isSectionOpen(id: string) {
 
 // ── Preview ──
 const previewMode = ref<'mobile' | 'desktop'>('mobile');
-const iframeKey = ref(0);
-
-function refreshPreview() {
-    iframeKey.value++;
-}
 
 // ── Save state ──
 const saveStatus = ref<'idle' | 'saving' | 'saved'>('idle');
@@ -263,7 +255,6 @@ function save() {
             preserveScroll: true,
             onSuccess: () => {
                 saveStatus.value = 'saved';
-                refreshPreview();
                 savedTimeout = setTimeout(() => {
                     saveStatus.value = 'idle';
                 }, 2000);
@@ -293,7 +284,6 @@ function confirmReset() {
             spacing.value = { density: 'comfortable' };
             header.value = { show_restaurant_name: true, tagline: '', name_display_style: 'default' };
             sections.value = { divider_style: 'line', title_alignment: 'left', numbering: 'none' };
-            refreshPreview();
         },
     });
 }
@@ -850,6 +840,7 @@ function preloadFont(pairing: typeof FONT_PAIRINGS[0]) {
                     >
                         <TemplatePreview
                             :component-name="currentComponentName"
+                            :menu="props.menu as any"
                             :customization="currentCustomization"
                             :interactive="false"
                         />

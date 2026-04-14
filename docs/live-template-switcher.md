@@ -125,19 +125,19 @@ public function rules(): array {
 
 ## 7. Checklist
 
-- [ ] `TemplatePreview.vue` extendido con `menu`, `customization`, `interactive`, `labels`
-- [ ] `MenuPatchRequest` acepta `template_id`
-- [ ] `PatchMenu` action procesa `template_id`
-- [ ] Backend: `Show.vue` recibe `templates`
-- [ ] Backend: `Customize.vue` recibe `templates`
-- [ ] Show.vue: strip/grid de thumbnails en el preview-panel
-- [ ] Show.vue: click en thumbnail → PATCH optimista + refresh iframe con `?v=`
-- [ ] Show.vue: navegación con flechas ← → cuando preview abierto
-- [ ] Customize.vue: sección "Plantilla" con grid y selección activa visible
-- [ ] Customize.vue: PATCH optimista de `template_id`
-- [ ] Customize.vue: preview vivo lateral con `TemplatePreview` + customization reactiva
-- [ ] Customize.vue: eliminado iframe si lo había (o justificar mantenerlo)
-- [ ] Tests verdes: `php artisan test --filter=Menu`
+- [x] `TemplatePreview.vue` extendido con `menu`, `customization`, `interactive`, `labels`
+- [x] `MenuPatchRequest` acepta `template_id` (ya existía)
+- [x] `PatchMenu` action procesa `template_id` (ya existía)
+- [x] Backend: `Show.vue` recibe `templates` con `component_name` añadido
+- [x] Backend: `Customize.vue` recibe `templates`
+- [x] Show.vue: strip/grid de thumbnails en el preview-panel
+- [x] Show.vue: click en thumbnail → PATCH optimista + refresh iframe con `?v=`
+- [x] Show.vue: navegación con flechas ← → cuando preview abierto
+- [x] Customize.vue: sección "Plantilla" con grid y selección activa visible
+- [x] Customize.vue: PATCH optimista de `template_id`
+- [x] Customize.vue: preview vivo lateral con `TemplatePreview` + customization reactiva
+- [x] Customize.vue: eliminado iframe (reemplazado por TemplatePreview vivo)
+- [x] Tests verdes: 64 passed (295 assertions)
 - [ ] Prueba manual: 3 cambios en Show preview + 3 en Customize sin errores
 - [ ] Reporte final
 

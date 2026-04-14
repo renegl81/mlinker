@@ -183,6 +183,12 @@ const chapterWord = props.labels?.chapter_word ?? 'Capítulo';
                             <span v-if="menu.show_prices && product.price" class="dish-price">
                                 {{ formatPrice(product.price) }}
                             </span>
+                            <AddToCartButton
+                                v-if="interactive && hasCart && menu.show_prices && product.price"
+                                :quantity="cartGetQuantity ? cartGetQuantity(product.id) : 0"
+                                @add="cartAddItem && cartAddItem(product.id)"
+                                @remove="cartRemoveItem && cartRemoveItem(product.id)"
+                            />
                         </div>
                     </li>
                 </ol>

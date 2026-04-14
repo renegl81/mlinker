@@ -17,7 +17,14 @@ class MenuCustomizationController extends Controller
 {
     public function show(Menu $menu): Response
     {
-        $menu->load(['location', 'template']);
+        $menu->load([
+            'location',
+            'template',
+            'sections' => fn ($q) => $q->orderBy('sort_order'),
+            'sections.products' => fn ($q) => $q->orderBy('products.id'),
+            'sections.products.allergens',
+            'sections.products.ingredients',
+        ]);
 
         $tenant = tenant();
         $domain = $tenant?->domains()->first()?->domain;

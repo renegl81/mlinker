@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
 import MenuSeoHead from '@/components/public/MenuSeoHead.vue';
-import MenuLanguageSwitcher from '@/components/public/MenuLanguageSwitcher.vue';
 import ShareMenu from '@/components/public/ShareMenu.vue';
 import CartFab from '@/components/public/CartFab.vue';
 import CartOnboarding from '@/components/public/CartOnboarding.vue';
