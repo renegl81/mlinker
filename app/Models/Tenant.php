@@ -17,6 +17,7 @@ class Tenant extends BaseTenant
     {
         return [
             'id',
+            'name',
             'onboarding_completed_at',
             'onboarding_step',
             'has_website',

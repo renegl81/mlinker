@@ -58,8 +58,7 @@ Route::middleware([
         // Rutas de onboarding (FUERA del RedirectToOnboarding para evitar bucles)
         Route::prefix('panel/onboarding')->as('onboarding.')->group(function () {
             Route::get('/', [OnboardingController::class, 'show'])->name('show');
-            Route::post('/website', [OnboardingController::class, 'storeWebsite'])->name('website');
-            Route::post('/location', [OnboardingController::class, 'storeLocation'])->name('location');
+            Route::post('/basics', [OnboardingController::class, 'storeBasics'])->name('basics');
             Route::post('/menu', [OnboardingController::class, 'storeMenu'])->name('menu');
             Route::post('/products', [OnboardingController::class, 'storeProducts'])->name('products');
             Route::post('/complete', [OnboardingController::class, 'complete'])->name('complete');

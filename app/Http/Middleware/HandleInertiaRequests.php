@@ -49,6 +49,7 @@ class HandleInertiaRequests extends Middleware
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
                 'user' => auth()->user(),
+                'panel_url' => fn () => $this->userPanelUrl(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'ziggy' => fn (): array => [
@@ -72,6 +73,29 @@ class HandleInertiaRequests extends Middleware
     /**
      * @return array<string, mixed>|null
      */
+    private function userPanelUrl(): ?string
+    {
+        $user = auth()->user();
+
+        if (! $user instanceof User) {
+            return null;
+        }
+
+        $tenant = $user->tenants()->first();
+        $domain = $tenant?->domains()->first()?->domain;
+
+        if (! $domain) {
+            return null;
+        }
+
+        $appUrl = config('app.url');
+        $scheme = parse_url($appUrl, PHP_URL_SCHEME) ?: 'http';
+        $port = parse_url($appUrl, PHP_URL_PORT);
+        $portSuffix = $port ? ':'.$port : '';
+
+        return "{$scheme}://{$domain}{$portSuffix}/panel";
+    }
+
     private function tenantFeatures(): ?array
     {
         if (! function_exists('tenant') || ! tenant()) {

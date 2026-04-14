@@ -39,6 +39,7 @@ export interface MenuCustomization {
 
 export interface Auth {
     user: User;
+    panel_url?: string | null;
 }
 
 export interface BreadcrumbItem {

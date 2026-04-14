@@ -39,6 +39,7 @@ class RegisteredUserController extends Controller
         // Crear Tenant (sin base de datos)
         DB::table('tenants')->insert([
             'id' => $validated['tenant_domain'],
+            'name' => $validated['tenant_name'],
             'created_at' => now(),
             'updated_at' => now(),
         ]);

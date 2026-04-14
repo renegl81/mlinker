@@ -27,7 +27,11 @@ class OnboardingController extends Controller
     public function show(): Response
     {
         $tenant = tenant();
-        $step = (int) ($tenant->onboarding_step ?? 0);
+
+        // Map legacy steps: old 0=website, 1=location, 2=menu, 3=products, 4=complete
+        // New steps:        0=basics, 1=template, 2=sections+products, 3=complete
+        $rawStep = (int) ($tenant->onboarding_step ?? 0);
+        $step = $this->mapLegacyStep($rawStep);
 
         $location = Location::orderBy('id')->first();
         $menu = $location ? Menu::where('location_id', $location->id)->orderBy('id')->first() : null;
@@ -35,153 +39,148 @@ class OnboardingController extends Controller
             $q->where('menu_id', $menu->id);
         })->get() : collect();
 
+        $templates = Template::where('is_active', true)
+            ->orderBy('id')
+            ->get(['id', 'name', 'component_name', 'description', 'preview_image_url', 'config']);
+
         return Inertia::render('admin/tenant/onboarding/Wizard', [
-            'step' => $step,
-            'location' => $location,
-            'menu' => $menu,
-            'products' => $products,
-            'business_type' => tenant()->business_type ?? 'restaurant',
+            'step'       => $step,
+            'tenantName' => $tenant->name ?? ucfirst($tenant->id),
+            'userName'   => auth()->user()?->name ?? '',
+            'location'   => $location,
+            'menu'       => $menu,
+            'products'   => $products,
+            'templates'  => $templates,
         ]);
     }
 
-    public function storeWebsite(Request $request): RedirectResponse
+    /**
+     * Map old step numbers to new ones for backwards-compat.
+     * Old: 0=website, 1=location, 2=menu, 3=products, 4=complete
+     * New: 0=basics,  1=template, 2=products,          3=complete
+     */
+    protected function mapLegacyStep(int $raw): int
     {
-        $data = $request->validate([
-            'has_website' => ['required', 'boolean'],
-            'business_type' => ['nullable', 'string', 'in:restaurant,cafe,bar,fastfood,finedining'],
-        ]);
-
-        $tenant = tenant();
-        $tenant->has_website = (bool) $data['has_website'];
-
-        if ($data['has_website']) {
-            $businessType = $data['business_type'] ?? 'restaurant';
-            $tenant->business_type = $businessType;
-            $tenant->home_template = config("menulinker.default_home_template.{$businessType}", 'HomeClassic');
-        }
-
-        $tenant->onboarding_step = 1;
-        $tenant->save();
-
-        return redirect()->route('tenant.onboarding.show');
+        return match ($raw) {
+            0       => 0,   // website → basics
+            1       => 0,   // location → basics (redo if not created yet)
+            2       => 1,   // menu → template
+            3       => 2,   // products → products
+            default => 3,   // 4+ → complete
+        };
     }
 
-    public function storeLocation(Request $request): RedirectResponse
+    /**
+     * Step 1 — Basics: persist city + phone, create the Location from tenant name.
+     */
+    public function storeBasics(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'address' => ['nullable', 'string'],
-            'city' => ['nullable', 'string'],
-            'phone' => ['nullable', 'string'],
+            'city'  => ['nullable', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:50'],
         ]);
 
         $tenant = tenant();
-        $slug = Str::slug($data['name']);
+        $locationName = $tenant->name ?? ucfirst($tenant->id);
+        $slug = Str::slug($locationName) ?: $tenant->id;
 
         $country = Country::firstOrCreate(
             ['code' => 'ES'],
             ['name' => 'España']
         );
 
-        Location::create([
-            'name' => $data['name'],
-            'address' => $data['address'] ?? '',
-            'city' => $data['city'] ?? '',
-            'phone' => $data['phone'] ?? null,
-            'province' => '',
-            'postal_code' => '',
-            'country_id' => $country->id,
-            'user_id' => auth()->id(),
-            'tenant_id' => $tenant->id,
-            'slug' => $slug,
-            'url' => $slug,
-            'currency' => 'EUR',
-            'time_zone' => 'Europe/Madrid',
-            'time_format' => 'H:i',
-            'lang' => 'es',
-            'languages' => ['es'],
-            'social_medias' => [],
-        ]);
+        // Create only if not yet created
+        if (! Location::where('tenant_id', $tenant->id)->exists()) {
+            Location::create([
+                'name'        => $locationName,
+                'address'     => '',
+                'city'        => $data['city'] ?? '',
+                'phone'       => $data['phone'] ?? null,
+                'province'    => '',
+                'postal_code' => '',
+                'country_id'  => $country->id,
+                'user_id'     => auth()->id(),
+                'tenant_id'   => $tenant->id,
+                'slug'        => $slug,
+                'url'         => $slug,
+                'currency'    => 'EUR',
+                'time_zone'   => 'Europe/Madrid',
+                'time_format' => 'H:i',
+                'lang'        => 'es',
+                'languages'   => ['es'],
+                'social_medias' => [],
+            ]);
+        } else {
+            // Update city/phone on existing location
+            $location = Location::where('tenant_id', $tenant->id)->first();
+            $location->city  = $data['city']  ?? $location->city;
+            $location->phone = $data['phone'] ?? $location->phone;
+            $location->save();
+        }
 
-        // Seed the 14 EU allergens for this tenant (idempotent)
+        // Seed 14 EU allergens (idempotent)
         try {
             UeAllergenSeeder::seedForTenant($tenant->id);
         } catch (\Throwable $e) {
             Log::error('UeAllergenSeeder failed', ['tenant' => $tenant->id, 'error' => $e->getMessage()]);
         }
 
-        $tenant->onboarding_step = 2;
-        $tenant->save();
-
-        return redirect()->route('tenant.onboarding.show');
-    }
-
-    public function storeMenu(Request $request): RedirectResponse
-    {
-        $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'lang' => ['sometimes', 'string', 'max:5'],
-            'location_id' => ['required', 'integer', 'exists:locations,id'],
-        ]);
-
-        $template = $this->resolveDefaultTemplate();
-
-        Menu::create([
-            'name' => $data['name'],
-            'description' => $data['description'] ?? null,
-            'location_id' => (int) $data['location_id'],
-            'template_id' => $template->id,
-            'is_active' => true,
-            'lang' => $data['lang'] ?? config('menulinker.source_locale', 'es'),
-            'show_prices' => true,
-            'show_currency' => false,
-            'show_calories' => false,
-        ]);
-
-        $tenant = tenant();
-        $tenant->onboarding_step = 3;
+        $tenant->onboarding_step = 2; // maps to new step 1 (template)
         $tenant->save();
 
         return redirect()->route('tenant.onboarding.show');
     }
 
     /**
-     * Resolve a default template for new menus, creating a Basic one on demand
-     * if the templates table is empty (e.g. the TemplateSeeder was not run).
+     * Step 2 — Template: create Menu with selected template_id.
      */
-    protected function resolveDefaultTemplate(): Template
+    public function storeMenu(Request $request): RedirectResponse
     {
-        $template = Template::where('component_name', 'Basic')->first()
-            ?? Template::where('is_active', true)->first()
-            ?? Template::first();
+        $data = $request->validate([
+            'template_id' => ['required', 'integer', 'exists:templates,id'],
+            'location_id' => ['required', 'integer', 'exists:locations,id'],
+        ]);
 
-        if ($template) {
-            return $template;
+        $tenant = tenant();
+        $menuName = $tenant->name ?? ucfirst($tenant->id);
+
+        // Create menu only if not yet created for this location
+        if (! Menu::where('location_id', $data['location_id'])->exists()) {
+            Menu::create([
+                'name'          => $menuName,
+                'description'   => null,
+                'location_id'   => (int) $data['location_id'],
+                'template_id'   => (int) $data['template_id'],
+                'is_active'     => true,
+                'lang'          => config('menulinker.source_locale', 'es'),
+                'show_prices'   => true,
+                'show_currency' => false,
+                'show_calories' => false,
+            ]);
+        } else {
+            // Update template on existing menu
+            $menu = Menu::where('location_id', $data['location_id'])->first();
+            $menu->template_id = (int) $data['template_id'];
+            $menu->save();
         }
 
-        return Template::create([
-            'name' => 'Basic',
-            'component_name' => 'Basic',
-            'description' => 'Diseño clásico con enfoque en la simplicidad y elegancia.',
-            'preview_image_url' => null,
-            'config' => [
-                'color_scheme' => 'light',
-                'font_style' => 'serif',
-                'layout' => 'single-column',
-            ],
-            'is_active' => true,
-        ]);
+        $tenant->onboarding_step = 3; // maps to new step 2 (products)
+        $tenant->save();
+
+        return redirect()->route('tenant.onboarding.show');
     }
 
+    /**
+     * Step 3 — Products: create section + products. Can be called multiple times.
+     */
     public function storeProducts(Request $request): RedirectResponse
     {
         $request->validate([
-            'products' => ['required', 'array', 'min:1'],
-            'products.*.name' => ['required', 'string'],
-            'products.*.price' => ['required', 'numeric', 'min:0'],
+            'products'               => ['required', 'array', 'min:1'],
+            'products.*.name'        => ['required', 'string'],
+            'products.*.price'       => ['required', 'numeric', 'min:0'],
             'products.*.section_name' => ['required', 'string'],
-            'menu_id' => ['required', 'integer', 'exists:menus,id'],
+            'menu_id'                => ['required', 'integer', 'exists:menus,id'],
         ]);
 
         $tenant = tenant();
@@ -197,25 +196,28 @@ class OnboardingController extends Controller
 
             foreach ($items as $item) {
                 $product = Product::create([
-                    'name' => $item['name'],
-                    'price' => $item['price'],
+                    'name'      => $item['name'],
+                    'price'     => $item['price'],
                     'tenant_id' => $tenant->id,
                 ]);
 
                 DB::table('product_section')->insert([
                     'product_id' => $product->id,
                     'section_id' => $section->id,
-                    'tenant_id' => $tenant->id,
+                    'tenant_id'  => $tenant->id,
                 ]);
             }
         }
 
-        $tenant->onboarding_step = 4;
+        $tenant->onboarding_step = 4; // maps to new step 3 (complete)
         $tenant->save();
 
         return redirect()->route('tenant.onboarding.show');
     }
 
+    /**
+     * Final step — generate QR, send welcome mail, mark onboarding done.
+     */
     public function complete(Request $request): RedirectResponse
     {
         $request->validate([
@@ -230,10 +232,10 @@ class OnboardingController extends Controller
         $tenant->onboarding_completed_at = now();
         $tenant->save();
 
+        $menuUrl = $qr->url;
         $user = auth()->user();
         if ($user) {
             try {
-                $menuUrl = $qr->url;
                 $qrDownloadUrl = $qr->image_url
                     ? Storage::disk('public')->url($qr->image_url)
                     : $menuUrl;
@@ -242,7 +244,7 @@ class OnboardingController extends Controller
             } catch (\Throwable $e) {
                 Log::error('WelcomeMail failed', [
                     'user_id' => $user->id,
-                    'error' => $e->getMessage(),
+                    'error'   => $e->getMessage(),
                 ]);
             }
         }

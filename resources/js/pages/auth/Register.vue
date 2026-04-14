@@ -187,7 +187,7 @@ const submit = () => {
                             :tabindex="8"
                             class="mt-0.5"
                         />
-                        <Label for="terms_accepted" class="cursor-pointer text-sm font-normal leading-snug text-muted-foreground">
+                        <Label for="terms_accepted" class="!block cursor-pointer text-sm font-normal leading-snug text-muted-foreground">
                             {{ t('terms_accept_prefix') }}
                             <a :href="terms().url" target="_blank" rel="noopener noreferrer" class="text-teal-600 underline underline-offset-2 hover:text-teal-700">{{ t('terms_accept_terms') }}</a>
                             {{ t('terms_accept_and') }}

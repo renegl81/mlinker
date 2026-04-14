@@ -16,7 +16,7 @@ import UserMenuContent from '@/components/UserMenuContent.vue';
 import { getInitials } from '@/composables/useInitials';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import LocaleFlag from '@/components/ui/LocaleFlag.vue';
-import { Globe, Menu } from 'lucide-vue-next';
+import { Globe, LayoutDashboard, Menu } from 'lucide-vue-next';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -219,7 +219,7 @@ function switchLocale(code: string) {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" class="w-56">
-                        <UserMenuContent :user="auth.user" />
+                        <UserMenuContent :user="auth.user" :panel-url="auth?.panel_url ?? null" />
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
