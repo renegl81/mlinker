@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { Check } from 'lucide-vue-next';
 import { useI18n } from 'vue-i18n';
+import TemplatePreview from '@/components/template-bodies/TemplatePreview.vue';
 
 const { t } = useI18n();
 
 interface TemplateConfig {
     color_scheme?: string;
     vibe?: string;
+    font_style?: string;
+    layout?: string;
 }
 
 interface Template {
@@ -55,6 +58,7 @@ function colorChip(scheme?: string): string {
     };
     return scheme ? (map[scheme] ?? scheme) : '';
 }
+
 </script>
 
 <template>
@@ -69,19 +73,13 @@ function colorChip(scheme?: string): string {
         "
         @click="emit('select', props.template.id)"
     >
-        <!-- Preview image -->
-        <div class="relative h-32 w-full overflow-hidden bg-slate-700/40 sm:h-36">
-            <img
-                v-if="props.template.preview_image_url"
-                :src="props.template.preview_image_url"
-                :alt="props.template.name"
-                class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-            />
+        <!-- Preview: miniatura viva de la plantilla real escalada -->
+        <div class="relative h-32 w-full overflow-hidden bg-slate-700/40 sm:h-36" aria-hidden="true">
             <div
-                v-else
-                class="flex h-full w-full items-center justify-center text-slate-600"
+                class="pointer-events-none absolute left-0 top-0 origin-top-left"
+                style="width: 600px; height: 800px; transform: scale(0.24); transform-origin: top left;"
             >
-                <span class="text-4xl font-bold font-serif tracking-tight opacity-30">Aa</span>
+                <TemplatePreview :component-name="props.template.component_name" />
             </div>
 
             <!-- Hover overlay with preview button -->

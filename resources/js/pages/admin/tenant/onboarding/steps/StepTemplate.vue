@@ -4,6 +4,7 @@ import { Loader2, Sparkles, X } from 'lucide-vue-next';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import TemplateCard from '../components/TemplateCard.vue';
+import TemplatePreview from '@/components/template-bodies/TemplatePreview.vue';
 
 const { t } = useI18n();
 
@@ -134,18 +135,14 @@ function closePreview() {
                             <X class="h-5 w-5" />
                         </button>
                     </div>
-                    <div class="bg-slate-800/50 p-4">
-                        <img
-                            v-if="previewTemplate.preview_image_url"
-                            :src="previewTemplate.preview_image_url"
-                            :alt="previewTemplate.name"
-                            class="w-full rounded-lg object-contain max-h-[60vh]"
-                        />
-                        <div
-                            v-else
-                            class="flex h-64 items-center justify-center rounded-lg bg-slate-700/30"
-                        >
-                            <p class="text-slate-500 text-sm">Preview no disponible aún</p>
+                    <div class="bg-slate-800/50 p-4 overflow-hidden rounded-b-xl" aria-hidden="true">
+                        <div class="relative w-full overflow-hidden rounded-lg" style="height: 480px;">
+                            <div
+                                class="pointer-events-none absolute left-0 top-0 origin-top-left"
+                                style="width: 600px; height: 800px; transform: scale(0.8); transform-origin: top left;"
+                            >
+                                <TemplatePreview :component-name="previewTemplate.component_name" />
+                            </div>
                         </div>
                     </div>
                     <div class="flex justify-end gap-3 border-t border-slate-800 px-5 py-4">
