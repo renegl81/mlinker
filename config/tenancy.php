@@ -23,14 +23,11 @@ return [
      *
      * Only relevant if you're using the domain or subdomain identification middleware.
      */
-    'central_domains' => [
-        'lvh.me:8086',
-        'lvh.me',
-        '127.0.0.1:8086',
-        '127.0.0.1',
-        'localhost:8086',
-        'localhost',
-    ],
+    'central_domains' => array_filter([
+        env('APP_DOMAIN'),
+        ($port = parse_url(env('APP_URL', ''), PHP_URL_PORT)) ? env('APP_DOMAIN') . ':' . $port : null,
+        'www.' . env('APP_DOMAIN'),
+    ]),
 
     /**
      * Tenancy bootstrappers are executed when tenancy is initialized.
