@@ -18,6 +18,8 @@ return new class extends Migration
             $table->decimal('price', 8, 2);
             $table->decimal('calories', 8, 2)->nullable();
             $table->string('image_url', 255)->nullable();
+            $table->string('tenant_id')->index();
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             $table->timestamps();
         });
     }

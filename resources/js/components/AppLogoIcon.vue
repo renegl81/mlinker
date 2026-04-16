@@ -1,17 +1,9 @@
 <script setup lang="ts">
-import type { HTMLAttributes } from 'vue';
+import { usePage } from '@inertiajs/vue3';
 
-defineOptions({
-    inheritAttrs: false,
-});
-
-interface Props {
-    className?: HTMLAttributes['class'];
-}
-
-defineProps<Props>();
+const appName = usePage().props.name as string;
 </script>
 
 <template>
-   <img class="logo" src="/logo.png" alt="logo" />
+    <img class="logo" src="/images/logo.png" :alt="appName" />
 </template>

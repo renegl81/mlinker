@@ -5,19 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 class QRCode extends Model
 {
-    use HasFactory;
+    use BelongsToTenant, HasFactory;
 
     protected $table = 'qr_codes';
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'menu_card_id',
+        'menu_id',
         'parameters',
         'image_url',
         'url',
@@ -32,15 +34,15 @@ class QRCode extends Model
     {
         return [
             'id' => 'integer',
-            'menu_card_id' => 'integer',
+            'menu_id' => 'integer',
             'parameters' => 'array',
             'created_at' => 'timestamp',
             'updated_at' => 'timestamp',
         ];
     }
 
-    public function menuCard(): BelongsTo
+    public function menu(): BelongsTo
     {
-        return $this->belongsTo(MenuCard::class);
+        return $this->belongsTo(Menu::class);
     }
 }

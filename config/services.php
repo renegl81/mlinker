@@ -13,7 +13,7 @@ return [
     | a conventional file to locate the various service credentials.
     |
     */
-
+    'app_port' => env('APP_PORT'),
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
     ],
@@ -33,6 +33,12 @@ return [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
+    ],
+
+    // MyMemory free translation API (https://mymemory.translated.net/doc/spec.php).
+    // No key required. Optional email raises the anonymous limit from 5k to 50k chars/day.
+    'mymemory' => [
+        'email' => env('MYMEMORY_EMAIL'),
     ],
 
 ];

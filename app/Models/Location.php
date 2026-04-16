@@ -2,15 +2,40 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasDynamicFilters;
+use App\Models\Traits\HasImage;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Stancl\Tenancy\Database\Concerns\BelongsToTenant;
 
 class Location extends Model
 {
-    use HasFactory;
+    use BelongsToTenant, HasDynamicFilters, HasFactory, HasImage;
+
+    protected $appends = ['image_path'];
+
+    protected function imagePath(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if (! $this->image_url) {
+                    return null;
+                }
+
+                if (str_starts_with($this->image_url, 'data:') || str_starts_with($this->image_url, 'http')) {
+                    return $this->image_url;
+                }
+
+                $tenantId = tenant('id');
+
+                return rtrim(config('app.url'), '/').route('tenant_image', ['tenant' => 'tenant'.$tenantId, 'path' => $this->image_url], false);
+            }
+        );
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -37,7 +62,35 @@ class Location extends Model
         'time_format',
         'time_zone',
         'social_medias',
+        'latitude',
+        'longitude',
+        'primary_color',
+        'secondary_color',
+        'order_email',
+        'order_whatsapp',
+        'is_pet_friendly',
+        'has_wifi',
+        'has_terrace',
+        'has_parking',
+        'is_accessible',
+        'reservation_url',
+        'reservation_phone',
+        'instagram',
+        'facebook',
+        'google_maps_url',
     ];
+
+    public static function getFilterableFields(): array
+    {
+        return [
+            'name' => 'like',
+            'address' => 'like',
+            'city' => 'like',
+            'province' => 'like',
+            'status' => '=',
+            'type' => 'in',
+        ];
+    }
 
     /**
      * Get the attributes that should be cast.
@@ -52,6 +105,11 @@ class Location extends Model
             'country_id' => 'integer',
             'languages' => 'array',
             'social_medias' => 'array',
+            'is_pet_friendly' => 'boolean',
+            'has_wifi' => 'boolean',
+            'has_terrace' => 'boolean',
+            'has_parking' => 'boolean',
+            'is_accessible' => 'boolean',
         ];
     }
 
@@ -65,13 +123,23 @@ class Location extends Model
         return $this->belongsTo(Country::class);
     }
 
+    public function menus(): HasMany
+    {
+        return $this->hasMany(Menu::class);
+    }
+
+    public function openingHours(): HasMany
+    {
+        return $this->hasMany(OpeningHour::class)->orderBy('weekday');
+    }
+
+    public function images(): HasMany
+    {
+        return $this->hasMany(LocationImage::class)->orderBy('sort_order');
+    }
+
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class);
-    }
-
-    public function menuCards(): HasMany
-    {
-        return $this->hasMany(MenuCard::class);
     }
 }

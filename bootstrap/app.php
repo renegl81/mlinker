@@ -1,11 +1,18 @@
 <?php
 
+use App\Http\Middleware\EnsureApiAccess;
+use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\InitializeTenancyFromSanctum;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
+ // <--- 1. IMPORTANTE: Añadir esta línea
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -13,8 +20,17 @@ return Application::configure(basePath: dirname(__DIR__))
         api: __DIR__.'/../routes/api.php',
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
+        then: function () {
+            // Registrar rutas de tenant
+            Route::middleware('web')
+                ->group(base_path('routes/tenant.php'));
+        },
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->validateCsrfTokens(except: [
+            'stripe/webhook',
+        ]);
+
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
 
         $middleware->web(append: [
@@ -22,6 +38,20 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
         ]);
+
+        $middleware->alias([
+            'admin' => EnsureUserIsAdmin::class,
+            'ensure-api-access' => EnsureApiAccess::class,
+            'initialize-tenancy-from-sanctum' => InitializeTenancyFromSanctum::class,
+        ]);
+
+        $middleware->redirectGuestsTo(function (Request $request) {
+            if ($request->expectsJson()) {
+                return null;
+            }
+
+            return route('login');
+        });
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

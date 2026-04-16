@@ -17,6 +17,7 @@ class Template extends Model
      */
     protected $fillable = [
         'name',
+        'component_name',
         'description',
         'preview_image_url',
         'config',
@@ -37,8 +38,8 @@ class Template extends Model
         ];
     }
 
-    public function menuCards(): HasMany
+    public function menus(): HasMany
     {
-        return $this->hasMany(MenuCard::class);
+        return $this->hasMany(Menu::class);
     }
 }

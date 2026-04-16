@@ -1,0 +1,76 @@
+<?php
+
+return [
+
+    'failed' => 'Kredentzial hauek ez datoz bat gure erregistroekin.',
+    'password' => 'Pasahitza okerra da.',
+    'throttle' => 'Saiakera gehiegi. Mesedez, saiatu berriro :seconds segundo barru.',
+
+    'register' => [
+        'title' => 'Sortu zure kontua',
+        'description' => 'Sartu zure datuak kontua eta workspacea sortzeko',
+        'name' => 'Izen osoa',
+        'name_placeholder' => 'Zure izena',
+        'last_name' => 'Abizenak',
+        'last_name_placeholder' => 'Zure abizenak',
+        'email' => 'Posta elektronikoa',
+        'email_placeholder' => 'posta@adibidea.com',
+        'tenant_name' => 'Negozioaren izena',
+        'tenant_name_placeholder' => 'Nire kafetegia',
+        'tenant_domain' => 'Domeinu bakarra',
+        'tenant_domain_placeholder' => 'nire-enpresa',
+        'tenant_domain_help' => 'Hau izango da zure azpidomeinu bakarra',
+        'password' => 'Pasahitza',
+        'password_placeholder' => 'Pasahitza',
+        'password_confirmation' => 'Berretsi pasahitza',
+        'password_confirmation_placeholder' => 'Berretsi pasahitza',
+        'submit' => 'Sortu kontua',
+        'already_registered' => 'Baduzu konturik?',
+        'login_link' => 'Saioa hasi',
+
+        'terms_accept_prefix' => 'Irakurri eta onartzen ditut',
+        'terms_accept_terms' => 'Zerbitzu Baldintzak',
+        'terms_accept_and' => 'eta',
+        'terms_accept_privacy' => 'Pribatutasun Politika',
+
+        'validation' => [
+            'terms_required' => 'Jarraitzeko baldintzak eta pribatutasun politika onartu behar dituzu.',
+            'name_required' => 'Izena beharrezkoa da.',
+            'name_string' => 'Izenak testua izan behar du.',
+            'name_max' => 'Izenak ezin du 255 karaktere baino gehiago izan.',
+            'last_name_required' => 'Abizenak beharrezkoak dira.',
+            'last_name_string' => 'Abizenek testua izan behar dute.',
+            'last_name_max' => 'Abizenek ezin dute 255 karaktere baino gehiago izan.',
+            'email_required' => 'Posta elektronikoa beharrezkoa da.',
+            'email_email' => 'Baliozko posta elektroniko bat eman behar duzu.',
+            'email_unique' => 'Posta elektroniko hau jada erregistratuta dago.',
+            'password_required' => 'Pasahitza beharrezkoa da.',
+            'password_confirmed' => 'Pasahitzak ez datoz bat.',
+            'tenant_name_required' => 'Workspaceren izena beharrezkoa da.',
+            'tenant_name_max' => 'Workspaceren izenak ezin du 255 karaktere baino gehiago izan.',
+            'tenant_domain_required' => 'Domeinua beharrezkoa da.',
+            'tenant_domain_lowercase' => 'Domeinuak letra xeheetan egon behar du.',
+            'tenant_domain_regex' => 'Domeinuak letra xeheak, zenbakiak eta marratxoak baino ezin ditu izan.',
+            'tenant_domain_unique' => 'Domeinu hau jada erabiltzen ari da.',
+        ],
+
+        'attributes' => [
+            'terms_accepted' => 'baldintzak eta pribatutasun politika',
+        ],
+
+        'activation' => [
+            'subject' => 'Aktibatu zure kontua',
+            'greeting' => 'Kaixo :name!',
+            'line1' => 'Eskerrik asko izena emateagatik. Aktibatu zure kontua botoian klik eginez.',
+            'action' => 'Kontua aktibatu',
+            'line2' => 'Esteka hau 24 ordutan iraungiko da.',
+            'line3' => 'Kontu hau ez baduzu sortu, ez ikusi mezu hau.',
+            'sent' => 'Aktibazio esteka duen mezu bat bidali dizugu. Egiaztatu zure sarrera ontzia.',
+            'success' => 'Zure kontua ondo aktibatu da!',
+            'invalid_link' => 'Aktibazio esteka baliogabea da edo iraungita dago.',
+            'already_activated' => 'Zure kontua jada aktibatuta dago.',
+            'back_login' => 'Itzuli saioa hastera',
+        ],
+    ],
+
+];

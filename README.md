@@ -1,45 +1,83 @@
-**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
+# MenuFlow Core (Backend)
 
-When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
+**MenuFlow** es una plataforma SaaS multi-tenant diseñada para la gestión de menús digitales en restaurantes. Este repositorio contiene el **Backend (Laravel 12)** y el **Panel de Administración (Inertia.js + Vue 3)**.
 
-*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
+La aplicación pública (Carta Digital) se encuentra en el repositorio del cliente (Nuxt 3).
 
----
+## 🚀 Stack Tecnológico
 
-## Edit a file
+* **Framework:** Laravel 13
+* **Base de Datos:** PostgreSQL 14+
+* **Admin Frontend:** Vue 3 + Inertia.js + Tailwind CSS (Shadcn UI)
+* **Arquitectura:** Monolito Modular con Multi-tenancy (Single Database)
+* **API:** REST para consumo del cliente Nuxt (PWA)
 
-You’ll start by editing this README file to learn how to edit a file in Bitbucket.
+## 📋 Requisitos Previos
 
-1. Click **Source** on the left side.
-2. Click the README.md link from the list of files.
-3. Click the **Edit** button.
-4. Delete the following text: *Delete this line to make a change to the README from Bitbucket.*
-5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you’ll see the change you just made.
-6. Go back to the **Source** page.
+Asegúrate de tener instalado en tu entorno local:
+* Linux Mint / Ubuntu (Entorno recomendado)
+* PHP 8.2 o superior
+* Composer
+* Node.js & NPM
 
----
+## 🛠️ Guía de Instalación Completa
 
-## Create a file
+Sigue estos pasos para levantar el proyecto desde cero en un entorno Linux Mint recién instalado.
 
-Next, you’ll add a new file to this repository.
+### 1. Instalar PostgreSQL en el Sistema
 
-1. Click the **New file** button at the top of the **Source** page.
-2. Give the file a filename of **contributors.txt**.
-3. Enter your name in the empty file space.
-4. Click **Commit** and then **Commit** again in the dialog.
-5. Go back to the **Source** page.
+Si aún no tienes el motor de base de datos, ejecuta los siguientes comandos en tu terminal para instalar Postgres y los drivers necesarios para PHP:
 
-Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
+```bash
+# Actualizar lista de paquetes
+sudo apt update
 
----
+# Instalar PostgreSQL y la extensión para PHP
+sudo apt install postgresql postgresql-contrib php-pgsql
+-- 1. Crear el usuario para el proyecto
+CREATE USER menuflow_user WITH PASSWORD 'secret';
 
-## Clone a repository
+-- 2. Darle permisos para crear bases de datos (útil para tests automáticos)
+ALTER USER menuflow_user CREATEDB;
 
-Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://confluence.atlassian.com/x/4whODQ).
+-- 3. Crear la base de datos vacía
+CREATE DATABASE menuflow_db OWNER menuflow_user;
 
-1. You’ll see the clone button under the **Source** heading. Click that button.
-2. Now click **Check out in SourceTree**. You may need to create a SourceTree account or log in.
-3. When you see the **Clone New** dialog in SourceTree, update the destination path and name if you’d like to and then click **Clone**.
-4. Open the directory you just created to see your repository’s files.
+-- 4. Conectarnos a esa base de datos para activar extensiones
+\c menuflow_db
 
-Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
+-- 5. Activar extensión para UUIDs (Recomendado para Tenancy)
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- 6. Salir
+\q
+
+## 🎨 Formateo de Código con Laravel Pint
+
+**Laravel Pint** es un formateador de código PHP que viene preinstalado en Laravel 12. Utiliza PHP-CS-Fixer bajo el capó para mantener un estilo de código consistente.
+
+### Uso Básico
+
+```bash
+# Formatear todo el código del proyecto
+./vendor/bin/pint
+
+# Ver qué archivos cambiarían sin modificarlos (modo dry-run)
+./vendor/bin/pint --test
+
+# Formatear archivos/carpetas específicas
+./vendor/bin/pint app/Models
+./vendor/bin/pint app/Http/Controllers/Admin
+
+# Para pruebas de Stripe
+  ┌─────────────────────┬──────────────────────────────┐                                                                                                                                                                      
+  │       Tarjeta       │          Escenario           │                                                                                                                                                                        
+  ├─────────────────────┼──────────────────────────────┤    
+  │ 4242 4242 4242 4242 │ Pago exitoso                 │                                                                                                                                                                        
+  ├─────────────────────┼──────────────────────────────┤                                                                                                                                                                      
+  │ 4000 0000 0000 3220 │ Requiere 3D Secure           │                                                                                                                                                                        
+  ├─────────────────────┼──────────────────────────────┤
+  │ 4000 0000 0000 9995 │ Pago rechazado               │                                                                                                                                                                        
+  ├─────────────────────┼──────────────────────────────┤                                                                                                                                                                      
+  │ 4000 0000 0000 0341 │ Falla al adjuntar a customer │                                                                                                                                                                        
+  └─────────────────────┴──────────────────────────────┘ 

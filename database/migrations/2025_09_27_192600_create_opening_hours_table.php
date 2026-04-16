@@ -18,6 +18,8 @@ return new class extends Migration
             $table->time('opens_at')->nullable();
             $table->time('closes_at')->nullable();
             $table->boolean('is_closed')->default(false);
+            $table->string('tenant_id')->index();
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -1,287 +1,228 @@
 <script setup lang="ts">
-import AppLogo from '@/components/AppLogo.vue';
-import AppLogoIcon from '@/components/AppLogoIcon.vue';
-import Breadcrumbs from '@/components/Breadcrumbs.vue';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { route } from 'ziggy-js';
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuTrigger
+    DropdownMenuItem,
+    DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import {
-    NavigationMenu,
-    NavigationMenuItem,
-    NavigationMenuList,
-    navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu';
 import {
     Sheet,
     SheetContent,
-    SheetHeader,
-    SheetTitle,
     SheetTrigger,
 } from '@/components/ui/sheet';
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from '@/components/ui/tooltip';
 import UserMenuContent from '@/components/UserMenuContent.vue';
 import { getInitials } from '@/composables/useInitials';
-import { toUrl, urlIsActive } from '@/lib/utils';
-import type { BreadcrumbItem, NavItem } from '@/types';
-import { InertiaLinkProps, Link, usePage } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-vue-next';
-import { computed } from 'vue';
-
-interface Props {
-    breadcrumbs?: BreadcrumbItem[];
-}
-
-const props = withDefaults(defineProps<Props>(), {
-    breadcrumbs: () => [],
-});
+import { Link, router, usePage } from '@inertiajs/vue3';
+import LocaleFlag from '@/components/ui/LocaleFlag.vue';
+import { Globe, LayoutDashboard, Menu } from 'lucide-vue-next';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const page = usePage();
 const auth = computed(() => page.props.auth);
+const scrolled = ref(false);
 
-const isCurrentRoute = computed(
-    () => (url: NonNullable<InertiaLinkProps['href']>) =>
-        urlIsActive(url, page.url),
-);
+const { t, locale: i18nLocale } = useI18n();
+const appName = page.props.name as string;
 
-const activeItemStyles = computed(
-    () => (url: NonNullable<InertiaLinkProps['href']>) =>
-        isCurrentRoute.value(toUrl(url))
-            ? 'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100'
-            : '',
-);
+function onScroll() {
+    scrolled.value = window.scrollY > 12;
+}
 
-const mainNavItems: NavItem[] = [
-    {
-        title: page.props.messages.nav.login,
-        href: route('login'),
-        icon: null,
-    },
-    {
-        title: page.props.messages.nav.register,
-        href: route('register'),
-        icon: null,
-    },
+onMounted(() => window.addEventListener('scroll', onScroll, { passive: true }));
+onUnmounted(() => window.removeEventListener('scroll', onScroll));
+
+interface NavLink {
+    label: string;
+    href: string;
+}
+
+const links = computed<NavLink[]>(() => [
+    { label: t('home.header.nav.features'), href: '/#features' },
+    { label: t('home.header.nav.pricing'), href: '/#pricing' },
+    { label: t('home.header.nav.faq'), href: '/faq' },
+    { label: t('home.header.nav.contact'), href: '/contact' },
+]);
+
+const UI_LOCALES = [
+    { code: 'es', label: 'Español' },
+    { code: 'en', label: 'English' },
+    { code: 'ca', label: 'Català' },
+    { code: 'gl', label: 'Galego' },
+    { code: 'eu', label: 'Euskara' },
 ];
 
-const rightNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#vue',
-        icon: BookOpen,
-    },
-];
+const currentLocaleLabel = computed(() => {
+    const found = UI_LOCALES.find((l) => l.code === i18nLocale.value);
+    return found ? found.code.toUpperCase() : 'ES';
+});
+
+function switchLocale(code: string) {
+    i18nLocale.value = code;
+    if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('locale', code);
+    }
+    const currentPath = window.location.pathname;
+    // Remove existing locale prefix if any
+    const cleanPath = currentPath.replace(/^\/(en|ca|gl|eu)(\/|$)/, '/');
+    const newPath = code === 'es' ? cleanPath : `/${code}${cleanPath === '/' ? '' : cleanPath}`;
+    router.visit(newPath);
+}
 </script>
 
 <template>
-    <div>
-        <div class="border-b border-sidebar-border/80">
-            <div class="mx-auto flex h-16 items-center px-4 md:max-w-7xl">
-                <!-- Mobile Menu -->
-                <div class="lg:hidden">
-                    <Sheet>
-                        <SheetTrigger :as-child="true">
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                class="mr-2 h-9 w-9"
-                            >
-                                <Menu class="h-5 w-5" />
-                            </Button>
-                        </SheetTrigger>
-                        <SheetContent side="left" class="w-[300px] p-6">
-                            <SheetTitle class="sr-only"
-                                >Navigation Menu</SheetTitle
-                            >
-                            <SheetHeader class="flex justify-start text-left">
-                                <AppLogoIcon
-                                    class="size-6 fill-current text-black dark:text-white"
-                                />
-                            </SheetHeader>
-                            <div
-                                class="flex h-full flex-1 flex-col justify-between space-y-4 py-6"
-                            >
-                                <nav class="-mx-3 space-y-1">
-                                    <Link
-                                        v-for="item in mainNavItems"
-                                        :key="item.title"
-                                        :href="item.href"
-                                        class="flex items-center gap-x-3 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent"
-                                        :class="activeItemStyles(item.href)"
-                                    >
-                                        <component
-                                            v-if="item.icon"
-                                            :is="item.icon"
-                                            class="h-5 w-5"
-                                        />
-                                        {{ item.title }}
-                                    </Link>
-                                </nav>
-                                <div class="flex flex-col space-y-4">
-                                    <a
-                                        v-for="item in rightNavItems"
-                                        :key="item.title"
-                                        :href="toUrl(item.href)"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        class="flex items-center space-x-2 text-sm font-medium"
-                                    >
-                                        <component
-                                            v-if="item.icon"
-                                            :is="item.icon"
-                                            class="h-5 w-5"
-                                        />
-                                        <span>{{ item.title }}</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </SheetContent>
-                    </Sheet>
-                </div>
-
-                <Link :href="route('home')" class="flex items-center gap-x-2">
-                    <AppLogo />
-                </Link>
-
-                <!-- Desktop Menu -->
-                <div class="hidden h-full lg:flex lg:flex-1">
-                    <NavigationMenu class="ml-10 flex h-full items-stretch">
-                        <NavigationMenuList
-                            class="flex h-full items-stretch space-x-2"
-                        >
-                            <NavigationMenuItem
-                                v-for="(item, index) in mainNavItems"
-                                :key="index"
-                                class="relative flex h-full items-center"
-                            >
-                                <Link
-                                    :class="[
-                                        navigationMenuTriggerStyle(),
-                                        activeItemStyles(item.href),
-                                        'h-9 cursor-pointer px-3',
-                                    ]"
-                                    :href="item.href"
-                                >
-                                    <component
-                                        v-if="item.icon"
-                                        :is="item.icon"
-                                        class="mr-2 h-4 w-4"
-                                    />
-                                    {{ item.title }}
-                                </Link>
-                                <div
-                                    v-if="isCurrentRoute(item.href)"
-                                    class="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-black dark:bg-white"
-                                ></div>
-                            </NavigationMenuItem>
-                        </NavigationMenuList>
-                    </NavigationMenu>
-                </div>
-
-                <div class="ml-auto flex items-center space-x-2">
-                    <div class="relative flex items-center space-x-1">
+    <header
+        class="sticky top-0 z-50 transition-all duration-200"
+        :class="scrolled
+            ? 'bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm'
+            : 'bg-white/80 backdrop-blur-sm'"
+    >
+        <div class="mx-auto flex h-16 items-center px-4 md:max-w-7xl">
+            <!-- Mobile hamburger -->
+            <div class="lg:hidden">
+                <Sheet>
+                    <SheetTrigger :as-child="true">
                         <Button
                             variant="ghost"
                             size="icon"
-                            class="group h-9 w-9 cursor-pointer"
+                            class="mr-2 h-9 w-9 text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+                            :aria-label="t('home.header.open_menu')"
                         >
-                            <Search
-                                class="size-5 opacity-80 group-hover:opacity-100"
-                            />
+                            <Menu class="h-5 w-5" />
                         </Button>
-
-                        <div class="hidden space-x-1 lg:flex">
-                            <template
-                                v-for="item in rightNavItems"
-                                :key="item.title"
+                    </SheetTrigger>
+                    <SheetContent side="left" class="w-[280px] p-6 bg-white border-r border-slate-200">
+                        <!-- Mobile logo -->
+                        <Link href="/" class="flex items-center mb-8">
+                            <img src="/images/logo-name.png" :alt="appName" class="h-10 object-contain" />
+                        </Link>
+                        <nav class="space-y-1">
+                            <Link
+                                v-for="link in links"
+                                :key="link.href"
+                                :href="link.href"
+                                class="flex items-center px-3 py-2.5 rounded-lg text-slate-700 hover:text-teal-600 hover:bg-teal-50 font-medium transition-colors"
                             >
-                                <TooltipProvider :delay-duration="0">
-                                    <Tooltip>
-                                        <TooltipTrigger>
-                                            <Button
-                                                variant="ghost"
-                                                size="icon"
-                                                as-child
-                                                class="group h-9 w-9 cursor-pointer"
-                                            >
-                                                <a
-                                                    :href="toUrl(item.href)"
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    <span class="sr-only">{{
-                                                        item.title
-                                                    }}</span>
-                                                    <component
-                                                        :is="item.icon"
-                                                        class="size-5 opacity-80 group-hover:opacity-100"
-                                                    />
-                                                </a>
-                                            </Button>
-                                        </TooltipTrigger>
-                                        <TooltipContent>
-                                            <p>{{ item.title }}</p>
-                                        </TooltipContent>
-                                    </Tooltip>
-                                </TooltipProvider>
-                            </template>
-                        </div>
-                    </div>
-
-                    <DropdownMenu v-if="auth?.user">
-                        <DropdownMenuTrigger :as-child="true">
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                class="relative size-10 w-auto rounded-full p-1 focus-within:ring-2 focus-within:ring-primary"
-                            >
-                                <Avatar
-                                    class="size-8 overflow-hidden rounded-full"
-                                >
-                                    <AvatarImage
-                                        v-if="auth.user.avatar"
-                                        :src="auth.user.avatar"
-                                        :alt="auth.user.name"
-                                    />
-                                    <AvatarFallback
-                                        class="rounded-lg bg-neutral-200 font-semibold text-black dark:bg-neutral-700 dark:text-white"
+                                {{ link.label }}
+                            </Link>
+                            <template v-if="!auth?.user">
+                                <div class="pt-5 mt-5 border-t border-slate-100 space-y-2.5">
+                                    <Link
+                                        href="/login"
+                                        class="flex items-center justify-center px-4 py-2.5 rounded-lg border border-slate-200 text-slate-700 hover:border-teal-300 hover:text-teal-600 font-medium transition-colors text-sm"
                                     >
-                                        {{ getInitials(auth.user?.name) }}
-                                    </AvatarFallback>
-                                </Avatar>
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" class="w-56">
-                            <UserMenuContent :user="auth.user" />
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </div>
-            </div>
-        </div>
+                                        {{ t('home.header.login') }}
+                                    </Link>
+                                    <Link
+                                        href="/register"
+                                        class="flex items-center justify-center px-4 py-2.5 rounded-full bg-teal-500 hover:bg-teal-600 text-white font-bold transition-colors text-sm"
+                                    >
+                                        {{ t('home.header.get_started') }}
+                                    </Link>
+                                </div>
+                            </template>
 
-        <div
-            v-if="props.breadcrumbs.length > 1"
-            class="flex w-full border-b border-sidebar-border/70"
-        >
-            <div
-                class="mx-auto flex h-12 w-full items-center justify-start px-4 text-neutral-500 md:max-w-7xl"
-            >
-                <Breadcrumbs :breadcrumbs="breadcrumbs" />
+                            <!-- Selector de idioma en mobile -->
+                            <div class="pt-5 mt-5 border-t border-slate-100">
+                                <p class="px-3 text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">{{ t('home.header.language') }}</p>
+                                <div class="space-y-0.5">
+                                    <button
+                                        v-for="loc in UI_LOCALES"
+                                        :key="loc.code"
+                                        class="flex w-full items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors"
+                                        :class="i18nLocale === loc.code
+                                            ? 'bg-teal-50 text-teal-700 font-semibold'
+                                            : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'"
+                                        @click="switchLocale(loc.code)"
+                                    >
+                                        <LocaleFlag :code="loc.code" />
+                                        <span>{{ loc.label }}</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </nav>
+                    </SheetContent>
+                </Sheet>
+            </div>
+
+            <!-- Logo -->
+            <Link href="/" class="flex items-center group">
+                <img src="/images/logo-name.png" :alt="appName" class="hidden sm:block h-10 object-contain" />
+                <img src="/images/logo.png" :alt="appName" class="block sm:hidden h-9 w-9 object-contain" />
+            </Link>
+
+            <!-- Desktop nav -->
+            <nav class="hidden lg:flex lg:flex-1 ml-10 items-center gap-1">
+                <Link
+                    v-for="link in links"
+                    :key="link.href"
+                    :href="link.href"
+                    class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 hover:text-teal-600 hover:bg-teal-50 transition-colors"
+                >
+                    {{ link.label }}
+                </Link>
+            </nav>
+
+            <!-- Right side -->
+            <div class="ml-auto flex items-center gap-2">
+                <!-- Selector de idioma desktop -->
+                <DropdownMenu>
+                    <DropdownMenuTrigger :as-child="true">
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            class="hidden lg:inline-flex items-center gap-1.5 text-slate-500 hover:text-slate-800 hover:bg-slate-100 px-2.5"
+                        >
+                            <Globe class="h-4 w-4" />
+                            <span class="text-xs font-semibold">{{ currentLocaleLabel }}</span>
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" class="w-44">
+                        <DropdownMenuItem
+                            v-for="loc in UI_LOCALES"
+                            :key="loc.code"
+                            class="flex items-center gap-2.5 cursor-pointer"
+                            :class="i18nLocale === loc.code ? 'font-semibold text-teal-700 bg-teal-50' : ''"
+                            @click="switchLocale(loc.code)"
+                        >
+                            <LocaleFlag :code="loc.code" />
+                            <span>{{ loc.label }}</span>
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+
+                <template v-if="!auth?.user">
+                    <Link
+                        href="/login"
+                        class="hidden lg:inline-flex items-center px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
+                    >
+                        {{ t('home.header.login') }}
+                    </Link>
+                    <Link
+                        href="/register"
+                        class="inline-flex items-center px-5 py-2 rounded-full bg-teal-500 hover:bg-teal-600 text-white text-sm font-bold transition-colors shadow-sm"
+                    >
+                        {{ t('home.header.get_started') }}
+                    </Link>
+                </template>
+
+                <DropdownMenu v-if="auth?.user">
+                    <DropdownMenuTrigger :as-child="true">
+                        <Button variant="ghost" class="relative size-10 w-auto rounded-full p-1 border border-slate-200 hover:border-teal-300">
+                            <Avatar class="h-8 w-8 overflow-hidden rounded-lg">
+                                <AvatarFallback class="rounded-lg text-slate-700 bg-teal-50 text-xs font-semibold">
+                                    {{ getInitials(auth?.user?.name) }}
+                                </AvatarFallback>
+                            </Avatar>
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" class="w-56">
+                        <UserMenuContent :user="auth.user" :panel-url="auth?.panel_url ?? null" />
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </div>
         </div>
-    </div>
+    </header>
 </template>

@@ -2,8 +2,12 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Plan;
+use App\Models\Subscription;
+use App\Models\User;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
 
@@ -44,14 +48,84 @@ class HandleInertiaRequests extends Middleware
             'name' => config('app.name'),
             'quote' => ['message' => trim($message), 'author' => trim($author)],
             'auth' => [
-                'user' => $request->user(),
+                'user' => auth()->user(),
+                'panel_url' => fn () => $this->userPanelUrl(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
             'ziggy' => fn (): array => [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
-            'messages' => fn () => __('messages'),
+            'locale' => fn () => auth()->user()?->locale ?? app()->getLocale(),
+            'flash' => [
+                'success' => fn () => $request->session()->get('success'),
+                'error' => fn () => $request->session()->get('error'),
+                'welcome_onboarding' => fn () => $request->session()->get('welcome_onboarding'),
+                'menu_public_url' => fn () => $request->session()->get('menu_public_url'),
+            ],
+            'messages' => fn () => App::environment('production')
+                 ? cache()->rememberForever('messages.'.app()->getLocale(), fn () => __('messages'))
+                 : __('messages'),
+            'tenant' => fn () => $this->tenantFeatures(),
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    private function userPanelUrl(): ?string
+    {
+        $user = auth()->user();
+
+        if (! $user instanceof User) {
+            return null;
+        }
+
+        $tenant = $user->tenants()->first();
+        $domain = $tenant?->domains()->first()?->domain;
+
+        if (! $domain) {
+            return null;
+        }
+
+        $appUrl = config('app.url');
+        $scheme = parse_url($appUrl, PHP_URL_SCHEME) ?: 'http';
+        $port = parse_url($appUrl, PHP_URL_PORT);
+        $portSuffix = $port ? ':'.$port : '';
+
+        return "{$scheme}://{$domain}{$portSuffix}/panel";
+    }
+
+    private function tenantFeatures(): ?array
+    {
+        if (! function_exists('tenant') || ! tenant()) {
+            return null;
+        }
+
+        $subscription = Subscription::where('tenant_id', tenant()->id)
+            ->latest()
+            ->with('plan')
+            ->first();
+
+        $plan = $subscription?->plan ?? Plan::free();
+
+        $user = auth()->user();
+
+        return [
+            'id' => tenant()->id,
+            'plan_features' => [
+                'multilang' => (bool) ($plan?->has_multilang ?? false),
+                'catalog' => (bool) ($plan?->has_catalog ?? false),
+                'team' => (bool) ($plan?->has_team ?? false),
+                'analytics' => (bool) ($plan?->has_analytics ?? false),
+                'custom_qr' => (bool) ($plan?->has_custom_qr ?? false),
+                'menu_colors' => (bool) ($plan?->has_menu_colors ?? false),
+                'menu_fonts' => (bool) ($plan?->has_menu_fonts ?? false),
+                'menu_layout' => (bool) ($plan?->has_menu_layout ?? false),
+                'menu_advanced_style' => (bool) ($plan?->has_menu_advanced_style ?? false),
+                'api_access' => (bool) ($plan?->has_api_access ?? false),
+            ],
+            'user_role' => $user instanceof User ? $user->currentTenantRole() : null,
         ];
     }
 }

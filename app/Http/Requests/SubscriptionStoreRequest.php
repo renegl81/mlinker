@@ -20,7 +20,7 @@ class SubscriptionStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['required', 'integer', 'exists:Users,id'],
+            'user_id' => ['required', 'integer', 'exists:users,id'],
             'plan_id' => ['required', 'integer', 'exists:,id'],
             'started_at' => ['required'],
             'status' => ['required', 'string', 'max:20'],

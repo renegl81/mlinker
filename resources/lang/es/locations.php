@@ -1,0 +1,63 @@
+<?php
+
+return [
+    'singular' => 'Local',
+    'plural' => 'Locales',
+    'caption' => 'Gestiona los locales de tu negocio',
+    'fields' => [
+        'name' => 'Nombre',
+        'address' => 'Dirección',
+        'city' => 'Ciudad',
+        'province' => 'Provincia',
+        'description' => 'Descripción',
+        'country' => 'País',
+        'phone' => 'Teléfono',
+        'currency' => 'Moneda',
+        'time_zone' => 'Zona Horaria',
+        'postal_code' => 'Código Postal',
+    ],
+    'placeholders' => [
+        'name' => 'Nombre completo',
+        'email' => 'correo@ejemplo.com',
+        'password' => 'Contraseña',
+        'password_edit' => 'Dejar vacío para no cambiar',
+        'password_confirmation' => 'Confirmar contraseña',
+    ],
+    'filters' => [
+        'show' => 'Mostrar filtros',
+        'hide' => 'Ocultar filtros',
+        'clear' => 'Limpiar filtros',
+        'search' => 'Buscar',
+        'placeholders' => [
+            'name' => 'Buscar por nombre',
+            'last_name' => 'Buscar por apellido',
+            'email' => 'Buscar por email',
+            'phone' => 'Buscar por teléfono',
+            'country' => 'Buscar por país',
+            'province' => 'Buscar por provincia',
+            'city' => 'Buscar por ciudad',
+            'postal_code' => 'Buscar por código postal',
+            'address' => 'Buscar por dirección',
+        ],
+    ],
+    'actions' => [
+        'create' => 'Crear Local',
+        'edit' => 'Editar Local',
+        'delete' => 'Eliminar Local',
+        'confirm_delete' => '¿Estás seguro de eliminar este local?',
+        'save' => 'Guardar',
+        'saving' => 'Guardando...',
+        'cancel' => 'Cancelar',
+    ],
+    'form' => [
+        'title_shoe' => 'Información del Local',
+        'title_create' => 'Crear Local',
+        'title_edit' => 'Editar Local',
+        'description_create' => 'Completa los datos del local',
+        'description_edit' => 'Actualiza los datos del local',
+        'create_success' => 'Local creado correctamente',
+        'edit_success' => 'Local actualizado correctamente',
+        'delete_success' => 'Local eliminado correctamente',
+
+    ],
+];

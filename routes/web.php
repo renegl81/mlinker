@@ -1,55 +1,70 @@
 <?php
 
-
-use App\Http\Controllers\AllergenController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\CountryController;
-use App\Http\Controllers\DefaultController;
-use App\Http\Controllers\IngredientController;
-use App\Http\Controllers\LocationController;
-use App\Http\Controllers\MenuCardController;
-use App\Http\Controllers\MenuController;
-use App\Http\Controllers\OpeningHourController;
-use App\Http\Controllers\PaymentController;
-use App\Http\Controllers\PlanController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\QRCodeController;
-use App\Http\Controllers\SectionController;
-use App\Http\Controllers\SubscriptionController;
-use App\Http\Controllers\TemplateController;
-use App\Http\Controllers\TranslationController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Admin\Core\DashboardController;
+use App\Http\Controllers\Admin\Core\UserController;
+use App\Http\Controllers\Admin\Menu\AllergenController;
+use App\Http\Controllers\Admin\Menu\IngredientController;
+use App\Http\Controllers\Admin\Menu\MenuController;
+use App\Http\Controllers\Admin\Menu\ProductController;
+use App\Http\Controllers\Admin\Menu\QRCodeController;
+use App\Http\Controllers\Admin\Tenant\CategoryController;
+use App\Http\Controllers\Admin\Tenant\CountryController;
+use App\Http\Controllers\Admin\Tenant\LocationController;
+use App\Http\Controllers\Admin\Tenant\PlanController;
+use App\Http\Controllers\Admin\Tenant\TemplateController;
+use App\Http\Controllers\DocumentationController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\StripeWebhookController;
+use App\Http\Controllers\TenantImageController;
+use App\Http\Middleware\SetLocaleFromUrl;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', [DefaultController::class, 'index'])->name('home');
+Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook'])->name('stripe.webhook');
 
-Route::get('admin', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::redirect('/doc', '/faq')->name('documentation');
+Route::get('/sitemap.xml', [HomeController::class, 'sitemap'])->name('sitemap');
 
+// Páginas públicas con prefijo de idioma opcional
+Route::middleware(SetLocaleFromUrl::class)->group(function () {
+    // Sin prefijo (español por defecto)
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::get('/faq', [PageController::class, 'faq'])->name('faq');
+    Route::get('/contact', [PageController::class, 'contact'])->name('contact');
+    Route::get('/privacy', [PageController::class, 'privacy'])->name('privacy');
+    Route::get('/terms', [PageController::class, 'terms'])->name('terms');
+    Route::get('/cookies', [PageController::class, 'cookies'])->name('cookies');
+
+    // Con prefijo de idioma (es queda sin prefijo — es el default)
+    Route::prefix('{locale}')
+        ->where(['locale' => 'en|ca|gl|eu'])
+        ->group(function () {
+            Route::get('/', [HomeController::class, 'index'])->name('home.locale');
+            Route::get('/faq', [PageController::class, 'faq'])->name('faq.locale');
+            Route::get('/contact', [PageController::class, 'contact'])->name('contact.locale');
+            Route::get('/privacy', [PageController::class, 'privacy'])->name('privacy.locale');
+            Route::get('/terms', [PageController::class, 'terms'])->name('terms.locale');
+            Route::get('/cookies', [PageController::class, 'cookies'])->name('cookies.locale');
+        });
+});
+Route::get('/tenant_image/{tenant}/{path}', TenantImageController::class)
+    ->where('path', '.*')
+    ->name('tenant_image');
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
 
-
-// routes/web.php
-
-Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
-    Route::resource('users', UserController::class)->except('create', 'edit');
+// Panel de administración legacy (Inertia/Vue) — movido a /superadmin para ceder /admin a Filament
+Route::prefix('superadmin')->middleware(['auth', 'verified', 'admin'])->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('users', UserController::class);
     Route::resource('locations', LocationController::class)->except('create', 'edit');
     Route::resource('categories', CategoryController::class)->except('create', 'edit');
-    Route::resource('menu-cards', MenuCardController::class)->except('create', 'edit');
     Route::resource('menus', MenuController::class)->except('create', 'edit');
-    Route::resource('sections', SectionController::class)->except('create', 'edit');
     Route::resource('products', ProductController::class)->except('create', 'edit');
     Route::resource('ingredients', IngredientController::class)->except('create', 'edit');
     Route::resource('allergens', AllergenController::class)->except('create', 'edit');
     Route::resource('plans', PlanController::class)->except('create', 'edit');
-    Route::resource('subscriptions', SubscriptionController::class)->except('create', 'edit');
-    Route::resource('payments', PaymentController::class)->except('create', 'edit');
     Route::resource('templates', TemplateController::class)->except('create', 'edit');
-    Route::resource('translations', TranslationController::class)->except('create', 'edit');
-    Route::resource('opening-hours', OpeningHourController::class)->except('create', 'edit');
     Route::resource('countries', CountryController::class)->except('create', 'edit');
     Route::resource('qrcodes', QRCodeController::class)->except('create', 'edit');
 });

@@ -1,14 +1,10 @@
 <?php
 
-
-
 return [
-   'nav' => [
-       'home' => 'Home',
-       'about' => 'About',
-       'contact' => 'Contact',
-       'login' => 'Login',
-       'register' => 'Register',
-   ]
-
+    'actions' => require __DIR__.'/actions.php',
+    'pagination' => require __DIR__.'/pagination.php',
+    'nav' => require __DIR__.'/nav.php',
+    'users' => require __DIR__.'/users.php',
+    'menus' => require __DIR__.'/menus.php',
+    'auth' => require __DIR__.'/auth.php',
 ];

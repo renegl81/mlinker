@@ -10,10 +10,11 @@ import { logout } from '@/routes';
 import { edit } from '@/routes/profile';
 import type { User } from '@/types';
 import { Link, router } from '@inertiajs/vue3';
-import { LogOut, Settings } from 'lucide-vue-next';
+import { LayoutDashboard, LogOut, Settings } from 'lucide-vue-next';
 
 interface Props {
     user: User;
+    panelUrl?: string | null;
 }
 
 const handleLogout = () => {
@@ -31,6 +32,12 @@ defineProps<Props>();
     </DropdownMenuLabel>
     <DropdownMenuSeparator />
     <DropdownMenuGroup>
+        <DropdownMenuItem v-if="panelUrl" :as-child="true">
+            <a class="block w-full" :href="panelUrl">
+                <LayoutDashboard class="mr-2 h-4 w-4" />
+                Panel
+            </a>
+        </DropdownMenuItem>
         <DropdownMenuItem :as-child="true">
             <Link class="block w-full" :href="edit()" prefetch as="button">
                 <Settings class="mr-2 h-4 w-4" />

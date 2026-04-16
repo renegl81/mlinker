@@ -112,6 +112,7 @@ models:
   Template:
     name: string:100
     description: text nullable
+    parameters: json
     preview_image_url: string:255 nullable
     config: json nullable
     is_active: boolean default:true
@@ -259,22 +260,22 @@ controllers:
 
   Menu:
     index:
-      dispatch: ListMenus
-      render: menu.index with:menus
+      dispatch: GetMenus
+      render: Menu.index with:menus
     store:
       validate: name, menu_card_id
       dispatch: CreateMenu with:request
-      redirect: menu.index
+      redirect: Menu.index
     show:
       dispatch: ShowMenu with:id
-      render: menu.show with:menu
+      render: Menu.show with:Menu
     update:
       validate: name, menu_card_id
       dispatch: UpdateMenu with:request, id
-      redirect: menu.show
+      redirect: Menu.show
     destroy:
       dispatch: DeleteMenu with:id
-      redirect: menu.index
+      redirect: Menu.index
 
   Section:
     index:

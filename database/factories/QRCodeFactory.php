@@ -2,32 +2,26 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
-use App\Models\MenuCard;
+use App\Models\Menu;
 use App\Models\QRCode;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class QRCodeFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = QRCode::class;
 
-    /**
-     * Define the model's default state.
-     */
     public function definition(): array
     {
         return [
-            'menu_card_id' => MenuCard::factory(),
-            'parameters' => '{}',
-            'image_url' => fake()->regexify('[A-Za-z0-9]{255}'),
+            'menu_id' => Menu::factory(),
+            'parameters' => [
+                'size' => 300,
+                'margin' => 10,
+                'foreground' => '#000000',
+                'background' => '#FFFFFF',
+            ],
+            'image_url' => null,
             'url' => fake()->url(),
-            'created_at' => fake()->dateTime(),
-            'updated_at' => fake()->dateTime(),
         ];
     }
 }

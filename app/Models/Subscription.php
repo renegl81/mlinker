@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Laravel\Cashier\Subscription as CashierSubscription;
 
-class Subscription extends Model
+class Subscription extends CashierSubscription
 {
     use HasFactory;
 
@@ -17,11 +17,15 @@ class Subscription extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id',
+        'tenant_id',
         'plan_id',
-        'started_at',
+        'type',
+        'stripe_id',
+        'stripe_status',
+        'stripe_price',
+        'quantity',
+        'trial_ends_at',
         'ends_at',
-        'status',
     ];
 
     /**
@@ -33,16 +37,19 @@ class Subscription extends Model
     {
         return [
             'id' => 'integer',
-            'user_id' => 'integer',
+            'tenant_id' => 'string',
             'plan_id' => 'integer',
-            'started_at' => 'timestamp',
-            'ends_at' => 'timestamp',
+            'quantity' => 'integer',
+            'trial_ends_at' => 'datetime',
+            'ends_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
         ];
     }
 
-    public function user(): BelongsTo
+    public function tenant(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Tenant::class);
     }
 
     public function plan(): BelongsTo
@@ -53,5 +60,26 @@ class Subscription extends Model
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
+    }
+
+    /**
+     * Determine if the subscription is active (including free plan).
+     */
+    public function isActive(): bool
+    {
+        // Free plan subscriptions are always active
+        if ($this->stripe_status === 'free') {
+            return true;
+        }
+
+        return $this->active() || $this->onTrial();
+    }
+
+    /**
+     * Determine if this is a free plan subscription.
+     */
+    public function isFree(): bool
+    {
+        return $this->stripe_status === 'free';
     }
 }

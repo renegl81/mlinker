@@ -60,7 +60,8 @@ export function initializeTheme() {
     }
 
     // Initialize theme from saved preference or default to system...
-    const savedAppearance = getStoredAppearance();
+   // const savedAppearance = getStoredAppearance();
+    const savedAppearance = 'light';
     updateTheme(savedAppearance || 'system');
 
     // Set up system theme change listener...

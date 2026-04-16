@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('product_section', function (Blueprint $table) {
             $table->foreignId('product_id');
             $table->foreignId('section_id');
+            $table->string('tenant_id')->index();
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
         });
     }
 

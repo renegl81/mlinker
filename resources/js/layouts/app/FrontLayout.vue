@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import AppContent from '@/components/AppContent.vue';
-import AppHeader from '@/components/AppHeader.vue';
-import AppShell from '@/components/AppShell.vue';
-import type { BreadcrumbItemType } from '@/types';
+import FooterSection from '@/components/home/FooterSection.vue';
 import FrontHeader from '@/components/FrontHeader.vue';
+import type { BreadcrumbItemType } from '@/types';
 
 interface Props {
-    breadcrumbs?: BreadcrumbItemType[];
+    breadcrumbs?: BreadcrumbItemType[]
 }
 
 withDefaults(defineProps<Props>(), {
@@ -15,10 +13,17 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-    <AppShell class="flex-col">
+    <div class="front-page flex min-h-screen flex-col bg-white text-slate-900 antialiased">
         <FrontHeader :breadcrumbs="breadcrumbs" />
-        <AppContent>
+        <main class="flex-1">
             <slot />
-        </AppContent>
-    </AppShell>
+        </main>
+        <FooterSection />
+    </div>
 </template>
+
+<style>
+.front-page {
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+</style>

@@ -1,0 +1,91 @@
+services:
+  laravel.test:
+    build:
+      context: './vendor/laravel/sail/runtimes/8.5'
+      dockerfile: Dockerfile
+      args:
+        WWWGROUP: '${WWWGROUP}'
+    image: 'sail-8.5/app'
+    container_name: 'flowsuite-php'
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+      - 'flowsuite.com:host-gateway'
+      - '*.flowsuite.com:host-gateway'
+    ports:
+      - '8086:80'
+      - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
+    environment:
+      WWWUSER: '${WWWUSER}'
+      LARAVEL_SAIL: 1
+      XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
+      XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
+      IGNITION_LOCAL_SITES_PATH: '${PWD}'
+    volumes:
+      - '.:/var/www/html'
+    networks:
+      - flowsuite
+    depends_on:
+      pgsql:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+
+  mailpit:
+    image: 'axllent/mailpit:latest'
+    container_name: 'flowsuite-mailpit'
+    ports:
+      - '${FORWARD_MAILPIT_PORT:-1025}:1025'
+      - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
+    networks:
+      - flowsuite
+
+  stripe-cli:
+    image: 'stripe/stripe-cli:latest'
+    container_name: 'flowsuite-stripe'
+    command:
+      - listen
+      - '--api-key'
+      - '${STRIPE_SECRET}'
+      - '--forward-to'
+      - 'http://laravel.test/stripe/webhook'
+      - '--log-level'
+      - 'info'
+    networks:
+      - flowsuite
+    depends_on:
+      - laravel.test
+
+  pgsql:
+    image: 'postgres:18-alpine'
+    container_name: 'flowsuite-pgsql'
+    ports:
+      - '${FORWARD_DB_PORT:-5433}:5432'
+    environment:
+      PGPASSWORD: '${DB_PASSWORD:-secret}'
+      POSTGRES_DB: '${DB_DATABASE}'
+      POSTGRES_USER: '${DB_USERNAME}'
+      POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
+    volumes:
+      - 'sail-pgsql:/var/lib/postgresql/data'
+      - './vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
+    networks:
+      - flowsuite
+    healthcheck:
+      test:
+        - "CMD"
+        - "pg_isready"
+        - "-q"
+        - "-d"
+        - "${DB_DATABASE}"
+        - "-U"
+        - "${DB_USERNAME}"
+      retries: 3
+      timeout: 5s
+
+networks:
+  flowsuite:
+    driver: bridge
+
+volumes:
+  sail-pgsql:
+    driver: local

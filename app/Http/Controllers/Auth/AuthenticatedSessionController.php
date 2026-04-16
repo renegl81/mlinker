@@ -28,7 +28,7 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
+    public function store(LoginRequest $request): RedirectResponse|\Symfony\Component\HttpFoundation\Response
     {
         $user = $request->validateCredentials();
 
@@ -44,6 +44,19 @@ class AuthenticatedSessionController extends Controller
         Auth::login($user, $request->boolean('remember'));
 
         $request->session()->regenerate();
+
+        // If the user belongs to a tenant, redirect to the tenant's panel via its domain.
+        $tenant = $user->tenants()->first();
+        $tenantDomain = $tenant?->domains()->first()?->domain;
+
+        if ($tenantDomain) {
+            $appUrl = config('app.url');
+            $scheme = parse_url($appUrl, PHP_URL_SCHEME) ?: 'http';
+            $port = parse_url($appUrl, PHP_URL_PORT);
+            $portSuffix = $port ? ':'.$port : '';
+
+            return Inertia::location("{$scheme}://{$tenantDomain}{$portSuffix}/panel");
+        }
 
         return redirect()->intended(route('dashboard', absolute: false));
     }

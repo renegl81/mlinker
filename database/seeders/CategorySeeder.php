@@ -12,6 +12,34 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        Category::factory()->count(5)->create();
+        $names = [
+            'Restaurante',
+            'Cafetería',
+            'Bar',
+            'Tasca',
+            'Pub',
+            'Cervecería',
+            'Bodega',
+            'Pizzería',
+            'Pastelería',
+            'Heladería',
+            'Food truck',
+            'Buffet',
+            'Brasería',
+            'Mesón',
+            'Taberna',
+            'Chiringuito',
+            'Gastrobar',
+            'Coctelería',
+            'Vinoteca',
+            'Parrilla',
+            'Asador',
+            'Restaurante vegetariano',
+            'Restaurante vegano',
+            'Casa de comidas',
+        ];
+        foreach ($names as $name) {
+            Category::updateOrCreate(['name' => $name]);
+        }
     }
 }

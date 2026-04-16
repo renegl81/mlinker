@@ -2,6 +2,7 @@
 
 return [
 
+    'domain' => env('APP_DOMAIN', 'menulinker.com'),
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -13,7 +14,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'MenuLinker'),
 
     /*
     |--------------------------------------------------------------------------

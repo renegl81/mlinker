@@ -2,10 +2,9 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\Location;
 use App\Models\OpeningHour;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OpeningHourFactory extends Factory
 {
