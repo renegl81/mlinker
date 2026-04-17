@@ -3,6 +3,8 @@ import { router } from '@inertiajs/vue3';
 import { Loader2, Plus, UtensilsCrossed, X } from 'lucide-vue-next';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 const { t } = useI18n();
 
@@ -80,20 +82,17 @@ function addAnotherSection() {
     error.value = '';
     emit('addSection', rows.value as any);
 }
-
-const inputClass =
-    'flex h-10 w-full rounded-lg border border-slate-700 bg-slate-900/60 px-3 py-2 text-sm text-white placeholder:text-slate-500 transition-colors focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/30';
 </script>
 
 <template>
     <div>
-        <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-teal-500/15">
-            <UtensilsCrossed class="h-6 w-6 text-teal-400" />
+        <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
+            <UtensilsCrossed class="h-6 w-6 text-primary" />
         </div>
-        <h1 class="mb-2 text-2xl font-bold text-white">
+        <h1 class="mb-2 text-2xl font-bold text-foreground">
             {{ t('panel.onboarding.products_title', { section: props.sectionName }) }}
         </h1>
-        <p class="mb-6 text-sm text-slate-400">
+        <p class="mb-6 text-sm text-muted-foreground">
             {{ t('panel.onboarding.products_subtitle') }}
         </p>
 
@@ -102,16 +101,16 @@ const inputClass =
             <span
                 v-for="sec in props.allSections"
                 :key="sec.name"
-                class="inline-flex items-center gap-1 rounded-full bg-teal-500/10 border border-teal-500/30 px-3 py-1 text-xs font-medium text-teal-300"
+                class="inline-flex items-center gap-1 rounded-full bg-primary/10 border border-primary/20 px-3 py-1 text-xs font-medium text-primary"
             >
                 {{ sec.name }}
-                <span class="text-teal-500/60">({{ sec.products.length }})</span>
+                <span class="text-primary/60">({{ sec.products.length }})</span>
             </span>
         </div>
 
         <!-- Current section header -->
         <div class="mb-3 flex items-center gap-2">
-            <span class="rounded-lg bg-slate-700/60 px-3 py-1.5 text-sm font-semibold text-white">
+            <span class="rounded-lg bg-muted px-3 py-1.5 text-sm font-semibold text-foreground">
                 {{ props.sectionName }}
             </span>
         </div>
@@ -123,74 +122,81 @@ const inputClass =
                 :key="i"
                 class="flex items-center gap-2"
             >
-                <input
+                <Input
                     v-model="row.name"
                     type="text"
                     :placeholder="t('panel.onboarding.product_name_placeholder')"
-                    :class="[inputClass, 'flex-1']"
+                    class="flex-1"
                 />
                 <div class="relative w-24">
-                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">€</span>
-                    <input
+                    <span class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">€</span>
+                    <Input
                         v-model="row.price"
                         type="number"
                         step="0.01"
                         min="0"
                         :placeholder="t('panel.onboarding.product_price_placeholder')"
-                        :class="[inputClass, 'pl-7']"
+                        class="pl-7"
                     />
                 </div>
-                <button
+                <Button
                     v-if="rows.length > 1"
                     type="button"
-                    class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-800 hover:text-red-400"
+                    variant="ghost"
+                    size="icon"
+                    class="flex-shrink-0 text-muted-foreground hover:text-destructive"
                     :title="t('common.delete')"
                     @click="removeRow(i)"
                 >
                     <X class="h-4 w-4" />
-                </button>
+                </Button>
             </div>
         </div>
 
         <!-- Add row -->
-        <button
+        <Button
             type="button"
-            class="mb-5 inline-flex items-center gap-1.5 text-sm font-medium text-teal-400 transition-colors hover:text-teal-300"
+            variant="ghost"
+            size="sm"
+            class="mb-5 text-primary hover:text-primary/80"
             @click="addRow"
         >
             <Plus class="h-4 w-4" />
             {{ t('panel.onboarding.add_product') }}
-        </button>
+        </Button>
 
-        <p v-if="error" class="mb-3 text-xs text-red-400">{{ error }}</p>
+        <p v-if="error" class="mb-3 text-xs text-destructive">{{ error }}</p>
 
         <!-- Actions -->
         <div class="flex flex-col gap-3">
-            <button
+            <Button
                 type="button"
                 :disabled="processing"
-                class="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-teal-600 to-cyan-600 px-6 font-semibold text-white shadow-lg shadow-teal-500/20 transition-all hover:from-teal-500 hover:to-cyan-500 disabled:cursor-not-allowed disabled:opacity-60"
+                class="w-full"
+                size="lg"
                 @click="submit"
             >
                 <Loader2 v-if="processing" class="h-4 w-4 animate-spin" />
                 <span>{{ t('panel.onboarding.publish_cta') }}</span>
-            </button>
+            </Button>
 
-            <button
+            <Button
                 type="button"
-                class="inline-flex items-center justify-center gap-1.5 text-sm font-medium text-teal-400 transition-colors hover:text-teal-300"
+                variant="outline"
+                size="sm"
                 @click="addAnotherSection"
             >
                 {{ t('panel.onboarding.add_section') }}
-            </button>
+            </Button>
 
-            <button
+            <Button
                 type="button"
-                class="text-sm text-slate-500 transition-colors hover:text-slate-300"
+                variant="ghost"
+                class="text-muted-foreground"
                 @click="emit('back')"
             >
                 ← {{ t('panel.onboarding.back') }}
-            </button>
+            </Button>
         </div>
     </div>
 </template>

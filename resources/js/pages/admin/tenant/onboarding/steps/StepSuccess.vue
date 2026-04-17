@@ -3,6 +3,7 @@ import { router } from '@inertiajs/vue3';
 import { LayoutDashboard, Loader2 } from 'lucide-vue-next';
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { Button } from '@/components/ui/button';
 
 const { t } = useI18n();
 
@@ -30,31 +31,31 @@ function finish() {
 
 <template>
     <div class="flex flex-col items-center text-center">
-        <!-- Celebration icon -->
-        <div class="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 text-5xl shadow-lg shadow-teal-500/30">
+        <!-- Celebration icon (gradiente sutil permitido por spec P1.3) -->
+        <div class="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 text-5xl shadow-lg shadow-primary/20">
             🎊
         </div>
 
-        <h1 class="mb-2 text-2xl font-bold text-white">
+        <h1 class="mb-2 text-2xl font-bold text-foreground">
             {{ t('panel.onboarding.success_title') }}
         </h1>
-        <p class="mb-8 max-w-sm text-sm text-slate-400">
+        <p class="mb-8 max-w-sm text-sm text-muted-foreground">
             {{ t('panel.onboarding.success_body') }}
         </p>
 
-        <!-- CTAs -->
+        <!-- CTA primaria: ir al panel (genera QR y redirige) -->
         <div class="flex w-full max-w-xs flex-col gap-3">
-            <!-- Primary: publish/finish -->
-            <button
+            <Button
                 type="button"
                 :disabled="processing || !props.menu"
-                class="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-teal-600 to-cyan-600 px-6 font-semibold text-white shadow-lg shadow-teal-500/20 transition-all hover:from-teal-500 hover:to-cyan-500 disabled:cursor-not-allowed disabled:opacity-60"
+                class="w-full"
+                size="lg"
                 @click="finish"
             >
                 <Loader2 v-if="processing" class="h-4 w-4 animate-spin" />
                 <LayoutDashboard v-else class="h-4 w-4" />
                 <span>{{ t('panel.onboarding.success_go_panel') }}</span>
-            </button>
+            </Button>
         </div>
     </div>
 </template>

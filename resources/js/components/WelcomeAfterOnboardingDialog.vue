@@ -8,6 +8,12 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { useI18n } from 'vue-i18n';
 
 interface Props {
@@ -36,26 +42,51 @@ const { t } = useI18n();
                 </DialogDescription>
             </DialogHeader>
 
-            <DialogFooter class="mt-4 flex-col gap-2 sm:flex-row sm:justify-center">
+            <DialogFooter class="mt-4 flex-col gap-2 sm:flex-col">
+                <!-- CTA primaria: ir al panel / cerrar -->
                 <Button
-                    variant="outline"
-                    class="w-full sm:w-auto"
-                    as-child
-                >
-                    <a
-                        :href="publicUrl"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        {{ t('panel.onboarding.welcome.cta_public') }}
-                    </a>
-                </Button>
-                <Button
-                    class="w-full bg-teal-500 text-white hover:bg-teal-600 sm:w-auto"
+                    class="w-full"
+                    size="lg"
                     @click="emit('close')"
                 >
                     {{ t('panel.onboarding.welcome.cta_customize') }}
                 </Button>
+
+                <!-- CTAs secundarias -->
+                <div class="flex flex-col gap-2 sm:flex-row">
+                    <Button
+                        variant="outline"
+                        class="w-full sm:flex-1"
+                        as-child
+                    >
+                        <a
+                            :href="publicUrl"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {{ t('panel.onboarding.success_view_public') }}
+                        </a>
+                    </Button>
+
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger as-child>
+                                <span class="w-full sm:flex-1">
+                                    <Button
+                                        variant="outline"
+                                        class="w-full pointer-events-none"
+                                        disabled
+                                    >
+                                        {{ t('panel.onboarding.success_download_qr') }}
+                                    </Button>
+                                </span>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                Próximamente
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                </div>
             </DialogFooter>
         </DialogContent>
     </Dialog>

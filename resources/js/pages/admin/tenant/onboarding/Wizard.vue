@@ -129,14 +129,14 @@ watch(
 </script>
 
 <template>
-    <div class="min-h-svh bg-slate-950 text-slate-200 selection:bg-teal-500 selection:text-white">
+    <div class="min-h-svh bg-background text-foreground">
         <div class="flex min-h-svh flex-col items-center justify-start px-4 py-10">
             <!-- Logo -->
             <div class="mb-10 flex items-center">
                 <img
                     src="/images/logo-name.png"
                     :alt="appName"
-                    class="h-10 object-contain brightness-0 invert"
+                    class="h-10 object-contain"
                 />
             </div>
 
@@ -152,10 +152,10 @@ watch(
                             class="flex h-8 w-8 items-center justify-center rounded-full border-2 text-xs font-bold transition-all"
                             :class="
                                 i < progressIndex
-                                    ? 'border-teal-500 bg-teal-500 text-white'
+                                    ? 'border-primary bg-primary text-primary-foreground'
                                     : i === progressIndex
-                                      ? 'border-teal-500 bg-teal-500/20 text-teal-300'
-                                      : 'border-slate-700 bg-slate-900 text-slate-500'
+                                      ? 'border-primary bg-primary/15 text-primary'
+                                      : 'border-border bg-card text-muted-foreground'
                             "
                         >
                             <Check v-if="i < progressIndex" class="h-4 w-4" />
@@ -163,15 +163,15 @@ watch(
                         </div>
                         <span
                             class="text-[11px] font-medium"
-                            :class="i <= progressIndex ? 'text-teal-300' : 'text-slate-500'"
+                            :class="i <= progressIndex ? 'text-primary' : 'text-muted-foreground'"
                         >
                             {{ label }}
                         </span>
                     </div>
                 </div>
-                <div class="relative mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
+                <div class="relative mt-2 h-1.5 w-full overflow-hidden rounded-full bg-muted">
                     <div
-                        class="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 transition-all duration-500"
+                        class="absolute left-0 top-0 h-full rounded-full bg-primary transition-all duration-500"
                         :style="{ width: Math.round((progressIndex / visibleSteps.length) * 100) + '%' }"
                     />
                 </div>
@@ -179,7 +179,7 @@ watch(
 
             <!-- Card -->
             <div
-                class="w-full rounded-2xl border border-slate-800 bg-slate-900/60 shadow-2xl backdrop-blur-sm"
+                class="w-full rounded-2xl border border-border bg-card shadow-sm"
                 :class="currentSubStep === 'template' ? 'max-w-3xl p-6 sm:p-8' : 'max-w-xl p-8'"
             >
                 <Transition
@@ -229,7 +229,7 @@ watch(
             </div>
 
             <!-- Footer -->
-            <p v-if="currentSubStep !== 'success'" class="mt-8 text-xs text-slate-600">
+            <p v-if="currentSubStep !== 'success'" class="mt-8 text-xs text-muted-foreground">
                 {{ t('panel.onboarding.step_counter', { current: progressIndex + 1, total: visibleSteps.length }) }}
             </p>
         </div>

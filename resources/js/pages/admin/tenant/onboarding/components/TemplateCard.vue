@@ -58,23 +58,22 @@ function colorChip(scheme?: string): string {
     };
     return scheme ? (map[scheme] ?? scheme) : '';
 }
-
 </script>
 
 <template>
     <button
         type="button"
         :aria-pressed="props.selected"
-        class="group relative flex flex-col overflow-hidden rounded-xl border-2 text-left transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+        class="group relative flex flex-col overflow-hidden rounded-xl border-2 text-left transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         :class="
             props.selected
-                ? 'border-teal-500 bg-teal-500/10 shadow-lg shadow-teal-500/20'
-                : 'border-slate-700 bg-slate-800/60 hover:border-slate-500 hover:bg-slate-800'
+                ? 'border-primary bg-primary/10 shadow-lg shadow-primary/20'
+                : 'border-border bg-card hover:border-border/80 hover:bg-accent'
         "
         @click="emit('select', props.template.id)"
     >
         <!-- Preview: miniatura viva de la plantilla real escalada -->
-        <div class="relative h-32 w-full overflow-hidden bg-slate-700/40 sm:h-36" aria-hidden="true">
+        <div class="relative h-32 w-full overflow-hidden bg-muted/40 sm:h-36" aria-hidden="true">
             <div
                 class="pointer-events-none absolute left-0 top-0 origin-top-left"
                 style="width: 600px; height: 800px; transform: scale(0.24); transform-origin: top left;"
@@ -84,10 +83,10 @@ function colorChip(scheme?: string): string {
 
             <!-- Hover overlay with preview button -->
             <div
-                class="absolute inset-0 flex items-center justify-center bg-slate-900/60 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                class="absolute inset-0 flex items-center justify-center bg-background/60 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
                 @click.stop="emit('preview', props.template)"
             >
-                <span class="rounded-lg bg-white/10 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur-sm">
+                <span class="rounded-lg bg-foreground/10 px-3 py-1.5 text-xs font-semibold text-foreground backdrop-blur-sm">
                     {{ t('panel.onboarding.template_preview') }}
                 </span>
             </div>
@@ -95,25 +94,25 @@ function colorChip(scheme?: string): string {
             <!-- Selected check -->
             <div
                 v-if="props.selected"
-                class="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-teal-500 shadow-md"
+                class="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-primary shadow-md"
             >
-                <Check class="h-3.5 w-3.5 text-white" />
+                <Check class="h-3.5 w-3.5 text-primary-foreground" />
             </div>
         </div>
 
         <!-- Info -->
         <div class="flex flex-1 flex-col gap-1.5 p-3">
-            <p class="font-semibold text-sm text-white leading-tight">{{ props.template.name }}</p>
+            <p class="font-semibold text-sm text-foreground leading-tight">{{ props.template.name }}</p>
             <div class="flex flex-wrap gap-1">
                 <span
                     v-if="vibeChip(props.template.config.vibe)"
-                    class="rounded-full bg-slate-700/70 px-2 py-0.5 text-[10px] font-medium text-slate-300"
+                    class="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground"
                 >
                     {{ vibeChip(props.template.config.vibe) }}
                 </span>
                 <span
                     v-if="colorChip(props.template.config.color_scheme)"
-                    class="rounded-full bg-slate-700/70 px-2 py-0.5 text-[10px] font-medium text-slate-300"
+                    class="rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground"
                 >
                     {{ colorChip(props.template.config.color_scheme) }}
                 </span>

@@ -3,6 +3,8 @@ import { UtensilsCrossed } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import SectionCard from '../components/SectionCard.vue';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 const { t } = useI18n();
 
@@ -47,13 +49,13 @@ function confirmCustom() {
 
 <template>
     <div>
-        <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-teal-500/15">
-            <UtensilsCrossed class="h-6 w-6 text-teal-400" />
+        <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
+            <UtensilsCrossed class="h-6 w-6 text-primary" />
         </div>
-        <h1 class="mb-2 text-2xl font-bold text-white">
+        <h1 class="mb-2 text-2xl font-bold text-foreground">
             {{ t('panel.onboarding.section_title') }}
         </h1>
-        <p class="mb-6 text-sm text-slate-400">
+        <p class="mb-6 text-sm text-muted-foreground">
             {{ t('panel.onboarding.section_subtitle') }}
         </p>
 
@@ -73,7 +75,7 @@ function confirmCustom() {
         <div v-if="!showCustom" class="mb-6">
             <button
                 type="button"
-                class="inline-flex items-center gap-2 rounded-xl border-2 border-dashed border-slate-700 px-4 py-3 text-sm text-slate-400 transition-all hover:border-slate-500 hover:text-white"
+                class="inline-flex items-center gap-2 rounded-xl border-2 border-dashed border-border px-4 py-3 text-sm text-muted-foreground transition-all hover:border-border/80 hover:text-foreground"
                 @click="toggleCustom"
             >
                 <span>+</span>
@@ -82,30 +84,30 @@ function confirmCustom() {
         </div>
 
         <div v-else class="mb-6 flex gap-2">
-            <input
+            <Input
                 v-model="customName"
                 type="text"
                 :placeholder="t('panel.onboarding.section_other_placeholder')"
-                class="flex h-11 flex-1 rounded-lg border border-slate-700 bg-slate-900/60 px-4 py-2 text-sm text-white placeholder:text-slate-500 transition-colors focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/30"
+                class="flex-1"
                 autofocus
                 @keydown.enter="confirmCustom"
             />
-            <button
+            <Button
                 type="button"
                 :disabled="!customName.trim()"
-                class="h-11 rounded-lg bg-teal-600 px-4 font-semibold text-white transition-colors hover:bg-teal-500 disabled:cursor-not-allowed disabled:opacity-50"
                 @click="confirmCustom"
             >
                 →
-            </button>
+            </Button>
         </div>
 
-        <button
+        <Button
             type="button"
-            class="text-sm text-slate-500 transition-colors hover:text-slate-300"
+            variant="ghost"
+            class="text-muted-foreground"
             @click="emit('back')"
         >
             ← {{ t('panel.onboarding.back') }}
-        </button>
+        </Button>
     </div>
 </template>
